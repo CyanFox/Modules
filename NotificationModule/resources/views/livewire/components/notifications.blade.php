@@ -12,7 +12,7 @@
                             <p class="card-title"><i class="{{ $notification->icon }}"></i> {{ $notification->title }}
                             </p>
                             <div
-                                class="badge {{ $notification->badge }}">{{ __('pages/admin/notifications/messages.types.' . $notification->type) }}</div>
+                                class="badge {{ $notification->badge }}">{{ __('notificationmodule::pages/admin/notifications/messages.types.' . $notification->type) }}</div>
                         </div>
                         <div class="flex gap-2">
                             <i class="icon-clock text-xl"></i>

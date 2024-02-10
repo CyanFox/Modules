@@ -27,25 +27,25 @@ class NotificationsTable extends DataTableComponent
         return [
             Column::make(__('messages.table.id'), 'id')
                 ->sortable(),
-            Column::make(__('pages/admin/notifications/notifications.table.title'), 'title')
+            Column::make(__('notificationmodule::pages/admin/notifications/notifications.table.title'), 'title')
                 ->sortable()
                 ->searchable(),
-            Column::make(__('pages/admin/notifications/notifications.table.message'), 'message')
+            Column::make(__('notificationmodule::pages/admin/notifications/notifications.table.message'), 'message')
                 ->sortable()
                 ->searchable()
                 ->format(fn($value) => Str::limit($value, 50)),
-            Column::make(__('pages/admin/notifications/notifications.table.type'), 'type')
+            Column::make(__('notificationmodule::pages/admin/notifications/notifications.table.type'), 'type')
                 ->sortable()
-                ->format(fn($value) => __('pages/admin/notifications/messages.types.' . $value)),
-            Column::make(__('pages/admin/notifications/notifications.table.icon'), 'icon')
+                ->format(fn($value) => __('notificationmodule::pages/admin/notifications/messages.types.' . $value)),
+            Column::make(__('notificationmodule::pages/admin/notifications/notifications.table.icon'), 'icon')
                 ->sortable()
                 ->format(fn($value) => '<i class="' . $value . ' text-lg"></i>')
                 ->html(),
-            BooleanColumn::make(__('pages/admin/notifications/notifications.table.dismissible'), 'dismissible')
+            BooleanColumn::make(__('notificationmodule::pages/admin/notifications/notifications.table.dismissible'), 'dismissible')
                 ->sortable(),
-            Column::make(__('pages/admin/notifications/notifications.table.location'), 'location')
+            Column::make(__('notificationmodule::pages/admin/notifications/notifications.table.location'), 'location')
                 ->sortable()
-                ->format(fn($value) => __('pages/admin/notifications/messages.locations.' . $value)),
+                ->format(fn($value) => __('notificationmodule::pages/admin/notifications/messages.locations.' . $value)),
             Column::make(__('messages.table.created_at'), 'created_at')
                 ->sortable(),
             Column::make(__('messages.table.updated_at'), 'updated_at')

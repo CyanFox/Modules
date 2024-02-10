@@ -10,6 +10,6 @@ class Notifications extends Component
     public function render()
     {
         return view('notificationmodule::livewire.admin.notifications.notifications')
-            ->layout('components.layouts.admin', ['title' => __('navigation/titles.admin.notifications.create_notification')]);
+            ->layout('components.layouts.admin', ['title' => __('notificationmodule::navigation/titles.admin.notifications.create_notification')]);
     }
 }

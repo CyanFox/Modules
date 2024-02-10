@@ -1,7 +1,7 @@
 <x-modal class="modal-bottom sm:modal-middle">
     <div class="text-center">
-        <h2 class="text-2xl font-bold mb-4">{{ __('components/modals/admin/delete_notification.title') }}</h2>
-        <p class="mb-3">{{ __('components/modals/admin/delete_notification.description') }}</p>
+        <h2 class="text-2xl font-bold mb-4">{{ __('notificationmodule::components/modals/admin/delete_notification.title') }}</h2>
+        <p class="mb-3">{{ __('notificationmodule::components/modals/admin/delete_notification.description') }}</p>
     </div>
 
 

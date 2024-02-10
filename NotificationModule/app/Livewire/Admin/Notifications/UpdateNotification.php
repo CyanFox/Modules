@@ -50,7 +50,7 @@ class UpdateNotification extends Component implements HasForms
         return $form
             ->schema([
                 MarkdownEditor::make('messageContent')
-                    ->name(__('pages/admin/notifications/messages.message'))
+                    ->name(__('notificationmodule::pages/admin/notifications/messages.message'))
                     ->disableToolbarButtons([
                         'attachFiles',
                     ])
@@ -123,7 +123,7 @@ class UpdateNotification extends Component implements HasForms
 
         \Filament\Notifications\Notification::make()
             ->success()
-            ->title(__('pages/admin/notifications/update_notification.notifications.notification_updated'))
+            ->title(__('notificationmodule::pages/admin/notifications/update_notification.notifications.notification_updated'))
             ->send();
 
         $this->redirect(route('admin.notifications'), navigate: true);
@@ -151,7 +151,7 @@ class UpdateNotification extends Component implements HasForms
     public function render()
     {
         return view('notificationmodule::livewire.admin.notifications.update-notification')
-            ->layout('components.layouts.admin', ['title' => __('navigation/titles.admin.notifications.update_notification',
+            ->layout('components.layouts.admin', ['title' => __('notificationmodule::navigation/titles.admin.notifications.update_notification',
                 ['notification' => $this->notification->title])]);
     }
 }

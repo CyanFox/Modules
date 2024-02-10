@@ -2,5 +2,5 @@
    href="{{ route('admin.notifications') }}" wire:navigate>
     <i class="icon-bell"></i>
     <span
-        class="ml-2 text-sm font-medium text-hidden">{{ __('navigation/navigation.admin.notifications') }}</span>
+        class="ml-2 text-sm font-medium text-hidden">{{ __('notificationmodule::navigation/navigation.admin.notifications') }}</span>
 </a>

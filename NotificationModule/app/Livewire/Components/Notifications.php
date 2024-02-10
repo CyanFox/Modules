@@ -35,7 +35,7 @@ class Notifications extends Component
                 'info' => ['badge' => 'bg-blue-500 text-base-100', 'border' => 'border-blue-500'],
                 'warning' => ['badge' => 'bg-yellow-500 text-base-100', 'border' => 'border-yellow-500'],
                 'update' => ['badge' => 'bg-green-500 text-base-100', 'border' => 'border-green-500'],
-                'important' => ['badge' => 'bg-red-500 text-base-100', 'border' => 'border-red-500']
+                'danger' => ['badge' => 'bg-red-500 text-base-100', 'border' => 'border-red-500']
             ];
 
             $type = $types[$notification->type] ?? $types['info'];
