@@ -1,10 +1,10 @@
 {
-    "name": "nwidart/notificationmodule",
-    "description": "",
+    "name": "cyanfox/notificationmodule",
+    "description": "A module for Laravel-Template to handle notifications",
     "authors": [
         {
-            "name": "Nicolas Widart",
-            "email": "n.widart@gmail.com"
+            "name": "Lenny P.",
+            "email": "lenny@petschl.org"
         }
     ],
     "extra": {
