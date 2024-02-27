@@ -2,7 +2,6 @@
 
 namespace Modules\NotificationModule\app\Livewire\Admin\Notifications;
 
-use Modules\NotificationModule\app\Models\Notification;
 use Exception;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -11,25 +10,36 @@ use Filament\Forms\Form;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Modules\NotificationModule\app\Models\Notification;
 use Storage;
 use Str;
 
 class UpdateNotification extends Component implements HasForms
 {
-    use WithFileUploads, InteractsWithForms;
+    use InteractsWithForms, WithFileUploads;
 
     public $notification;
+
     public $notificationId;
 
     public $title;
+
     public ?array $messageData = [];
+
     public $type = 'info';
+
     public $icon = 'icon-bell';
+
     public $dismissible = true;
+
     public $location = 'home';
+
     public $tmpAttachmentId;
+
     public $attachments = [];
+
     public $uploadedAttachments = [];
+
     public $storedAttachments = [];
 
     #[On('updateIcon')]
@@ -70,11 +80,11 @@ class UpdateNotification extends Component implements HasForms
         }
 
         foreach ($this->attachments as $attachment) {
-            if (in_array('tmp/' . $this->tmpAttachmentId . '/' . $attachment->getClientOriginalName(), $this->uploadedAttachments)) {
+            if (in_array('tmp/'.$this->tmpAttachmentId.'/'.$attachment->getClientOriginalName(), $this->uploadedAttachments)) {
                 continue;
             }
 
-            $this->uploadedAttachments[] = $attachment->storeAs('tmp/' . $this->tmpAttachmentId, $attachment->getClientOriginalName(), 'public');
+            $this->uploadedAttachments[] = $attachment->storeAs('tmp/'.$this->tmpAttachmentId, $attachment->getClientOriginalName(), 'public');
         }
 
         $this->attachments = [];
@@ -82,14 +92,14 @@ class UpdateNotification extends Component implements HasForms
 
     public function removeAttachmentFromTemp($attachmentName)
     {
-        Storage::disk('public')->delete('tmp/' . $this->tmpAttachmentId . '/' . $attachmentName);
-        $this->uploadedAttachments = array_diff($this->uploadedAttachments, ['tmp/' . $this->tmpAttachmentId . '/' . $attachmentName]);
+        Storage::disk('public')->delete('tmp/'.$this->tmpAttachmentId.'/'.$attachmentName);
+        $this->uploadedAttachments = array_diff($this->uploadedAttachments, ['tmp/'.$this->tmpAttachmentId.'/'.$attachmentName]);
     }
 
     public function removeAttachment($attachmentName)
     {
-        Storage::disk('public')->delete('notifications/' . $this->notification->id . '/' . $attachmentName);
-        $this->storedAttachments = array_diff($this->storedAttachments, ['notifications/' . $this->notification->id . '/' . $attachmentName]);
+        Storage::disk('public')->delete('notifications/'.$this->notification->id.'/'.$attachmentName);
+        $this->storedAttachments = array_diff($this->storedAttachments, ['notifications/'.$this->notification->id.'/'.$attachmentName]);
     }
 
     public function updateNotification()
@@ -112,14 +122,14 @@ class UpdateNotification extends Component implements HasForms
             'attachments' => $this->uploadedAttachments,
         ]);
 
-        $files = Storage::disk('public')->files('tmp/' . $this->tmpAttachmentId);
+        $files = Storage::disk('public')->files('tmp/'.$this->tmpAttachmentId);
 
         foreach ($files as $file) {
             $fileName = basename($file);
-            Storage::disk('public')->move($file, 'notifications/' . $this->notification->id . '/' . $fileName);
+            Storage::disk('public')->move($file, 'notifications/'.$this->notification->id.'/'.$fileName);
         }
 
-        Storage::disk('public')->deleteDirectory('tmp/' . $this->tmpAttachmentId);
+        Storage::disk('public')->deleteDirectory('tmp/'.$this->tmpAttachmentId);
 
         \Filament\Notifications\Notification::make()
             ->success()
@@ -128,7 +138,6 @@ class UpdateNotification extends Component implements HasForms
 
         $this->redirect(route('admin.notifications'), navigate: true);
     }
-
 
     public function mount()
     {
@@ -144,7 +153,7 @@ class UpdateNotification extends Component implements HasForms
         $this->icon = $this->notification->icon;
         $this->dismissible = $this->notification->dismissible;
         $this->location = $this->notification->location;
-        $this->storedAttachments = Storage::disk('public')->files('notifications/' . $this->notification->id);
+        $this->storedAttachments = Storage::disk('public')->files('notifications/'.$this->notification->id);
     }
 
     #[On('refresh')]

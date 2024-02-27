@@ -8,7 +8,6 @@ use Livewire;
 use Modules\NotificationModule\app\Livewire\Components\Modals\Admin\DeleteNotification;
 use Modules\NotificationModule\app\Livewire\Components\Notifications;
 use Modules\NotificationModule\app\Livewire\Components\Tables\Admin\NotificationsTable;
-use Modules\NotificationModule\app\Providers\RouteServiceProvider;
 
 class NotificationModuleServiceProvider extends ServiceProvider
 {

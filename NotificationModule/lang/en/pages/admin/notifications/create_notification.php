@@ -5,5 +5,5 @@ return [
 
     'notifications' => [
         'notification_created' => 'Notification created successfully!',
-    ]
+    ],
 ];

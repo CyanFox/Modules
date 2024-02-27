@@ -15,13 +15,13 @@ return [
                 'title' => 'Notifications',
                 'description' => 'View all notifications',
             ],
-        ]
+        ],
     ],
 
     'default' => [
         'notifications' => [
             'title' => 'Notifications',
             'description' => 'View all notifications',
-        ]
-    ]
+        ],
+    ],
 ];

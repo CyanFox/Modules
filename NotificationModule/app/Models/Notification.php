@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Notification extends Model
 {
     protected $table = 'notifications';
+
     protected $primaryKey = 'id';
+
     public $timestamps = true;
 
     protected $fillable = [
@@ -16,6 +18,6 @@ class Notification extends Model
         'type',
         'icon',
         'dismissible',
-        'location'
+        'location',
     ];
 }

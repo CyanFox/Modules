@@ -15,16 +15,24 @@ use Str;
 
 class CreateNotification extends Component implements HasForms
 {
-    use WithFileUploads, InteractsWithForms;
+    use InteractsWithForms, WithFileUploads;
 
     public $title;
+
     public ?array $messageData = [];
+
     public $type = 'info';
+
     public $icon = 'icon-bell';
+
     public $dismissible = true;
+
     public $location = 'home';
+
     public $tmpAttachmentId;
+
     public $attachments = [];
+
     public $uploadedAttachments = [];
 
     #[On('updateIcon')]
@@ -65,11 +73,11 @@ class CreateNotification extends Component implements HasForms
         }
 
         foreach ($this->attachments as $attachment) {
-            if (in_array('tmp/' . $this->tmpAttachmentId . '/' . $attachment->getClientOriginalName(), $this->uploadedAttachments)) {
+            if (in_array('tmp/'.$this->tmpAttachmentId.'/'.$attachment->getClientOriginalName(), $this->uploadedAttachments)) {
                 continue;
             }
 
-            $this->uploadedAttachments[] = $attachment->storeAs('tmp/' . $this->tmpAttachmentId, $attachment->getClientOriginalName(), 'public');
+            $this->uploadedAttachments[] = $attachment->storeAs('tmp/'.$this->tmpAttachmentId, $attachment->getClientOriginalName(), 'public');
         }
 
         $this->attachments = [];
@@ -77,8 +85,8 @@ class CreateNotification extends Component implements HasForms
 
     public function removeAttachmentFromTemp($attachmentName)
     {
-        Storage::disk('public')->delete('tmp/' . $this->tmpAttachmentId . '/' . $attachmentName);
-        $this->uploadedAttachments = array_diff($this->uploadedAttachments, ['tmp/' . $this->tmpAttachmentId . '/' . $attachmentName]);
+        Storage::disk('public')->delete('tmp/'.$this->tmpAttachmentId.'/'.$attachmentName);
+        $this->uploadedAttachments = array_diff($this->uploadedAttachments, ['tmp/'.$this->tmpAttachmentId.'/'.$attachmentName]);
     }
 
     public function createNotification()
@@ -101,8 +109,8 @@ class CreateNotification extends Component implements HasForms
             'attachments' => $this->uploadedAttachments,
         ]);
 
-        Storage::disk('public')->move('tmp/' . $this->tmpAttachmentId, 'notifications/' . $notification->id);
-        Storage::disk('public')->deleteDirectory('tmp/' . $this->tmpAttachmentId);
+        Storage::disk('public')->move('tmp/'.$this->tmpAttachmentId, 'notifications/'.$notification->id);
+        Storage::disk('public')->deleteDirectory('tmp/'.$this->tmpAttachmentId);
 
         \Filament\Notifications\Notification::make()
             ->success()

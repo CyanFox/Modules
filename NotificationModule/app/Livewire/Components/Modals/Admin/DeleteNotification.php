@@ -18,14 +18,15 @@ class DeleteNotification extends ModalComponent
             $notification = Notification::findOrFail($this->notificationId);
             $notification->delete();
 
-            Storage::disk('public')->deleteDirectory('notifications/' . $this->notificationId);
-        }catch (Exception $e) {
+            Storage::disk('public')->deleteDirectory('notifications/'.$this->notificationId);
+        } catch (Exception $e) {
             \Filament\Notifications\Notification::make()
                 ->title(__('messages.notifications.something_went_wrong'))
                 ->danger()
                 ->send();
 
             $this->dispatch('logger', ['type' => 'error', 'message' => $e->getMessage()]);
+
             return;
         }
 
