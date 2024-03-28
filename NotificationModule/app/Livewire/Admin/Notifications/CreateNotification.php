@@ -53,11 +53,10 @@ class CreateNotification extends Component implements HasForms
         return $form
             ->schema([
                 MarkdownEditor::make('messageContent')
-                    ->name(__('notificationmodule::pages/admin/notifications/messages.message'))
+                    ->name(__('notificationmodule::notifications.message'))
                     ->disableToolbarButtons([
                         'attachFiles',
-                    ])
-                    ->required(),
+                    ]),
             ])
             ->statePath('messageData');
     }
@@ -114,7 +113,7 @@ class CreateNotification extends Component implements HasForms
 
         \Filament\Notifications\Notification::make()
             ->success()
-            ->title(__('notificationmodule::pages/admin/notifications/create_notification.notifications.notification_created'))
+            ->title(__('notificationmodule::notifications.create_notification.notifications.notification_created'))
             ->send();
 
         $this->redirect(route('admin.notifications'), navigate: true);
@@ -130,6 +129,6 @@ class CreateNotification extends Component implements HasForms
     public function render()
     {
         return view('notificationmodule::livewire.admin.notifications.create-notification')
-            ->layout('components.layouts.admin', ['title' => __('notificationmodule::navigation/titles.admin.notifications.notifications')]);
+            ->layout('components.layouts.admin', ['title' => __('notificationmodule::notifications.create_notification.tab_title')]);
     }
 }

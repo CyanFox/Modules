@@ -2,27 +2,27 @@
     <div class="card bg-base-100 shadow-xl">
         <div class="card-body">
             <span
-                class="font-bold text-xl">{{ __('notificationmodule::pages/admin/notifications/update_notification.title', ['name' => $notification->title]) }}</span>
+                class="font-bold text-xl">{{ __('notificationmodule::notifications.update_notification.title', ['name' => $notification->title]) }}</span>
             <div class="divider"></div>
 
             <x-form wire:submit="updateNotification">
                 @csrf
 
                 <div class="grid md:grid-cols-2 gap-4 mt-4">
-                    <x-input label="{{ __('notificationmodule::pages/admin/notifications/messages.title') }}"
+                    <x-input label="{{ __('notificationmodule::notifications.title') }}"
                              class="input input-bordered w-full" wire:model="title" required/>
 
-                    <x-select label="{{ __('notificationmodule::pages/admin/notifications/messages.type') }}" wire:model="type"
+                    <x-select label="{{ __('notificationmodule::notifications.type') }}" wire:model="type"
                               class="select select-bordered"
                               :options="
-                                  [['id' => 'info', 'name' => __('notificationmodule::pages/admin/notifications/messages.types.info')],
-                                  ['id' => 'update', 'name' => __('notificationmodule::pages/admin/notifications/messages.types.update')],
-                                  ['id' => 'success', 'name' => __('notificationmodule::pages/admin/notifications/messages.types.success')],
-                                  ['id' => 'warning', 'name' => __('notificationmodule::pages/admin/notifications/messages.types.warning')],
-                                  ['id' => 'danger', 'name' => __('notificationmodule::pages/admin/notifications/messages.types.danger')]]"
+                                  [['id' => 'info', 'name' => __('notificationmodule::notifications.types.info')],
+                                  ['id' => 'update', 'name' => __('notificationmodule::notifications.types.update')],
+                                  ['id' => 'success', 'name' => __('notificationmodule::notifications.types.success')],
+                                  ['id' => 'warning', 'name' => __('notificationmodule::notifications.types.warning')],
+                                  ['id' => 'danger', 'name' => __('notificationmodule::notifications.types.danger')]]"
                               required></x-select>
 
-                    <x-select label="{{ __('notificationmodule::pages/admin/notifications/messages.dismissible') }}"
+                    <x-select label="{{ __('notificationmodule::notifications.dismissible') }}"
                               wire:model="dismissible"
                               class="select select-bordered"
                               :options="
@@ -30,11 +30,11 @@
                                   ['id' => '0', 'name' => __('messages.no')]]"
                               required></x-select>
 
-                    <x-select label="{{ __('notificationmodule::pages/admin/notifications/messages.location') }}" wire:model="location"
+                    <x-select label="{{ __('notificationmodule::notifications.location') }}" wire:model="location"
                               class="select select-bordered"
                               :options="
-                                  [['id' => 'home', 'name' => __('notificationmodule::pages/admin/notifications/messages.locations.home')],
-                                  ['id' => 'notificationsTab', 'name' => __('notificationmodule::pages/admin/notifications/messages.locations.notificationsTab')]]"
+                                  [['id' => 'home', 'name' => __('notificationmodule::notifications.locations.home')],
+                                  ['id' => 'notificationsTab', 'name' => __('notificationmodule::notifications.locations.notificationsTab')]]"
                               required></x-select>
                 </div>
 
@@ -100,7 +100,7 @@
 
                 <div class="mt-4 overflow-x-auto">
 
-                    <x-file label="{{ __('notificationmodule::pages/admin/notifications/messages.attachments') }}"
+                    <x-file label="{{ __('notificationmodule::notifications.attachments') }}"
                             wire:model="attachments"
                             multiple="">
                     </x-file>
@@ -111,7 +111,7 @@
                     <x-button type="button"
                               wire:click="uploadAttachmentsToTemp"
                               class="btn btn-info mt-3" spinner>
-                        {{ __('notificationmodule::pages/admin/notifications/messages.buttons.upload_attachments') }}
+                        {{ __('notificationmodule::notifications.buttons.upload_attachments') }}
                     </x-button>
 
                     <x-button type="button"
@@ -129,7 +129,7 @@
 
                     <x-button class="btn btn-success"
                               type="submit" spinner="updateNotification">
-                        {{ __('messages.buttons.update') }}
+                        {{ __('notificationmodule::notifications.update_notification.buttons.update_notification') }}
                     </x-button>
                 </div>
             </x-form>

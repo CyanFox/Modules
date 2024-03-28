@@ -31,7 +31,7 @@ class DeleteNotification extends ModalComponent
         }
 
         \Filament\Notifications\Notification::make()
-            ->title(__('components/modals/admin/delete_notification.notifications.notification_deleted'))
+            ->title(__('notificationmodule::notifications.modals.delete_notification.notifications.notification_deleted'))
             ->success()
             ->send();
 

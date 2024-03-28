@@ -30,6 +30,31 @@ class NotificationModuleServiceProvider extends ServiceProvider
         Livewire::component('notificationmodule::components.tables.admin.notifications-table', NotificationsTable::class);
         Livewire::component('notificationmodule::components.modals.admin.delete-notification', DeleteNotification::class);
         Livewire::component('notificationmodule::components.notifications', Notifications::class);
+
+        app('spotlight.values')->add([
+            [
+                'name' => __('notificationmodule::navigation.spotlight.admin.notifications.create.title'),
+                'description' => __('notificationmodule::navigation.spotlight.admin.notifications.create.description'),
+                'route' => 'admin.notifications.create',
+                'icon' => Blade::render('<i class="icon-bell-plus text-3xl"></i>'),
+                'admin' => true,
+            ],
+            [
+                'name' => __('notificationmodule::navigation.spotlight.admin.notifications.list.title'),
+                'description' => __('notificationmodule::navigation.spotlight.admin.notifications.list.description'),
+                'route' => 'admin.notifications',
+                'icon' => Blade::render('<i class="icon-bell text-3xl"></i>'),
+                'admin' => true,
+            ],
+
+            [
+                'name' => __('notificationmodule::navigation.spotlight.default.notifications.title'),
+                'description' => __('notificationmodule::navigation.spotlight.default.notifications.description'),
+                'route' => 'account.notifications',
+                'icon' => Blade::render('<i class="icon-bell-ring text-3xl"></i>'),
+                'admin' => false,
+            ],
+        ]);
     }
 
     /**

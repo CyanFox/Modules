@@ -9,6 +9,6 @@ class Notifications extends Component
     public function render()
     {
         return view('notificationmodule::livewire.account.notifications')
-            ->layout('components.layouts.app', ['title' => __('navigation/titles.notifications')]);
+            ->layout('components.layouts.app', ['title' => __('notificationmodule::notifications.user_notifications.tab_title')]);
     }
 }
