@@ -1,0 +1,11 @@
+{
+    "name": "NotificationModule",
+    "alias": "notificationmodule",
+    "description": "A simple module for creating and managing notifications.",
+    "keywords": ["cyanfox", "module", "notification", "laravel-template"],
+    "priority": 0,
+    "providers": [
+        "Modules\\NotificationModule\\app\\Providers\\NotificationModuleServiceProvider"
+    ],
+    "files": []
+}

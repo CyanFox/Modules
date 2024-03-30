@@ -1,0 +1,31 @@
+{
+    "name": "cyanfox/notificationmodule",
+    "description": "A module for Laravel-Template to handle notifications",
+    "authors": [
+        {
+            "name": "CyanFox-Projects",
+            "email": "info@cyanfox.de"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\NotificationModule\\": "",
+            "Modules\\NotificationModule\\App\\": "app/",
+            "Modules\\NotificationModule\\Database\\Factories\\": "database/factories/",
+            "Modules\\NotificationModule\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\NotificationModule\\Tests\\": "tests/"
+        }
+    }
+}
