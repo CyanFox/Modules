@@ -1,0 +1,30 @@
+name: Create Release
+
+on:
+  push:
+    branches:
+      - master 
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Install zip
+        run: sudo apt-get install zip
+
+      - name: Zip each folder
+        run: |
+          for d in */ ; do
+            zip -r "${d%/}.zip" "$d"
+          done
+          
+      - name: Release
+        uses: MarvinPinto/action-automatic-releases@latest
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: false
+          files: "*.zip"
