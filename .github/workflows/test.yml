@@ -30,6 +30,7 @@ jobs:
 
       - name: Move files to modules folder
         run: |
+          mkdir Laravel-Template/modules
           cp -r * Laravel-Template/modules
 
       - name: Setup PHP
