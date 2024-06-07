@@ -31,7 +31,11 @@ jobs:
       - name: Move files to modules folder
         run: |
           mkdir Laravel-Template/modules
-          cp -r * Laravel-Template/modules
+          for file in *; do
+            if [ "$file" != "Laravel-Template" ]; then
+              cp -r "$file" Laravel-Template/modules/
+            fi
+          done
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
