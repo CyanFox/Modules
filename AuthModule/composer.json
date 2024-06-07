@@ -1,0 +1,40 @@
+{
+    "name": "cyanfox/auth-module",
+    "description": "",
+    "authors": [
+        {
+            "name": "CyanFox-Projects",
+            "email": "opensource@cyanfox.de"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\AuthModule\\": "app/",
+            "Modules\\AuthModule\\Database\\Factories\\": "database/factories/",
+            "Modules\\AuthModule\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\AuthModule\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "simplesoftwareio/simple-qrcode": "^4.2",
+        "pragmarx/google2fa-laravel": "^2.2",
+        "jenssegers/agent": "^2.6"
+    },
+    "config": {
+        "allow-plugins": {
+            "kylekatarnls/update-helper": true
+        }
+    }
+}

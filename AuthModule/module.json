@@ -1,0 +1,23 @@
+{
+    "name": "AuthModule",
+    "alias": "authmodule",
+    "authors": [
+        {
+            "name": "CyanFox-Projects",
+            "email": "opensource@cyanfox.de"
+        }
+    ],
+    "keywords": [
+        "cyanfox",
+        "auth",
+        "module"
+    ],
+    "version": "1.0.0",
+    "template_version": "3.0.0",
+    "description": "An authentication module for the Laravel-Template v3.",
+    "priority": 0,
+    "providers": [
+        "Modules\\AuthModule\\Providers\\AuthModuleServiceProvider"
+    ],
+    "files": []
+}
