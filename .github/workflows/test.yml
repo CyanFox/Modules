@@ -59,6 +59,11 @@ jobs:
 
           cd ..
 
+          for dir in modules/*/; do
+          foldername=$(basename $dir)
+            ./vendor/bin/sail artisan module:migrate $foldername
+          done
+
           cp .env.testing .env
           curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
           /usr/local/bin/composer update
