@@ -26,10 +26,14 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y%m%d')"
 
+      - name: Get short SHA
+        id: sha
+        run: echo "::set-output name=sha::$(git rev-parse --short ${{ github.sha }})"
+
       - name: Release
         uses: MarvinPinto/action-automatic-releases@latest
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "${{ steps.date.outputs.date }}-${{ github.sha }}"
+          automatic_release_tag: "${{ steps.date.outputs.date }}-${{ steps.sha.outputs.sha }}"
           prerelease: false
           files: "*.zip"
