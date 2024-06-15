@@ -5,10 +5,10 @@
             <x-card>
                 <div class="flex items-center justify-center">
                     <img class="size-24" src="{{ asset(setting('settings.logo_path')) }}" alt="Logo">
-                    <x-view-integration name="authmodule_login_logo"/>
+                    <x-view-integration name="authmodule.login.logo"/>
                 </div>
                 <div class="space-y-4">
-                    <x-view-integration name="authmodule_login_top"/>
+                    <x-view-integration name="authmodule.login.top"/>
 
                     @if($user)
                         <div class="rounded-2xl border border-gray-500">
@@ -71,7 +71,7 @@
 
                             <x-checkbox :label="__('authmodule::auth.login.remember_me')" wire:model="rememberMe"/>
 
-                            <x-view-integration name="authmodule_login_form"/>
+                            <x-view-integration name="authmodule.login.form"/>
 
                             @if(setting('authmodule.enable.captcha'))
                                 <div class="gap-3 lg:flex space-y-3">
@@ -81,7 +81,7 @@
                                 </div>
                             @endif
 
-                            <x-button class="w-full" loading="attemptLogin">
+                            <x-button class="w-full" loading="attemptLogin" type="submit">
                                 {{ __('authmodule::auth.login.buttons.login') }}
                             </x-button>
                         </form>
@@ -106,7 +106,7 @@
                         </div>
                     @endif
 
-                    <x-view-integration name="authmodule_login_bottom"/>
+                    <x-view-integration name="authmodule.login.bottom"/>
                 </div>
             </x-card>
         </div>

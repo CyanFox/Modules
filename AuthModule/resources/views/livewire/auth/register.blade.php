@@ -5,10 +5,10 @@
             <x-card>
                 <div class="flex items-center justify-center">
                     <img class="size-24" src="{{ asset(setting('settings.logo_path')) }}" alt="Logo">
-                    <x-view-integration name="authmodule_register_logo"/>
+                    <x-view-integration name="authmodule.register.logo"/>
                 </div>
                 <div class="space-y-4">
-                    <x-view-integration name="authmodule_register_top"/>
+                    <x-view-integration name="authmodule.register.top"/>
 
                     @if ($rateLimitTime > 1)
                         <div wire:poll.1s="setRateLimit">
@@ -35,7 +35,7 @@
                             <x-password :label="__('authmodule::messages.confirm_password') . ' *'" wire:model="passwordConfirmation"/>
                         </div>
 
-                        <x-view-integration name="authmodule_register_form"/>
+                        <x-view-integration name="authmodule.register.form"/>
 
                         @if(setting('authmodule.enable.captcha'))
                             <div class="gap-3 lg:flex space-y-3">
@@ -45,7 +45,7 @@
                             </div>
                         @endif
 
-                        <x-button class="w-full" loading="register">
+                        <x-button class="w-full" loading="register" type="submit">
                             {{ __('authmodule::auth.register.buttons.register') }}
                         </x-button>
                     </form>
@@ -56,7 +56,7 @@
                     </x-button>
 
 
-                    <x-view-integration name="authmodule_register_bottom"/>
+                    <x-view-integration name="authmodule.register.bottom"/>
                 </div>
             </x-card>
         </div>

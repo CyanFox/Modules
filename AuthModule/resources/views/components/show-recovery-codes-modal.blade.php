@@ -3,7 +3,7 @@
         <h2 class="text-2xl font-bold mb-4">{{ __('authmodule::account.overview.actions.modals.show_recovery_codes.title') }}</h2>
         <p class="mb-3">{{ __('authmodule::account.overview.actions.modals.show_recovery_codes.description') }}</p>
     </div>
-    <x-view-integration name="authmodule_show_recovery_codes_modal_top"/>
+    <x-view-integration name="authmodule.show_recovery_codes_modal.top"/>
 
     <div class="text-center space-y-4 mb-3">
         @foreach($this->showRecoveryCodes as $recoveryCode)
@@ -11,7 +11,7 @@
         @endforeach
     </div>
 
-    <x-view-integration name="authmodule_show_recovery_codes_modal_middle"/>
+    <x-view-integration name="authmodule.show_recovery_codes_modal.middle"/>
 
     <x-divider/>
 
@@ -27,5 +27,5 @@
         </x-button>
     </div>
 
-    <x-view-integration name="authmodule_show_recovery_codes_modal_bottom"/>
+    <x-view-integration name="authmodule.show_recovery_codes_modal.bottom"/>
 </x-modal>

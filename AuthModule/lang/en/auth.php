@@ -14,6 +14,7 @@ return [
         'use_recovery_code' => 'Use Recovery Code',
         'user_disabled' => 'This user has been disabled.',
         'two_factor_code_invalid' => 'The two factor code is invalid.',
+        'user_not_found' => 'We can\'t find a user with that username.',
 
         'buttons' => [
             'login' => 'Login',

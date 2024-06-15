@@ -102,8 +102,16 @@ class Register extends LWComponent
 
         Auth::login($user, true);
 
+        if (setting('authmodule.redirects.register')) {
+            $this->redirect(setting('authmodule.redirects.register'));
+        }
+
         if (ModuleManager::getModule('DashboardModule')->isModuleEnabled()) {
-            $this->redirect(route('dashboard'));
+            if (setting('dashboardmodule.routes.dashboard')) {
+                $this->redirect(route('dashboard'));
+            } else {
+                $this->redirect('/');
+            }
         } else {
             $this->redirect('/');
         }

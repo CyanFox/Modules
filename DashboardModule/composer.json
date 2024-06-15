@@ -1,5 +1,5 @@
 {
-    "name": "cyanfox-projects/auth-module",
+    "name": "cyanfox-projects/dashboard-module",
     "description": "",
     "authors": [
         {
@@ -17,20 +17,15 @@
     },
     "autoload": {
         "psr-4": {
-            "Modules\\AuthModule\\": "app/",
-            "Modules\\AuthModule\\Database\\Factories\\": "database/factories/",
-            "Modules\\AuthModule\\Database\\Seeders\\": "database/seeders/"
+            "Modules\\DashboardModule\\": "app/",
+            "Modules\\DashboardModule\\Database\\Factories\\": "database/factories/",
+            "Modules\\DashboardModule\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Modules\\AuthModule\\Tests\\": "tests/"
+            "Modules\\DashboardModule\\Tests\\": "tests/"
         }
-    },
-    "require": {
-        "simplesoftwareio/simple-qrcode": "^4.2",
-        "pragmarx/google2fa-laravel": "^2.2",
-        "jenssegers/agent": "^2.6"
     },
     "config": {
         "allow-plugins": {

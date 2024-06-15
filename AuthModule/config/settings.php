@@ -13,7 +13,12 @@ return [
     ],
 
     'layouts' => [
-        'profile' => env('AUTHMODULE_LAYOUTS_PROFILE', 'authmodule::components.layouts.app'),
+        'profile' => env('AUTHMODULE_LAYOUTS_PROFILE'),
+    ],
+
+    'redirects' =>  [
+        'login' => env('AUTHMODULE_REDIRECTS_LOGIN'),
+        'register' => env('AUTHMODULE_REDIRECTS_REGISTER'),
     ],
 
     'password' => [

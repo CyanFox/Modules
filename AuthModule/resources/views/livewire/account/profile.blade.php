@@ -11,11 +11,11 @@
             </x-slot:left>
         </x-tab.items>
 
-        <x-view-integration name="authmodule_profile_tabs"/>
+        <x-view-integration name="authmodule.profile.tabs"/>
     </x-tab>
 
     @if($tab == __('authmodule::account.tabs.overview'))
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
+        <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-4 mt-4">
             <div class="col-span-1 space-y-4">
                 <x-card>
                     <div class="flex">
@@ -25,7 +25,7 @@
                             <p class="font-bold">{{ auth()->user()->username }}</p>
                             <p>{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</p>
 
-                            <x-view-integration name="authmodule_profile_avatar"/>
+                            <x-view-integration name="authmodule.profile.avatar"/>
                         </div>
                     </div>
                 </x-card>
@@ -48,7 +48,7 @@
                             ]" select="label:label|value:value" wire:model="theme" searchable/>
                     </div>
 
-                    <x-view-integration name="authmodule_profile_language_and_theme"/>
+                    <x-view-integration name="authmodule.profile.language_and_theme"/>
 
                     <x-divider/>
 
@@ -86,7 +86,7 @@
                             </x-button>
                         @endif
 
-                        <x-view-integration name="authmodule_profile_actions"/>
+                        <x-view-integration name="authmodule.profile.actions"/>
                     </div>
                 </x-card>
             </div>
@@ -112,7 +112,7 @@
                                      wire:model="email"/>
                         </div>
 
-                        <x-view-integration name="authmodule_profile_update"/>
+                        <x-view-integration name="authmodule.profile.update"/>
 
                         <x-divider/>
 
@@ -146,7 +146,7 @@
                                 </div>
                             </div>
 
-                            <x-view-integration name="authmodule_profile_password"/>
+                            <x-view-integration name="authmodule.profile.password"/>
 
                             <x-divider/>
 
@@ -169,7 +169,7 @@
                             class="font-bold text-xl">{{ __('authmodule::account.sessions.title') }}</span>
                 </x-slot:header>
 
-                <x-view-integration name="authmodule_profile_sessions"/>
+                <x-view-integration name="authmodule.profile.sessions"/>
 
                 @livewire('authmodule::components.tables.sessions-table')
             </x-card>

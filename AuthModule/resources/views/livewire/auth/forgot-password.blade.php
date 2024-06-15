@@ -5,10 +5,10 @@
             <x-card>
                 <div class="flex items-center justify-center">
                     <img class="size-24" src="{{ asset(setting('settings.logo_path')) }}" alt="Logo">
-                    <x-view-integration name="authmodule_forgot_password_logo"/>
+                    <x-view-integration name="authmodule.forgot_password.logo"/>
                 </div>
                 <div class="space-y-4">
-                    <x-view-integration name="authmodule_forgot_password_top"/>
+                    <x-view-integration name="authmodule.forgot_password.top"/>
 
                     @if ($rateLimitTime > 1)
                         <div wire:poll.1s="setRateLimit">
@@ -25,9 +25,9 @@
 
                             <x-password :label="__('authmodule::messages.confirm_password') . ' *'" wire:model="passwordConfirmation"/>
 
-                            <x-view-integration name="authmodule_forgot_password_reset_form"/>
+                            <x-view-integration name="authmodule.forgot_password.reset_form"/>
 
-                            <x-button class="w-full" loading="resetPassword">
+                            <x-button class="w-full" loading="resetPassword" type="submit">
                                 {{ __('authmodule::auth.forgot_password.buttons.reset_password') }}
                             </x-button>
                         </form>
@@ -46,7 +46,7 @@
                                 </div>
                             @endif
 
-                            <x-button class="w-full" loading="sendResetLink">
+                            <x-button class="w-full" loading="sendResetLink" type="submit">
                                 {{ __('authmodule::auth.forgot_password.buttons.send_reset_link') }}
                             </x-button>
                         </form>
@@ -57,7 +57,7 @@
                         {{ __('authmodule::auth.buttons.back_to_login') }}
                     </x-button>
 
-                    <x-view-integration name="authmodule_forgot_password_bottom"/>
+                    <x-view-integration name="authmodule.forgot_password.bottom"/>
                 </div>
             </x-card>
         </div>

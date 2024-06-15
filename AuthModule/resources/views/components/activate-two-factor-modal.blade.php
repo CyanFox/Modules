@@ -2,7 +2,7 @@
     <form wire:submit="activateTwoFactor">
         @csrf
 
-        <x-view-integration name="authmodule_activate_two_factor_modal_top"/>
+        <x-view-integration name="authmodule.activate_two_factor_modal.top"/>
 
         <div class="flex flex-col items-center">
             <img
@@ -20,7 +20,7 @@
                      wire:model="activateTwoFactorCode"/>
         </div>
 
-        <x-view-integration name="authmodule_activate_two_factor_modal_form"/>
+        <x-view-integration name="authmodule.activate_two_factor_modal.form"/>
 
         <x-divider/>
 
@@ -33,6 +33,6 @@
             </x-button>
         </div>
 
-        <x-view-integration name="authmodule_activate_two_factor_modal_bottom"/>
+        <x-view-integration name="authmodule.activate_two_factor_modal.bottom"/>
     </form>
 </x-modal>

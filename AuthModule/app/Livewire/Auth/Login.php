@@ -88,8 +88,16 @@ class Login extends LWComponent
                     return;
                 }
 
+                if (setting('authmodule.redirects.login')) {
+                    $this->redirect(setting('authmodule.redirects.login'));
+                }
+
                 if (ModuleManager::getModule('DashboardModule')->isModuleEnabled()) {
-                    $this->redirect(route('dashboard'));
+                    if (setting('dashboardmodule.routes.dashboard')) {
+                        $this->redirect(route('dashboard'));
+                    } else {
+                        $this->redirect('/');
+                    }
                 } else {
                     $this->redirect('/');
                 }
@@ -123,8 +131,16 @@ class Login extends LWComponent
                 return;
             }
 
+            if (setting('authmodule.redirects.login')) {
+                $this->redirect(setting('authmodule.redirects.login'));
+            }
+
             if (ModuleManager::getModule('DashboardModule')->isModuleEnabled()) {
-                $this->redirect(route('dashboard'));
+                if (setting('dashboardmodule.routes.dashboard')) {
+                    $this->redirect(route('dashboard'));
+                } else {
+                    $this->redirect('/');
+                }
             } else {
                 $this->redirect('/');
             }
@@ -148,6 +164,8 @@ class Login extends LWComponent
 
         $this->validate([
             'username' => 'required|exists:users,username',
+        ], [
+            'username.exists' => __('authmodule::auth.login.user_not_found'),
         ]);
 
         $this->user = UserManager::findUserByUsername($username);
