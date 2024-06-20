@@ -23,10 +23,10 @@
                             </div>
 
                             <div class="space-y-4 mb-3">
-                                <x-password :label="__('authmodule::messages.password') . ' *'"
+                                <x-password label="{{ __('authmodule::messages.password') }} *"
                                             wire:model="password"/>
 
-                                <x-input :label="__('authmodule::account.force_actions.activate_two_factor.two_factor_code') . ' *'"
+                                <x-input label="{{ __('authmodule::account.force_actions.activate_two_factor.two_factor_code')}} *"
                                          wire:model="twoFactorCode"/>
                             </div>
 

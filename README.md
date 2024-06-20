@@ -22,24 +22,20 @@
 
 <div align="center">
     <a href="https://github.com/CyanFox-Projects/Laravel-Template-Modules/graphs/contributors" alt="Contributors">
-        <img src="https://img.shields.io/github/contributors/CyanFox-Projects/Laravel-Template.svg?style=for-the-badge" />
+        <img src="https://img.shields.io/github/contributors/CyanFox-Projects/Laravel-Template-Modules.svg?style=for-the-badge" />
     </a>
     <a href="https://github.com/CyanFox-Projects/Laravel-Template-Modules/network/members" alt="Forks">
-        <img src="https://img.shields.io/github/forks/CyanFox-Projects/Laravel-Template.svg?style=for-the-badge" />
+        <img src="https://img.shields.io/github/forks/CyanFox-Projects/Laravel-Template-Modules.svg?style=for-the-badge" />
     </a>
     <a href="https://github.com/CyanFox-Projects/Laravel-Template-Modules/stargazers" alt="Stars">
-        <img src="https://img.shields.io/github/stars/CyanFox-Projects/Laravel-Template.svg?style=for-the-badge" />
+        <img src="https://img.shields.io/github/stars/CyanFox-Projects/Laravel-Template-Modules.svg?style=for-the-badge" />
     </a>
     <a href="https://github.com/CyanFox-Projects/Laravel-Template-Modules/issues" alt="Issues">
-        <img src="https://img.shields.io/github/issues/CyanFox-Projects/Laravel-Template.svg?style=for-the-badge" />
+        <img src="https://img.shields.io/github/issues/CyanFox-Projects/Laravel-Template-Modules.svg?style=for-the-badge" />
     </a>
 </div>
 
 <div align="center">
-
-## Changelog
-
-Please se [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 
 ## Security Vulnerabilities
 

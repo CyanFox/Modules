@@ -92,7 +92,7 @@ class Login extends LWComponent
                     $this->redirect(setting('authmodule.redirects.login'));
                 }
 
-                if (ModuleManager::getModule('DashboardModule')->isModuleEnabled()) {
+                if (ModuleManager::getModule('DashboardModule')->isEnabled()) {
                     if (setting('dashboardmodule.routes.dashboard')) {
                         $this->redirect(route('dashboard'));
                     } else {
@@ -135,7 +135,7 @@ class Login extends LWComponent
                 $this->redirect(setting('authmodule.redirects.login'));
             }
 
-            if (ModuleManager::getModule('DashboardModule')->isModuleEnabled()) {
+            if (ModuleManager::getModule('DashboardModule')->isEnabled()) {
                 if (setting('dashboardmodule.routes.dashboard')) {
                     $this->redirect(route('dashboard'));
                 } else {

@@ -1,0 +1,8 @@
+- [ ] AuthModule
+  - [ ] Change Profile Picture
+- [ ] AdminModule
+  - [x] Dashboard
+  - [x] User Management
+  - [ ] Role / Permission Management
+  - [ ] Settings
+  - [ ] Module Management

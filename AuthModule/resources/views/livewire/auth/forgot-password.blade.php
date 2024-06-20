@@ -21,9 +21,9 @@
                     @if($resetToken)
                         <form class="space-y-5" wire:submit="resetPassword">
                             @csrf
-                            <x-password :label="__('authmodule::messages.password') . ' *'" wire:model="password"/>
+                            <x-password label="{{ __('authmodule::messages.password') }} *" wire:model="password"/>
 
-                            <x-password :label="__('authmodule::messages.confirm_password') . ' *'" wire:model="passwordConfirmation"/>
+                            <x-password label="{{ __('authmodule::messages.confirm_password') }} *" wire:model="passwordConfirmation"/>
 
                             <x-view-integration name="authmodule.forgot_password.reset_form"/>
 
@@ -34,7 +34,7 @@
                     @else
                         <form class="space-y-5" wire:submit="sendResetLink">
                             @csrf
-                            <x-input :label="__('authmodule::messages.email') . ' *'" wire:model="email"/>
+                            <x-input label="{{ __('authmodule::messages.email') }} *" wire:model="email"/>
 
                             <x-view-integration name="authmodule_forgot_email_form"/>
 
@@ -42,7 +42,7 @@
                                 <div class="gap-3 lg:flex space-y-3">
                                     <img src="{{ captcha_src() }}" class="rounded-lg lg:w-1/2 w-full" alt="Captcha">
 
-                                    <x-input :label="__('messages.captcha') . ' *'" class="w-full" wire:model="captcha"/>
+                                    <x-input label="{{ __('messages.captcha')}} *" class="w-full" wire:model="captcha"/>
                                 </div>
                             @endif
 

@@ -35,7 +35,7 @@
                             @csrf
 
                             @if ($useRecoveryCode)
-                                <x-input :label="__('authmodule::auth.login.recovery_code') . ' *'"
+                                <x-input label="{{ __('authmodule::auth.login.recovery_code') }} *"
                                          wire:model="twoFactorCode"/>
 
                                 <span class="text-xs text-gray-500 cursor-pointer"
@@ -45,7 +45,7 @@
                             @else
                                 <div class="flex justify-center">
                                     <div>
-                                        <x-pin length="6" :label="__('authmodule::auth.login.two_factor_code') . ' *'"
+                                        <x-pin length="6" label="{{ __('authmodule::auth.login.two_factor_code')}} *"
                                                wire:model="twoFactorCode" numbers/>
 
                                         <span class="text-sm text-gray-500 cursor-pointer"
@@ -64,12 +64,12 @@
                         <form class="space-y-5" wire:submit="attemptLogin">
                             @csrf
 
-                            <x-input :label="__('authmodule::messages.username') . ' *'" wire:model="username"
+                            <x-input label="{{ __('authmodule::messages.username') }} *" wire:model="username"
                                      wire:blur="checkIfUserExists($event.target.value)"/>
 
-                            <x-password :label="__('authmodule::messages.password') . ' *'" wire:model="password"/>
+                            <x-password label="{{ __('authmodule::messages.password') }} *" wire:model="password"/>
 
-                            <x-checkbox :label="__('authmodule::auth.login.remember_me')" wire:model="rememberMe"/>
+                            <x-checkbox label="{{ __('authmodule::auth.login.remember_me') }}" wire:model="rememberMe"/>
 
                             <x-view-integration name="authmodule.login.form"/>
 
@@ -77,7 +77,7 @@
                                 <div class="gap-3 lg:flex space-y-3">
                                     <img src="{{ captcha_src() }}" class="rounded-lg lg:w-1/2 w-full" alt="Captcha">
 
-                                    <x-input :label="__('messages.captcha') . ' *'" class="w-full" wire:model="captcha"/>
+                                    <x-input label="{{ __('messages.captcha') }} *" class="w-full" wire:model="captcha"/>
                                 </div>
                             @endif
 

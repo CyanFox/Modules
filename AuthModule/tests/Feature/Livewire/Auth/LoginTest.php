@@ -29,7 +29,7 @@ class LoginTest extends TestCase
             'password' => Hash::make('password'),
         ]);
 
-        if (ModuleManager::getModule('DashboardModule')->isModuleEnabled()) {
+        if (ModuleManager::getModule('DashboardModule')->isEnabled()) {
             Livewire::test(Login::class)
                 ->set('username', $user->username)
                 ->set('password', 'password')

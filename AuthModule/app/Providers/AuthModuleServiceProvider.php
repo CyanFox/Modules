@@ -111,6 +111,9 @@ class AuthModuleServiceProvider extends ServiceProvider
     {
         $this->publishes([module_path($this->moduleName, 'config/settings.php') => config_path($this->moduleNameLower.'.php')], 'config');
         $this->mergeConfigFrom(module_path($this->moduleName, 'config/settings.php'), $this->moduleNameLower);
+
+        $this->publishes([module_path($this->moduleName, 'config/permission.php') => config_path('permission.php')], 'config');
+        $this->mergeConfigFrom(module_path($this->moduleName, 'config/permission.php'), 'permission');
     }
 
     /**

@@ -22,17 +22,17 @@
                         @csrf
 
                         <div class="grid md:grid-cols-2 grid-cols-1 gap-3">
-                            <x-input :label="__('authmodule::messages.first_name') . ' *'" wire:model="firstName"/>
+                            <x-input label="{{ __('authmodule::messages.first_name') }} *" wire:model="firstName"/>
 
-                            <x-input :label="__('authmodule::messages.last_name') . ' *'" wire:model="lastName"/>
+                            <x-input label="{{ __('authmodule::messages.last_name') }} *" wire:model="lastName"/>
 
-                            <x-input :label="__('authmodule::messages.username') . ' *'" wire:model="username"/>
+                            <x-input label="{{ __('authmodule::messages.username') }} *" wire:model="username"/>
 
-                            <x-input :label="__('authmodule::messages.email') . ' *'" wire:model="email"/>
+                            <x-input label="{{ __('authmodule::messages.email') }} *" wire:model="email"/>
 
-                            <x-password :label="__('authmodule::messages.password') . ' *'" wire:model="password"/>
+                            <x-password label="{{ __('authmodule::messages.password') }} *" wire:model="password"/>
 
-                            <x-password :label="__('authmodule::messages.confirm_password') . ' *'" wire:model="passwordConfirmation"/>
+                            <x-password label="{{ __('authmodule::messages.confirm_password') }} *" wire:model="passwordConfirmation"/>
                         </div>
 
                         <x-view-integration name="authmodule.register.form"/>
@@ -41,7 +41,7 @@
                             <div class="gap-3 lg:flex space-y-3">
                                 <img src="{{ captcha_src() }}" class="rounded-lg lg:w-1/2 w-full" alt="Captcha">
 
-                                <x-input :label="__('messages.captcha') . ' *'" class="w-full" wire:model="captcha"/>
+                                <x-input label="{{ __('messages.captcha') }} *" class="w-full" wire:model="captcha"/>
                             </div>
                         @endif
 

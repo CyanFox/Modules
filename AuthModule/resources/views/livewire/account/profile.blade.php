@@ -91,7 +91,7 @@
                 </x-card>
             </div>
 
-            <div class="col-span-2 space-y-4">
+            <div class="col-span-2 space-y-4 lg:mt-0 mt-4">
                 <x-card>
                     <x-slot:header>
                         <span
@@ -116,7 +116,7 @@
 
                         <x-divider/>
 
-                        <x-button class="mt-3" loading="updateProfile">
+                        <x-button class="mt-3" loading="updateProfile" type="submit">
                             {{ __('authmodule::account.overview.profile.buttons.update_profile') }}
                         </x-button>
                     </form>
@@ -150,7 +150,7 @@
 
                             <x-divider/>
 
-                            <x-button class="mt-3" loading="updatePassword">
+                            <x-button class="mt-3" loading="updatePassword" type="submit">
                                 {{ __('authmodule::account.overview.password.buttons.update_password') }}
                             </x-button>
 

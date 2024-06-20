@@ -284,7 +284,7 @@ class Profile extends LWComponent
             return $this->renderView('authmodule::livewire.account.profile', __('authmodule::account.tab_title'), setting('authmodule.layouts.profile'));
         }
 
-        if (ModuleManager::getModule('DashboardModule')->isModuleEnabled()) {
+        if (ModuleManager::getModule('DashboardModule')->isEnabled()) {
             return $this->renderView('authmodule::livewire.account.profile', __('authmodule::account.tab_title'), 'dashboardmodule::components.layouts.app');
         }
 

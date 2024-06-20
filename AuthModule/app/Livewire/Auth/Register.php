@@ -106,7 +106,7 @@ class Register extends LWComponent
             $this->redirect(setting('authmodule.redirects.register'));
         }
 
-        if (ModuleManager::getModule('DashboardModule')->isModuleEnabled()) {
+        if (ModuleManager::getModule('DashboardModule')->isEnabled()) {
             if (setting('dashboardmodule.routes.dashboard')) {
                 $this->redirect(route('dashboard'));
             } else {

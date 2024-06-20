@@ -12,10 +12,13 @@
         "dashboard",
         "module"
     ],
+    "requirements": [
+        "AuthModule"
+    ],
     "version": "1.0.0",
     "template_version": "3.0.0",
     "description": "A navbar and sidebar module for the Laravel-Template v3.",
-    "priority": 0,
+    "priority": 1,
     "providers": [
         "Modules\\DashboardModule\\Providers\\DashboardModuleServiceProvider"
     ],

@@ -58,9 +58,9 @@
                                 <span class="ml-2 text-md">{{ __('dashboardmodule::dashboard.profile') }}</span>
                             </x-dropdown.items>
                         </a>
-                        @if(module()->getModule('AdminModule')->isModuleEnabled())
+                        @if(module()->getModule('AdminModule')->isEnabled())
                             @hasrole('Super Admin')
-                            <a href="{{ route('admin') }}" wire:navigate>
+                            <a href="{{ route('admin.dashboard') }}" wire:navigate>
                                 <x-dropdown.items>
                                     <i class="icon-settings text-md"></i>
                                     <span class="ml-2 text-md">{{ __('dashboardmodule::dashboard.admin') }}</span>
@@ -89,7 +89,7 @@
 
     <!-- Navbar -->
     <nav
-        class="dark:bg-dark-700 dark:border-none border bg-white hidden md:flex items-center justify-between px-4 py-3">
+            class="dark:bg-dark-700 dark:border-none border bg-white hidden md:flex items-center justify-between px-4 py-3">
         <div class="ml-auto flex items-center">
             <div class="relative inline-block">
                 @auth()
@@ -104,9 +104,9 @@
                                 <span class="ml-2 text-md">{{ __('dashboardmodule::dashboard.profile') }}</span>
                             </x-dropdown.items>
                         </a>
-                        @if(module()->getModule('AdminModule')->isModuleEnabled())
+                        @if(module()->getModule('AdminModule')->isEnabled())
                             @hasrole('Super Admin')
-                            <a href="{{ route('admin') }}">
+                            <a href="{{ route('admin.dashboard') }}">
                                 <x-dropdown.items>
                                     <i class="icon-settings text-md"></i>
                                     <span class="ml-2 text-md">{{ __('dashboardmodule::dashboard.admin') }}</span>
@@ -165,10 +165,10 @@
                                                       route="account.profile"
                                                       icon="icon-user"/>
 
-                    @if(module()->getModule('AdminModule')->isModuleEnabled())
+                    @if(module()->getModule('AdminModule')->isEnabled())
                         @hasrole('Super Admin')
                         <x-dashboardmodule::sidebar-entry :label="__('dashboardmodule::dashboard.admin')"
-                                                          route="admin"
+                                                          route="admin.dashboard"
                                                           icon="icon-settings"/>
                         @endhasrole
                     @endif
