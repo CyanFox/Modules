@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Modules\AdminModule\Http\Controllers\AdminModuleController;
-
 /*
  *--------------------------------------------------------------------------
  * API Routes
@@ -14,6 +11,3 @@ use Modules\AdminModule\Http\Controllers\AdminModuleController;
  *
 */
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    Route::apiResource('adminmodule', AdminModuleController::class)->names('adminmodule');
-});

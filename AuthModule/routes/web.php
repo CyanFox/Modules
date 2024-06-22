@@ -19,7 +19,7 @@ use Modules\AuthModule\Livewire\Auth\Register;
 |
 */
 
-Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
+Route::group(['prefix' => 'auth', 'as' => 'auth.', 'domain' => setting('authmodule.domains.auth')], function () {
     Route::group(['middleware' => 'guest'], function () {
         Route::get('login', Login::class)->name('login');
 
@@ -40,7 +40,7 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     })->name('logout')->middleware('auth');
 });
 
-Route::group(['middleware' => ['auth', 'language', 'disabled']], function () {
+Route::group(['middleware' => ['auth', 'language', 'disabled'], 'domain' => setting('authmodule.domains.account')], function () {
     Route::group(['prefix' => 'account', 'as' => 'account.', 'middleware' => 'force_actions'], function () {
         Route::get('profile', Profile::class)->name('profile');
     });

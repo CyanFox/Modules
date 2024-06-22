@@ -50,7 +50,7 @@
     </div>
 
     <div class="flex flex-wrap gap-4 mt-4">
-        <a href="#" class="flex-grow" wire:navigate>
+        <a href="{{ route('admin.users') }}" class="flex-grow" wire:navigate>
             <x-card>
                 <div class="flex justify-center items-center">
                     <i class="icon-users text-2xl"></i>
@@ -59,7 +59,7 @@
             </x-card>
         </a>
 
-        <a href="#" class="flex-grow" wire:navigate>
+        <a href="{{ route('admin.groups') }}" class="flex-grow" wire:navigate>
             <x-card>
                 <div class="flex justify-center items-center">
                     <i class="icon-shield text-2xl"></i>

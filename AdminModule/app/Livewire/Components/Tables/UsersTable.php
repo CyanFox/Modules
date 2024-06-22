@@ -48,7 +48,7 @@ final class UsersTable extends PowerGridComponent
     {
         return [
             Button::add('create')
-                ->slot('<x-button x-on:click="$slideOpen(`create-user-slide`)">{{ __("adminmodule::users.buttons.create_user") }}</x-button>'),
+                ->slot('<x-button wire:click="$dispatch(`clearForm`)" x-on:click="$slideOpen(`create-user-slide`)">{{ __("adminmodule::users.buttons.create_user") }}</x-button>'),
         ];
     }
 
@@ -124,7 +124,7 @@ final class UsersTable extends PowerGridComponent
                 ->searchable()
                 ->sortable(),
 
-            Column::action('Action'),
+            Column::action(__('messages.table.actions')),
         ];
     }
 

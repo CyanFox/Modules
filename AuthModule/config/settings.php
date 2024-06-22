@@ -16,9 +16,14 @@ return [
         'profile' => env('AUTHMODULE_LAYOUTS_PROFILE'),
     ],
 
-    'redirects' =>  [
+    'redirects' => [
         'login' => env('AUTHMODULE_REDIRECTS_LOGIN'),
         'register' => env('AUTHMODULE_REDIRECTS_REGISTER'),
+    ],
+
+    'domains' => [
+        'auth' => env('AUTHMODULE_DOMAINS_AUTH'),
+        'account' => env('AUTHMODULE_DOMAINS_ACCOUNT'),
     ],
 
     'password' => [

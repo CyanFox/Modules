@@ -178,6 +178,22 @@ class Users extends LWComponent
         $this->redirect(route('admin.users'), navigate: true);
     }
 
+    #[On('clearForm')]
+    public function clearForm()
+    {
+        $this->firstName = null;
+        $this->lastName = null;
+        $this->username = null;
+        $this->email = null;
+        $this->password = null;
+        $this->passwordConfirmation = null;
+        $this->groups = null;
+        $this->permissions = null;
+        $this->forceChangePassword = null;
+        $this->forceActivateTwoFactor = null;
+        $this->disabled = null;
+    }
+
     public function mount()
     {
         $this->groupList = Role::all()->map(function ($role) {
@@ -224,6 +240,6 @@ class Users extends LWComponent
 
     public function render()
     {
-        return $this->renderView('adminmodule::livewire.users', 'Admin • Users', 'adminmodule::components.layouts.app');
+        return $this->renderView('adminmodule::livewire.users', __('adminmodule::users.tab_title'), 'adminmodule::components.layouts.app');
     }
 }

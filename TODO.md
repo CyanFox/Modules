@@ -3,6 +3,7 @@
 - [ ] AdminModule
   - [x] Dashboard
   - [x] User Management
-  - [ ] Role / Permission Management
+  - [x] Group Management
   - [ ] Settings
   - [ ] Module Management
+  - [ ] Permissions for each section (user, role, module, settings, etc.)

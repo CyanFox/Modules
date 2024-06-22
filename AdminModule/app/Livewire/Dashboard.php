@@ -6,7 +6,7 @@ use App\Facades\ModuleManager;
 use App\Facades\Utils\VersionManager;
 use App\Services\LWComponent;
 
-class AdminDashboard extends LWComponent
+class Dashboard extends LWComponent
 {
     public $currentProjectVersion;
 
@@ -45,6 +45,6 @@ class AdminDashboard extends LWComponent
 
     public function render()
     {
-        return $this->renderView('adminmodule::livewire.admin-dashboard', __('adminmodule::dashboard.tab_title'), 'adminmodule::components.layouts.app');
+        return $this->renderView('adminmodule::livewire.dashboard', __('adminmodule::dashboard.tab_title'), 'adminmodule::components.layouts.app');
     }
 }

@@ -2,22 +2,27 @@
 
 namespace Modules\AdminModule\Livewire\Components\Tables;
 
-use App\Models\Setting;
+use Exception;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Exportable;
-use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\Rule;
 use PowerComponents\LivewirePowerGrid\Footer;
 use PowerComponents\LivewirePowerGrid\Header;
 use PowerComponents\LivewirePowerGrid\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
+use PowerComponents\LivewirePowerGrid\Traits\WithExport;
+use Spatie\Permission\Models\Role;
+use TallStackUi\Traits\Interactions;
 
 final class GroupsTable extends PowerGridComponent
 {
+    use Interactions, WithExport;
+
     public function setUp(): array
     {
         $this->showCheckBox();
@@ -35,7 +40,15 @@ final class GroupsTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return Setting::query();
+        return Role::query();
+    }
+
+    public function header(): array
+    {
+        return [
+            Button::add('create')
+                ->slot('<x-button wire:click="$dispatch(`clearForm`)" x-on:click="$slideOpen(`create-group-slide`)">{{ __("adminmodule::groups.buttons.create_group") }}</x-button>'),
+        ];
     }
 
     public function fields(): PowerGridFields
@@ -43,15 +56,18 @@ final class GroupsTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('name')
-            ->add('name_lower', fn (Setting $model) => strtolower(e($model->name)))
+            ->add('guard_name')
+            ->add('module')
             ->add('created_at')
-            ->add('created_at_formatted', fn (Setting $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'));
+            ->add('created_at_formatted', fn(Role $model) => Carbon::parse($model->created_at)->format('d.m.Y H:i'))
+            ->add('updated_at')
+            ->add('updated_at_formatted', fn(Role $model) => Carbon::parse($model->updated_at)->format('d.m.Y H:i'));
     }
 
     public function columns(): array
     {
         return [
-            Column::make('ID', 'id')
+            Column::make(__('messages.table.id'), 'id')
                 ->searchable()
                 ->sortable(),
 
@@ -59,50 +75,102 @@ final class GroupsTable extends PowerGridComponent
                 ->searchable()
                 ->sortable(),
 
-            Column::make('Created at', 'created_at')
+            Column::make('Guard name', 'guard_name')
+                ->searchable()
+                ->sortable(),
+
+            Column::make('Module', 'module')
+                ->searchable()
+                ->sortable(),
+
+            Column::make(__('messages.table.created_at'), 'created_at')
                 ->hidden(),
 
-            Column::make('Created at', 'created_at_formatted', 'created_at')
-                ->searchable(),
+            Column::make(__('messages.table.created_at'), 'created_at_formatted', 'created_at')
+                ->searchable()
+                ->sortable(),
 
-            Column::action('Action'),
+            Column::make(__('messages.table.updated_at'), 'updated_at')
+                ->hidden(),
+
+            Column::make(__('messages.table.updated_at'), 'updated_at_formatted', 'updated_at')
+                ->searchable()
+                ->sortable(),
+
+            Column::action(__('messages.table.actions')),
         ];
     }
 
     public function filters(): array
     {
+        return [];
+    }
+
+    public function deleteGroup($groupId, $confirmed = true)
+    {
+        if ($confirmed) {
+            try {
+                $group = Role::findOrFail($groupId)->first();
+                $group->update([
+                    'guard_name' => 'web',
+                ]);
+
+                if ($group->name === 'Super Admin') {
+                    return;
+                }
+
+                $group->delete();
+
+                Notification::make()
+                    ->title(__('adminmodule::groups.delete_group.notifications.group_deleted'))
+                    ->success()
+                    ->send();
+
+                $this->redirect(route('admin.groups'), navigate: true);
+            } catch (Exception $e) {
+                Notification::make()
+                    ->title(__('messages.notifications.something_went_wrong'))
+                    ->danger()
+                    ->send();
+
+                $this->dispatch('logger', ['type' => 'error', 'message' => $e]);
+            }
+
+            return;
+        }
+
+        $this->dialog()
+            ->error(__('adminmodule::groups.delete_group.title'),
+                __('adminmodule::groups.delete_group.description'))
+            ->confirm(__('adminmodule::groups.delete_group.buttons.delete_group'), 'deleteGroup', [$groupId])
+            ->cancel()
+            ->send();
+
+    }
+
+    public function actions(Role $row): array
+    {
         return [
-            Filter::inputText('name'),
-            Filter::datepicker('created_at_formatted', 'created_at'),
+            Button::add('update')
+                ->slot('<x-button color="blue" x-on:click="$slideOpen(`update-group-slide`)" wire:click="$dispatch(`updateGroupParams`, { groupId: `' . $row->id . '` })" sm><i class="icon-pen"></i></x-button>')
+                ->id(),
+
+            Button::add('delete')
+                ->slot('<x-button color="red" wire:click="deleteGroup(`' . $row->id . '`, false)" sm><i class="icon-trash"></i></x-button>')
+                ->id(),
         ];
     }
 
-    #[\Livewire\Attributes\On('edit')]
-    public function edit($rowId): void
-    {
-        $this->js('alert('.$rowId.')');
-    }
-
-    public function actions(Setting $row): array
+    public function actionRules(Role $row): array
     {
         return [
-            Button::add('edit')
-                ->slot('Edit: '.$row->id)
-                ->id()
-                ->class('pg-btn-white dark:ring-pg-primary-600 dark:border-pg-primary-600 dark:hover:bg-pg-primary-700 dark:ring-offset-pg-primary-800 dark:text-pg-primary-300 dark:bg-pg-primary-700')
-                ->dispatch('edit', ['rowId' => $row->id]),
-        ];
-    }
+            Rule::button('delete')
+                ->when(fn($row) => $row->name === 'Super Admin')
+                ->slot('<x-button color="red" disabled sm><i class="icon-trash"></i></x-button>'),
 
-    /*
-    public function actionRules(Setting $row): array
-    {
-       return [
-            // Hide button edit for ID 1
-            Rule::button('edit')
-                ->when(fn($row) => $row->id === 1)
-                ->hide(),
+            Rule::button('update')
+                ->when(fn($row) => $row->name === 'Super Admin')
+                ->slot('<x-button color="blue" disabled sm><i class="icon-pen"></i></x-button>'),
         ];
     }
-    */
 }
