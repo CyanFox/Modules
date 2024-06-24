@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Modules\AdminModule\Livewire\Dashboard;
 use Modules\AdminModule\Livewire\Groups;
+use Modules\AdminModule\Livewire\Modules;
+use Modules\AdminModule\Livewire\Settings;
 use Modules\AdminModule\Livewire\Users;
 
 /*
@@ -20,6 +22,6 @@ Route::group(['middleware' => ['auth', 'role:Super Admin'], 'prefix' => 'admin',
     Route::get('/', Dashboard::class)->name('dashboard');
     Route::get('/users', Users::class)->name('users');
     Route::get('/groups', Groups::class)->name('groups');
-    Route::get('/settings', Dashboard::class)->name('settings');
-    Route::get('/modules', Dashboard::class)->name('modules');
+    Route::get('/settings', Settings::class)->name('settings');
+    Route::get('/modules', Modules::class)->name('modules');
 });

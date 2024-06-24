@@ -16,9 +16,9 @@ use Modules\DashboardModule\Livewire\Dashboard;
 use Modules\DashboardModule\Livewire\Home;
 
 if (setting('dashboardmodule.routes.dashboard')) {
-    Route::get('/dashboard', Dashboard::class)->name('dashboard')->middleware('auth')->domain(setting('dashboardmodule.domains.dashboard'));
+    Route::get('/dashboard', Dashboard::class)->name('dashboard')->middleware('auth');
 }
 
 if (setting('dashboardmodule.routes.home')) {
-    Route::get('/', Home::class)->name('home')->middleware('auth')->domain(setting('dashboardmodule.domains.home'));
+    Route::get('/', Home::class)->name('home');
 }

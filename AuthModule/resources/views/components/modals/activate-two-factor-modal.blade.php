@@ -13,10 +13,10 @@
         </div>
 
         <div class="space-y-4 mb-3">
-            <x-password :label="__('authmodule::messages.password') . ' *'"
+            <x-password label="{{ __('authmodule::messages.password')}} *"
                         wire:model="activateTwoFactorPassword"/>
 
-            <x-input :label="__('authmodule::account.overview.actions.modals.activate_two_factor.two_factor_code') . ' *'"
+            <x-input label="{{ __('authmodule::account.overview.actions.modals.activate_two_factor.two_factor_code') }} *"
                      wire:model="activateTwoFactorCode"/>
         </div>
 
@@ -28,7 +28,7 @@
             <x-button class="w-full" type="button" color="gray" wire:click="$toggle('activateTwoFactorModal')">
                 {{ __('messages.buttons.cancel') }}
             </x-button>
-            <x-button class="w-full" type="submit">
+            <x-button class="w-full" type="submit" spinner="activateTwoFactor">
                 {{ __('authmodule::account.overview.actions.modals.activate_two_factor.buttons.activate_two_factor') }}
             </x-button>
         </div>

@@ -5,10 +5,10 @@
             <x-card>
                 <div class="flex items-center justify-center">
                     <img class="size-24" src="{{ asset(setting('settings.logo_path')) }}" alt="Logo">
-                    <x-view-integration name="authmodule_force_activate_two_factor_logo"/>
+                    <x-view-integration name="authmodule.force_activate_two_factor.logo"/>
                 </div>
                 <div class="space-y-4">
-                    <x-view-integration name="authmodule_force_activate_two_factor_top"/>
+                    <x-view-integration name="authmodule.force_activate_two_factor.top"/>
 
                     <form wire:submit="activateTwoFactor">
                         @csrf
@@ -30,7 +30,7 @@
                                          wire:model="twoFactorCode"/>
                             </div>
 
-                            <x-view-integration name="authmodule_force_activate_two_factor_form"/>
+                            <x-view-integration name="authmodule.force_activate_two_factor.form"/>
                         </div>
 
                         <x-button class="mt-3 w-full" loading="activateTwoFactor">
@@ -39,7 +39,7 @@
                     </form>
 
 
-                    <x-view-integration name="authmodule_force_activate_two_factor_bottom"/>
+                    <x-view-integration name="authmodule.force_activate_two_factor.bottom"/>
 
                 </div>
             </x-card>

@@ -5,10 +5,10 @@
             <x-card>
                 <div class="flex items-center justify-center">
                     <img class="size-24" src="{{ asset(setting('settings.logo_path')) }}" alt="Logo">
-                    <x-view-integration name="authmodule_force_change_password_logo"/>
+                    <x-view-integration name="authmodule.force_change_password.logo"/>
                 </div>
                 <div class="space-y-4">
-                    <x-view-integration name="authmodule_force_change_password_top"/>
+                    <x-view-integration name="authmodule.force_change_password.top"/>
 
                     <form wire:submit="updatePassword">
                         @csrf
@@ -26,7 +26,7 @@
                                     wire:model="newPasswordConfirmation"/>
                             </div>
                         </div>
-                        <x-view-integration name="authmodule_force_change_password_form"/>
+                        <x-view-integration name="authmodule.force_change_password."/>
 
                         <x-button class="mt-3 w-full" loading="updatePassword">
                             {{ __('authmodule::account.force_actions.change_password.buttons.change_password') }}
@@ -34,7 +34,7 @@
                     </form>
 
 
-                    <x-view-integration name="authmodule_force_change_password_bottom"/>
+                    <x-view-integration name="authmodule.force_change_password.bottom"/>
 
                 </div>
             </x-card>

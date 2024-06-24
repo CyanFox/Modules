@@ -63,8 +63,8 @@
                             class="font-bold text-xl">{{ __('authmodule::account.overview.actions.title') }}</span>
                     </x-slot:header>
 
-                    <x-authmodule::activate-two-factor-modal/>
-                    <x-authmodule::show-recovery-codes-modal/>
+                    <x-authmodule::modals.activate-two-factor-modal/>
+                    <x-authmodule::modals.show-recovery-codes-modal/>
 
                     <div class="grid sm:grid-cols-2 grid-cols-1 gap-2">
                         @if(auth()->user()->two_factor_enabled)
