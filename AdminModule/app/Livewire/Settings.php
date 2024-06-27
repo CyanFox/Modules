@@ -8,6 +8,7 @@ use App\Models\Setting;
 use App\Services\LWComponent;
 use Exception;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Url;
 use Livewire\WithFileUploads;
@@ -18,26 +19,47 @@ class Settings extends LWComponent
 
     #[Url]
     public $tab;
+
     public $availableTimeZones;
+
     public $systemName;
+
     public $systemUrl;
+
     public $systemLang;
+
     public $systemTimeZone;
+
     public $unsplashUtm;
+
     public $unsplashApiKey;
+
     public $projectVersionUrl;
+
     public $templateVersionUrl;
+
     public $logoFile;
+
     public $moduleList;
+
     public $moduleSearchKeyword;
+
     public $editorEncryptionKeyword;
+
     public $editorDecryptionKeyword;
+
     public $editorSearchKeyword;
+
     public $originalEditorSettings;
+
     public $editorSettings;
 
     public function updateSystemSettings()
     {
+        if (Auth::user()->cannot('adminmodule.settings.update')) {
+            return;
+        }
+
         $this->validate([
             'systemName' => 'required',
             'systemUrl' => 'required|url',
@@ -89,6 +111,10 @@ class Settings extends LWComponent
 
     public function resetLogo()
     {
+        if (Auth::user()->cannot('adminmodule.settings.update')) {
+            return;
+        }
+
         Storage::disk('public')->delete('img/Logo.png');
 
         SettingsManager::updateSetting('settings.logo_path', 'img/Logo.svg');
@@ -112,6 +138,10 @@ class Settings extends LWComponent
 
     public function updateEditorSettings()
     {
+        if (Auth::user()->cannot('adminmodule.settings.editor.update')) {
+            return;
+        }
+
         $settings = [];
         foreach ($this->editorSettings as $key => $value) {
             $newKey = str_replace(':', '.', $key);
@@ -151,6 +181,7 @@ class Settings extends LWComponent
             foreach ($this->originalEditorSettings as $key => $value) {
                 $this->editorSettings .= $key . '::' . $value . "\n";
             }
+
             return;
         }
 

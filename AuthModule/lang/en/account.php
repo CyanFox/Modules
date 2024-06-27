@@ -34,6 +34,22 @@ return [
         ],
     ],
 
+    'change_avatar' => [
+        'title' => 'Change Avatar',
+        'description' => 'Change your avatar by uploading a new image or entering a URL.',
+
+        'url' => 'URL',
+        'or_from_url' => 'Or enter a URL',
+
+        'buttons' => [
+            'change_avatar' => 'Change Avatar',
+            'reset_avatar' => 'Reset Avatar',
+        ],
+        'notifications' => [
+            'avatar_changed' => 'Avatar changed successfully.',
+        ],
+    ],
+
     'overview' => [
         'language_and_theme' => [
             'title' => 'Language & Theme',

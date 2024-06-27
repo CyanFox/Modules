@@ -3,7 +3,10 @@
 namespace Modules\AdminModule\Providers;
 
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class AdminModuleServiceProvider extends ServiceProvider
 {
@@ -22,6 +25,63 @@ class AdminModuleServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'database/migrations'));
+
+        $this->app->booted(function () {
+            if (config('app.env') == 'testing') {
+                return;
+            }
+            if (!Cache::has('adminmodule.permissions.set')) {
+                $permissions = [
+                    'adminmodule.admin',
+                    'adminmodule.dashboard.view',
+                    'adminmodule.users.view',
+                    'adminmodule.users.create',
+                    'adminmodule.users.update',
+                    'adminmodule.users.delete',
+                    'adminmodule.groups.view',
+                    'adminmodule.groups.create',
+                    'adminmodule.groups.update',
+                    'adminmodule.groups.delete',
+                    'adminmodule.permissions.view',
+                    'adminmodule.permissions.create',
+                    'adminmodule.permissions.update',
+                    'adminmodule.permissions.delete',
+                    'adminmodule.settings.view',
+                    'adminmodule.settings.update',
+                    'adminmodule.settings.editor',
+                    'adminmodule.settings.editor.update',
+                    'adminmodule.modules.view',
+                    'adminmodule.modules.disable',
+                    'adminmodule.modules.enable',
+                    'adminmodule.modules.install',
+                    'adminmodule.modules.delete',
+                    'adminmodule.modules.actions.npm',
+                    'adminmodule.modules.actions.composer',
+                    'adminmodule.modules.actions.migrate',
+                ];
+
+                $existingPermissionsQuery = Permission::query();
+                $existingPermissions = $existingPermissionsQuery->whereIn('name', $permissions)->get()->keyBy('name');
+                $newPermissions = [];
+
+                foreach ($permissions as $permission) {
+                    if (!$existingPermissions->has($permission)) {
+                        $newPermissions[] = ['name' => $permission, 'module' => $this->moduleNameLower];
+                    }
+                }
+
+                if (!empty($newPermissions)) {
+                    Permission::insert($newPermissions);
+                }
+            }
+
+            Cache::rememberForever('adminmodule.permissions.set', fn () => true);
+
+            $role = Role::where('name', 'Super Admin')->first();
+            $role->syncPermissions(
+                Permission::all()
+            );
+        });
     }
 
     /**
@@ -57,7 +117,7 @@ class AdminModuleServiceProvider extends ServiceProvider
      */
     public function registerTranslations(): void
     {
-        $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
+        $langPath = resource_path('lang/modules/' . $this->moduleNameLower);
 
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
@@ -73,7 +133,7 @@ class AdminModuleServiceProvider extends ServiceProvider
      */
     protected function registerConfig(): void
     {
-        $this->publishes([module_path($this->moduleName, 'config/settings.php') => config_path($this->moduleNameLower.'.php')], 'config');
+        $this->publishes([module_path($this->moduleName, 'config/settings.php') => config_path($this->moduleNameLower . '.php')], 'config');
         $this->mergeConfigFrom(module_path($this->moduleName, 'config/settings.php'), $this->moduleNameLower);
     }
 
@@ -82,14 +142,14 @@ class AdminModuleServiceProvider extends ServiceProvider
      */
     public function registerViews(): void
     {
-        $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
+        $viewPath = resource_path('views/modules/' . $this->moduleNameLower);
         $sourcePath = module_path($this->moduleName, 'resources/views');
 
-        $this->publishes([$sourcePath => $viewPath], ['views', $this->moduleNameLower.'-module-views']);
+        $this->publishes([$sourcePath => $viewPath], ['views', $this->moduleNameLower . '-module-views']);
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
 
-        $componentNamespace = str_replace('/', '\\', config('modules.namespace').'\\'.$this->moduleName.'\\'.ltrim(config('modules.paths.generator.component-class.path'), config('modules.paths.app_folder', '')));
+        $componentNamespace = str_replace('/', '\\', config('modules.namespace') . '\\' . $this->moduleName . '\\' . ltrim(config('modules.paths.generator.component-class.path'), config('modules.paths.app_folder', '')));
         Blade::componentNamespace($componentNamespace, $this->moduleNameLower);
     }
 
@@ -110,8 +170,8 @@ class AdminModuleServiceProvider extends ServiceProvider
     {
         $paths = [];
         foreach (config('view.paths') as $path) {
-            if (is_dir($path.'/modules/'.$this->moduleNameLower)) {
-                $paths[] = $path.'/modules/'.$this->moduleNameLower;
+            if (is_dir($path . '/modules/' . $this->moduleNameLower)) {
+                $paths[] = $path . '/modules/' . $this->moduleNameLower;
             }
         }
 

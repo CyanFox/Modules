@@ -27,40 +27,59 @@
                     <x-slot:action>
                         <i x-on:click="show = !show" class="icon-menu text-xl dark:text-white cursor-pointer"></i>
                     </x-slot:action>
-                    <a href="{{ route('admin.dashboard') }}" wire:navigate>
-                        <x-dropdown.items>
-                            <i class="icon-layout-dashboard text-md"></i>
-                            <span class="ml-2 text-md">{{ __('adminmodule::navigation.dashboard') }}</span>
-                        </x-dropdown.items>
-                    </a>
+                    @can('adminmodule.dashboard.view')
+                        <a href="{{ route('admin.dashboard') }}" wire:navigate>
+                            <x-dropdown.items>
+                                <i class="icon-layout-dashboard text-md"></i>
+                                <span class="ml-2 text-md">{{ __('adminmodule::navigation.dashboard') }}</span>
+                            </x-dropdown.items>
+                        </a>
+                    @endcan
 
-                    <a href="{{ route('admin.users') }}" wire:navigate>
-                        <x-dropdown.items>
-                            <i class="icon-users text-md"></i>
-                            <span class="ml-2 text-md">{{ __('adminmodule::navigation.users') }}</span>
-                        </x-dropdown.items>
-                    </a>
+                    @can('adminmodule.users.view')
+                        <a href="{{ route('admin.users') }}" wire:navigate>
+                            <x-dropdown.items>
+                                <i class="icon-users text-md"></i>
+                                <span class="ml-2 text-md">{{ __('adminmodule::navigation.users') }}</span>
+                            </x-dropdown.items>
+                        </a>
+                    @endcan
 
-                    <a href="{{ route('admin.groups') }}" wire:navigate>
-                        <x-dropdown.items>
-                            <i class="icon-shield text-md"></i>
-                            <span class="ml-2 text-md">{{ __('adminmodule::navigation.groups') }}</span>
-                        </x-dropdown.items>
-                    </a>
+                    @can('adminmodule.groups.view')
+                        <a href="{{ route('admin.groups') }}" wire:navigate>
+                            <x-dropdown.items>
+                                <i class="icon-shield text-md"></i>
+                                <span class="ml-2 text-md">{{ __('adminmodule::navigation.groups') }}</span>
+                            </x-dropdown.items>
+                        </a>
+                    @endcan
 
-                    <a href="{{ route('admin.settings') }}" wire:navigate>
-                        <x-dropdown.items>
-                            <i class="icon-settings-2 text-md"></i>
-                            <span class="ml-2 text-md">{{ __('adminmodule::navigation.settings') }}</span>
-                        </x-dropdown.items>
-                    </a>
+                    @can('adminmodule.permissions.view')
+                        <a href="{{ route('admin.permissions') }}" wire:navigate>
+                            <x-dropdown.items>
+                                <i class="icon-key-round text-md"></i>
+                                <span class="ml-2 text-md">{{ __('adminmodule::navigation.permissions') }}</span>
+                            </x-dropdown.items>
+                        </a>
+                    @endcan
 
-                    <a href="{{ route('admin.modules') }}" wire:navigate>
-                        <x-dropdown.items>
-                            <i class="icon-boxes text-md"></i>
-                            <span class="ml-2 text-md">{{ __('adminmodule::navigation.modules') }}</span>
-                        </x-dropdown.items>
-                    </a>
+                    @can('adminmodule.settings.view')
+                        <a href="{{ route('admin.settings') }}" wire:navigate>
+                            <x-dropdown.items>
+                                <i class="icon-settings-2 text-md"></i>
+                                <span class="ml-2 text-md">{{ __('adminmodule::navigation.settings') }}</span>
+                            </x-dropdown.items>
+                        </a>
+                    @endcan
+
+                    @can('adminmodule.modules.view')
+                        <a href="{{ route('admin.modules') }}" wire:navigate>
+                            <x-dropdown.items>
+                                <i class="icon-boxes text-md"></i>
+                                <span class="ml-2 text-md">{{ __('adminmodule::navigation.modules') }}</span>
+                            </x-dropdown.items>
+                        </a>
+                    @endcan
 
                     <x-view-integration name="adminmodule.mobile.nav"/>
                 </x-dropdown>
@@ -154,25 +173,41 @@
         </div>
         <div class="w-full px-2 mt-4">
             <div class="flex flex-col items-center w-full mt-3 mb-3">
-                <x-adminmodule::sidebar-entry :label="__('adminmodule::navigation.dashboard')"
-                                              route="admin.dashboard"
-                                              icon="icon-layout-dashboard"/>
+                @can('adminmodule.dashboard.view')
+                    <x-adminmodule::sidebar-entry :label="__('adminmodule::navigation.dashboard')"
+                                                  route="admin.dashboard"
+                                                  icon="icon-layout-dashboard"/>
+                @endcan
 
-                <x-adminmodule::sidebar-entry :label="__('adminmodule::navigation.users')"
-                                              route="admin.users"
-                                              icon="icon-users"/>
+                @can('adminmodule.users.view')
+                    <x-adminmodule::sidebar-entry :label="__('adminmodule::navigation.users')"
+                                                  route="admin.users"
+                                                  icon="icon-users"/>
+                @endcan
 
-                <x-adminmodule::sidebar-entry :label="__('adminmodule::navigation.groups')"
-                                              route="admin.groups"
-                                              icon="icon-shield"/>
+                @can('adminmodule.groups.view')
+                    <x-adminmodule::sidebar-entry :label="__('adminmodule::navigation.groups')"
+                                                  route="admin.groups"
+                                                  icon="icon-shield"/>
+                @endcan
 
-                <x-adminmodule::sidebar-entry :label="__('adminmodule::navigation.settings')"
-                                              route="admin.settings"
-                                              icon="icon-settings-2"/>
+                @can('adminmodule.permissions.view')
+                    <x-adminmodule::sidebar-entry :label="__('adminmodule::navigation.permissions')"
+                                                  route="admin.permissions"
+                                                  icon="icon-key-round"/>
+                @endcan
 
-                <x-adminmodule::sidebar-entry :label="__('adminmodule::navigation.modules')"
-                                              route="admin.modules"
-                                              icon="icon-boxes"/>
+                @can('adminmodule.settings.view')
+                    <x-adminmodule::sidebar-entry :label="__('adminmodule::navigation.settings')"
+                                                  route="admin.settings"
+                                                  icon="icon-settings-2"/>
+                @endcan
+
+                @can('adminmodule.modules.view')
+                    <x-adminmodule::sidebar-entry :label="__('adminmodule::navigation.modules')"
+                                                  route="admin.modules"
+                                                  icon="icon-boxes"/>
+                @endcan
 
                 <x-view-integration name="adminmodule.sidebar.top"/>
             </div>

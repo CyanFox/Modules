@@ -49,42 +49,55 @@
         </x-button>
     </div>
 
+    <x-view-integration name="adminmodule.dashboard.top"/>
+
     <div class="flex flex-wrap gap-4 mt-4">
-        <a href="{{ route('admin.users') }}" class="flex-grow" wire:navigate>
-            <x-card>
-                <div class="flex justify-center items-center">
-                    <i class="icon-users text-2xl"></i>
-                    <span class="ml-2">{{ __('adminmodule::dashboard.navigation.users') }}</span>
-                </div>
-            </x-card>
-        </a>
 
-        <a href="{{ route('admin.groups') }}" class="flex-grow" wire:navigate>
-            <x-card>
-                <div class="flex justify-center items-center">
-                    <i class="icon-shield text-2xl"></i>
-                    <span class="ml-2">{{ __('adminmodule::dashboard.navigation.groups') }}</span>
-                </div>
-            </x-card>
-        </a>
+        @can('adminmodule.users.view')
+            <a href="{{ route('admin.users') }}" class="flex-grow" wire:navigate>
+                <x-card>
+                    <div class="flex justify-center items-center">
+                        <i class="icon-users text-2xl"></i>
+                        <span class="ml-2">{{ __('adminmodule::dashboard.navigation.users') }}</span>
+                    </div>
+                </x-card>
+            </a>
+        @endcan
 
-        <a href="#" class="flex-grow" wire:navigate>
-            <x-card>
-                <div class="flex justify-center items-center">
-                    <i class="icon-settings-2 text-2xl"></i>
-                    <span class="ml-2">{{ __('adminmodule::dashboard.navigation.settings') }}</span>
-                </div>
-            </x-card>
-        </a>
+        @can('adminmodule.groups.view')
+            <a href="{{ route('admin.groups') }}" class="flex-grow" wire:navigate>
+                <x-card>
+                    <div class="flex justify-center items-center">
+                        <i class="icon-shield text-2xl"></i>
+                        <span class="ml-2">{{ __('adminmodule::dashboard.navigation.groups') }}</span>
+                    </div>
+                </x-card>
+            </a>
+        @endcan
 
-        <a href="#" class="flex-grow" wire:navigate>
-            <x-card>
-                <div class="flex justify-center items-center">
-                    <i class="icon-boxes text-2xl"></i>
-                    <span class="ml-2">{{ __('adminmodule::dashboard.navigation.modules') }}</span>
-                </div>
-            </x-card>
-        </a>
+        @can('adminmodule.settings.view')
+            <a href="{{ route('admin.settings') }}" class="flex-grow" wire:navigate>
+                <x-card>
+                    <div class="flex justify-center items-center">
+                        <i class="icon-settings-2 text-2xl"></i>
+                        <span class="ml-2">{{ __('adminmodule::dashboard.navigation.settings') }}</span>
+                    </div>
+                </x-card>
+            </a>
+        @endcan
+
+        @can('adminmodule.modules.view')
+            <a href="{{ route('admin.modules') }}" class="flex-grow" wire:navigate>
+                <x-card>
+                    <div class="flex justify-center items-center">
+                        <i class="icon-boxes text-2xl"></i>
+                        <span class="ml-2">{{ __('adminmodule::dashboard.navigation.modules') }}</span>
+                    </div>
+                </x-card>
+            </a>
+        @endcan
+
+        <x-view-integration name="adminmodule.dashboard.bottom"/>
     </div>
 
 </div>

@@ -17,10 +17,10 @@ use PowerComponents\LivewirePowerGrid\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
-use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use TallStackUi\Traits\Interactions;
 
-final class GroupsTable extends PowerGridComponent
+final class PermissionsTable extends PowerGridComponent
 {
     use Interactions, WithExport;
 
@@ -41,14 +41,17 @@ final class GroupsTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return Role::query();
+        return Permission::query();
     }
 
     public function header(): array
     {
         return [
             Button::add('create')
-                ->slot('<x-button wire:click="$dispatch(`clearForm`)" x-on:click="$slideOpen(`create-group-slide`)">{{ __("adminmodule::groups.buttons.create_group") }}</x-button>'),
+                ->slot('<x-button wire:click="$dispatch(`clearForm`)" x-on:click="$slideOpen(`create-permission-slide`)">{{ __("adminmodule::permissions.buttons.create_permission") }}</x-button>'),
+
+            Button::add('bulkDelete')
+                ->slot('<x-button wire:click="bulkDelete" color="red" loading>{!! __("messages.table.bulk_delete", ["table" => $this->tableName]) !!}</x-button>'),
         ];
     }
 
@@ -60,9 +63,9 @@ final class GroupsTable extends PowerGridComponent
             ->add('guard_name')
             ->add('module')
             ->add('created_at')
-            ->add('created_at_formatted', fn (Role $model) => Carbon::parse($model->created_at)->format('d.m.Y H:i'))
+            ->add('created_at_formatted', fn (Permission $model) => Carbon::parse($model->created_at)->format('d.m.Y H:i'))
             ->add('updated_at')
-            ->add('updated_at_formatted', fn (Role $model) => Carbon::parse($model->updated_at)->format('d.m.Y H:i'));
+            ->add('updated_at_formatted', fn (Permission $model) => Carbon::parse($model->updated_at)->format('d.m.Y H:i'));
     }
 
     public function columns(): array
@@ -72,15 +75,15 @@ final class GroupsTable extends PowerGridComponent
                 ->searchable()
                 ->sortable(),
 
-            Column::make(__('adminmodule::groups.name'), 'name')
+            Column::make(__('adminmodule::permissions.name'), 'name')
                 ->searchable()
                 ->sortable(),
 
-            Column::make(__('adminmodule::groups.guard_name'), 'guard_name')
+            Column::make(__('adminmodule::permissions.guard_name'), 'guard_name')
                 ->searchable()
                 ->sortable(),
 
-            Column::make(__('adminmodule::groups.module'), 'module')
+            Column::make(__('adminmodule::permissions.module'), 'module')
                 ->searchable()
                 ->sortable(),
 
@@ -107,7 +110,19 @@ final class GroupsTable extends PowerGridComponent
         return [];
     }
 
-    public function deleteGroup($groupId, $confirmed = true)
+    public function bulkDelete(): void
+    {
+        if (Auth::user()->cannot('adminmodule.permissions.delete')) {
+            return;
+        }
+
+        if ($this->checkboxValues) {
+            Permission::destroy($this->checkboxValues);
+            $this->js('window.pgBulkActions.clearAll()');
+        }
+    }
+
+    public function deletePermission($permissionId, $confirmed = true)
     {
         if (Auth::user()->cannot('adminmodule.groups.delete')) {
             return;
@@ -115,23 +130,16 @@ final class GroupsTable extends PowerGridComponent
 
         if ($confirmed) {
             try {
-                $group = Role::findOrFail($groupId)->first();
-                $group->update([
-                    'guard_name' => 'web',
-                ]);
+                $permission = Permission::findOrFail($permissionId)->first();
 
-                if ($group->name === 'Super Admin') {
-                    return;
-                }
-
-                $group->delete();
+                $permission->delete();
 
                 Notification::make()
-                    ->title(__('adminmodule::groups.delete_group.notifications.group_deleted'))
+                    ->title(__('adminmodule::permissions.delete_permission.notifications.permission_deleted'))
                     ->success()
                     ->send();
 
-                $this->redirect(route('admin.groups'), navigate: true);
+                $this->redirect(route('admin.permissions'), navigate: true);
             } catch (Exception $e) {
                 Notification::make()
                     ->title(__('messages.notifications.something_went_wrong'))
@@ -145,48 +153,44 @@ final class GroupsTable extends PowerGridComponent
         }
 
         $this->dialog()
-            ->error(__('adminmodule::groups.delete_group.title'),
-                __('adminmodule::groups.delete_group.description'))
-            ->confirm(__('adminmodule::groups.delete_group.buttons.delete_group'), 'deleteGroup', [$groupId])
+            ->error(__('adminmodule::permissions.delete_permission.title'),
+                __('adminmodule::permissions.delete_permission.description'))
+            ->confirm(__('adminmodule::permissions.delete_permission.buttons.delete_permission'), 'deletePermission', [$permissionId])
             ->cancel()
             ->send();
 
     }
 
-    public function actions(Role $row): array
+    public function actions(Permission $row): array
     {
         return [
             Button::add('update')
-                ->slot('<x-button color="blue" x-on:click="$slideOpen(`update-group-slide`)" wire:click="$dispatch(`updateGroupParams`, { groupId: `' . $row->id . '` })" sm><i class="icon-pen"></i></x-button>')
+                ->slot('<x-button color="blue" x-on:click="$slideOpen(`update-permission-slide`)" wire:click="$dispatch(`updatePermissionParams`, { permissionId: `' . $row->id . '` })" sm><i class="icon-pen"></i></x-button>')
                 ->id(),
 
             Button::add('delete')
-                ->slot('<x-button color="red" wire:click="deleteGroup(`' . $row->id . '`, false)" sm><i class="icon-trash"></i></x-button>')
+                ->slot('<x-button color="red" wire:click="deletePermission(`' . $row->id . '`, false)" sm><i class="icon-trash"></i></x-button>')
                 ->id(),
         ];
     }
 
-    public function actionRules(Role $row): array
+    public function actionRules(Permission $row): array
     {
         return [
             Rule::button('delete')
-                ->when(fn ($row) => $row->name === 'Super Admin')
-                ->slot('<x-button color="red" disabled sm><i class="icon-trash"></i></x-button>'),
-
-            Rule::button('update')
-                ->when(fn ($row) => $row->name === 'Super Admin')
-                ->slot('<x-button color="blue" disabled sm><i class="icon-pen"></i></x-button>'),
-
-            Rule::button('delete')
-                ->when(fn ($row) => Auth::user()->cannot('adminmodule.groups.delete'))
+                ->when(fn ($row) => Auth::user()->cannot('adminmodule.permissions.delete'))
                 ->hide(),
 
             Rule::button('update')
-                ->when(fn ($row) => Auth::user()->cannot('adminmodule.groups.update'))
+                ->when(fn ($row) => Auth::user()->cannot('adminmodule.permissions.update'))
+                ->hide(),
+
+            Rule::button('bulkDelete')
+                ->when(fn ($row) => Auth::user()->cannot('adminmodule.permissions.delete'))
                 ->hide(),
 
             Rule::button('create')
-                ->when(fn ($row) => Auth::user()->cannot('adminmodule.groups.create'))
+                ->when(fn ($row) => Auth::user()->cannot('adminmodule.permissions.create'))
                 ->hide(),
         ];
     }

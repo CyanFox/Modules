@@ -5,6 +5,7 @@ namespace Modules\AdminModule\Livewire;
 use App\Services\LWComponent;
 use Exception;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\On;
 use Modules\AuthModule\Models\User;
@@ -41,10 +42,14 @@ class Users extends LWComponent
     public $permissionList;
 
     public $passwordRules;
+
     public $userId;
 
     public function createUser()
     {
+        if (Auth::user()->cannot('adminmodule.users.create')) {
+            return;
+        }
         $this->validate([
             'firstName' => 'required|max:255',
             'lastName' => 'required|max:255',
@@ -124,6 +129,10 @@ class Users extends LWComponent
 
     public function updateUser()
     {
+        if (Auth::user()->cannot('adminmodule.users.update')) {
+            return;
+        }
+
         $this->validate([
             'firstName' => 'required|max:255',
             'lastName' => 'required|max:255',

@@ -5,6 +5,7 @@ namespace Modules\AdminModule\Livewire\Components\Modals;
 use App\Facades\ModuleManager;
 use App\Services\LWComponent;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
 
@@ -20,6 +21,10 @@ class InstallModule extends LWComponent
 
     public function installModule()
     {
+        if (Auth::user()->cannot('adminmodule.modules.install')) {
+            return;
+        }
+
         if ($this->moduleUrl) {
             $this->validate([
                 'moduleUrl' => 'required|url',

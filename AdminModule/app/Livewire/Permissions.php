@@ -8,9 +8,8 @@ use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
-class Groups extends LWComponent
+class Permissions extends LWComponent
 {
     public $name;
 
@@ -18,15 +17,11 @@ class Groups extends LWComponent
 
     public $module;
 
-    public $permissions = [];
+    public $permissionId;
 
-    public $permissionList = [];
-
-    public $groupId;
-
-    public function createGroup()
+    public function createPermission()
     {
-        if (Auth::user()->cannot('adminmodule.groups.create')) {
+        if (Auth::user()->cannot('adminmodule.permissions.create')) {
             return;
         }
 
@@ -34,19 +29,14 @@ class Groups extends LWComponent
             'name' => 'required|unique:roles,name',
             'guardName' => 'required',
             'module' => 'required',
-            'permissions' => 'nullable|array',
         ]);
 
         try {
-            $group = Role::create([
+            Permission::create([
                 'name' => $this->name,
                 'guard_name' => $this->guardName,
                 'module' => $this->module,
             ]);
-
-            if ($this->permissions) {
-                $group->syncPermissions($this->permissions);
-            }
         } catch (Exception $e) {
             Notification::make()
                 ->title(__('messages.notifications.something_went_wrong'))
@@ -59,26 +49,24 @@ class Groups extends LWComponent
         }
 
         Notification::make()
-            ->title(__('adminmodule::groups.create_group.notifications.group_created'))
+            ->title(__('adminmodule::permissions.create_permission.notifications.permission_created'))
             ->success()
             ->send();
 
-        $this->redirect(route('admin.groups'), navigate: true);
+        $this->redirect(route('admin.permissions'), navigate: true);
     }
 
-    #[On('updateGroupParams')]
-    public function updateGroupParams($groupId)
+    #[On('updatePermissionParams')]
+    public function updatePermissionParams($permissionId)
     {
         try {
 
-            $group = Role::findOrFail($groupId);
+            $permission = Permission::findOrFail($permissionId);
 
-            $this->groupId = $group->id;
-
-            $this->name = $group->name;
-            $this->guardName = $group->guard_name;
-            $this->module = $group->module;
-            $this->permissions = $group->permissions->pluck('name')->toArray();
+            $this->name = $permission->name;
+            $this->guardName = $permission->guard_name;
+            $this->module = $permission->module;
+            $this->permissionId = $permission->id;
         } catch (Exception $e) {
             Notification::make()
                 ->title(__('messages.notifications.something_went_wrong'))
@@ -91,34 +79,26 @@ class Groups extends LWComponent
         }
     }
 
-    public function updateGroup()
+    public function updatePermission()
     {
-        if (Auth::user()->cannot('adminmodule.groups.update')) {
+        if (Auth::user()->cannot('adminmodule.permissions.update')) {
             return;
         }
 
         $this->validate([
-            'name' => 'required|unique:roles,name,' . $this->groupId,
+            'name' => 'required|unique:permissions,name,' . $this->permissionId,
             'guardName' => 'required',
             'module' => 'required',
-            'permissions' => 'nullable|array',
         ]);
 
         try {
-            $group = Role::findOrFail($this->groupId);
-            if ($group->name === 'Super Admin') {
-                return;
-            }
+            $permission = Permission::findOrFail($this->permissionId);
 
-            $group->update([
+            $permission->update([
                 'name' => $this->name,
                 'guard_name' => $this->guardName,
                 'module' => $this->module,
             ]);
-
-            if ($this->permissions) {
-                $group->syncPermissions($this->permissions);
-            }
         } catch (Exception $e) {
             Notification::make()
                 ->title(__('messages.notifications.something_went_wrong'))
@@ -131,11 +111,11 @@ class Groups extends LWComponent
         }
 
         Notification::make()
-            ->title(__('adminmodule::groups.update_group.notifications.group_updated'))
+            ->title(__('adminmodule::permissions.update_permission.notifications.permission_updated'))
             ->success()
             ->send();
 
-        $this->redirect(route('admin.groups'), navigate: true);
+        $this->redirect(route('admin.permissions'), navigate: true);
     }
 
     #[On('clearForm')]
@@ -144,21 +124,10 @@ class Groups extends LWComponent
         $this->name = null;
         $this->guardName = 'web';
         $this->module = null;
-        $this->permissions = [];
-    }
-
-    public function mount()
-    {
-        $this->permissionList = Permission::all()->map(function ($permission) {
-            return [
-                'label' => $permission->name,
-                'value' => $permission->name,
-            ];
-        })->toArray();
     }
 
     public function render()
     {
-        return $this->renderView('adminmodule::livewire.groups', __('adminmodule::groups.tab_title'), 'adminmodule::components.layouts.app');
+        return $this->renderView('adminmodule::livewire.permissions', __('adminmodule::permissions.tab_title'), 'adminmodule::components.layouts.app');
     }
 }

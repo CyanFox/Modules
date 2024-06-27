@@ -135,6 +135,10 @@ final class UsersTable extends PowerGridComponent
 
     public function deleteUser($userId, $confirmed = true)
     {
+        if (Auth::user()->cannot('adminmodule.users.delete')) {
+            return;
+        }
+
         if ($userId === Auth::user()->id) {
             return;
         }
@@ -188,12 +192,24 @@ final class UsersTable extends PowerGridComponent
     {
         return [
             Rule::button('delete')
-                ->when(fn ($row) => $row->id === Auth::user()->id)
+                ->when(fn ($row) => $row->id === Auth::user()->id && Auth::user()->hasPermissionTo('adminmodule.users.delete'))
                 ->slot('<x-button color="red" disabled sm><i class="icon-trash"></i></x-button>'),
 
             Rule::button('update')
-                ->when(fn ($row) => $row->id !== Auth::user()->id)
+                ->when(fn ($row) => $row->id !== Auth::user()->id && Auth::user()->hasPermissionTo('adminmodule.users.update'))
                 ->slot('<x-button color="blue" x-on:click="$slideOpen(`update-user-slide`)" wire:click="$dispatch(`updateUserParams`, { userId: `' . $row->id . '` })" sm><i class="icon-pen"></i></x-button>'),
+
+            Rule::button('delete')
+                ->when(fn ($row) => Auth::user()->cannot('adminmodule.users.delete'))
+                ->hide(),
+
+            Rule::button('update')
+                ->when(fn ($row) => Auth::user()->cannot('adminmodule.users.update'))
+                ->hide(),
+
+            Rule::button('create')
+                ->when(fn ($row) => Auth::user()->cannot('adminmodule.users.create'))
+                ->hide(),
         ];
     }
 }

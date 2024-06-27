@@ -2,7 +2,6 @@
 
 namespace Modules\AuthModule\Tests\Feature\Livewire\Auth;
 
-use App\Facades\Utils\SettingsManager;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Modules\AuthModule\Livewire\Auth\Register;

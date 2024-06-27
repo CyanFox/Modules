@@ -6,6 +6,7 @@ return [
         'forgot_password' => env('AUTHMODULE_ENABLE_FORGOT_PASSWORD', true),
         'captcha' => env('AUTHMODULE_ENABLE_CAPTCHA', false),
         'delete_account' => env('AUTHMODULE_ENABLE_DELETE_ACCOUNT', true),
+        'change_avatar' => env('AUTHMODULE_ENABLE_CHANGE_AVATAR', true),
     ],
 
     'profile' => [

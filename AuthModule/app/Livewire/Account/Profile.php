@@ -8,8 +8,10 @@ use Exception;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Url;
+use Livewire\WithFileUploads;
 use Modules\AuthModule\Facades\UserManager;
 use Modules\AuthModule\Models\UserRecoveryCode;
 use Modules\AuthModule\Rules\Password;
@@ -17,6 +19,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class Profile extends LWComponent
 {
+    use WithFileUploads;
+
     #[Url]
     public $tab = 'Overview';
 
@@ -29,6 +33,12 @@ class Profile extends LWComponent
     public $showRecoveryCodesModal;
 
     public $showRecoveryCodes;
+
+    public $showChangeAvatarModal;
+
+    public $avatarFile;
+
+    public $avatarUrl;
 
     public $language;
 
@@ -263,6 +273,90 @@ class Profile extends LWComponent
         }, 'recovery-codes.txt');
     }
 
+    public function changeAvatar()
+    {
+        if ($this->avatarFile) {
+            $this->validate([
+                'avatarFile' => 'image|max:10000',
+            ]);
+
+            try {
+                $this->avatarFile->storeAs('public/avatars', Auth::user()->id . '.png');
+            } catch (Exception $e) {
+                Notification::make()
+                    ->title(__('messages.notifications.something_went_wrong'))
+                    ->danger()
+                    ->send();
+
+                $this->dispatch('logger', ['type' => 'error', 'message' => $e->getMessage()]);
+
+                return;
+            }
+
+            Notification::make()
+                ->title(__('authmodule::account.change_avatar.notifications.avatar_changed'))
+                ->success()
+                ->send();
+
+            $this->redirect(route('account.profile'), navigate: true);
+
+            return;
+        }
+
+        if ($this->avatarUrl) {
+
+            try {
+                Auth::user()->update([
+                    'custom_avatar_url' => $this->avatarUrl,
+                ]);
+            } catch (Exception $e) {
+                Notification::make()
+                    ->title(__('messages.notifications.something_went_wrong'))
+                    ->danger()
+                    ->send();
+
+                $this->log($e->getMessage(), 'error');
+
+                return;
+            }
+
+            Notification::make()
+                ->title(__('authmodule::account.change_avatar.notifications.avatar_changed'))
+                ->success()
+                ->send();
+
+            $this->redirect(route('account.profile'), navigate: true);
+        }
+
+    }
+
+    public function resetAvatar(): void
+    {
+        Storage::disk('public')->delete('avatars/' . Auth::user()->id . '.png');
+
+        try {
+            Auth::user()->update([
+                'custom_avatar_url' => null,
+            ]);
+        } catch (Exception $e) {
+            Notification::make()
+                ->title(__('messages.notifications.something_went_wrong'))
+                ->danger()
+                ->send();
+
+            $this->log($e->getMessage(), 'error');
+
+            return;
+        }
+
+        Notification::make()
+            ->title(__('authmodule::account.change_avatar.notifications.avatar_changed'))
+            ->success()
+            ->send();
+
+        $this->redirect(route('account.profile'), navigate: true);
+    }
+
     public function mount()
     {
         $this->language = Auth::user()->language;
@@ -271,6 +365,7 @@ class Profile extends LWComponent
         $this->lastName = Auth::user()->last_name;
         $this->username = Auth::user()->username;
         $this->email = Auth::user()->email;
+        $this->avatarUrl = Auth::user()->custom_avatar_url;
 
         $this->showRecoveryCodes = UserRecoveryCode::where('user_id', Auth::user()->id)->get()->pluck('code')->toArray();
         if (empty($this->recoveryCodes)) {

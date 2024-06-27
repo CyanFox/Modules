@@ -19,8 +19,21 @@
             <div class="col-span-1 space-y-4">
                 <x-card>
                     <div class="flex">
-                        <img src="{{ user()->getUser(auth()->user())->getAvatarURL() }}"
-                             alt="Avatar" class="h-16 w-16 rounded-3xl mr-4">
+                        @if(setting('authmodule.enable.change_avatar'))
+                            <div class="h-16 w-16 relative mr-4 group">
+                                <div
+                                    class="absolute inset-0 bg-cover bg-center z-0 rounded-3xl group-hover:opacity-70 transition-opacity duration-300"
+                                    style="background-image: url('{{ user()->getUser(auth()->user())->getAvatarURL() }}')"></div>
+                                <div
+                                    wire:click="$toggle('showChangeAvatarModal')"
+                                    class="opacity-0 group-hover:opacity-100 hover:cursor-pointer duration-300 absolute inset-0 z-10 flex justify-center items-center text-3xl text-white font-semibold">
+                                    <i class="icon-upload"></i></div>
+                            </div>
+                            <x-authmodule::modals.change-avatar :avatarUrl="$avatarUrl" :avatarFile="$avatarFile"/>
+                        @else
+                            <img src="{{ user()->getUser(auth()->user())->getAvatarURL() }}"
+                                 alt="Avatar" class="h-16 w-16 rounded-3xl mr-4">
+                        @endif
                         <div>
                             <p class="font-bold">{{ auth()->user()->username }}</p>
                             <p>{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</p>
@@ -63,8 +76,8 @@
                             class="font-bold text-xl">{{ __('authmodule::account.overview.actions.title') }}</span>
                     </x-slot:header>
 
-                    <x-authmodule::modals.activate-two-factor-modal/>
-                    <x-authmodule::modals.show-recovery-codes-modal/>
+                    <x-authmodule::modals.activate-two-factor/>
+                    <x-authmodule::modals.show-recovery-codes/>
 
                     <div class="grid sm:grid-cols-2 grid-cols-1 gap-2">
                         @if(auth()->user()->two_factor_enabled)
@@ -134,10 +147,12 @@
 
                             <div class="mb-3">
                                 @if(auth()->user()->password !== null)
-                                    <x-password label="{{ __('authmodule::account.overview.password.current_password') }} *"
-                                                wire:model="currentPassword"/>
+                                    <x-password
+                                        label="{{ __('authmodule::account.overview.password.current_password') }} *"
+                                        wire:model="currentPassword"/>
                                 @endif
-                                <div class="grid md:grid-cols-2 grid-cols-1 gap-4 @if(auth()->user()->password !== null) mt-4 @endif">
+                                <div
+                                    class="grid md:grid-cols-2 grid-cols-1 gap-4 @if(auth()->user()->password !== null) mt-4 @endif">
                                     <x-password label="{{ __('authmodule::messages.new_password') }} *"
                                                 wire:model="newPassword"/>
                                     <x-password
