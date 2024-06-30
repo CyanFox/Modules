@@ -1,9 +1,11 @@
 <?php
 
+use App\Facades\ModuleManager;
 use Illuminate\Support\Facades\Route;
 use Modules\AuthModule\Livewire\Account\ForceActivateTwoFactor;
 use Modules\AuthModule\Livewire\Account\ForceChangePassword;
 use Modules\AuthModule\Livewire\Account\Profile;
+use Modules\AuthModule\Livewire\AdminSettings;
 use Modules\AuthModule\Livewire\Auth\ForgotPassword;
 use Modules\AuthModule\Livewire\Auth\Login;
 use Modules\AuthModule\Livewire\Auth\Register;
@@ -50,3 +52,10 @@ Route::group(['middleware' => ['auth', 'language', 'disabled'], 'domain' => sett
         Route::get('activate-two-factor', ForceActivateTwoFactor::class)->name('force-activate-two-factor');
     });
 });
+
+if (ModuleManager::getModule('AdminModule')->isEnabled()) {
+    Route::get('/admin/modules/authmodule', AdminSettings::class)
+        ->name('admin.modules.settings.authmodule')
+        ->middleware(['auth', 'can:adminmodule.settings.view'])
+        ->domain(setting('adminmodule.domains.admin'));
+}

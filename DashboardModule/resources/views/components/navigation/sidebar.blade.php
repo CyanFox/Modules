@@ -59,14 +59,14 @@
                             </x-dropdown.items>
                         </a>
                         @if(module()->getModule('AdminModule')->isEnabled())
-                            @hasrole('Super Admin')
-                            <a href="{{ route('admin.dashboard') }}" wire:navigate>
-                                <x-dropdown.items>
-                                    <i class="icon-settings text-md"></i>
-                                    <span class="ml-2 text-md">{{ __('dashboardmodule::dashboard.admin') }}</span>
-                                </x-dropdown.items>
-                            </a>
-                            @endhasrole
+                            @can('adminmodule.admin')
+                                <a href="{{ route('admin.dashboard') }}" wire:navigate>
+                                    <x-dropdown.items>
+                                        <i class="icon-settings text-md"></i>
+                                        <span class="ml-2 text-md">{{ __('dashboardmodule::dashboard.admin') }}</span>
+                                    </x-dropdown.items>
+                                </a>
+                            @endcan
                         @endif
                         <a href="{{ route('auth.logout') }}">
                             <x-dropdown.items separator>
@@ -74,7 +74,7 @@
                                 <span class="ml-2 text-md">{{ __('dashboardmodule::dashboard.logout') }}</span>
                             </x-dropdown.items>
                         </a>
-                        <x-view-integration name="dashboardmodule.profile"/>
+                        <x-view-integration name="dashboardmodule.profile.mobile.dropdown"/>
                     </x-dropdown>
                 @endauth
                 @guest()
@@ -82,6 +82,8 @@
                         <i class="icon-log-in text-md"></i>
                         <span class="ml-2 text-md">{{ __('dashboardmodule::dashboard.login') }}</span>
                     </a>
+
+                    <x-view-integration name="dashboardmodule.profile.mobile.guest"/>
                 @endguest
             </div>
         </div>
@@ -89,7 +91,7 @@
 
     <!-- Navbar -->
     <nav
-            class="dark:bg-dark-700 dark:border-none border bg-white hidden md:flex items-center justify-between px-4 py-3">
+        class="dark:bg-dark-700 dark:border-none border bg-white hidden md:flex items-center justify-between px-4 py-3">
         <div class="ml-auto flex items-center">
             <div class="relative inline-block">
                 @auth()
@@ -105,14 +107,14 @@
                             </x-dropdown.items>
                         </a>
                         @if(module()->getModule('AdminModule')->isEnabled())
-                            @hasrole('Super Admin')
-                            <a href="{{ route('admin.dashboard') }}">
-                                <x-dropdown.items>
-                                    <i class="icon-settings text-md"></i>
-                                    <span class="ml-2 text-md">{{ __('dashboardmodule::dashboard.admin') }}</span>
-                                </x-dropdown.items>
-                            </a>
-                            @endhasrole
+                            @can('adminmodule.admin')
+                                <a href="{{ route('admin.dashboard') }}">
+                                    <x-dropdown.items>
+                                        <i class="icon-settings text-md"></i>
+                                        <span class="ml-2 text-md">{{ __('dashboardmodule::dashboard.admin') }}</span>
+                                    </x-dropdown.items>
+                                </a>
+                            @endcan
                         @endif
                         <a href="{{ route('auth.logout') }}">
                             <x-dropdown.items separator>
@@ -121,7 +123,7 @@
                             </x-dropdown.items>
                         </a>
 
-                        <x-view-integration name="dashboardmodule.profile"/>
+                        <x-view-integration name="dashboardmodule.profile.dropdown"/>
                     </x-dropdown>
                 @endauth
                 @guest()
@@ -129,6 +131,8 @@
                         <i class="icon-log-in text-md"></i>
                         <span class="ml-2 text-md">{{ __('dashboardmodule::dashboard.login') }}</span>
                     </a>
+
+                    <x-view-integration name="dashboardmodule.profile.guest"/>
                 @endguest
             </div>
         </div>
@@ -151,10 +155,10 @@
                     <x-dashboardmodule::sidebar-entry :label="__('dashboardmodule::dashboard.dashboard')"
                                                       route="dashboard"
                                                       icon="icon-layout-dashboard"/>
-                    <x-view-integration name="dashboardmodule.sidebar.auth.top"/>
+                    <x-view-integration name="dashboardmodule.sidebar.auth.header"/>
                 @endauth
                 @guest()
-                    <x-view-integration name="dashboardmodule.sidebar.guest.top"/>
+                    <x-view-integration name="dashboardmodule.sidebar.guest.header"/>
                 @endguest
 
             </div>
@@ -166,21 +170,21 @@
                                                       icon="icon-user"/>
 
                     @if(module()->getModule('AdminModule')->isEnabled())
-                        @hasrole('Super Admin')
-                        <x-dashboardmodule::sidebar-entry :label="__('dashboardmodule::dashboard.admin')"
-                                                          route="admin.dashboard"
-                                                          icon="icon-settings"/>
-                        @endhasrole
+                        @can('adminmodule.admin')
+                            <x-dashboardmodule::sidebar-entry :label="__('dashboardmodule::dashboard.admin')"
+                                                              route="admin.dashboard"
+                                                              icon="icon-settings"/>
+                        @endcan
                     @endif
 
                     <x-dashboardmodule::sidebar-entry :label="__('dashboardmodule::dashboard.logout')"
                                                       route="auth.logout"
                                                       icon="icon-log-out" :navigate="false"/>
 
-                    <x-view-integration name="dashboardmodule.sidebar.auth.bottom"/>
+                    <x-view-integration name="dashboardmodule.sidebar.auth.footer"/>
                 @endauth
                 @guest()
-                    <x-view-integration name="dashboardmodule.sidebar.guest.bottom"/>
+                    <x-view-integration name="dashboardmodule.sidebar.guest.footer"/>
                 @endguest
             </div>
         </div>

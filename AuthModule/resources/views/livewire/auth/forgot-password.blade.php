@@ -8,13 +8,15 @@
                     <x-view-integration name="authmodule.forgot_password.logo"/>
                 </div>
                 <div class="space-y-4">
-                    <x-view-integration name="authmodule.forgot_password.top"/>
+                    <x-view-integration name="authmodule.forgot_password.header"/>
 
                     @if ($rateLimitTime > 1)
                         <div wire:poll.1s="setRateLimit">
                             <x-alert icon="alert-triangle" color="yellow">
                                 {{ __('authmodule::auth.rate_limit', ['seconds' => $rateLimitTime]) }}
                             </x-alert>
+
+                            <x-view-integration name="authmodule.forgot_password.rate_limit"/>
                         </div>
                     @endif
 
@@ -25,30 +27,40 @@
 
                             <x-password label="{{ __('authmodule::messages.confirm_password') }} *" wire:model="passwordConfirmation"/>
 
-                            <x-view-integration name="authmodule.forgot_password.reset_form"/>
+                            <x-view-integration name="authmodule.forgot_password.reset.form"/>
 
                             <x-button class="w-full" loading="resetPassword" type="submit">
                                 {{ __('authmodule::auth.forgot_password.buttons.reset_password') }}
                             </x-button>
+
+                            <x-view-integration name="authmodule.forgot_password.reset.buttons"/>
+
+                            <x-view-integration name="authmodule.forgot_password.reset.footer"/>
                         </form>
                     @else
                         <form class="space-y-5" wire:submit="sendResetLink">
                             @csrf
                             <x-input label="{{ __('authmodule::messages.email') }} *" wire:model="email"/>
 
-                            <x-view-integration name="authmodule_forgot_email_form"/>
+                            <x-view-integration name="authmodule.forgot_password.email.form"/>
 
                             @if(setting('authmodule.enable.captcha'))
                                 <div class="gap-3 lg:flex space-y-3">
                                     <img src="{{ captcha_src() }}" class="rounded-lg lg:w-1/2 w-full" alt="Captcha">
 
                                     <x-input label="{{ __('messages.captcha')}} *" class="w-full" wire:model="captcha"/>
+
+                                    <x-view-integration name="authmodule.forgot_password.email.captcha"/>
                                 </div>
                             @endif
 
                             <x-button class="w-full" loading="sendResetLink" type="submit">
                                 {{ __('authmodule::auth.forgot_password.buttons.send_reset_link') }}
                             </x-button>
+
+                            <x-view-integration name="authmodule.forgot_password.email.buttons"/>
+
+                            <x-view-integration name="authmodule.forgot_password.email.footer"/>
                         </form>
                     @endif
 
@@ -57,7 +69,9 @@
                         {{ __('authmodule::auth.buttons.back_to_login') }}
                     </x-button>
 
-                    <x-view-integration name="authmodule.forgot_password.bottom"/>
+                    <x-view-integration name="authmodule.forgot_password.buttons"/>
+
+                    <x-view-integration name="authmodule.forgot_password.footer"/>
                 </div>
             </x-card>
         </div>

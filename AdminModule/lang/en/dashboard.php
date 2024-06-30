@@ -27,6 +27,7 @@ return [
     'navigation' => [
         'users' => 'Users',
         'groups' => 'Groups',
+        'permissions' => 'Permissions',
         'settings' => 'Settings',
         'modules' => 'Modules',
     ],

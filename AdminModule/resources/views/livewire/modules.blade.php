@@ -8,11 +8,13 @@
                         {{ __('adminmodule::modules.buttons.install_module') }}
                     </x-button>
 
-                    <x-view-integration name="authmodule.modules.header"/>
+                    <x-view-integration name="authmodule.modules.header.install"/>
                 @endcan
 
                 <x-input wire:model="moduleSearchKeyword" wire:change="searchModule"
                          placeholder="{{ __('adminmodule::modules.search') }}"/>
+
+                <x-view-integration name="authmodule.modules.header"/>
             </div>
         </x-card>
     </div>
@@ -22,6 +24,8 @@
             <div class="text-2xl font-semibold text-center">
                 {{ __('adminmodule::modules.no_modules') }}
             </div>
+
+            <x-view-integration name="authmodule.modules.no_modules"/>
         </x-card>
     @endif
 
@@ -31,6 +35,8 @@
                 <x-card>
                     <div class="text-2xl font-semibold text-center">
                         {{ $module }}
+
+                        <x-view-integration name="authmodule.modules.{{ $module }}.title"/>
                     </div>
 
                     <div class="text-center">
@@ -38,10 +44,14 @@
                             <x-badge color="green">
                                 {{ __('adminmodule::modules.enabled') }}
                             </x-badge>
+
+                            <x-view-integration name="authmodule.modules.{{ $module }}.status.enable"/>
                         @else
                             <x-badge color="red">
                                 {{ __('adminmodule::modules.disabled') }}
                             </x-badge>
+
+                            <x-view-integration name="authmodule.modules.{{ $module }}.status.disable"/>
                         @endif
 
                         <x-view-integration name="authmodule.modules.{{ $module }}.status"/>
@@ -64,6 +74,8 @@
                                                     class="ml-2 text-md">{{ __('adminmodule::modules.module_settings') }}</span>
                                             </x-dropdown.items>
                                         </a>
+
+                                        <x-view-integration name="authmodule.modules.{{ $module }}.dropdown.settings"/>
                                     @endcan
                                 @endif
 
@@ -76,6 +88,8 @@
                                                 class="ml-2 text-md">{{ __('adminmodule::modules.run_migrations') }}</span>
                                         </x-dropdown.items>
                                     </a>
+
+                                    <x-view-integration name="authmodule.modules.{{ $module }}.dropdown.migrate"/>
                                 @endcan
 
                                 @can('adminmodule.modules.actions.composer')
@@ -87,6 +101,8 @@
                                                 class="ml-2 text-md">{{ __('adminmodule::modules.run_composer') }}</span>
                                         </x-dropdown.items>
                                     </a>
+
+                                    <x-view-integration name="authmodule.modules.{{ $module }}.dropdown.composer"/>
                                 @endcan
 
                                 @can('adminmodule.modules.actions.npm')
@@ -97,9 +113,11 @@
                                             <span class="ml-2 text-md">{{ __('adminmodule::modules.run_npm') }}</span>
                                         </x-dropdown.items>
                                     </a>
+
+                                    <x-view-integration name="authmodule.modules.{{ $module }}.dropdown.npm"/>
                                 @endcan
 
-                                <x-view-integration name="authmodule.modules.{{ $module }}.actions"/>
+                                <x-view-integration name="authmodule.modules.{{ $module }}.dropdown"/>
                             </x-dropdown>
                         </div>
 
@@ -109,34 +127,43 @@
                                     <x-button :href="module()->getModule($module)->getSettingsPage()"><i
                                             class="icon-settings-2 text-lg"></i>
                                     </x-button>
+
+                                    <x-view-integration
+                                        name="authmodule.modules.{{ $module }}.actions.settings"/>
                                 @endcan
                             @endif
 
                             @can('adminmodule.modules.delete')
                                 <x-button
-                                    wire:click="deleteModule('{{ $module }}', false)">
-                                    <i class="icon-trash text-lg text-red-600"></i>
+                                    wire:click="deleteModule('{{ $module }}', false)" color="red">
+                                    <i class="icon-trash text-lg"></i>
                                 </x-button>
+
+                                <x-view-integration name="authmodule.modules.{{ $module }}.actions.delete"/>
                             @endcan
 
                             @if(module()->getModule($module)->isEnabled())
                                 @can('adminmodule.modules.disable')
-                                    <x-button wire:click="disableModule('{{ $module }}')"
+                                    <x-button wire:click="disableModule('{{ $module }}')" color="orange"
                                               tooltip-bottom="{{ __('admin/modules.tooltip.disable_module') }}" spinner>
-                                        <i class="icon-ban text-lg text-yellow-600"></i>
+                                        <i class="icon-ban text-lg"></i>
                                     </x-button>
+
+                                    <x-view-integration name="authmodule.modules.{{ $module }}.actions.disable"/>
                                 @endcan
                             @else
                                 @can('adminmodule.modules.enable')
-                                    <x-button wire:click="enableModule('{{ $module }}')"
+                                    <x-button wire:click="enableModule('{{ $module }}')" color="green"
                                               tooltip-bottom="{{ __('admin/modules.tooltip.enable_module') }}" spinner>
-                                        <i class="icon-check text-lg text-green-600"></i>
+                                        <i class="icon-check text-lg"></i>
                                     </x-button>
+
+                                        <x-view-integration name="authmodule.modules.{{ $module }}.actions.enable"/>
                                 @endcan
                             @endif
 
 
-                            <x-view-integration name="authmodule.modules.{{ $module }}.buttons"/>
+                                <x-view-integration name="authmodule.modules.{{ $module }}.actions"/>
                         </div>
                     </div>
                 </x-card>
@@ -145,4 +172,7 @@
     </div>
 
     @livewire('adminmodule::components.modals.install-module')
+
+
+    <x-view-integration name="authmodule.modules.footer"/>
 </div>

@@ -11,3 +11,5 @@
         $resetLink
     ],
      setting('authmodule.emails.forgot_password.content'))) !!}
+
+<x-view-integration name="authmodule.emails.forgot_password.content"/>

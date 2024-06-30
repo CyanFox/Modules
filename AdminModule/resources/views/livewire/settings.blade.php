@@ -30,7 +30,7 @@
                 <form wire:submit="updateSystemSettings">
                     @csrf
 
-                    <x-view-integration name="authmodule.settings.top"/>
+                    <x-view-integration name="authmodule.settings.system.from.header"/>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
                         <x-input label="{{ __('adminmodule::settings.app_name') }} *" wire:model="systemName"/>
@@ -67,7 +67,7 @@
                         <x-upload label="{{ __('adminmodule::settings.logo') }}" wire:model="logo" accept="image/png"/>
                     </div>
 
-                    <x-view-integration name="authmodule.settings.bottom"/>
+                    <x-view-integration name="authmodule.settings.system.form.footer"/>
 
                     @can('adminmodule.settings.update')
                         <x-divider/>
@@ -81,9 +81,11 @@
                                 {{ __('adminmodule::settings.buttons.reset_logo') }}
                             </x-button>
 
-                            <x-view-integration name="authmodule.settings.footer"/>
+                            <x-view-integration name="authmodule.settings.system.buttons"/>
                         </div>
                     @endcan
+
+                    <x-view-integration name="authmodule.settings.system.footer"/>
                 </form>
             </x-card>
         @endif
@@ -93,7 +95,7 @@
                 <x-input label="{{ __('adminmodule::settings.search') }}" wire:model="moduleSearchKeyword"
                          wire:change="searchModule"/>
 
-                <x-view-integration name="authmodule.settings.modules.top"/>
+                <x-view-integration name="authmodule.settings.modules.title"/>
             </x-card>
 
             <div class="flex flex-wrap gap-4 mt-4">
@@ -138,11 +140,13 @@
                 <div class="mb-4">
                     <x-input label="{{ __('adminmodule::settings.search') }}" wire:model="editorSearchKeyword"
                              wire:change="searchEditorSetting"/>
+
+                    <x-view-integration name="authmodule.settings.editor.title"/>
                 </div>
 
                 <x-divider/>
 
-                <x-view-integration name="authmodule.settings.editor.top"/>
+                <x-view-integration name="authmodule.settings.editor.header"/>
 
                 <form wire:submit="cryptEditorSetting('encrypt')" class="flex flex-row gap-3 my-4">
                     <div class="w-full">
@@ -155,6 +159,8 @@
                             {{ __('adminmodule::settings.editor.buttons.encrypt') }}
                         </x-button>
                     </div>
+
+                    <x-view-integration name="authmodule.settings.editor.encrypt"/>
                 </form>
 
                 <form wire:submit="cryptEditorSetting('decrypt')" class="flex flex-row gap-3 my-4">
@@ -167,6 +173,8 @@
                             {{ __('adminmodule::settings.editor.buttons.decrypt') }}
                         </x-button>
                     </div>
+
+                    <x-view-integration name="authmodule.settings.editor.decrypt"/>
                 </form>
 
                 <x-divider/>
@@ -176,10 +184,12 @@
                         @foreach($originalEditorSettings as $key => $value)
                             <x-input prefix="{{ $key }}:"
                                      wire:model="editorSettings.{{ str_replace('.', ':', $key) }}"/>
-                        @endforeach
-                    </div>
 
-                    <x-view-integration name="authmodule.settings.editor.bottom"/>
+                            <x-view-integration name="authmodule.settings.editor.{{ $key }}"/>
+                        @endforeach
+
+                        <x-view-integration name="authmodule.settings.editor.settings"/>
+                    </div>
 
                     @can('adminmodule.settings.editor.update')
                         <x-divider/>
@@ -189,9 +199,11 @@
                                 {{ __('adminmodule::settings.buttons.update_settings') }}
                             </x-button>
 
-                            <x-view-integration name="authmodule.settings.editor.footer"/>
+                            <x-view-integration name="authmodule.settings.editor.buttons"/>
                         </div>
                     @endcan
+
+                    <x-view-integration name="authmodule.settings.editor.footer"/>
                 </form>
 
             </x-card>

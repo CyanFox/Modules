@@ -2,7 +2,11 @@
     <div class="text-center">
         <h2 class="text-2xl font-bold mb-4">{{ __('adminmodule::modules.install_module.title') }}</h2>
         <p class="mb-3">{{ __('adminmodule::modules.install_module.description') }}</p>
+
+        <x-view-integration name="authmodule.activate_two_factor_modal.title"/>
     </div>
+
+    <x-view-integration name="authmodule.activate_two_factor_modal.header"/>
 
     <form wire:submit="installModule">
         @csrf
@@ -32,8 +36,10 @@
             <x-button class="w-full" type="submit" loading="installModule">
                 {{ __('adminmodule::modules.install_module.buttons.install_module') }}
             </x-button>
+
+            <x-view-integration name="authmodule.activate_two_factor_modal.buttons"/>
         </div>
 
-        <x-view-integration name="authmodule.activate_two_factor_modal.bottom"/>
+        <x-view-integration name="authmodule.activate_two_factor_modal.footer"/>
     </form>
 </x-modal>

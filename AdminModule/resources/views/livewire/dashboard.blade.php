@@ -9,6 +9,8 @@
         <x-alert>
             {{ __('adminmodule::dashboard.current.admin_module_version', ['version' => $currentAdminModuleVersion]) }}
         </x-alert>
+
+        <x-view-integration name="adminmodule.dashboard.versions"/>
     </div>
 
     @if($showUpdateNotification)
@@ -32,6 +34,8 @@
                     {{ __('adminmodule::dashboard.up_to_date.project_version') }}
                 </x-alert>
             @endif
+
+            <x-view-integration name="adminmodule.dashboard.versions.update"/>
         </div>
     @endif
 
@@ -41,15 +45,15 @@
                 {{ __('adminmodule::dashboard.dev_version') }}
             </x-alert>
         </div>
+
+        <x-view-integration name="adminmodule.dashboard.versions.dev"/>
     @endif
 
-    <div class="grid grid-cols-1">
-        <x-button color="green" wire:click="checkForUpdates" loading>
-            {{ __('adminmodule::dashboard.buttons.check_for_updates') }}
-        </x-button>
-    </div>
+    <x-button color="green" class="w-full" wire:click="checkForUpdates" loading>
+        {{ __('adminmodule::dashboard.buttons.check_for_updates') }}
+    </x-button>
 
-    <x-view-integration name="adminmodule.dashboard.top"/>
+    <x-view-integration name="adminmodule.dashboard.cards.start"/>
 
     <div class="flex flex-wrap gap-4 mt-4">
 
@@ -70,6 +74,17 @@
                     <div class="flex justify-center items-center">
                         <i class="icon-shield text-2xl"></i>
                         <span class="ml-2">{{ __('adminmodule::dashboard.navigation.groups') }}</span>
+                    </div>
+                </x-card>
+            </a>
+        @endcan
+
+        @can('adminmodule.permissions.view')
+            <a href="{{ route('admin.permissions') }}" class="flex-grow" wire:navigate>
+                <x-card>
+                    <div class="flex justify-center items-center">
+                        <i class="icon-key-round text-2xl"></i>
+                        <span class="ml-2">{{ __('adminmodule::dashboard.navigation.permissions') }}</span>
                     </div>
                 </x-card>
             </a>
@@ -97,7 +112,9 @@
             </a>
         @endcan
 
-        <x-view-integration name="adminmodule.dashboard.bottom"/>
+        <x-view-integration name="adminmodule.dashboard.cards.end"/>
+
+        <x-view-integration name="adminmodule.dashboard.footer"/>
     </div>
 
 </div>

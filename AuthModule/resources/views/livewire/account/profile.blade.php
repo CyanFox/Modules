@@ -30,15 +30,19 @@
                                     <i class="icon-upload"></i></div>
                             </div>
                             <x-authmodule::modals.change-avatar :avatarUrl="$avatarUrl" :avatarFile="$avatarFile"/>
+
+                            <x-view-integration name="authmodule.profile.overview.change_avatar"/>
                         @else
                             <img src="{{ user()->getUser(auth()->user())->getAvatarURL() }}"
                                  alt="Avatar" class="h-16 w-16 rounded-3xl mr-4">
+
+                            <x-view-integration name="authmodule.profile.overview.avatar"/>
                         @endif
                         <div>
                             <p class="font-bold">{{ auth()->user()->username }}</p>
                             <p>{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</p>
 
-                            <x-view-integration name="authmodule.profile.avatar"/>
+                            <x-view-integration name="authmodule.profile.overview.username"/>
                         </div>
                     </div>
                 </x-card>
@@ -47,6 +51,8 @@
                     <x-slot:header>
                         <span
                             class="font-bold text-xl">{{ __('authmodule::account.overview.language_and_theme.title') }}</span>
+
+                        <x-view-integration name="authmodule.profile.overview.language_and_theme.title"/>
                     </x-slot:header>
 
                     <x-select.styled :options="[
@@ -61,19 +67,28 @@
                             ]" select="label:label|value:value" wire:model="theme" searchable/>
                     </div>
 
-                    <x-view-integration name="authmodule.profile.language_and_theme"/>
+                    <x-view-integration name="authmodule.profile.overview.language_and_theme.form"/>
 
                     <x-divider/>
 
-                    <x-button class="mt-3" wire:click="updateLanguageAndTheme" loading="updateLanguageAndTheme">
-                        {{ __('authmodule::account.overview.language_and_theme.buttons.update_language_and_theme') }}
-                    </x-button>
+
+                    <div class="space-x-1 mt-3">
+                        <x-button class="mt-3" wire:click="updateLanguageAndTheme" loading="updateLanguageAndTheme">
+                            {{ __('authmodule::account.overview.language_and_theme.buttons.update_language_and_theme') }}
+                        </x-button>
+
+                        <x-view-integration name="authmodule.profile.overview.language_and_theme.buttons"/>
+                    </div>
+
+                    <x-view-integration name="authmodule.profile.overview.language_and_theme.footer"/>
                 </x-card>
 
                 <x-card>
                     <x-slot:header>
                         <span
                             class="font-bold text-xl">{{ __('authmodule::account.overview.actions.title') }}</span>
+
+                        <x-view-integration name="authmodule.profile.overview.actions.title"/>
                     </x-slot:header>
 
                     <x-authmodule::modals.activate-two-factor/>
@@ -87,19 +102,27 @@
                             <x-button color="red" wire:click="disableTwoFactor">
                                 {{ __('authmodule::account.overview.actions.buttons.disable_two_factor') }}
                             </x-button>
+
+                            <x-view-integration name="authmodule.profile.overview.actions.two_factor_enabled"/>
                         @elseif(auth()->user()->password !== null)
                             <x-button wire:click="$toggle('activateTwoFactorModal')" color="green">
                                 {{ __('authmodule::account.overview.actions.buttons.activate_two_factor') }}
                             </x-button>
+
+                            <x-view-integration name="authmodule.profile.overview.actions.two_factor_disabled"/>
                         @endif
 
                         @if(setting('authmodule.enable.delete_account'))
                             <x-button color="red" wire:click="deleteAccount">
                                 {{ __('authmodule::account.overview.actions.buttons.delete_account') }}
                             </x-button>
+
+                            <x-view-integration name="authmodule.profile.overview.actions.delete_account"/>
                         @endif
 
-                        <x-view-integration name="authmodule.profile.actions"/>
+                        <x-view-integration name="authmodule.profile.overview.actions"/>
+
+                        <x-view-integration name="authmodule.profile.overview.footer"/>
                     </div>
                 </x-card>
             </div>
@@ -109,6 +132,8 @@
                     <x-slot:header>
                         <span
                             class="font-bold text-xl">{{ __('authmodule::account.overview.profile.title') }}</span>
+
+                        <x-view-integration name="authmodule.profile.overview.account.title"/>
                     </x-slot:header>
 
                     <form wire:submit="updateProfile">
@@ -125,13 +150,20 @@
                                      wire:model="email"/>
                         </div>
 
-                        <x-view-integration name="authmodule.profile.update"/>
+                        <x-view-integration name="authmodule.profile.overview.account.form"/>
 
                         <x-divider/>
 
-                        <x-button class="mt-3" loading="updateProfile" type="submit">
-                            {{ __('authmodule::account.overview.profile.buttons.update_profile') }}
-                        </x-button>
+
+                        <div class="space-x-1 mt-3">
+                            <x-button class="mt-3" loading="updateProfile" type="submit">
+                                {{ __('authmodule::account.overview.profile.buttons.update_profile') }}
+                            </x-button>
+
+                            <x-view-integration name="authmodule.profile.overview.account.buttons"/>
+                        </div>
+
+                        <x-view-integration name="authmodule.profile.overview.account.footer"/>
                     </form>
                 </x-card>
 
@@ -140,6 +172,8 @@
                         <x-slot:header>
                         <span
                             class="font-bold text-xl">{{ __('authmodule::account.overview.password.title') }}</span>
+
+                            <x-view-integration name="authmodule.profile.overview.password.title"/>
                         </x-slot:header>
 
                         <form wire:submit="updatePassword">
@@ -159,16 +193,23 @@
                                         label="{{ __('authmodule::account.overview.password.new_password_confirmation') }} *"
                                         wire:model="newPasswordConfirmation"/>
                                 </div>
-                            </div>
 
-                            <x-view-integration name="authmodule.profile.password"/>
+                                <x-view-integration name="authmodule.profile.overview.password.form"/>
+                            </div>
 
                             <x-divider/>
 
-                            <x-button class="mt-3" loading="updatePassword" type="submit">
-                                {{ __('authmodule::account.overview.password.buttons.update_password') }}
-                            </x-button>
 
+                            <div class="space-x-1 mt-3">
+                                <x-button class="mt-3" loading="updatePassword" type="submit">
+                                    {{ __('authmodule::account.overview.password.buttons.update_password') }}
+                                </x-button>
+
+                                <x-view-integration name="authmodule.profile.overview.password.buttons"/>
+                            </div>
+
+
+                            <x-view-integration name="authmodule.profile.overview.password.footer"/>
                         </form>
                     </x-card>
                 </div>
@@ -182,11 +223,15 @@
                 <x-slot:header>
                         <span
                             class="font-bold text-xl">{{ __('authmodule::account.sessions.title') }}</span>
+
+                    <x-view-integration name="authmodule.profile.sessions.title"/>
                 </x-slot:header>
 
-                <x-view-integration name="authmodule.profile.sessions"/>
+                <x-view-integration name="authmodule.profile.sessions.header"/>
 
                 @livewire('authmodule::components.tables.sessions-table')
+
+                <x-view-integration name="authmodule.profile.sessions.footer"/>
             </x-card>
         </div>
     @endif

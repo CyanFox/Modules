@@ -172,31 +172,11 @@ class Settings extends LWComponent
 
     public function searchEditorSetting()
     {
-        if ($this->editorSearchKeyword === null || $this->editorSearchKeyword === '') {
-            $this->editorSettings = '';
-            $this->originalEditorSettings = Setting::all()->mapWithKeys(function ($setting) {
-                return [$setting->key => $setting->value];
-            });
+        $keyword = $this->editorSearchKeyword;
 
-            foreach ($this->originalEditorSettings as $key => $value) {
-                $this->editorSettings .= $key . '::' . $value . "\n";
-            }
-
-            return;
-        }
-
-        $settingsArray = explode("\n", $this->editorSettings);
-        $results = [];
-        foreach ($settingsArray as $setting) {
-            $setting = explode('::', $setting);
-            if (count($setting) === 2) {
-                if (str_contains($setting[0], $this->editorSearchKeyword) || str_contains($setting[1], $this->editorSearchKeyword)) {
-                    $results[] = $setting[0] . '::' . $setting[1];
-                }
-            }
-        }
-
-        $this->editorSettings = implode("\n", $results);
+        $this->originalEditorSettings = Setting::where('key', 'like', "%$keyword%")->get()->mapWithKeys(function ($setting) {
+            return [$setting->key => $setting->value];
+        });
     }
 
     public function cryptEditorSetting($type)

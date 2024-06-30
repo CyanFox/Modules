@@ -2,16 +2,17 @@
     <div class="text-center">
         <h2 class="text-2xl font-bold mb-4">{{ __('authmodule::account.overview.actions.modals.show_recovery_codes.title') }}</h2>
         <p class="mb-3">{{ __('authmodule::account.overview.actions.modals.show_recovery_codes.description') }}</p>
+
+        <x-view-integration name="authmodule.show_recovery_codes_modal.title"/>
     </div>
-    <x-view-integration name="authmodule.show_recovery_codes_modal.top"/>
 
     <div class="text-center space-y-4 mb-3">
         @foreach($this->showRecoveryCodes as $recoveryCode)
             <p class="mb-3">{{ $recoveryCode }}</p>
         @endforeach
-    </div>
 
-    <x-view-integration name="authmodule.show_recovery_codes_modal.middle"/>
+        <x-view-integration name="authmodule.show_recovery_codes_modal.recovery_codes"/>
+    </div>
 
     <x-divider/>
 
@@ -25,7 +26,9 @@
         <x-button class="w-full" color="green" wire:click="downloadRecoveryCodes" loading="downloadRecoveryCodes">
             {{ __('authmodule::account.overview.actions.modals.show_recovery_codes.buttons.download') }}
         </x-button>
+
+        <x-view-integration name="authmodule.show_recovery_codes_modal.buttons"/>
     </div>
 
-    <x-view-integration name="authmodule.show_recovery_codes_modal.bottom"/>
+    <x-view-integration name="authmodule.show_recovery_codes_modal.footer"/>
 </x-modal>

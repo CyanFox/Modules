@@ -2,7 +2,7 @@
     <form wire:submit="activateTwoFactor">
         @csrf
 
-        <x-view-integration name="authmodule.activate_two_factor_modal.top"/>
+        <x-view-integration name="authmodule.activate_two_factor_modal.header"/>
 
         <div class="flex flex-col items-center">
             <img
@@ -31,8 +31,10 @@
             <x-button class="w-full" type="submit" spinner="activateTwoFactor">
                 {{ __('authmodule::account.overview.actions.modals.activate_two_factor.buttons.activate_two_factor') }}
             </x-button>
+
+            <x-view-integration name="authmodule.activate_two_factor_modal.buttons"/>
         </div>
 
-        <x-view-integration name="authmodule.activate_two_factor_modal.bottom"/>
+        <x-view-integration name="authmodule.activate_two_factor_modal.footer"/>
     </form>
 </x-modal>

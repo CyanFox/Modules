@@ -1,2 +1,1 @@
-- [ ] OAuth Module (Google, Facebook, Twitter, Custom, etc.)
 - [ ] REST API

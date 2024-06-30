@@ -78,6 +78,9 @@ class AdminModuleServiceProvider extends ServiceProvider
             Cache::rememberForever('adminmodule.permissions.set', fn () => true);
 
             $role = Role::where('name', 'Super Admin')->first();
+            if (!$role) {
+                $role = Role::create(['name' => 'Super Admin', 'module' => $this->moduleNameLower]);
+            }
             $role->syncPermissions(
                 Permission::all()
             );

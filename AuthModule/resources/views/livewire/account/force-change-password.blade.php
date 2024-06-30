@@ -8,7 +8,7 @@
                     <x-view-integration name="authmodule.force_change_password.logo"/>
                 </div>
                 <div class="space-y-4">
-                    <x-view-integration name="authmodule.force_change_password.top"/>
+                    <x-view-integration name="authmodule.force_change_password.header"/>
 
                     <form wire:submit="updatePassword">
                         @csrf
@@ -26,15 +26,17 @@
                                     wire:model="newPasswordConfirmation"/>
                             </div>
                         </div>
-                        <x-view-integration name="authmodule.force_change_password."/>
+                        <x-view-integration name="authmodule.force_change_password.form"/>
 
                         <x-button class="mt-3 w-full" loading="updatePassword">
                             {{ __('authmodule::account.force_actions.change_password.buttons.change_password') }}
                         </x-button>
+
+                        <x-view-integration name="authmodule.force_change_password.buttons"/>
                     </form>
 
 
-                    <x-view-integration name="authmodule.force_change_password.bottom"/>
+                    <x-view-integration name="authmodule.force_change_password.footer"/>
 
                 </div>
             </x-card>

@@ -8,7 +8,7 @@
                     <x-view-integration name="authmodule.force_activate_two_factor.logo"/>
                 </div>
                 <div class="space-y-4">
-                    <x-view-integration name="authmodule.force_activate_two_factor.top"/>
+                    <x-view-integration name="authmodule.force_activate_two_factor.header"/>
 
                     <form wire:submit="activateTwoFactor">
                         @csrf
@@ -36,10 +36,12 @@
                         <x-button class="mt-3 w-full" loading="activateTwoFactor">
                             {{ __('authmodule::account.force_actions.activate_two_factor.buttons.activate_two_factor') }}
                         </x-button>
+
+                        <x-view-integration name="authmodule.force_activate_two_factor.buttons"/>
                     </form>
 
 
-                    <x-view-integration name="authmodule.force_activate_two_factor.bottom"/>
+                    <x-view-integration name="authmodule.force_activate_two_factor.footer"/>
 
                 </div>
             </x-card>

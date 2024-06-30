@@ -2,10 +2,14 @@
     <div class="text-center">
         <h2 class="text-2xl font-bold mb-4">{{ __('authmodule::account.change_avatar.title') }}</h2>
         <p class="mb-3">{{ __('authmodule::account.change_avatar.description') }}</p>
+
+        <x-view-integration name="authmodule.change_avatar_modal.title"/>
     </div>
 
     <form wire:submit="changeAvatar">
         @csrf
+
+        <x-view-integration name="authmodule.change_avatar_modal.header"/>
 
         <div class="space-y-4 mb-3">
 
@@ -22,7 +26,7 @@
                     wire:model="avatarUrl"/>
         </div>
 
-        <x-view-integration name="authmodule.activate_two_factor_modal.form"/>
+        <x-view-integration name="authmodule.change_avatar_modal.form"/>
 
         <x-divider/>
 
@@ -36,8 +40,10 @@
             <x-button class="w-full" type="submit" loading="installModule">
                 {{ __('authmodule::account.change_avatar.buttons.change_avatar') }}
             </x-button>
+
+            <x-view-integration name="authmodule.change_avatar_modal.buttons"/>
         </div>
 
-        <x-view-integration name="authmodule.activate_two_factor_modal.bottom"/>
+        <x-view-integration name="authmodule.change_avatar_modal.footer"/>
     </form>
 </x-modal>

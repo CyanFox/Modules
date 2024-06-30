@@ -6,6 +6,9 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
+use Modules\AuthModule\Console\CreateUserCommand;
+use Modules\AuthModule\Console\DeleteUserCommand;
+use Modules\AuthModule\Console\UpdateUserCommand;
 use TallStackUi\Facades\TallStackUi;
 
 class AuthModuleServiceProvider extends ServiceProvider
@@ -49,7 +52,11 @@ class AuthModuleServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        // $this->commands([]);
+        $this->commands([
+            new CreateUserCommand(),
+            new UpdateUserCommand(),
+            new DeleteUserCommand(),
+        ]);
     }
 
     protected $middleware = [
@@ -93,7 +100,7 @@ class AuthModuleServiceProvider extends ServiceProvider
      */
     public function registerTranslations(): void
     {
-        $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
+        $langPath = resource_path('lang/modules/' . $this->moduleNameLower);
 
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
@@ -109,7 +116,7 @@ class AuthModuleServiceProvider extends ServiceProvider
      */
     protected function registerConfig(): void
     {
-        $this->publishes([module_path($this->moduleName, 'config/settings.php') => config_path($this->moduleNameLower.'.php')], 'config');
+        $this->publishes([module_path($this->moduleName, 'config/settings.php') => config_path($this->moduleNameLower . '.php')], 'config');
         $this->mergeConfigFrom(module_path($this->moduleName, 'config/settings.php'), $this->moduleNameLower);
 
         $this->publishes([module_path($this->moduleName, 'config/permission.php') => config_path('permission.php')], 'config');
@@ -121,14 +128,14 @@ class AuthModuleServiceProvider extends ServiceProvider
      */
     public function registerViews(): void
     {
-        $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
+        $viewPath = resource_path('views/modules/' . $this->moduleNameLower);
         $sourcePath = module_path($this->moduleName, 'resources/views');
 
-        $this->publishes([$sourcePath => $viewPath], ['views', $this->moduleNameLower.'-module-views']);
+        $this->publishes([$sourcePath => $viewPath], ['views', $this->moduleNameLower . '-module-views']);
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
 
-        $componentNamespace = str_replace('/', '\\', config('modules.namespace').'\\'.$this->moduleName.'\\'.ltrim(config('modules.paths.generator.component-class.path'), config('modules.paths.app_folder', '')));
+        $componentNamespace = str_replace('/', '\\', config('modules.namespace') . '\\' . $this->moduleName . '\\' . ltrim(config('modules.paths.generator.component-class.path'), config('modules.paths.app_folder', '')));
         Blade::componentNamespace($componentNamespace, $this->moduleNameLower);
     }
 
@@ -149,8 +156,8 @@ class AuthModuleServiceProvider extends ServiceProvider
     {
         $paths = [];
         foreach (config('view.paths') as $path) {
-            if (is_dir($path.'/modules/'.$this->moduleNameLower)) {
-                $paths[] = $path.'/modules/'.$this->moduleNameLower;
+            if (is_dir($path . '/modules/' . $this->moduleNameLower)) {
+                $paths[] = $path . '/modules/' . $this->moduleNameLower;
             }
         }
 
