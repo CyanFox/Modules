@@ -16,7 +16,7 @@ use Modules\DashboardModule\Livewire\Dashboard;
 use Modules\DashboardModule\Livewire\Home;
 
 if (setting('dashboardmodule.routes.dashboard')) {
-    Route::get('/dashboard', Dashboard::class)->name('dashboard')->middleware('auth');
+    Route::get('/dashboard', Dashboard::class)->name('dashboard')->middleware('auth', 'language', 'disabled');
 }
 
 if (setting('dashboardmodule.routes.home')) {

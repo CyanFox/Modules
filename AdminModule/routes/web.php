@@ -19,7 +19,7 @@ use Modules\AdminModule\Livewire\Users;
 |
 */
 
-Route::group(['middleware' => ['auth', 'can:adminmodule.admin'], 'prefix' => 'admin', 'as' => 'admin.', 'domain' => setting('adminmodule.domains.admin')], function () {
+Route::group(['middleware' => ['auth', 'can:adminmodule.admin', 'language', 'disabled'], 'prefix' => 'admin', 'as' => 'admin.', 'domain' => setting('adminmodule.domains.admin')], function () {
     Route::get('/', Dashboard::class)->name('dashboard')->middleware('can:adminmodule.dashboard.view');
     Route::get('/users', Users::class)->name('users')->middleware('can:adminmodule.users.view');
     Route::get('/groups', Groups::class)->name('groups')->middleware('can:adminmodule.groups.view');

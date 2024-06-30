@@ -56,6 +56,6 @@ Route::group(['middleware' => ['auth', 'language', 'disabled'], 'domain' => sett
 if (ModuleManager::getModule('AdminModule')->isEnabled()) {
     Route::get('/admin/modules/authmodule', AdminSettings::class)
         ->name('admin.modules.settings.authmodule')
-        ->middleware(['auth', 'can:adminmodule.settings.view'])
+        ->middleware(['auth', 'can:adminmodule.settings.view', 'language', 'disabled'])
         ->domain(setting('adminmodule.domains.admin'));
 }

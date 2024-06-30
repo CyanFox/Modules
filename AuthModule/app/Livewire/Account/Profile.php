@@ -22,7 +22,7 @@ class Profile extends LWComponent
     use WithFileUploads;
 
     #[Url]
-    public $tab = 'Overview';
+    public $tab;
 
     public $activateTwoFactorModal;
 
@@ -359,6 +359,7 @@ class Profile extends LWComponent
 
     public function mount()
     {
+        $this->tab = __('authmodule::account.tabs.overview');
         $this->language = Auth::user()->language;
         $this->theme = Auth::user()->theme;
         $this->firstName = Auth::user()->first_name;
