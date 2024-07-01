@@ -7,6 +7,7 @@ return [
         'captcha' => env('AUTHMODULE_ENABLE_CAPTCHA', false),
         'delete_account' => env('AUTHMODULE_ENABLE_DELETE_ACCOUNT', true),
         'change_avatar' => env('AUTHMODULE_ENABLE_CHANGE_AVATAR', true),
+        'local_login' => env('AUTHMODULE_ENABLE_LOCAL_LOGIN', true),
     ],
 
     'profile' => [

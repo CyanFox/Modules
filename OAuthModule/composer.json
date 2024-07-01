@@ -1,0 +1,37 @@
+{
+    "name": "nwidart/oauthmodule",
+    "description": "",
+    "authors": [
+        {
+            "name": "CyanFox-Projects",
+            "email": "opensource@cyanfox.de"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\OAuthModule\\": "app/",
+            "Modules\\OAuthModule\\Database\\Factories\\": "database/factories/",
+            "Modules\\OAuthModule\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\OAuthModule\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "socialiteproviders/authentik": "^5.2",
+        "socialiteproviders/github": "^4.1",
+        "socialiteproviders/google": "^4.1",
+        "socialiteproviders/discord": "^4.2",
+        "laravel/socialite": "^5.15"
+    }
+}
