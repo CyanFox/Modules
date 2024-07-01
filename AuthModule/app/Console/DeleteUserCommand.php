@@ -3,12 +3,8 @@
 namespace Modules\AuthModule\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Hash;
 use Modules\AuthModule\Models\User;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
+
 use function Laravel\Prompts\confirm;
 
 class DeleteUserCommand extends Command
@@ -39,6 +35,7 @@ class DeleteUserCommand extends Command
         $user = User::where('username', $this->argument('username'))->first();
         if (!$user) {
             $this->error('User not found');
+
             return;
         }
 
@@ -46,6 +43,7 @@ class DeleteUserCommand extends Command
 
         if (!$delete) {
             $this->info('User not deleted');
+
             return;
         }
 

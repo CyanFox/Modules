@@ -7,8 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Modules\AuthModule\Models\User;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
+
 use function Laravel\Prompts\multiselect;
 use function Laravel\Prompts\password;
 use function Laravel\Prompts\text;
@@ -41,6 +40,7 @@ class UpdateUserCommand extends Command
         $user = User::where('username', $this->argument('username'))->first();
         if (!$user) {
             $this->error('User not found');
+
             return;
         }
 

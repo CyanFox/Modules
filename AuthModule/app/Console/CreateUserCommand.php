@@ -4,15 +4,14 @@ namespace Modules\AuthModule\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
+use Modules\AuthModule\Facades\UserManager;
 use Modules\AuthModule\Models\User;
-use Modules\AuthModule\Rules\Password;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
+
 use function Laravel\Prompts\multiselect;
-use function Laravel\Prompts\text;
 use function Laravel\Prompts\password;
+use function Laravel\Prompts\text;
 
 class CreateUserCommand extends Command
 {
@@ -63,6 +62,7 @@ class CreateUserCommand extends Command
 
         $user->assignRole($groups);
         $user->givePermissionTo($permissions);
+        UserManager::getUser($user)->getTwoFactorManager()->generateTwoFactorSecret();
 
         $this->info('User created successfully');
     }

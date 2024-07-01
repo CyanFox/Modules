@@ -195,10 +195,10 @@ class AdminSettings extends LWComponent
 
         $this->passwordMinLength = setting('authmodule.password.minimum_length');
         $this->passwordBlacklist = setting('authmodule.password.blacklist');
-        $this->passwordRequireNumber = (bool)setting('authmodule.password.require.numbers');
-        $this->passwordRequireSpecialCharacter = (bool)setting('authmodule.password.require.special_characters');
-        $this->passwordRequireUppercase = (bool)setting('authmodule.password.require.uppercase');
-        $this->passwordRequireLowercase = (bool)setting('authmodule.password.require.lowercase');
+        $this->passwordRequireNumber = (bool) setting('authmodule.password.require.numbers');
+        $this->passwordRequireSpecialCharacter = (bool) setting('authmodule.password.require.special_characters');
+        $this->passwordRequireUppercase = (bool) setting('authmodule.password.require.uppercase');
+        $this->passwordRequireLowercase = (bool) setting('authmodule.password.require.lowercase');
     }
 
     public function render()
