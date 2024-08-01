@@ -1,0 +1,11 @@
+{
+    "name": "TelemetryModule",
+    "alias": "telemetrymodule",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\TelemetryModule\\Providers\\TelemetryModuleServiceProvider"
+    ],
+    "files": []
+}

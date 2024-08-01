@@ -11,7 +11,7 @@ return [
     ],
 
     'profile' => [
-        'default_avatar_url' => env('AUTHMODULE_PROFILE_DEFAULT_AVATAR_URL', 'https://source.boringavatars.com/beam/100/{username}'),
+        'default_avatar_url' => env('AUTHMODULE_PROFILE_DEFAULT_AVATAR_URL', 'https://avatars.cyanfox.de/beam/100/{username}'),
     ],
 
     'layouts' => [

@@ -4,6 +4,7 @@ namespace Modules\AdminModule\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -59,6 +60,10 @@ class AdminModuleServiceProvider extends ServiceProvider
                     'adminmodule.modules.actions.composer',
                     'adminmodule.modules.actions.migrate',
                 ];
+
+                if (!Schema::hasTable('permissions') || !Schema::hasTable('roles')) {
+                    return;
+                }
 
                 $existingPermissionsQuery = Permission::query();
                 $existingPermissions = $existingPermissionsQuery->whereIn('name', $permissions)->get()->keyBy('name');

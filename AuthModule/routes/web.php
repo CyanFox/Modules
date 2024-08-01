@@ -22,7 +22,7 @@ use Modules\AuthModule\Livewire\Auth\Register;
 */
 
 Route::group(['prefix' => 'auth', 'as' => 'auth.', 'domain' => setting('authmodule.domains.auth')], function () {
-    Route::group(['middleware' => 'guest'], function () {
+    Route::group(['middleware' => ['guest', 'throttle:20,1']], function () {
         Route::get('login', Login::class)->name('login');
 
         if (setting('authmodule.enable.register')) {

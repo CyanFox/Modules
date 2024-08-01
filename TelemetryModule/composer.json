@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/telemetrymodule",
+    "description": "",
+    "authors": [
+        {
+            "name": "CyanFox-Projects",
+            "email": "opensource@cyanfox.de"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\TelemetryModule\\": "app/",
+            "Modules\\TelemetryModule\\Database\\Factories\\": "database/factories/",
+            "Modules\\TelemetryModule\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\TelemetryModule\\Tests\\": "tests/"
+        }
+    }
+}
