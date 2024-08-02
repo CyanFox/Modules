@@ -67,6 +67,18 @@
                         <x-upload label="{{ __('adminmodule::settings.logo') }}" wire:model="logo" accept="image/png"/>
                     </div>
 
+                    <x-divider/>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-5">
+                        <x-select.styled label="{{ __('adminmodule::settings.enable_telemetry') }} *" :options="[
+                            ['label' => __('messages.yes'), 'value' => '1'],
+                            ['label' => __('messages.no'), 'value' => '0']]"
+                                         select="label:label|value:value" wire:model="enableTelemetry" searchable/>
+
+                        <x-input label="{{ __('adminmodule::settings.telemetry_url') }}"
+                                 wire:model="telemetryUrl"/>
+                    </div>
+
                     <x-view-integration name="authmodule.settings.system.form.footer"/>
 
                     @can('adminmodule.settings.update')
@@ -74,7 +86,7 @@
 
                         <div class="space-x-1 mt-3">
                             <x-button type="submit" loading="updateSystemSettings">
-                                {{ __('adminmodule::settings.buttons.update_settings') }}
+                                {{ __('messages.buttons.update') }}
                             </x-button>
 
                             <x-button wire:click="resetLogo" color="red" loading>

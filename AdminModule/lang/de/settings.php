@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'tab_title' => 'Einstellungen',
+    'tab_title' => 'Admin • Einstellungen',
 
     'tabs' => [
         'system' => 'System',
@@ -23,6 +23,8 @@ return [
     'project_version_url' => 'Projektversions-URL',
     'template_version_url' => 'Template-Versions-URL',
     'logo' => 'Logo',
+    'enable_telemetry' => 'Telemetrie aktivieren',
+    'telemetry_url' => 'Telemetrie-URL',
     'search' => 'Suche',
     'no_settings_page' => 'Es gibt keine Module mit einer benutzerdefinierten Einstellungsseite.',
 
@@ -37,7 +39,6 @@ return [
     ],
 
     'buttons' => [
-        'update_settings' => 'Einstellungen aktualisieren',
         'reset_logo' => 'Logo zurücksetzen',
     ],
 

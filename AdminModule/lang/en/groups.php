@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'tab_title' => 'Groups',
+    'tab_title' => 'Admin • Groups',
     'title' => 'Groups',
 
     'buttons' => [
@@ -14,10 +14,8 @@ return [
     'permissions' => 'Permissions',
 
     'create_group' => [
+        'tab_title' => 'Admin • Groups | Create Group',
         'title' => 'Create Group',
-        'buttons' => [
-            'create_group' => 'Create Group',
-        ],
 
         'notifications' => [
             'group_created' => 'Group created successfully!',
@@ -25,10 +23,8 @@ return [
     ],
 
     'update_group' => [
+        'tab_title' => 'Admin • Groups | Update Group',
         'title' => 'Update Group',
-        'buttons' => [
-            'update_group' => 'Update Group',
-        ],
 
         'notifications' => [
             'group_updated' => 'Group updated successfully!',

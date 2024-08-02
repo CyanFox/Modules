@@ -43,10 +43,6 @@ return [
         'default_avatar_url_placeholder' => 'Available Placeholders: {username}',
     ],
 
-    'buttons' => [
-        'update_settings' => 'Update Settings',
-    ],
-
     'notifications' => [
         'settings_updated' => 'Settings updated successfully.',
     ],

@@ -78,7 +78,7 @@
 
                         <div class="space-x-1 mt-3">
                             <x-button type="submit" loading="updateAuthSettings">
-                                {{ __('authmodule::settings.buttons.update_settings') }}
+                                {{ __('messages.buttons.update') }}
                             </x-button>
 
                             <x-view-integration name="authmodule.settings.auth.buttons"/>
@@ -121,7 +121,7 @@
 
                         <div class="space-x-1 mt-3">
                             <x-button type="submit" loading="updateEmailSettings">
-                                {{ __('authmodule::settings.buttons.update_settings') }}
+                                {{ __('messages.buttons.update') }}
                             </x-button>
 
                             <x-view-integration name="authmodule.settings.emails.buttons"/>
@@ -167,7 +167,7 @@
 
                         <div class="space-x-1 mt-3">
                             <x-button type="submit" loading="updateAccountSettings">
-                                {{ __('authmodule::settings.buttons.update_settings') }}
+                                {{ __('messages.buttons.update') }}
                             </x-button>
 
                             <x-view-integration name="authmodule.settings.account.buttons"/>

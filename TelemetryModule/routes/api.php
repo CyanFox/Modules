@@ -14,7 +14,7 @@ use Modules\TelemetryModule\Http\Controllers\TelemetryController;
  *
 */
 
-Route::group(['prefix' => 'v1/telemetry', 'middleware' => ['throttle:1000,1'], 'domain' => setting('telemetrymodule.domains.api')], function () {
+Route::group(['prefix' => 'v1/telemetry', 'middleware' => ['throttle:1,60'], 'domain' => setting('telemetrymodule.domains.api')], function () {
     Route::post('/', [TelemetryController::class, 'store']);
     Route::get('{instanceId}/delete', [TelemetryController::class, 'delete']);
 });

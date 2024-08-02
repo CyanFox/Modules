@@ -23,10 +23,8 @@ return [
     'disabled' => 'Deaktiviert',
 
     'create_user' => [
+        'tab_title' => 'Admin • Benutzer | Benutzer erstellen',
         'title' => 'Benutzer erstellen',
-        'buttons' => [
-            'create_user' => 'Benutzer erstellen',
-        ],
 
         'notifications' => [
             'user_created' => 'Benutzer erfolgreich erstellt!',
@@ -34,10 +32,8 @@ return [
     ],
 
     'update_user' => [
+        'tab_title' => 'Admin • Benutzer | Benutzer aktualisieren',
         'title' => 'Benutzer aktualisieren',
-        'buttons' => [
-            'update_user' => 'Benutzer aktualisieren',
-        ],
 
         'notifications' => [
             'user_updated' => 'Benutzer erfolgreich aktualisiert!',
@@ -47,9 +43,6 @@ return [
     'delete_user' => [
         'title' => 'Benutzer löschen',
         'description' => 'Bist du sicher, dass du diesen Benutzer löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.',
-        'buttons' => [
-            'delete_user' => 'Benutzer löschen',
-        ],
 
         'notifications' => [
             'user_deleted' => 'Benutzer erfolgreich gelöscht!',

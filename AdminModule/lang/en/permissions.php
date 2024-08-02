@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'tab_title' => 'Permissions',
+    'tab_title' => 'Admin • Permissions',
     'title' => 'Permissions',
 
     'buttons' => [
@@ -13,10 +13,8 @@ return [
     'module' => 'Module',
 
     'create_permission' => [
+        'tab_title' => 'Admin • Permissions | Update Permission',
         'title' => 'Create Permission',
-        'buttons' => [
-            'create_permission' => 'Create Permission',
-        ],
 
         'notifications' => [
             'permission_created' => 'Permission created successfully!',
@@ -24,10 +22,8 @@ return [
     ],
 
     'update_permission' => [
+        'tab_title' => 'Admin • Permissions | Update Permission',
         'title' => 'Update Permission',
-        'buttons' => [
-            'update_permission' => 'Update Permission',
-        ],
 
         'notifications' => [
             'permission_updated' => 'Permission updated successfully!',
@@ -37,9 +33,6 @@ return [
     'delete_permission' => [
         'title' => 'Delete Permission',
         'description' => 'Are you sure you want to delete this permission? This action cannot be undone.',
-        'buttons' => [
-            'delete_permission' => 'Delete Permission',
-        ],
 
         'notifications' => [
             'permission_deleted' => 'Permission deleted successfully!',

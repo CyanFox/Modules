@@ -40,6 +40,10 @@ class Settings extends LWComponent
 
     public $logoFile;
 
+    public $enableTelemetry;
+
+    public $telemetryUrl;
+
     public $moduleList;
 
     public $moduleSearchKeyword;
@@ -70,6 +74,8 @@ class Settings extends LWComponent
             'projectVersionUrl' => 'nullable|url',
             'templateVersionUrl' => 'nullable|url',
             'logoFile' => 'nullable|image|max:1024',
+            'enableTelemetry' => 'nullable|boolean',
+            'telemetryUrl' => 'nullable|url',
         ]);
 
         $settings = [
@@ -81,6 +87,8 @@ class Settings extends LWComponent
             'settings.unsplash.api_key' => $this->unsplashApiKey ? encrypt($this->unsplashApiKey) : null,
             'settings.versions.project_url' => $this->projectVersionUrl,
             'settings.versions.template_url' => $this->templateVersionUrl,
+            'settings.telemetry.enabled' => $this->enableTelemetry,
+            'settings.telemetry.url' => $this->telemetryUrl,
         ];
 
         try {
@@ -227,6 +235,9 @@ class Settings extends LWComponent
 
         $this->projectVersionUrl = setting('settings.versions.project_url');
         $this->templateVersionUrl = setting('settings.versions.template_url');
+
+        $this->enableTelemetry = setting('settings.telemetry.enabled');
+        $this->telemetryUrl = setting('settings.telemetry.url');
 
         $moduleList = ModuleManager::getModules();
         foreach ($moduleList as $module) {

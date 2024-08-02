@@ -5,4 +5,6 @@
 
 </div>
 
-<x-input label="{{ __('adminmodule::permissions.module') }} *" wire:model="module" required/>
+<div class="mb-4">
+    <x-input label="{{ __('adminmodule::permissions.module') }} *" wire:model="module" required/>
+</div>

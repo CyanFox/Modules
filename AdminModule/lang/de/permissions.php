@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'tab_title' => 'Berechtigungen',
+    'tab_title' => 'Admin • Berechtigungen',
     'title' => 'Berechtigungen',
 
     'buttons' => [
@@ -13,10 +13,8 @@ return [
     'module' => 'Modul',
 
     'create_permission' => [
+        'tab_title' => 'Admin • Berechtigungen | Berechtigung erstellen',
         'title' => 'Berechtigung erstellen',
-        'buttons' => [
-            'create_permission' => 'Berechtigung erstellen',
-        ],
 
         'notifications' => [
             'permission_created' => 'Berechtigung erfolgreich erstellt!',
@@ -24,10 +22,8 @@ return [
     ],
 
     'update_permission' => [
+        'tab_title' => 'Admin • Berechtigungen | Berechtigung aktualisieren',
         'title' => 'Berechtigung aktualisieren',
-        'buttons' => [
-            'update_permission' => 'Berechtigung aktualisieren',
-        ],
 
         'notifications' => [
             'permission_updated' => 'Berechtigung erfolgreich aktualisiert!',
@@ -37,9 +33,6 @@ return [
     'delete_permission' => [
         'title' => 'Berechtigung löschen',
         'description' => 'Bist du sicher, dass du diese Berechtigung löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.',
-        'buttons' => [
-            'delete_permission' => 'Berechtigung löschen',
-        ],
 
         'notifications' => [
             'permission_deleted' => 'Berechtigung erfolgreich gelöscht!',

@@ -74,7 +74,7 @@
 
                     <div class="space-x-1 mt-3">
                         <x-button class="mt-3" wire:click="updateLanguageAndTheme" loading="updateLanguageAndTheme">
-                            {{ __('authmodule::account.overview.language_and_theme.buttons.update_language_and_theme') }}
+                            {{ __('messages.buttons.update') }}
                         </x-button>
 
                         <x-view-integration name="authmodule.profile.overview.language_and_theme.buttons"/>
@@ -157,7 +157,7 @@
 
                         <div class="space-x-1 mt-3">
                             <x-button class="mt-3" loading="updateProfile" type="submit">
-                                {{ __('authmodule::account.overview.profile.buttons.update_profile') }}
+                                {{ __('messages.buttons.update') }}
                             </x-button>
 
                             <x-view-integration name="authmodule.profile.overview.account.buttons"/>
@@ -202,7 +202,7 @@
 
                             <div class="space-x-1 mt-3">
                                 <x-button class="mt-3" loading="updatePassword" type="submit">
-                                    {{ __('authmodule::account.overview.password.buttons.update_password') }}
+                                    {{ __('messages.buttons.update') }}
                                 </x-button>
 
                                 <x-view-integration name="authmodule.profile.overview.password.buttons"/>

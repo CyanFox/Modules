@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'tab_title' => 'Settings',
+    'tab_title' => 'Admin • Settings',
 
     'tabs' => [
         'system' => 'System',
@@ -23,6 +23,8 @@ return [
     'project_version_url' => 'Project Version URL',
     'template_version_url' => 'Template Version URL',
     'logo' => 'Logo',
+    'enable_telemetry' => 'Enable Telemetry',
+    'telemetry_url' => 'Telemetry URL',
     'search' => 'Search',
     'no_settings_page' => 'There are no modules with a custom settings page.',
 
@@ -37,7 +39,6 @@ return [
     ],
 
     'buttons' => [
-        'update_settings' => 'Update Settings',
         'reset_logo' => 'Reset Logo',
     ],
 

@@ -46,9 +46,12 @@ final class GroupsTable extends PowerGridComponent
 
     public function header(): array
     {
+        if (Auth::user()->cannot('adminmodule.groups.create')) {
+            return [];
+        }
         return [
             Button::add('create')
-                ->slot('<x-button wire:click="$dispatch(`clearForm`)" x-on:click="$slideOpen(`create-group-slide`)">{{ __("adminmodule::groups.buttons.create_group") }}</x-button>'),
+                ->slot('<x-button wire:navigate href="' . route('admin.groups.create') . '">{{ __("adminmodule::groups.buttons.create_group") }}</x-button>'),
         ];
     }
 
@@ -147,7 +150,7 @@ final class GroupsTable extends PowerGridComponent
         $this->dialog()
             ->error(__('adminmodule::groups.delete_group.title'),
                 __('adminmodule::groups.delete_group.description'))
-            ->confirm(__('adminmodule::groups.delete_group.buttons.delete_group'), 'deleteGroup', [$groupId])
+            ->confirm(__('messages.buttons.delete'), 'deleteGroup', [$groupId])
             ->cancel()
             ->send();
 
@@ -157,7 +160,7 @@ final class GroupsTable extends PowerGridComponent
     {
         return [
             Button::add('update')
-                ->slot('<x-button color="blue" x-on:click="$slideOpen(`update-group-slide`)" wire:click="$dispatch(`updateGroupParams`, { groupId: `' . $row->id . '` })" sm><i class="icon-pen"></i></x-button>')
+                ->slot('<x-button color="blue" wire:navigate href="' . route('admin.groups.update', ['groupId' => $row->id]) . '" sm><i class="icon-pen"></i></x-button>')
                 ->id(),
 
             Button::add('delete')
@@ -183,10 +186,6 @@ final class GroupsTable extends PowerGridComponent
 
             Rule::button('update')
                 ->when(fn ($row) => Auth::user()->cannot('adminmodule.groups.update'))
-                ->hide(),
-
-            Rule::button('create')
-                ->when(fn ($row) => Auth::user()->cannot('adminmodule.groups.create'))
                 ->hide(),
         ];
     }

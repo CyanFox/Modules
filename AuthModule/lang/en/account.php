@@ -61,9 +61,6 @@ return [
                 'en' => 'English',
                 'de' => 'German',
             ],
-            'buttons' => [
-                'update_language_and_theme' => 'Update Language & Theme',
-            ],
             'notifications' => [
                 'language_and_theme_updated' => 'Language & Theme updated successfully.',
             ],
@@ -130,10 +127,6 @@ return [
             'username_already_taken' => 'The username has already been taken.',
             'email_already_taken' => 'The email has already been taken.',
 
-            'buttons' => [
-                'update_profile' => 'Update Profile',
-            ],
-
             'notifications' => [
                 'profile_updated' => 'Profile updated successfully.',
             ],
@@ -142,10 +135,6 @@ return [
             'title' => 'Password',
             'new_password_confirmation' => 'Confirm New Password',
             'current_password' => 'Current Password',
-
-            'buttons' => [
-                'update_password' => 'Update Password',
-            ],
 
             'notifications' => [
                 'password_updated' => 'Password updated successfully.',

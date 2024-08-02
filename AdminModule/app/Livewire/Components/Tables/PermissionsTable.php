@@ -46,13 +46,19 @@ final class PermissionsTable extends PowerGridComponent
 
     public function header(): array
     {
-        return [
-            Button::add('create')
-                ->slot('<x-button wire:click="$dispatch(`clearForm`)" x-on:click="$slideOpen(`create-permission-slide`)">{{ __("adminmodule::permissions.buttons.create_permission") }}</x-button>'),
+        $header = [];
 
-            Button::add('bulkDelete')
-                ->slot('<x-button wire:click="bulkDelete" color="red" loading>{!! __("messages.table.bulk_delete", ["table" => $this->tableName]) !!}</x-button>'),
-        ];
+        if (Auth::user()->can('adminmodule.permissions.create')) {
+            $header[] = Button::add('create')
+                ->slot('<x-button wire:navigate href="' . route('admin.permissions.create') . '">{{ __("adminmodule::permissions.buttons.create_permission") }}</x-button>');
+        }
+
+        if (Auth::user()->can('adminmodule.permissions.delete')) {
+            $header[] = Button::add('bulkDelete')
+                ->slot('<x-button wire:click="bulkDelete" color="red" loading>{!! __("messages.table.bulk_delete", ["table" => $this->tableName]) !!}</x-button>');
+        }
+
+        return $header;
     }
 
     public function fields(): PowerGridFields
@@ -155,7 +161,7 @@ final class PermissionsTable extends PowerGridComponent
         $this->dialog()
             ->error(__('adminmodule::permissions.delete_permission.title'),
                 __('adminmodule::permissions.delete_permission.description'))
-            ->confirm(__('adminmodule::permissions.delete_permission.buttons.delete_permission'), 'deletePermission', [$permissionId])
+            ->confirm(__('messages.buttons.delete'), 'deletePermission', [$permissionId])
             ->cancel()
             ->send();
 
@@ -165,7 +171,7 @@ final class PermissionsTable extends PowerGridComponent
     {
         return [
             Button::add('update')
-                ->slot('<x-button color="blue" x-on:click="$slideOpen(`update-permission-slide`)" wire:click="$dispatch(`updatePermissionParams`, { permissionId: `' . $row->id . '` })" sm><i class="icon-pen"></i></x-button>')
+                ->slot('<x-button color="blue" wire:navigate href="' . route('admin.permissions.update', ['permissionId' => $row->id]) . '" sm><i class="icon-pen"></i></x-button>')
                 ->id(),
 
             Button::add('delete')
@@ -183,14 +189,6 @@ final class PermissionsTable extends PowerGridComponent
 
             Rule::button('update')
                 ->when(fn ($row) => Auth::user()->cannot('adminmodule.permissions.update'))
-                ->hide(),
-
-            Rule::button('bulkDelete')
-                ->when(fn ($row) => Auth::user()->cannot('adminmodule.permissions.delete'))
-                ->hide(),
-
-            Rule::button('create')
-                ->when(fn ($row) => Auth::user()->cannot('adminmodule.permissions.create'))
                 ->hide(),
         ];
     }

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'tab_title' => 'Modules',
+    'tab_title' => 'Admin • Modules',
 
     'search' => 'Search',
     'enabled' => 'Enabled',
@@ -29,10 +29,6 @@ return [
     'delete_module' => [
         'title' => 'Delete Module',
         'description' => 'Are you sure you want to delete this module? This action cannot be undone.',
-
-        'buttons' => [
-            'delete_module' => 'Delete Module',
-        ],
 
         'notifications' => [
             'module_deleted' => 'Module has been deleted.',

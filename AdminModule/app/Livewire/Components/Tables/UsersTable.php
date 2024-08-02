@@ -46,9 +46,12 @@ final class UsersTable extends PowerGridComponent
 
     public function header(): array
     {
+        if (Auth::user()->cannot('adminmodule.users.create')) {
+            return [];
+        }
         return [
             Button::add('create')
-                ->slot('<x-button wire:click="$dispatch(`clearForm`)" x-on:click="$slideOpen(`create-user-slide`)">{{ __("adminmodule::users.buttons.create_user") }}</x-button>'),
+                ->slot('<x-button wire:navigate href="' . route('admin.users.create') . '">{{ __("adminmodule::users.buttons.create_user") }}</x-button>'),
         ];
     }
 
@@ -169,7 +172,7 @@ final class UsersTable extends PowerGridComponent
         $this->dialog()
             ->error(__('adminmodule::users.delete_user.title'),
                 __('adminmodule::users.delete_user.description'))
-            ->confirm(__('adminmodule::users.delete_user.buttons.delete_user'), 'deleteUser', [$userId])
+            ->confirm(__('messages.buttons.delete'), 'deleteUser', [$userId])
             ->cancel()
             ->send();
 
@@ -179,7 +182,7 @@ final class UsersTable extends PowerGridComponent
     {
         return [
             Button::add('update')
-                ->slot('<x-button color="blue" x-on:click="$slideOpen(`update-user-slide`)" wire:click="$dispatch(`updateUserParams`, { userId: `' . $row->id . '` })" sm><i class="icon-pen"></i></x-button>')
+                ->slot('<x-button color="blue" wire:navigate href="' . route('admin.users.update', ['userId' => $row->id]) . '" sm><i class="icon-pen"></i></x-button>')
                 ->id(),
 
             Button::add('delete')
@@ -195,20 +198,12 @@ final class UsersTable extends PowerGridComponent
                 ->when(fn ($row) => $row->id === Auth::user()->id && Auth::user()->hasPermissionTo('adminmodule.users.delete'))
                 ->slot('<x-button color="red" disabled sm><i class="icon-trash"></i></x-button>'),
 
-            Rule::button('update')
-                ->when(fn ($row) => $row->id !== Auth::user()->id && Auth::user()->hasPermissionTo('adminmodule.users.update'))
-                ->slot('<x-button color="blue" x-on:click="$slideOpen(`update-user-slide`)" wire:click="$dispatch(`updateUserParams`, { userId: `' . $row->id . '` })" sm><i class="icon-pen"></i></x-button>'),
-
             Rule::button('delete')
                 ->when(fn ($row) => Auth::user()->cannot('adminmodule.users.delete'))
                 ->hide(),
 
             Rule::button('update')
                 ->when(fn ($row) => Auth::user()->cannot('adminmodule.users.update'))
-                ->hide(),
-
-            Rule::button('create')
-                ->when(fn ($row) => Auth::user()->cannot('adminmodule.users.create'))
                 ->hide(),
         ];
     }

@@ -1,4 +1,4 @@
-<div class="grid md:grid-cols-2 gap-4 mt-4">
+<div class="grid md:grid-cols-2 gap-4 my-4">
     <x-input label="{{ __('adminmodule::groups.name') }} *" wire:model="name" required/>
 
     <x-input label="{{ __('adminmodule::groups.guard_name') }} *" wire:model="guardName" required/>

@@ -43,10 +43,6 @@ return [
         'default_avatar_url_placeholder' => 'Verfügbare Platzhalter: {username}',
     ],
 
-    'buttons' => [
-        'update_settings' => 'Einstellungen aktualisieren',
-    ],
-
     'notifications' => [
         'settings_updated' => 'Einstellungen erfolgreich aktualisiert.',
     ],

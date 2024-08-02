@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'tab_title' => 'Gruppen',
+    'tab_title' => 'Admin • Gruppen',
     'title' => 'Gruppen',
 
     'buttons' => [
@@ -14,10 +14,8 @@ return [
     'permissions' => 'Berechtigungen',
 
     'create_group' => [
+        'tab_title' => 'Admin • Gruppen | Gruppe erstellen',
         'title' => 'Gruppe erstellen',
-        'buttons' => [
-            'create_group' => 'Gruppe erstellen',
-        ],
 
         'notifications' => [
             'group_created' => 'Gruppe erfolgreich erstellt!',
@@ -25,10 +23,8 @@ return [
     ],
 
     'update_group' => [
+        'tab_title' => 'Admin • Gruppen | Gruppe aktualisieren',
         'title' => 'Gruppe aktualisieren',
-        'buttons' => [
-            'update_group' => 'Gruppe aktualisieren',
-        ],
 
         'notifications' => [
             'group_updated' => 'Gruppe erfolgreich aktualisiert!',
@@ -38,9 +34,6 @@ return [
     'delete_group' => [
         'title' => 'Gruppe löschen',
         'description' => 'Bist du sicher, dass du diese Gruppe löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.',
-        'buttons' => [
-            'delete_group' => 'Gruppe löschen',
-        ],
 
         'notifications' => [
             'group_deleted' => 'Gruppe erfolgreich gelöscht!',

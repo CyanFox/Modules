@@ -61,9 +61,6 @@ return [
                 'en' => 'Englisch',
                 'de' => 'Deutsch',
             ],
-            'buttons' => [
-                'update_language_and_theme' => 'Sprache & Erscheinungsbild aktualisieren',
-            ],
             'notifications' => [
                 'language_and_theme_updated' => 'Sprache & Erscheinungsbild erfolgreich aktualisiert.',
             ],
@@ -130,10 +127,6 @@ return [
             'username_already_taken' => 'Der Benutzername ist bereits vergeben.',
             'email_already_taken' => 'Die E-Mail-Adresse ist bereits vergeben.',
 
-            'buttons' => [
-                'update_profile' => 'Profil aktualisieren',
-            ],
-
             'notifications' => [
                 'profile_updated' => 'Profil erfolgreich aktualisiert.',
             ],
@@ -142,10 +135,6 @@ return [
             'title' => 'Passwort',
             'new_password_confirmation' => 'Neues Passwort bestätigen',
             'current_password' => 'Aktuelles Passwort',
-
-            'buttons' => [
-                'update_password' => 'Passwort aktualisieren',
-            ],
 
             'notifications' => [
                 'password_updated' => 'Passwort erfolgreich aktualisiert.',

@@ -70,7 +70,7 @@ class Modules extends LWComponent
 
         $this->dialog()
             ->error(__('adminmodule::modules.delete_module.title'), __('adminmodule::modules.delete_module.description'))
-            ->confirm(__('adminmodule::modules.delete_module.buttons.delete_module'), 'deleteModule', $moduleName)
+            ->confirm(__('messages.buttons.delete'), 'deleteModule', $moduleName)
             ->cancel()
             ->send();
 

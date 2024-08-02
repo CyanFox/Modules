@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'tab_title' => 'Module',
+    'tab_title' => 'Admin • Module',
 
     'search' => 'Suchen',
     'enabled' => 'Aktiviert',
@@ -29,10 +29,6 @@ return [
     'delete_module' => [
         'title' => 'Modul löschen',
         'description' => 'Bist du sicher, dass du dieses Modul löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.',
-
-        'buttons' => [
-            'delete_module' => 'Modul löschen',
-        ],
 
         'notifications' => [
             'module_deleted' => 'Modul wurde gelöscht.',
