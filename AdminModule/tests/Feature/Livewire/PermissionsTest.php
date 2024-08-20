@@ -4,7 +4,9 @@ namespace Modules\AdminModule\Tests\Feature\Livewire;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
-use Modules\AdminModule\Livewire\Permissions;
+use Modules\AdminModule\Livewire\Components\Tables\PermissionsTable;
+use Modules\AdminModule\Livewire\Permissions\CreatePermission;
+use Modules\AdminModule\Livewire\Permissions\UpdatePermission;
 use Modules\AdminModule\Tests\TestCase;
 use Modules\AuthModule\Facades\UserManager;
 use Modules\AuthModule\Models\User;
@@ -34,7 +36,7 @@ class PermissionsTest extends TestCase
         $user->assignRole('Super Admin');
 
         Livewire::actingAs($user)
-            ->test(Permissions::class)
+            ->test(CreatePermission::class)
             ->set('name', 'Test')
             ->set('guardName', 'web')
             ->set('module', 'test')
@@ -58,7 +60,7 @@ class PermissionsTest extends TestCase
         $permissionToUpdate = Permission::create(['name' => 'Test1', 'guard_name' => 'web', 'module' => 'test1']);
 
         Livewire::actingAs($user)
-            ->test(Permissions::class)
+            ->test(UpdatePermission::class, ['permissionId' => $permissionToUpdate->id])
             ->set('permissionId', $permissionToUpdate->id)
             ->set('name', 'test')
             ->set('guardName', 'web')

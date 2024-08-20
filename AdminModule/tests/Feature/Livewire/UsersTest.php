@@ -4,7 +4,9 @@ namespace Feature\Livewire;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
-use Modules\AdminModule\Livewire\Users;
+use Modules\AdminModule\Livewire\Components\Tables\UsersTable;
+use Modules\AdminModule\Livewire\Users\CreateUser;
+use Modules\AdminModule\Livewire\Users\UpdateUser;
 use Modules\AdminModule\Tests\TestCase;
 use Modules\AuthModule\Facades\UserManager;
 use Modules\AuthModule\Models\User;
@@ -33,7 +35,7 @@ class UsersTest extends TestCase
         $user->assignRole('Super Admin');
 
         Livewire::actingAs($user)
-            ->test(Users::class)
+            ->test(CreateUser::class)
             ->set('firstName', 'Test')
             ->set('lastName', 'User')
             ->set('username', 'test')
@@ -66,7 +68,7 @@ class UsersTest extends TestCase
         $userToUpdate = User::factory()->create();
 
         Livewire::actingAs($user)
-            ->test(Users::class)
+            ->test(UpdateUser::class, ['userId' => $userToUpdate->id])
             ->set('userId', $userToUpdate->id)
             ->set('firstName', 'Test')
             ->set('lastName', 'User')
