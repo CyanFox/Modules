@@ -7,7 +7,6 @@ use Exception;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Livewire\Component;
 use Modules\AuthModule\Models\User;
 use Modules\AuthModule\Rules\Password;
 use Spatie\Permission\Models\Permission;

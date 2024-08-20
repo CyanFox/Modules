@@ -4,7 +4,9 @@ namespace Modules\AdminModule\Tests\Feature\Livewire;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
-use Modules\AdminModule\Livewire\Groups;
+use Modules\AdminModule\Livewire\Components\Tables\GroupsTable;
+use Modules\AdminModule\Livewire\Groups\CreateGroup;
+use Modules\AdminModule\Livewire\Groups\UpdateGroup;
 use Modules\AdminModule\Tests\TestCase;
 use Modules\AuthModule\Facades\UserManager;
 use Modules\AuthModule\Models\User;
@@ -34,7 +36,7 @@ class GroupsTest extends TestCase
         $user->assignRole('Super Admin');
 
         Livewire::actingAs($user)
-            ->test(Groups::class)
+            ->test(CreateGroup::class)
             ->set('name', 'Test')
             ->set('guardName', 'web')
             ->set('module', 'test')
@@ -59,7 +61,7 @@ class GroupsTest extends TestCase
         $groupToUpdate = Role::create(['name' => 'Test1', 'guard_name' => 'web', 'module' => 'test1']);
 
         Livewire::actingAs($user)
-            ->test(Groups::class)
+            ->test(UpdateGroup::class, ['groupId' => $groupToUpdate->id])
             ->set('groupId', $groupToUpdate->id)
             ->set('name', 'test')
             ->set('guardName', 'web')
