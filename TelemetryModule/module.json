@@ -1,8 +1,23 @@
 {
     "name": "TelemetryModule",
     "alias": "telemetrymodule",
-    "description": "",
-    "keywords": [],
+    "authors": [
+        {
+            "name": "CyanFox-Projects",
+            "email": "opensource@cyanfox.de"
+        }
+    ],
+    "keywords": [
+        "cyanfox",
+        "telemetry",
+        "module"
+    ],
+    "requirements": [
+        "AuthModule"
+    ],
+    "version": "1.1.0",
+    "template_version": "3.1.x",
+    "description": "A telemetry dashboard for CyanFox-Base v3",
     "priority": 0,
     "providers": [
         "Modules\\TelemetryModule\\Providers\\TelemetryModuleServiceProvider"

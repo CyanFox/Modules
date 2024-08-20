@@ -16,8 +16,8 @@
         "AuthModule"
     ],
     "version": "1.0.0",
-    "template_version": "3.0.0",
-    "description": "A navbar and sidebar module for the Laravel-Template v3.",
+    "template_version": "3.x.x",
+    "description": "A navbar and sidebar module for CyanFox-Base v3.",
     "priority": 1,
     "providers": [
         "Modules\\DashboardModule\\Providers\\DashboardModuleServiceProvider"

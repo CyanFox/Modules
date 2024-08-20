@@ -208,7 +208,7 @@
 
                         <div class="space-x-1 mt-3">
                             <x-button type="submit" loading="updateEditorSettings">
-                                {{ __('adminmodule::settings.buttons.update_settings') }}
+                                {{ __('messages.buttons.update') }}
                             </x-button>
 
                             <x-view-integration name="authmodule.settings.editor.buttons"/>

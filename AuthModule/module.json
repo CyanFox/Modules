@@ -13,8 +13,8 @@
         "module"
     ],
     "version": "1.0.0",
-    "template_version": "3.0.0",
-    "description": "An authentication module for the Laravel-Template v3.",
+    "template_version": "3.x.x",
+    "description": "An authentication module for CyanFox-Base v3.",
     "settings_page": "admin.modules.settings.authmodule",
     "priority": 0,
     "providers": [

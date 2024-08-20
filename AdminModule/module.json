@@ -15,9 +15,9 @@
     "requirements": [
         "AuthModule"
     ],
-    "version": "1.0.0",
-    "template_version": "3.0.0",
-    "description": "A admin module for the Laravel-Template v3",
+    "version": "1.1.0",
+    "template_version": "3.1.x",
+    "description": "A admin module for CyanFox-Base v3",
     "priority": 2,
     "providers": [
         "Modules\\AdminModule\\Providers\\AdminModuleServiceProvider"
