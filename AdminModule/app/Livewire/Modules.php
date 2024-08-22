@@ -27,6 +27,8 @@ class Modules extends LWComponent
             ->title(__('adminmodule::modules.notifications.module_enabled'))
             ->success()
             ->send();
+
+        $this->redirect(route('admin.modules'), navigate: true);
     }
 
     public function disableModule($moduleName)
@@ -37,6 +39,8 @@ class Modules extends LWComponent
             ->title(__('adminmodule::modules.notifications.module_disabled'))
             ->success()
             ->send();
+
+        $this->redirect(route('admin.modules'), navigate: true);
     }
 
     public function deleteModule($moduleName, $confirmed = true)
