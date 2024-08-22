@@ -2,7 +2,7 @@
     <x-tab wire:model.live="tab">
         <x-tab.items :tab="__('authmodule::account.tabs.overview')">
             <x-slot:left>
-                <i class="icon-home"></i>
+                <i class="icon-house"></i>
             </x-slot:left>
         </x-tab.items>
         <x-tab.items :tab="__('authmodule::account.tabs.sessions')">
