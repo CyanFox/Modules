@@ -17,6 +17,7 @@
     ],
     "version": "1.0.0",
     "template_version": "3.x.x",
+    "remote_version": "https://raw.githubusercontent.com/CyanFox-Projects/CyanFox-Base-Modules/v3/OAuthModule/module.json",
     "description": "A OAuth module for CyanFox-Base v3.",
     "priority": 2,
     "providers": [

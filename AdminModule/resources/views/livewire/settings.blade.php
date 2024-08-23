@@ -192,10 +192,38 @@
                 <x-divider/>
 
                 <form wire:submit="updateEditorSettings">
-                    <div class="space-y-3 my-4">
+                    <div class="space-y-3 my-4 overflow-x-auto">
                         @foreach($originalEditorSettings as $key => $value)
-                            <x-input prefix="{{ $key }}:"
-                                     wire:model="editorSettings.{{ str_replace('.', ':', $key) }}"/>
+                            <div class="flex flex-row gap-3 my-4">
+                                <div class="w-full">
+                                    @if ($value['is_locked'])
+                                        <x-input
+                                            prefix="{{ $key }}:"
+                                            wire:model="editorSettings.{{ str_replace('.', ':', $key) }}"
+                                            disabled/>
+                                    @else
+                                        <x-input
+                                            prefix="{{ $key }}:"
+                                            wire:model="editorSettings.{{ str_replace('.', ':', $key) }}"/>
+                                    @endif
+                                </div>
+
+                                <div>
+                                    @if($value['is_locked'])
+                                        <x-button color="red" class="mt-0.5" wire:click="setLockState('{{ $key }}', false)"
+                                                  loading flat>
+                                            <i class="icon-lock"></i>
+                                        </x-button>
+                                    @else
+                                        <x-button color="green" class="mt-0.5" wire:click="setLockState('{{ $key }}', true)"
+                                                  loading flat>
+                                            <i class="icon-lock-open"></i>
+                                        </x-button>
+                                    @endif
+                                </div>
+
+                                <x-view-integration name="authmodule.settings.editor.encrypt"/>
+                            </div>
 
                             <x-view-integration name="authmodule.settings.editor.{{ $key }}"/>
                         @endforeach

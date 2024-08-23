@@ -13,6 +13,7 @@ return [
     'run_npm' => 'Run npm run build',
 
     'no_modules' => 'No modules found.',
+    'update_available' => 'Update Available',
 
     'buttons' => [
         'install_module' => 'Install Module',
