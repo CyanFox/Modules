@@ -1,0 +1,27 @@
+{
+    "name": "NotificationModule",
+    "alias": "notificationmodule",
+    "authors": [
+        {
+            "name": "CyanFox-Projects",
+            "email": "opensource@cyanfox.de"
+        }
+    ],
+    "keywords": [
+        "cyanfox",
+        "notifications",
+        "module"
+    ],
+    "requirements": [
+        "AdminModule"
+    ],
+    "version": "1.0.0",
+    "template_version": "3.x.x",
+    "remote_version": "https://raw.githubusercontent.com/CyanFox-Projects/CyanFox-Base-Modules/v3/NotificationModule/module.json",
+    "description": "Simple application-wide notifications for CyanFox-Base v3.",
+    "priority": 0,
+    "providers": [
+        "Modules\\NotificationModule\\Providers\\NotificationModuleServiceProvider"
+    ],
+    "files": []
+}

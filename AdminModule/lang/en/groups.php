@@ -34,9 +34,6 @@ return [
     'delete_group' => [
         'title' => 'Delete Group',
         'description' => 'Are you sure you want to delete this group? This action cannot be undone.',
-        'buttons' => [
-            'delete_group' => 'Delete Group',
-        ],
 
         'notifications' => [
             'group_deleted' => 'Group deleted successfully!',

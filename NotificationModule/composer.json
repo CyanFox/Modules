@@ -1,0 +1,30 @@
+{
+    "name": "cyanfox-projects/notification-module",
+    "description": "",
+    "authors": [
+        {
+            "name": "CyanFox-Projects",
+            "email": "opensource@cyanfox.de"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\NotificationModule\\": "app/",
+            "Modules\\NotificationModule\\Database\\Factories\\": "database/factories/",
+            "Modules\\NotificationModule\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\NotificationModule\\Tests\\": "tests/"
+        }
+    }
+}

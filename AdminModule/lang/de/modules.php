@@ -13,6 +13,7 @@ return [
     'run_npm' => 'NPM-Run-Build ausführen',
 
     'no_modules' => 'Keine Module gefunden.',
+    'update_available' => 'Update verfügbar',
 
     'buttons' => [
         'install_module' => 'Modul installieren',

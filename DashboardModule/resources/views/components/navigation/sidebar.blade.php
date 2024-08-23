@@ -68,13 +68,14 @@
                                 </a>
                             @endcan
                         @endif
+                        <x-view-integration name="dashboardmodule.profile.mobile.dropdown"/>
+
                         <a href="{{ route('auth.logout') }}">
                             <x-dropdown.items separator>
                                 <i class="icon-log-out text-md"></i>
                                 <span class="ml-2 text-md">{{ __('dashboardmodule::dashboard.logout') }}</span>
                             </x-dropdown.items>
                         </a>
-                        <x-view-integration name="dashboardmodule.profile.mobile.dropdown"/>
                     </x-dropdown>
                 @endauth
                 @guest()
@@ -116,14 +117,14 @@
                                 </a>
                             @endcan
                         @endif
+                        <x-view-integration name="dashboardmodule.profile.dropdown"/>
+
                         <a href="{{ route('auth.logout') }}">
                             <x-dropdown.items separator>
                                 <i class="icon-log-out text-md"></i>
                                 <span class="ml-2 text-md">{{ __('dashboardmodule::dashboard.logout') }}</span>
                             </x-dropdown.items>
                         </a>
-
-                        <x-view-integration name="dashboardmodule.profile.dropdown"/>
                     </x-dropdown>
                 @endauth
                 @guest()
@@ -177,11 +178,11 @@
                         @endcan
                     @endif
 
+                    <x-view-integration name="dashboardmodule.sidebar.auth.footer"/>
+
                     <x-dashboardmodule::sidebar-entry :label="__('dashboardmodule::dashboard.logout')"
                                                       route="auth.logout"
                                                       icon="icon-log-out" :navigate="false"/>
-
-                    <x-view-integration name="dashboardmodule.sidebar.auth.footer"/>
                 @endauth
                 @guest()
                     <x-view-integration name="dashboardmodule.sidebar.guest.footer"/>

@@ -12,11 +12,10 @@
         "telemetry",
         "module"
     ],
-    "requirements": [
-        "AuthModule"
-    ],
+    "requirements": [],
     "version": "1.1.0",
     "template_version": "3.1.x",
+    "remote_version": "https://raw.githubusercontent.com/CyanFox-Projects/CyanFox-Base-Modules/v3/TelemetryModule/module.json",
     "description": "A telemetry dashboard for CyanFox-Base v3",
     "priority": 0,
     "providers": [

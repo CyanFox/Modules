@@ -15,8 +15,9 @@
     "requirements": [
         "AuthModule"
     ],
-    "version": "1.1.0",
+    "version": "1.2.0",
     "template_version": "3.1.x",
+    "remote_version": "https://raw.githubusercontent.com/CyanFox-Projects/CyanFox-Base-Modules/v3/AdminModule/module.json",
     "description": "A admin module for CyanFox-Base v3",
     "priority": 2,
     "providers": [

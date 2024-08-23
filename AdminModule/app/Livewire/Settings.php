@@ -183,7 +183,7 @@ class Settings extends LWComponent
         $keyword = $this->editorSearchKeyword;
 
         $this->originalEditorSettings = Setting::where('key', 'like', "%$keyword%")->get()->mapWithKeys(function ($setting) {
-            return [$setting->key => $setting->value];
+            return [$setting->key => ['value' => $setting->value, 'is_locked' => $setting->is_locked]];
         });
     }
 
@@ -209,6 +209,21 @@ class Settings extends LWComponent
                 return;
             }
         }
+    }
+
+    public function setLockState($key, $state)
+    {
+        if (Auth::user()->cannot('adminmodule.settings.editor.update')) {
+            return;
+        }
+
+        $setting = Setting::where('key', $key)->first();
+        $setting->is_locked = $state;
+        $setting->save();
+
+        $this->originalEditorSettings = Setting::all()->mapWithKeys(function ($setting) {
+            return [$setting->key => ['value' => $setting->value, 'is_locked' => $setting->is_locked]];
+        });
     }
 
     public function mount()
@@ -245,11 +260,11 @@ class Settings extends LWComponent
         }
 
         $this->originalEditorSettings = Setting::all()->mapWithKeys(function ($setting) {
-            return [$setting->key => $setting->value];
+            return [$setting->key => ['value' => $setting->value, 'is_locked' => $setting->is_locked]];
         });
 
         foreach ($this->originalEditorSettings as $key => $value) {
-            $this->editorSettings[str_replace('.', ':', $key)] = $value;
+            $this->editorSettings[str_replace('.', ':', $key)] = $value['value'];
         }
 
     }

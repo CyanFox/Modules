@@ -15,8 +15,9 @@
     "requirements": [
         "AuthModule"
     ],
-    "version": "1.0.0",
+    "version": "1.0.1",
     "template_version": "3.x.x",
+    "remote_version": "https://raw.githubusercontent.com/CyanFox-Projects/CyanFox-Base-Modules/v3/DashboardModule/module.json",
     "description": "A navbar and sidebar module for CyanFox-Base v3.",
     "priority": 1,
     "providers": [
