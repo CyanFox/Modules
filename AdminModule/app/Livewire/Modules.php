@@ -171,6 +171,6 @@ class Modules extends LWComponent
 
     public function render()
     {
-        return $this->renderView('adminmodule::livewire.modules', __('adminmodule::settings.tab_title'), 'adminmodule::components.layouts.app');
+        return $this->renderView('adminmodule::livewire.modules', __('adminmodule::modules.tab_title'), 'adminmodule::components.layouts.app');
     }
 }
