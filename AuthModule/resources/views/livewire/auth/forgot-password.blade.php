@@ -1,5 +1,5 @@
 <div>
-    <div class="flex min-h-screen">
+    <div class="flex relative min-h-screen">
         <div class="absolute inset-0 z-[-1]" style="{{ $unsplash['css'] }}"></div>
         <div class="justify-center m-auto md:w-1/3 max-w-lg">
             <x-card>
