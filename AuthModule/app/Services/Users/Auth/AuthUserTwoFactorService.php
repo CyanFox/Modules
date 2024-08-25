@@ -115,6 +115,9 @@ class AuthUserTwoFactorService
      */
     public function getTwoFactorImage($format = 'svg', $size = 200): string
     {
+        if ($this->user->two_factor_secret == null || $this->user->two_factor_secret == '') {
+            $this->generateTwoFactorSecret();
+        }
         $twoFactor = new Google2FA;
         $QRCode = $twoFactor->getQRCodeUrl(config('app.name'), $this->user->email, decrypt($this->user->two_factor_secret));
 

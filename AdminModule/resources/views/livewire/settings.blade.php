@@ -64,7 +64,7 @@
                         <x-input label="{{ __('adminmodule::settings.template_version_url') }}" type="url"
                                  wire:model="templateVersionUrl"/>
 
-                        <x-upload label="{{ __('adminmodule::settings.logo') }}" wire:model="logo" accept="image/png"/>
+                        <x-upload label="{{ __('adminmodule::settings.logo') }}" wire:model="logoFile" accept="image/png"/>
                     </div>
 
                     <x-divider/>
