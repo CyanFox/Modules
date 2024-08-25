@@ -57,7 +57,11 @@
                     @endif
 
                     <x-badge color="blue">
-                        V{{ module()->getModule($module)->getVersion() }}
+                        @if (module()->getModule($module)->getVersion() !== null)
+                            V{{ module()->getModule($module)->getVersion() }}
+                        @else
+                            {{ __('adminmodule::modules.unknown') }}
+                        @endif
                     </x-badge>
 
                     @if (module()->getModule($module)->getRemoteVersion() !== null)

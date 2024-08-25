@@ -6,6 +6,7 @@ return [
     'search' => 'Search',
     'enabled' => 'Enabled',
     'disabled' => 'Disabled',
+    'unknown' => 'Unknown',
 
     'module_settings' => 'Module Settings',
     'run_migrations' => 'Run Migrations',
