@@ -7,6 +7,7 @@ use Exception;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Modules\AuthModule\Facades\UserManager;
 use Modules\AuthModule\Models\User;
 use Modules\AuthModule\Rules\Password;
 use Spatie\Permission\Models\Permission;
@@ -75,6 +76,7 @@ class CreateUser extends LWComponent
 
             $user->syncRoles($this->groups);
             $user->syncPermissions($this->permissions);
+            UserManager::getUser($user)->getTwoFactorManager()->generateTwoFactorSecret();
         } catch (Exception $e) {
             Notification::make()
                 ->title(__('messages.notifications.something_went_wrong'))

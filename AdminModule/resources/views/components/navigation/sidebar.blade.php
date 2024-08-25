@@ -103,8 +103,15 @@
                         @if(setting('dashboardmodule.routes.home'))
                             <a href="{{ route('home') }}" wire:navigate>
                                 <x-dropdown.items>
-                                    <i class="icon-home text-md"></i>
+                                    <i class="icon-house text-md"></i>
                                     <span class="ml-2 text-md">{{ __('adminmodule::navigation.home') }}</span>
+                                </x-dropdown.items>
+                            </a>
+                        @elseif(setting('dashboardmodule.routes.dashboard'))
+                            <a href="{{ route('dashboard') }}" wire:navigate>
+                                <x-dropdown.items>
+                                    <i class="icon-house text-md"></i>
+                                    <span class="ml-2 text-md">{{ __('adminmodule::navigation.dashboard') }}</span>
                                 </x-dropdown.items>
                             </a>
                         @endif
@@ -141,8 +148,15 @@
                         @if(setting('dashboardmodule.routes.home'))
                             <a href="{{ route('home') }}" wire:navigate>
                                 <x-dropdown.items>
-                                    <i class="icon-home text-md"></i>
+                                    <i class="icon-house text-md"></i>
                                     <span class="ml-2 text-md">{{ __('adminmodule::navigation.home') }}</span>
+                                </x-dropdown.items>
+                            </a>
+                        @elseif(setting('dashboardmodule.routes.dashboard'))
+                            <a href="{{ route('dashboard') }}" wire:navigate>
+                                <x-dropdown.items>
+                                    <i class="icon-house text-md"></i>
+                                    <span class="ml-2 text-md">{{ __('adminmodule::navigation.dashboard') }}</span>
                                 </x-dropdown.items>
                             </a>
                         @endif
@@ -221,7 +235,11 @@
                     @if(setting('dashboardmodule.routes.home'))
                         <x-adminmodule::sidebar-entry :label="__('adminmodule::navigation.home')"
                                                       route="home"
-                                                      icon="icon-home"/>
+                                                      icon="icon-house"/>
+                    @elseif(setting('dashboardmodule.routes.dashboard'))
+                        <x-adminmodule::sidebar-entry :label="__('adminmodule::navigation.dashboard')"
+                                                      route="dashboard"
+                                                      icon="icon-house"/>
                     @endif
                 @endif
 
