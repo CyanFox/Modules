@@ -68,9 +68,9 @@ class CreateUser extends LWComponent
                 'username' => $this->username,
                 'email' => $this->email,
                 'password' => Hash::make($this->password),
-                'force_change_password' => $this->forceChangePassword,
-                'force_activate_two_factor' => $this->forceActivateTwoFactor,
-                'disabled' => $this->disabled,
+                'force_change_password' => (bool) $this->forceChangePassword,
+                'force_activate_two_factor' => (bool) $this->forceActivateTwoFactor,
+                'disabled' => (bool) $this->disabled,
             ]);
 
             $user->syncRoles($this->groups);

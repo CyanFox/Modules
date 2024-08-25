@@ -6,6 +6,7 @@ return [
     'search' => 'Suchen',
     'enabled' => 'Aktiviert',
     'disabled' => 'Deaktiviert',
+    'unknown' => 'Unbekannt',
 
     'module_settings' => 'Moduleinstellungen',
     'run_migrations' => 'Migrationen ausführen',
