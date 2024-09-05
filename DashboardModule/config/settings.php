@@ -3,6 +3,7 @@
 return [
     'routes' => [
         'dashboard' => true,
-        'home' => true,
+        'home' => false,
+        'home_redirect' => 'dashboard',
     ],
 ];
