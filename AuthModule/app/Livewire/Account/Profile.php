@@ -369,8 +369,12 @@ class Profile extends LWComponent
         $this->avatarUrl = Auth::user()->custom_avatar_url;
 
         $this->showRecoveryCodes = UserRecoveryCode::where('user_id', Auth::user()->id)->get()->pluck('code')->toArray();
-        if (empty($this->recoveryCodes)) {
+        if (empty($this->showRecoveryCodes)) {
             $this->showRecoveryCodes = UserManager::getUser(Auth::user())->getTwoFactorManager()->generateRecoveryCodes();
+        }
+
+        foreach ($this->showRecoveryCodes as $key => $code) {
+            $this->showRecoveryCodes[$key] = decrypt($code);
         }
     }
 
