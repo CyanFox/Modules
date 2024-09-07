@@ -239,6 +239,7 @@ class Profile extends LWComponent
             ]);
 
             UserManager::getUser(Auth::user())->getSessionManager()->revokeOtherSessions();
+            UserManager::getUser(Auth::user())->getTwoFactorManager()->generateTwoFactorSecret();
 
             Notification::make()
                 ->title(__('authmodule::account.overview.actions.dialogs.disable_two_factor.notifications.two_factor_disabled'))
