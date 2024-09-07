@@ -12,7 +12,7 @@
         "auth",
         "module"
     ],
-    "version": "1.0.2",
+    "version": "1.0.3",
     "template_version": "3.x.x",
     "remote_version": "https://raw.githubusercontent.com/CyanFox-Projects/CyanFox-Base-Modules/v3/AuthModule/module.json",
     "description": "An authentication module for CyanFox-Base v3.",
