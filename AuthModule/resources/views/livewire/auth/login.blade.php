@@ -72,7 +72,7 @@
                                     </div>
                                 @endif
 
-                                <x-button class="w-full" loading="checkTwoFactorCode">
+                                <x-button class="w-full" type="submit" loading="checkTwoFactorCode">
                                     {{ __('authmodule::auth.login.buttons.login') }}
                                 </x-button>
 

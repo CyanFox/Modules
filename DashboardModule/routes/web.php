@@ -23,7 +23,7 @@ if (setting('dashboardmodule.routes.home') && setting('dashboardmodule.routes.ho
     Route::get('/', Home::class)->name('home');
 }
 
-if (!setting('dashboardmodule.routes.home') && setting('dashboardmodule.routes.home_redirect') != null) {
+if (setting('dashboardmodule.routes.home_redirect') != null) {
     Route::get('/', function () {
         return redirect()->route(setting('dashboardmodule.routes.home_redirect'));
     })->name('home');
