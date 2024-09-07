@@ -239,6 +239,7 @@ class Profile extends LWComponent
             ]);
 
             UserManager::getUser(Auth::user())->getSessionManager()->revokeOtherSessions();
+            UserManager::getUser(Auth::user())->getTwoFactorManager()->generateTwoFactorSecret();
 
             Notification::make()
                 ->title(__('authmodule::account.overview.actions.dialogs.disable_two_factor.notifications.two_factor_disabled'))
@@ -369,8 +370,23 @@ class Profile extends LWComponent
         $this->avatarUrl = Auth::user()->custom_avatar_url;
 
         $this->showRecoveryCodes = UserRecoveryCode::where('user_id', Auth::user()->id)->get()->pluck('code')->toArray();
-        if (empty($this->recoveryCodes)) {
+        if (empty($this->showRecoveryCodes)) {
             $this->showRecoveryCodes = UserManager::getUser(Auth::user())->getTwoFactorManager()->generateRecoveryCodes();
+        }
+
+        foreach ($this->showRecoveryCodes as $key => $code) {
+            try {
+                $this->showRecoveryCodes[$key] = decrypt($code);
+            } catch (Exception $e) {
+                Notification::make()
+                    ->title(__('messages.notifications.something_went_wrong'))
+                    ->danger()
+                    ->send();
+
+                $this->log($e->getMessage(), 'error');
+
+                return;
+            }
         }
     }
 
