@@ -375,7 +375,18 @@ class Profile extends LWComponent
         }
 
         foreach ($this->showRecoveryCodes as $key => $code) {
-            $this->showRecoveryCodes[$key] = decrypt($code);
+            try {
+                $this->showRecoveryCodes[$key] = decrypt($code);
+            } catch (Exception $e) {
+                Notification::make()
+                    ->title(__('messages.notifications.something_went_wrong'))
+                    ->danger()
+                    ->send();
+
+                $this->log($e->getMessage(), 'error');
+
+                return;
+            }
         }
     }
 
