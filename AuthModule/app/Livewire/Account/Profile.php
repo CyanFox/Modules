@@ -360,7 +360,9 @@ class Profile extends LWComponent
 
     public function mount()
     {
-        $this->tab = __('authmodule::account.tabs.overview');
+        if ($this->tab === null) {
+            $this->tab = __('authmodule::account.tabs.overview');
+        }
         $this->language = Auth::user()->language;
         $this->theme = Auth::user()->theme;
         $this->firstName = Auth::user()->first_name;
