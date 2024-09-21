@@ -1,10 +1,10 @@
 version: 2
 updates:
   - package-ecosystem: "composer"
-    directory: "/"
+    directory: "/**"
     schedule:
       interval: "weekly"
   - package-ecosystem: "npm"
-    directory: "/"
+    directory: "/**"
     schedule:
       interval: "weekly"
