@@ -29,32 +29,39 @@
                 @endif
 
                 <div class="overflow-x-auto mt-4">
-                    <div class="grid xl:grid-cols-7 lg:grid-cols-4 md:grid-cols-2 gap-4">
+                    <table class="min-w-full">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
                         @if ($notification->files !== null)
                             @foreach($notification->files as $path)
                                 @php
                                     $file = basename($path);
                                     $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
                                 @endphp
-                                <x-card class="rounded-lg border border-1 border-gray-400">
-                                    <div class="flex justify-center">
-                                        <i class="icon-file text-7xl"></i>
-                                    </div>
-
-                                    <div class="flex flex-col items-center justify-center">
-                                        <p class="text-center">{{ $file }}</p>
-                                    </div>
-                                    <div class="flex justify-end mt-4 mr-4">
+                                <tr class="border-b dark:border-dark-600 border-gray-300">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <i class="icon-file text-2xl mr-2"></i>
+                                            <div class="text-sm font-medium">{{ $file }}</div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <x-button type="button"
                                                   wire:click="downloadFile('{{ $notification->id }}', '{{ $file }}')"
                                                   loading>
                                             <i class="icon-download"></i>
                                         </x-button>
-                                    </div>
-                                </x-card>
+                                    </td>
+                                </tr>
                             @endforeach
                         @endif
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
             </x-card>
         </div>

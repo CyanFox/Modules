@@ -5,28 +5,35 @@
 
 
             <div class="overflow-x-auto mt-4">
-                <div class="grid xl:grid-cols-7 lg:grid-cols-4 md:grid-cols-2 gap-4">
-                    @foreach($existingFiles as $path)
-                        @php
-                            $file = basename($path);
-                            $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
-                        @endphp
-                        <x-card class="rounded-lg border border-1 border-gray-400">
-                            <div class="flex justify-center">
-                                <i class="icon-file text-7xl"></i>
-                            </div>
-
-                            <div class="flex flex-col items-center justify-center">
-                                <p class="text-center">{{ $file }}</p>
-                            </div>
-                            <div class="flex justify-end mt-4 mr-4">
-                                <x-button color="red" type="button" wire:click="deleteExistingFile('{{ $file }}')" loading>
-                                    <i class="icon-trash"></i>
-                                </x-button>
-                            </div>
-                        </x-card>
-                    @endforeach
-                </div>
+                <table class="min-w-full">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($existingFiles as $path)
+                            @php
+                                $file = basename($path);
+                                $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
+                            @endphp
+                            <tr class="border-b dark:border-dark-600 border-gray-300">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <i class="icon-file text-2xl mr-2"></i>
+                                        <div class="text-sm font-medium">{{ $file }}</div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <x-button color="red" type="button" wire:click="deleteExistingFile('{{ $file }}')" loading>
+                                        <i class="icon-trash"></i>
+                                    </x-button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
 
             <x-actions.buttons.update target="updateNotification" :back-url="route('admin.notifications')"/>
