@@ -28,6 +28,9 @@ class NotificationModuleServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(module_path($this->moduleName, 'database/migrations'));
 
         $this->app->booted(function () {
+            if (config('app.env') == 'testing') {
+                return;
+            }
             $permissions = [
                 'notificationmodule.notifications.admin.view',
                 'notificationmodule.notifications.admin.create',
