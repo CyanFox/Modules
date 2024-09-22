@@ -30,7 +30,7 @@
     "require": {
         "simplesoftwareio/simple-qrcode": "^4.2",
         "pragmarx/google2fa-laravel": "^2.2",
-        "jenssegers/agent": "^2.6"
+        "jenssegers/agent": "^2.6",
     },
     "config": {
         "allow-plugins": {

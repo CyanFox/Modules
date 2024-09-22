@@ -2,12 +2,10 @@
 
 namespace Modules\AdminModule\Providers;
 
+use App\Facades\Utils\PermissionsManager;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class AdminModuleServiceProvider extends ServiceProvider
 {
@@ -28,67 +26,37 @@ class AdminModuleServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(module_path($this->moduleName, 'database/migrations'));
 
         $this->app->booted(function () {
-            if (config('app.env') == 'testing') {
-                return;
-            }
-            if (!Cache::has('adminmodule.permissions.set')) {
-                $permissions = [
-                    'adminmodule.admin',
-                    'adminmodule.dashboard.view',
-                    'adminmodule.users.view',
-                    'adminmodule.users.create',
-                    'adminmodule.users.update',
-                    'adminmodule.users.delete',
-                    'adminmodule.groups.view',
-                    'adminmodule.groups.create',
-                    'adminmodule.groups.update',
-                    'adminmodule.groups.delete',
-                    'adminmodule.permissions.view',
-                    'adminmodule.permissions.create',
-                    'adminmodule.permissions.update',
-                    'adminmodule.permissions.delete',
-                    'adminmodule.settings.view',
-                    'adminmodule.settings.update',
-                    'adminmodule.settings.editor',
-                    'adminmodule.settings.editor.update',
-                    'adminmodule.modules.view',
-                    'adminmodule.modules.disable',
-                    'adminmodule.modules.enable',
-                    'adminmodule.modules.install',
-                    'adminmodule.modules.delete',
-                    'adminmodule.modules.actions.npm',
-                    'adminmodule.modules.actions.composer',
-                    'adminmodule.modules.actions.migrate',
-                ];
+            $permissions = [
+                'adminmodule.admin',
+                'adminmodule.dashboard.view',
+                'adminmodule.users.view',
+                'adminmodule.users.create',
+                'adminmodule.users.update',
+                'adminmodule.users.delete',
+                'adminmodule.groups.view',
+                'adminmodule.groups.create',
+                'adminmodule.groups.update',
+                'adminmodule.groups.delete',
+                'adminmodule.permissions.view',
+                'adminmodule.permissions.create',
+                'adminmodule.permissions.update',
+                'adminmodule.permissions.delete',
+                'adminmodule.settings.view',
+                'adminmodule.settings.update',
+                'adminmodule.settings.editor',
+                'adminmodule.settings.editor.update',
+                'adminmodule.modules.view',
+                'adminmodule.modules.disable',
+                'adminmodule.modules.enable',
+                'adminmodule.modules.install',
+                'adminmodule.modules.delete',
+                'adminmodule.modules.actions.npm',
+                'adminmodule.modules.actions.composer',
+                'adminmodule.modules.actions.migrate',
+            ];
 
-                if (!Schema::hasTable('permissions') || !Schema::hasTable('roles')) {
-                    return;
-                }
-
-                $existingPermissionsQuery = Permission::query();
-                $existingPermissions = $existingPermissionsQuery->whereIn('name', $permissions)->get()->keyBy('name');
-                $newPermissions = [];
-
-                foreach ($permissions as $permission) {
-                    if (!$existingPermissions->has($permission)) {
-                        $newPermissions[] = ['name' => $permission, 'module' => $this->moduleNameLower];
-                    }
-                }
-
-                if (!empty($newPermissions)) {
-                    Permission::insert($newPermissions);
-                }
-            }
-
-            Cache::rememberForever('adminmodule.permissions.set', fn () => true);
-
-            $role = Role::where('name', 'Super Admin')->first();
-            if (!$role) {
-                $role = Role::create(['name' => 'Super Admin', 'module' => $this->moduleNameLower]);
-            }
-            $role->syncPermissions(
-                Permission::all()
-            );
+            PermissionsManager::createPermissions($this->moduleNameLower, $permissions);
+            PermissionsManager::createGroups($this->moduleNameLower, 'Super Admin', Permission::all(), now()->addHour());
         });
     }
 
