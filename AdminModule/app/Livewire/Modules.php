@@ -7,6 +7,7 @@ use App\Models\Setting;
 use App\Services\LWComponent;
 use Exception;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Artisan;
 use Nwidart\Modules\Facades\Module;
 use Symfony\Component\Process\Process;
 use TallStackUi\Traits\Interactions;
@@ -80,10 +81,10 @@ class Modules extends LWComponent
 
     }
 
-    public function runMigrations($moduleName)
+    public function runMigrations()
     {
         try {
-            ModuleManager::getModule($moduleName)->runMigrations();
+            Artisan::call('migrate');
         } catch (Exception $e) {
             Notification::make()
                 ->title(__('messages.notifications.something_went_wrong'))
