@@ -4,7 +4,7 @@
             <div class="flex md:justify-between md:flex-row flex-col">
                 @can('adminmodule.modules.install')
                     <x-button
-                            wire:click="$dispatch('toggleInstallModal')">
+                        wire:click="$dispatch('toggleInstallModal')">
                         {{ __('adminmodule::modules.buttons.install_module') }}
                     </x-button>
 
@@ -31,7 +31,7 @@
 
     <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
         @foreach($moduleList as $module)
-            <x-card>
+            <x-card class="flex flex-col min-h-48">
                 <div class="text-2xl font-semibold text-center">
                     {{ $module }}
 
@@ -57,7 +57,7 @@
                     @endif
 
                     <x-badge color="blue">
-                        @if (module()->getModule($module)->getVersion() !== null)
+                        @if (module()->getModule($module)->getVersion() !== null && module()->getModule($module)->getVersion() !== '')
                             V{{ module()->getModule($module)->getVersion() }}
                         @else
                             {{ __('adminmodule::modules.unknown') }}
@@ -75,7 +75,7 @@
                     <x-view-integration name="authmodule.modules.{{ $module }}.status"/>
                 </div>
 
-                <div class="flex mt-6 justify-between">
+                <div class="flex pt-3 justify-between mt-auto">
                     <div>
                         <x-dropdown position="bottom-start">
                             <x-slot:action>
@@ -89,7 +89,7 @@
                                         <x-dropdown.items>
                                             <i class="icon-settings text-md"></i>
                                             <span
-                                                    class="ml-2 text-md">{{ __('adminmodule::modules.module_settings') }}</span>
+                                                class="ml-2 text-md">{{ __('adminmodule::modules.module_settings') }}</span>
                                         </x-dropdown.items>
                                     </a>
 
@@ -98,12 +98,12 @@
                             @endif
 
                             @can('adminmodule.modules.actions.migrate')
-                                <a wire:click="runMigrations('{{ $module }}')">
+                                <a wire:click="runMigrations">
                                     <x-dropdown.items>
                                         <x-loading loading="runMigrations"/>
                                         <i class="icon-database text-md"></i>
                                         <span
-                                                class="ml-2 text-md">{{ __('adminmodule::modules.run_migrations') }}</span>
+                                            class="ml-2 text-md">{{ __('adminmodule::modules.run_migrations') }}</span>
                                     </x-dropdown.items>
                                 </a>
 
@@ -116,7 +116,7 @@
                                         <x-loading loading="runComposer"/>
                                         <i class="icon-terminal text-md"></i>
                                         <span
-                                                class="ml-2 text-md">{{ __('adminmodule::modules.run_composer') }}</span>
+                                            class="ml-2 text-md">{{ __('adminmodule::modules.run_composer') }}</span>
                                     </x-dropdown.items>
                                 </a>
 
@@ -143,17 +143,17 @@
                         @if(module()->getModule($module)->getSettingsPage() !== null)
                             @can('adminmodule.settings.view')
                                 <x-button :href="module()->getModule($module)->getSettingsPage()" sm><i
-                                            class="icon-settings-2 text-lg"></i>
+                                        class="icon-settings-2 text-lg"></i>
                                 </x-button>
 
                                 <x-view-integration
-                                        name="authmodule.modules.{{ $module }}.actions.settings"/>
+                                    name="authmodule.modules.{{ $module }}.actions.settings"/>
                             @endcan
                         @endif
 
                         @can('adminmodule.modules.delete')
                             <x-button
-                                    wire:click="deleteModule('{{ $module }}', false)" color="red" sm>
+                                wire:click="deleteModule('{{ $module }}', false)" color="red" sm>
                                 <i class="icon-trash text-lg"></i>
                             </x-button>
 

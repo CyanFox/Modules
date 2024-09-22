@@ -185,8 +185,8 @@
             <span class="ml-1 font-bold dark:text-white hidden"
                   x-bind:class="{'hidden': !sidebarOpen && !pinned}">{{ setting('settings.name') }}</span>
         </div>
-        <div class="w-full px-2 mt-4">
-            <div class="flex flex-col items-center w-full mt-3 mb-3">
+        <div class="w-full px-2">
+            <div class="flex flex-col items-center w-full mb-3">
                 @can('adminmodule.dashboard.view')
                     <x-adminmodule::sidebar-entry :label="__('adminmodule::navigation.dashboard')"
                                                   route="admin.dashboard"

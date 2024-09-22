@@ -1,4 +1,5 @@
 <div>
+    <x-loading delay="short" loading="tab"/>
     <x-tab wire:model.live="tab">
         <x-tab.items :tab="__('authmodule::account.tabs.overview')">
             <x-slot:left>

@@ -2,6 +2,7 @@
 
 namespace Modules\NotificationModule\Providers;
 
+use App\Facades\Utils\PermissionsManager;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
@@ -30,30 +31,14 @@ class NotificationModuleServiceProvider extends ServiceProvider
             if (config('app.env') == 'testing') {
                 return;
             }
-            if (!Cache::has('notificationmodule.permissions.set')) {
-                $permissions = [
-                    'notificationmodule.notifications.admin.view',
-                    'notificationmodule.notifications.admin.create',
-                    'notificationmodule.notifications.admin.update',
-                    'notificationmodule.notifications.admin.delete',
-                ];
+            $permissions = [
+                'notificationmodule.notifications.admin.view',
+                'notificationmodule.notifications.admin.create',
+                'notificationmodule.notifications.admin.update',
+                'notificationmodule.notifications.admin.delete',
+            ];
 
-                $existingPermissionsQuery = Permission::query();
-                $existingPermissions = $existingPermissionsQuery->whereIn('name', $permissions)->get()->keyBy('name');
-                $newPermissions = [];
-
-                foreach ($permissions as $permission) {
-                    if (!$existingPermissions->has($permission)) {
-                        $newPermissions[] = ['name' => $permission, 'module' => $this->moduleNameLower];
-                    }
-                }
-
-                if (!empty($newPermissions)) {
-                    Permission::insert($newPermissions);
-                }
-            }
-
-            Cache::rememberForever('notificationmodule.permissions.set', fn () => true);
+            PermissionsManager::createPermissions($this->moduleNameLower, $permissions);
         });
 
         $this->app['router']->pushMiddlewareToGroup('web', ViewIntegration::class);
