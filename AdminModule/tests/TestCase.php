@@ -2,6 +2,7 @@
 
 namespace Modules\AdminModule\Tests;
 
+use App\Facades\Utils\PermissionsManager;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -40,23 +41,7 @@ abstract class TestCase extends \Tests\TestCase
             'adminmodule.modules.actions.migrate',
         ];
 
-        $existingPermissionsQuery = Permission::query();
-        $existingPermissions = $existingPermissionsQuery->whereIn('name', $permissions)->get()->keyBy('name');
-        $newPermissions = [];
-
-        foreach ($permissions as $permission) {
-            if (!$existingPermissions->has($permission)) {
-                $newPermissions[] = ['name' => $permission, 'module' => 'adminmodule'];
-            }
-        }
-
-        if (!empty($newPermissions)) {
-            Permission::insert($newPermissions);
-        }
-
-        $role = Role::create(['name' => 'Super Admin'])->first();
-        $role->syncPermissions(
-            Permission::all()
-        );
+        PermissionsManager::createPermissions('adminmodule', $permissions);
+        PermissionsManager::createGroups('adminmodule', 'Super Admin', Permission::all(), now()->addHour());
     }
 }
