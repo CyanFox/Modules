@@ -2,7 +2,6 @@
 
 namespace Modules\NotificationModule\tests;
 
-use App\Facades\Utils\PermissionsManager;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -20,7 +19,23 @@ abstract class TestCase extends \Tests\TestCase
             'notificationmodule.notifications.admin.delete',
         ];
 
-        PermissionsManager::createPermissions('adminmodule', $permissions);
-        PermissionsManager::createGroups('adminmodule', 'Super Admin', Permission::all(), now()->addHour());
+        $existingPermissionsQuery = Permission::query();
+        $existingPermissions = $existingPermissionsQuery->whereIn('name', $permissions)->get()->keyBy('name');
+        $newPermissions = [];
+
+        foreach ($permissions as $permission) {
+            if (!$existingPermissions->has($permission)) {
+                $newPermissions[] = ['name' => $permission, 'module' => 'notificationmodule'];
+            }
+        }
+
+        if (!empty($newPermissions)) {
+            Permission::insert($newPermissions);
+        }
+
+        $role = Role::create(['name' => 'Super Admin'])->first();
+        $role->syncPermissions(
+            Permission::all()
+        );
     }
 }
