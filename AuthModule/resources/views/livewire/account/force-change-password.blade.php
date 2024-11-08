@@ -28,7 +28,7 @@
                         </div>
                         <x-view-integration name="authmodule.force_change_password.form"/>
 
-                        <x-button class="mt-3 w-full" loading="updatePassword">
+                        <x-button class="mt-3 w-full" loading="updatePassword" type="submit">
                             {{ __('authmodule::account.force_actions.change_password.buttons.change_password') }}
                         </x-button>
 

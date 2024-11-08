@@ -33,7 +33,7 @@
                             <x-view-integration name="authmodule.force_activate_two_factor.form"/>
                         </div>
 
-                        <x-button class="mt-3 w-full" loading="activateTwoFactor">
+                        <x-button class="mt-3 w-full" loading="activateTwoFactor" type="submit">
                             {{ __('authmodule::account.force_actions.activate_two_factor.buttons.activate_two_factor') }}
                         </x-button>
 
