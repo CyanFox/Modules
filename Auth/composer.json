@@ -1,0 +1,36 @@
+{
+    "name": "cyanfox/auth",
+    "description": "",
+    "authors": [
+        {
+            "name": "CyanFox Labs",
+            "email": "opensouce@cyanfox.de"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Auth\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Auth\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "danharrin/livewire-rate-limiting": "^2.0",
+        "mews/captcha": "~3.0",
+        "simplesoftwareio/simple-qrcode": "^4.2",
+        "pragmarx/google2fa-laravel": "^2.2",
+        "jenssegers/agent": "^2.6",
+        "spatie/laravel-permission": "^6.7"
+    }
+}

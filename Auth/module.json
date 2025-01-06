@@ -1,0 +1,17 @@
+{
+    "name": "Auth",
+    "alias": "auth",
+    "description": "Auth module for CyanFox-Base v4",
+    "keywords": ["auth", "cyanfox", "base"],
+    "authors": ["CyanFox"],
+    "license": "MIT",
+    "version": "0.1.0",
+    "remote_version_url": "",
+    "priority": 100,
+    "providers": [
+        "Modules\\Auth\\Providers\\AuthServiceProvider"
+    ],
+    "files": [
+        "app/helpers.php"
+    ]
+}
