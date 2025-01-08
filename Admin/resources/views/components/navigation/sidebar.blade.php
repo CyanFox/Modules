@@ -63,20 +63,20 @@
         <div class="flex flex-col gap-2 items-center overflow-y-auto py-6 px-2">
             <x-dashboard::sidebar-item
                 icon="icon-layout-dashboard"
-                :label="__('dashboard::navigation.dashboard')"
-                route="dashboard"/>
+                label="Dashboard"
+                route="admin.dashboard"/>
 
             @foreach(\Modules\Dashboard\Facades\SidebarManager::getAll() as $sidebarItem)
-                <x-dashboard::sidebar-item
+                <x-admin::sidebar-item
                     :icon="$sidebarItem['icon']"
                     :label="$sidebarItem['label']"
                     :url="$sidebarItem['url']"
                     :route="$sidebarItem['route']"/>
 
-                <x-view-integration name="dashboard.sidebar.items.{{ $sidebarItem['label'] }}"/>
+                <x-view-integration name="admin.sidebar.items.{{ $sidebarItem['label'] }}"/>
             @endforeach
 
-            <x-view-integration name="dashboard.sidebar.items"/>
+            <x-view-integration name="admin.sidebar.items"/>
         </div>
 
         <button
@@ -123,15 +123,16 @@
                      x-transition="" x-trap="userDropdownIsOpen">
 
                     <div class="flex flex-col py-1.5">
-                        <x-dashboard::profile-item icon="icon-user" :label="__('dashboard::navigation.profile')" route="account.profile"/>
+                        <x-dashboard::profile-item icon="icon-user" label="Profile" route="account.profile"/>
+                        <x-dashboard::profile-item icon="icon-house" label="Home" url="/" :external="true"/>
 
-                        <x-view-integration name="dashboard.profile.items"/>
+                        <x-view-integration name="admin.profile.items"/>
                     </div>
 
-                    <x-view-integration name="dashboard.profile.items.end"/>
+                    <x-view-integration name="admin.profile.items.end"/>
 
                     <div class="flex flex-col py-1.5">
-                        <x-dashboard::profile-item icon="icon-log-out" :label="__('dashboard::navigation.logout')" route="auth.logout"
+                        <x-dashboard::profile-item icon="icon-log-out" label="Logout" route="auth.logout"
                                                    external/>
                     </div>
                 </div>

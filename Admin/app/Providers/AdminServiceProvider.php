@@ -1,41 +1,46 @@
 <?php
 
-namespace Modules\Auth\Providers;
+namespace Modules\Admin\Providers;
 
-use Illuminate\Routing\Router;
+use App\Http\ViewIntegrationManager;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Spatie\Permission\Middleware\PermissionMiddleware;
-use Spatie\Permission\Middleware\RoleMiddleware;
-use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 
-class AuthServiceProvider extends ServiceProvider
+class AdminServiceProvider extends ServiceProvider
 {
     use PathNamespace;
 
-    protected string $name = 'Auth';
+    protected string $name = 'Admin';
 
-    protected string $nameLower = 'auth';
+    protected string $nameLower = 'admin';
+
+    protected bool $integrationsAdded = false;
 
     /**
      * Boot the application events.
      */
     public function boot(): void
     {
-        Config::set('auth.providers.users.driver', 'eloquent');
-        Config::set('auth.providers.users.model', '\Modules\Auth\Models\User');
-
-        $this->registerMiddleware($this->app['router']);
         $this->registerCommands();
         $this->registerCommandSchedules();
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+
+        View::composer('*', function ($view) {
+            if (!$this->integrationsAdded) {
+                if (auth()->check() && auth()->user()->hasRole('Super Admin')) {
+                    ViewIntegrationManager::add('dashboard.profile.items',
+                        '<x-dashboard::profile-item icon="icon-wrench" label="' . __('admin::navigation.admin') . '" route="admin.dashboard" :external="true"/>');
+                }
+                $this->integrationsAdded = true;
+            }
+        });
     }
 
     /**
@@ -66,38 +71,12 @@ class AuthServiceProvider extends ServiceProvider
         // });
     }
 
-    protected $middleware = [
-        'Auth' => [
-            'auth' => 'Authenticate',
-            'disabled' => 'CheckIfUserIsDisabled',
-            'language' => 'CheckLanguage',
-            'force_actions' => 'CheckForceActions',
-        ],
-    ];
-
-    /**
-     * Register middlewares
-     */
-    public function registerMiddleware(Router $router)
-    {
-        foreach ($this->middleware as $module => $middlewares) {
-            foreach ($middlewares as $name => $middleware) {
-                $class = "Modules\\{$module}\\Http\\Middleware\\{$middleware}";
-
-                $router->aliasMiddleware($name, $class);
-            }
-        }
-        $router->aliasMiddleware('role', RoleMiddleware::class);
-        $router->aliasMiddleware('permission', PermissionMiddleware::class);
-        $router->aliasMiddleware('role_or_permission', RoleOrPermissionMiddleware::class);
-    }
-
     /**
      * Register translations.
      */
     public function registerTranslations(): void
     {
-        $langPath = resource_path('lang/modules/'.$this->nameLower);
+        $langPath = resource_path('lang/modules/' . $this->nameLower);
 
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->nameLower);
@@ -121,9 +100,9 @@ class AuthServiceProvider extends ServiceProvider
 
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
-                    $relativePath = str_replace($configPath.DIRECTORY_SEPARATOR, '', $file->getPathname());
-                    $configKey = $this->nameLower.'.'.str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
-                    $key = ($relativePath === 'auth.php') ? $this->nameLower : $configKey;
+                    $relativePath = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
+                    $configKey = $this->nameLower . '.' . str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
+                    $key = ($relativePath === 'config.php') ? $this->nameLower : $configKey;
 
                     $this->publishes([$file->getPathname() => config_path($relativePath)], 'config');
                     $this->mergeConfigFrom($file->getPathname(), $key);
@@ -137,10 +116,10 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function registerViews(): void
     {
-        $viewPath = resource_path('views/modules/'.$this->nameLower);
+        $viewPath = resource_path('views/modules/' . $this->nameLower);
         $sourcePath = module_path($this->name, 'resources/views');
 
-        $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower.'-module-views']);
+        $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower . '-module-views']);
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->nameLower);
 
@@ -160,8 +139,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $paths = [];
         foreach (config('view.paths') as $path) {
-            if (is_dir($path.'/modules/'.$this->nameLower)) {
-                $paths[] = $path.'/modules/'.$this->nameLower;
+            if (is_dir($path . '/modules/' . $this->nameLower)) {
+                $paths[] = $path . '/modules/' . $this->nameLower;
             }
         }
 
