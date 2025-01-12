@@ -21,6 +21,7 @@ class User extends Authenticatable
         'password',
         'theme',
         'language',
+        'lang_country',
         'custom_avatar_url',
         'two_factor_enabled',
         'two_factor_secret',
@@ -64,7 +65,7 @@ class User extends Authenticatable
     public function avatar()
     {
         if ($this->custom_avatar_url) {
-            return $this->custom_avatar_url;
+            return e($this->custom_avatar_url);
         }
 
         $filePath = 'avatars/' . $this->id . '.png';

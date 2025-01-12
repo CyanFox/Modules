@@ -18,13 +18,13 @@ use Modules\Auth\Livewire\Auth\Register;
 */
 
 Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
-    Route::group(['middleware' => ['guest', 'throttle:10,1', 'language']], function () {
+    Route::group(['middleware' => ['guest', 'throttle:10,1']], function () {
         Route::get('login', Login::class)->name('login');
         Route::get('register', Register::class)->name('register');
         Route::get('forgot-password', ForgotPassword::class)->name('forgot-password');
     });
 
-    Route::group(['middleware' => ['auth', 'language']], function () {
+    Route::group(['middleware' => ['auth']], function () {
         Route::get('logout', function () {
             auth()->logout();
 
@@ -33,6 +33,6 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     });
 });
 
-Route::group(['prefix' => 'account', 'as' => 'account.', 'middleware' => ['auth', 'language']], function () {
+Route::group(['prefix' => 'account', 'as' => 'account.', 'middleware' => ['auth']], function () {
     Route::get('profile', Profile::class)->name('profile');
 });

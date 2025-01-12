@@ -61,12 +61,32 @@
         </div>
 
         <div class="flex flex-col gap-2 items-center overflow-y-auto py-6 px-2">
-            <x-dashboard::sidebar-item
+            <x-admin::sidebar-item
                 icon="icon-layout-dashboard"
-                label="Dashboard"
+                :label="__('admin::navigation.dashboard')"
                 route="admin.dashboard"/>
 
-            @foreach(\Modules\Dashboard\Facades\SidebarManager::getAll() as $sidebarItem)
+            <x-admin::sidebar-item
+                icon="icon-users"
+                :label="__('admin::navigation.users')"
+                route="admin.users"/>
+
+            <x-admin::sidebar-item
+                icon="icon-shield"
+                :label="__('admin::navigation.groups')"
+                route="admin.groups"/>
+
+            <x-admin::sidebar-item
+                icon="icon-key-round"
+                :label="__('admin::navigation.permissions')"
+                route="admin.permissions"/>
+
+            <x-admin::sidebar-item
+                icon="icon-settings"
+                :label="__('admin::navigation.settings')"
+                route="admin.settings"/>
+
+            @foreach(\Modules\Admin\Facades\SidebarManager::getAll() as $sidebarItem)
                 <x-admin::sidebar-item
                     :icon="$sidebarItem['icon']"
                     :label="$sidebarItem['label']"

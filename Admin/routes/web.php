@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Admin\Livewire\Dashboard;
+use Modules\Admin\Livewire\Groups\CreateGroup;
+use Modules\Admin\Livewire\Groups\Groups;
+use Modules\Admin\Livewire\Groups\UpdateGroup;
+use Modules\Admin\Livewire\Users\CreateUser;
+use Modules\Admin\Livewire\Users\UpdateUser;
+use Modules\Admin\Livewire\Users\Users;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +22,24 @@ use Modules\Admin\Livewire\Dashboard;
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'role:Super Admin']], function () {
     Route::get('dashboard', Dashboard::class)->name('dashboard');
+
+    Route::group(['prefix' => 'users'], function () {
+        Route::get('/', Users::class)->name('users');
+        Route::get('create', CreateUser::class)->name('users.create');
+        Route::get('update/{userId}', UpdateUser::class)->name('users.update');
+    });
+
+    Route::group(['prefix' => 'groups'], function () {
+        Route::get('/', Groups::class)->name('groups');
+        Route::get('create', CreateGroup::class)->name('groups.create');
+        Route::get('update/{groupId}', UpdateGroup::class)->name('groups.update');
+    });
+
+    Route::group(['prefix' => 'permissions'], function () {
+        Route::get('/', Users::class)->name('permissions');
+    });
+
+    Route::group(['prefix' => 'settings'], function () {
+        Route::get('/', Users::class)->name('settings');
+    });
 });

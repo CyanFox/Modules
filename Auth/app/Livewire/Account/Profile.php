@@ -33,13 +33,13 @@ class Profile extends CFComponent
     public function updateLanguageAndTheme()
     {
         $this->validate([
-            'language' => 'required|string',
-            'theme' => 'required|string|in:light,dark',
+            'language' => 'nullable|string',
+            'theme' => 'nullable|string|in:light,dark',
         ]);
 
         auth()->user()->update([
-            'language' => $this->language,
-            'theme' => $this->theme,
+            'language' => $this->language ?? 'en',
+            'theme' => $this->theme ?? 'light',
         ]);
 
 

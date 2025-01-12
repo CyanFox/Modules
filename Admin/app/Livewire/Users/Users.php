@@ -2,12 +2,12 @@
 
 namespace Modules\Admin\Livewire\Users;
 
-use Livewire\Component;
+use App\Livewire\CFComponent;
 
-class Users extends Component
+class Users extends CFComponent
 {
     public function render()
     {
-        return view('admin::livewire.users.users');
+        return $this->renderView('admin::livewire.users.users', __('admin::users.tab_title'), 'admin::components.layouts.app');
     }
 }
