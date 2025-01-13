@@ -1,4 +1,4 @@
-<div class="grid md:grid-cols-2 gap-4 mt-4">
+<div class="grid md:grid-cols-2 gap-4 mb-4">
     <x-input wire:model="firstName" required>
         {{ __('admin::users.first_name') }}
     </x-input>

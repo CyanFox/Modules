@@ -2,12 +2,12 @@
 
 namespace Modules\Admin\Livewire\Groups;
 
-use Livewire\Component;
+use App\Livewire\CFComponent;
 
-class Groups extends Component
+class Groups extends CFComponent
 {
     public function render()
     {
-        return view('admin::livewire.groups.groups');
+        return $this->renderView('admin::livewire.groups.groups', __('admin::groups.tab_title'), 'admin::components.layouts.app');
     }
 }
