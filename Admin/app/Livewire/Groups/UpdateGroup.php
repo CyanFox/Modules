@@ -5,6 +5,7 @@ namespace Modules\Admin\Livewire\Groups;
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
+use Spatie\Permission\Exceptions\RoleDoesNotExist;
 use Spatie\Permission\Models\Role;
 
 class UpdateGroup extends CFComponent
@@ -20,7 +21,7 @@ class UpdateGroup extends CFComponent
     public function updateGroup()
     {
         $this->validate([
-            'name' => 'required|string|unique:roles,name,' . $this->group->id,
+            'name' => 'required|string|unique:roles,name,' . $this->groupId,
             'guardName' => 'required|string',
             'permissions' => 'nullable|array',
         ]);
@@ -44,7 +45,12 @@ class UpdateGroup extends CFComponent
 
     public function mount()
     {
-        $this->group = Role::findById($this->groupId);
+        try {
+            $this->group = Role::findById($this->groupId);
+        }catch (RoleDoesNotExist) {
+            abort(404);
+        }
+
         if ($this->group->name === 'Super Admin') {
             abort(404);
         }

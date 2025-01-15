@@ -5,6 +5,9 @@ use Modules\Admin\Livewire\Dashboard;
 use Modules\Admin\Livewire\Groups\CreateGroup;
 use Modules\Admin\Livewire\Groups\Groups;
 use Modules\Admin\Livewire\Groups\UpdateGroup;
+use Modules\Admin\Livewire\Permissions\CreatePermission;
+use Modules\Admin\Livewire\Permissions\Permissions;
+use Modules\Admin\Livewire\Permissions\UpdatePermission;
 use Modules\Admin\Livewire\Users\CreateUser;
 use Modules\Admin\Livewire\Users\UpdateUser;
 use Modules\Admin\Livewire\Users\Users;
@@ -36,7 +39,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'r
     });
 
     Route::group(['prefix' => 'permissions'], function () {
-        Route::get('/', Users::class)->name('permissions');
+        Route::get('/', Permissions::class)->name('permissions');
+        Route::get('create', CreatePermission::class)->name('permissions.create');
+        Route::get('update/{permissionId}', UpdatePermission::class)->name('permissions.update');
     });
 
     Route::group(['prefix' => 'settings'], function () {

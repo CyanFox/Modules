@@ -13,24 +13,7 @@ class User extends Authenticatable
 {
     use HasRoles, Notifiable, WithTwoFactorAuth, WithSession;
 
-    protected $fillable = [
-        'username',
-        'first_name',
-        'last_name',
-        'email',
-        'password',
-        'theme',
-        'language',
-        'lang_country',
-        'custom_avatar_url',
-        'two_factor_enabled',
-        'two_factor_secret',
-        'force_change_password',
-        'force_activate_two_factor',
-        'password_reset_token',
-        'password_reset_expiration',
-        'disabled',
-    ];
+    protected $guarded = [];
 
     protected $hidden = [
         'password',
