@@ -3,7 +3,7 @@
         <div class="absolute inset-0 z-[-1]" style="{{ $unsplash['css'] }}"></div>
         <div class="justify-center m-auto md:w-1/3 max-w-sm w-full">
             <div class="mb-4">
-                <img src="{{ asset('img/Logo.svg') }}" alt="Logo"
+                <img src="{{ settings('internal.app.logo', config('settings.logo_path')) }}" alt="Logo"
                      class="{{ settings('auth.logo_size', config('auth.logo_size')) }} mx-auto">
                 <x-view-integration name="auth.login.logo"/>
             </div>

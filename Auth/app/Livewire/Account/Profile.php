@@ -48,7 +48,7 @@ class Profile extends CFComponent
             ->success()
             ->send();
 
-        $this->redirect(url()->previous());
+        $this->redirect(route('account.profile'));
     }
 
     public function updateProfile()
@@ -72,7 +72,7 @@ class Profile extends CFComponent
             ->success()
             ->send();
 
-        $this->redirect(url()->previous(), true);
+        $this->redirect(route('account.profile'), true);
     }
 
     public function updatePassword()
@@ -105,7 +105,7 @@ class Profile extends CFComponent
             ->success()
             ->send();
 
-        $this->redirect(url()->previous());
+        $this->redirect(route('account.profile'), true);
     }
 
     public function disableTwoFA($confirmed = false)
@@ -136,7 +136,7 @@ class Profile extends CFComponent
             ->success()
             ->send();
 
-        $this->redirect(url()->previous(), true);
+        $this->redirect(route('account.profile'), true);
     }
 
     public function deleteAccount($confirmed = false)
@@ -177,7 +177,7 @@ class Profile extends CFComponent
             ->success()
             ->send();
 
-        $this->redirect(url()->previous());
+        $this->redirect(route('account.profile'), true);
     }
 
     public function logoutAllSessions($confirmed = false)
@@ -202,7 +202,7 @@ class Profile extends CFComponent
             ->success()
             ->send();
 
-        $this->redirect(url()->previous());
+        $this->redirect(route('account.profile'), true);
     }
 
     public function mount()

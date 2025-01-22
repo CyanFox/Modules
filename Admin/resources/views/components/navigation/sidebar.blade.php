@@ -52,7 +52,7 @@
                class="flex items-center text-xl font-bold text-neutral-900 dark:text-white"
                :class="(!sidebarPinned && !sidebarHovered) ? 'justify-center' : ''">
                 <span class="sr-only">dashboard</span>
-                <img src="{{ asset('img/Logo.svg') }}" alt="Logo" class="{{ settings('dashboard.logo_size') }}">
+                <img src="{{ settings('internal.app.logo', config('settings.logo_path')) }}" alt="Logo" class="{{ settings('dashboard.logo_size') }}">
                 <p class="pl-4 truncate transition-opacity duration-300"
                    :class="(!sidebarPinned && !sidebarHovered) ? 'md:hidden' : 'md:block'">
                     {{ settings('internal.app.name', config('app.name')) }}

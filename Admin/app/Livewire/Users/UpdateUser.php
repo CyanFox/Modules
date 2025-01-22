@@ -71,8 +71,7 @@ class UpdateUser extends CFComponent
         try {
             $this->user = User::findOrFail($this->userId);
         }catch (Exception) {
-            $this->redirect(route('admin.users'), true);
-            return;
+            abort(404);
         }
 
         $this->firstName = $this->user->first_name;

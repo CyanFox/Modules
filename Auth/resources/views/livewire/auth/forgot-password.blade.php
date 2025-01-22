@@ -3,7 +3,7 @@
         <div class="absolute inset-0 z-[-1]" style="{{ $unsplash['css'] }}"></div>
         <div class="justify-center m-auto md:w-1/3 max-w-sm w-full">
             <div class="mb-4">
-                <img src="{{ asset('img/Logo.svg') }}" alt="Logo"
+                <img src="{{ settings('internal.app.logo', config('settings.logo_path')) }}" alt="Logo"
                      class="{{ settings('auth.logo_size', config('auth.logo_size')) }} mx-auto">
                 <x-view-integration name="auth.forgot-password.logo"/>
             </div>
@@ -71,7 +71,7 @@
 
                         <x-view-integration name="auth.forgot-password.card.form"/>
 
-                        @if(settings()->isTrue('auth.forgot_password.enable.captcha', config('auth.forgot_password.captcha')))
+                        @if(settings('auth.forgot_password.enable.captcha', config('auth.forgot_password.captcha')))
                             <div class="gap-3 lg:flex space-y-3">
                                 <img src="{{ captcha_src('inverse') }}" class="rounded-lg lg:w-1/2 w-full"
                                      alt="Captcha">

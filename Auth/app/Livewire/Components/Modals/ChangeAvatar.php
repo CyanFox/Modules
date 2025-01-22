@@ -30,7 +30,7 @@ class ChangeAvatar extends CFModalComponent
                 ->success()
                 ->send();
 
-            $this->redirect(url()->previous(), true);
+            $this->redirect(route('account.profile'), true);
 
             return;
         }
@@ -46,7 +46,7 @@ class ChangeAvatar extends CFModalComponent
                 ->success()
                 ->send();
 
-            $this->redirect(url()->previous(), true);
+            $this->redirect(route('account.profile'), true);
         }
 
     }
@@ -65,7 +65,7 @@ class ChangeAvatar extends CFModalComponent
             ->success()
             ->send();
 
-        $this->redirect(url()->previous(), true);
+        $this->redirect(route('account.profile'), true);
     }
 
     public function mount()

@@ -64,7 +64,7 @@ class ActivateTwoFA extends CFModalComponent
 
     public function closeModal(): void
     {
-        $this->redirect(url()->previous(), true);
+        $this->redirect(route('account.profile'), true);
     }
 
     public function mount()
