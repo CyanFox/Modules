@@ -8,4 +8,5 @@ return [
     'groups' => 'Groups',
     'permissions' => 'Permissions',
     'settings' => 'Settings',
+    'modules' => 'Modules',
 ];

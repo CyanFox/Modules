@@ -3,6 +3,10 @@
     "alias": "admin",
     "description": "",
     "keywords": [],
+    "require": [
+        "Auth",
+        "Dashboard"
+    ],
     "priority": 0,
     "providers": [
         "Modules\\Admin\\Providers\\AdminServiceProvider"

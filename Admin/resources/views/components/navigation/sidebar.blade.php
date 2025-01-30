@@ -86,6 +86,11 @@
                 :label="__('admin::navigation.settings')"
                 route="admin.settings"/>
 
+            <x-admin::sidebar-item
+                icon="icon-package"
+                :label="__('admin::navigation.modules')"
+                route="admin.modules"/>
+
             @foreach(\Modules\Admin\Facades\SidebarManager::getAll() as $sidebarItem)
                 <x-admin::sidebar-item
                     :icon="$sidebarItem['icon']"
