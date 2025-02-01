@@ -7,6 +7,7 @@ use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
 use Modules\Auth\Models\User;
+use Modules\Auth\Rules\Password;
 
 class CreateUser extends CFComponent
 {
@@ -31,7 +32,7 @@ class CreateUser extends CFComponent
             'lastName' => 'required',
             'username' => 'required',
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => ['nullable', new Password],
             'confirmPassword' => 'required|same:password',
             'forceActivateTwoFactor' => 'nullable|boolean',
             'forceChangePassword' => 'nullable|boolean',

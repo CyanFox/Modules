@@ -6,6 +6,8 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Socialite\Contracts\Factory;
+use Modules\Auth\Socialite\CustomOAuthProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -43,6 +45,16 @@ class AuthServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
 
         $this->app['router']->pushMiddlewareToGroup('web', 'language');
+
+        $socialite = $this->app->make(Factory::class);
+
+        $socialite->extend('custom', function () use ($socialite) {
+            return $socialite->buildProvider(CustomOAuthProvider::class, [
+                'client_id' => settings('auth.oauth.client_id'),
+                'client_secret' => settings('auth.oauth.client_secret'),
+                'redirect' => settings('auth.oauth.redirect'),
+            ]);
+        });
     }
 
     /**

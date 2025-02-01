@@ -17,10 +17,11 @@ return new class extends Migration
             $table->string('last_name')->nullable();
             $table->string('username')->unique();
             $table->string('email')->unique();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->string('theme')->default('light');
             $table->string('language')->default('en');
             $table->string('custom_avatar_url')->nullable();
+            $table->string('oauth_id')->nullable();
             $table->text('password_reset_token')->nullable();
             $table->timestamp('password_reset_expiration')->nullable();
             $table->boolean('two_factor_enabled')->default(false);

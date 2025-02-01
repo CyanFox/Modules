@@ -40,6 +40,10 @@ final class GroupsTable extends PowerGridComponent
 
     public function header(): array
     {
+        if (auth()->user()->cannot('admin.groups.create')) {
+            return [];
+        }
+
         return [
             Button::add('create')
                 ->slot(Blade::render('<x-button class="flex" wire:navigate link="' . route('admin.groups.create') . '">' . __('admin::groups.buttons.create_group') . '</x-button>')),
@@ -90,6 +94,10 @@ final class GroupsTable extends PowerGridComponent
 
     public function deleteGroup($groupId, $confirmed = true)
     {
+        if (auth()->user()->cannot('admin.groups.delete')) {
+            return;
+        }
+
         if ($groupId === Role::findByName('Super Admin')->id) {
             return;
         }
@@ -140,8 +148,16 @@ final class GroupsTable extends PowerGridComponent
                 ->when(fn($row) => $row->id == Role::findByName('Super Admin')->id)
                 ->hide(),
 
+            Rule::button('delete')
+                ->when(fn($row) => auth()->user()->cannot('admin.groups.delete'))
+                ->hide(),
+
             Rule::button('update')
                 ->when(fn($row) => $row->id == Role::findByName('Super Admin')->id)
+                ->hide(),
+
+            Rule::button('update')
+                ->when(fn($row) => auth()->user()->cannot('admin.groups.update'))
                 ->hide(),
         ];
     }

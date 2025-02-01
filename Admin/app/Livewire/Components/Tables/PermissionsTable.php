@@ -11,6 +11,7 @@ use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
+use PowerComponents\LivewirePowerGrid\Facades\Rule;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use Spatie\Permission\Models\Permission;
@@ -39,6 +40,10 @@ final class PermissionsTable extends PowerGridComponent
 
     public function header(): array
     {
+        if (auth()->user()->cannot('admin.permissions.create')) {
+            return [];
+        }
+
         return [
             Button::add('create')
                 ->slot(Blade::render('<x-button class="flex" wire:navigate link="' . route('admin.permissions.create') . '">' . __('admin::permissions.buttons.create_permission') . '</x-button>')),
@@ -89,6 +94,10 @@ final class PermissionsTable extends PowerGridComponent
 
     public function deletePermission($permissionId, $confirmed = true)
     {
+        if (auth()->user()->cannot('admin.permissions.delete')) {
+            return;
+        }
+
         if ($confirmed) {
             $permission = Permission::find($permissionId);
 
@@ -126,6 +135,19 @@ final class PermissionsTable extends PowerGridComponent
 
             Button::add('delete')
                 ->slot(Blade::render('<x-button color="danger" class="px-2 py-1 flex" wire:click="deletePermission(`' . $row->id . '`, false)"><i class="icon-trash"></i></x-button>')),
+        ];
+    }
+
+    public function actionRules(): array
+    {
+        return [
+            Rule::button('delete')
+                ->when(fn($row) => auth()->user()->cannot('admin.permissions.delete'))
+                ->hide(),
+
+            Rule::button('update')
+                ->when(fn($row) => auth()->user()->cannot('admin.permissions.update'))
+                ->hide(),
         ];
     }
 }

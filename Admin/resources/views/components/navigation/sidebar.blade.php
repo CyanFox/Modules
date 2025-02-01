@@ -31,7 +31,7 @@
     <a class="sr-only" href="#main-content">skip to the main content</a>
 
     <div x-cloak x-show="sidebarIsOpen"
-         class="fixed inset-0 z-20 bg-neutral-950/10 backdrop-blur-sm md:hidden"
+         class="fixed inset-0 z-20 bg-neutral-950/10 backdrop-blur-xs md:hidden"
          aria-hidden="true"
          x-on:click="sidebarIsOpen = false"
          x-transition.opacity></div>
@@ -40,7 +40,7 @@
          x-ref="sidebar"
          x-on:mouseenter="sidebarHovered = true"
          x-on:mouseleave="sidebarHovered = false"
-         class="fixed left-0 z-30 flex h-svh shrink-0 flex-col border-r border-neutral-300 bg-neutral-50 transition-all duration-300 ease-in-out md:relative dark:border-neutral-700 dark:bg-neutral-900 overflow-hidden"
+         class="fixed left-0 z-30 flex h-svh shrink-0 flex-col border-r border-neutral-300 bg-neutral-50 transition-all duration-300 ease-in-out dark:border-neutral-700 dark:bg-neutral-900 overflow-hidden"
          :class="[
        sidebarIsOpen ? 'translate-x-0' : '-translate-x-60 md:translate-x-0',
        sidebarPinned ? 'md:w-64' : 'md:w-16'
@@ -52,7 +52,8 @@
                class="flex items-center text-xl font-bold text-neutral-900 dark:text-white"
                :class="(!sidebarPinned && !sidebarHovered) ? 'justify-center' : ''">
                 <span class="sr-only">dashboard</span>
-                <img src="{{ settings('internal.app.logo', config('settings.logo_path')) }}" alt="Logo" class="{{ settings('dashboard.logo_size') }}">
+                <img src="{{ settings('internal.app.logo', config('settings.logo_path')) }}" alt="Logo"
+                     class="{{ settings('dashboard.logo_size') }}">
                 <p class="pl-4 truncate transition-opacity duration-300"
                    :class="(!sidebarPinned && !sidebarHovered) ? 'md:hidden' : 'md:block'">
                     {{ settings('internal.app.name', config('app.name')) }}
@@ -61,35 +62,48 @@
         </div>
 
         <div class="flex flex-col gap-2 items-center overflow-y-auto py-6 px-2">
-            <x-admin::sidebar-item
-                icon="icon-layout-dashboard"
-                :label="__('admin::navigation.dashboard')"
-                route="admin.dashboard"/>
+            @can('admin.dashboard')
+                <x-admin::sidebar-item
+                    icon="icon-layout-dashboard"
+                    :label="__('admin::navigation.dashboard')"
+                    route="admin.dashboard"/>
+            @endcan
 
-            <x-admin::sidebar-item
-                icon="icon-users"
-                :label="__('admin::navigation.users')"
-                route="admin.users"/>
+            @can('admin.users')
+                <x-admin::sidebar-item
+                    icon="icon-users"
+                    :label="__('admin::navigation.users')"
+                    route="admin.users"/>
+            @endcan
 
-            <x-admin::sidebar-item
-                icon="icon-shield"
-                :label="__('admin::navigation.groups')"
-                route="admin.groups"/>
 
-            <x-admin::sidebar-item
-                icon="icon-key-round"
-                :label="__('admin::navigation.permissions')"
-                route="admin.permissions"/>
+            @can('admin.groups')
+                <x-admin::sidebar-item
+                    icon="icon-shield"
+                    :label="__('admin::navigation.groups')"
+                    route="admin.groups"/>
+            @endcan
 
-            <x-admin::sidebar-item
-                icon="icon-settings"
-                :label="__('admin::navigation.settings')"
-                route="admin.settings"/>
+            @can('admin.permissions')
+                <x-admin::sidebar-item
+                    icon="icon-key-round"
+                    :label="__('admin::navigation.permissions')"
+                    route="admin.permissions"/>
+            @endcan
 
-            <x-admin::sidebar-item
-                icon="icon-package"
-                :label="__('admin::navigation.modules')"
-                route="admin.modules"/>
+            @can('admin.settings')
+                <x-admin::sidebar-item
+                    icon="icon-settings"
+                    :label="__('admin::navigation.settings')"
+                    route="admin.settings"/>
+            @endcan
+
+            @can('admin.modules')
+                <x-admin::sidebar-item
+                    icon="icon-package"
+                    :label="__('admin::navigation.modules')"
+                    route="admin.modules"/>
+            @endcan
 
             @foreach(\Modules\Admin\Facades\SidebarManager::getAll() as $sidebarItem)
                 <x-admin::sidebar-item
@@ -106,14 +120,14 @@
 
         <button
             x-on:click="sidebarPinned = !sidebarPinned"
-            class="hidden md:flex items-center justify-center h-8 mx-2 my-2 mt-auto rounded-md font-medium text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-none dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white overflow-hidden"
+            class="hidden cursor-pointer md:flex items-center justify-center h-8 mx-2 my-2 mt-auto rounded-md font-medium text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white overflow-hidden"
         >
             <i :class="[sidebarPinned ? 'transform rotate-90 transition-transform duration-300' :
             'transform rotate-0 transition-transform duration-300']" class="icon-pin dark:text-white"></i>
         </button>
     </nav>
 
-    <div class="h-svh w-full overflow-y-auto bg-white dark:bg-neutral-950">
+    <div class="h-svh w-full overflow-y-auto bg-white dark:bg-neutral-950 transition-all duration-300 ease-in-out" :class="sidebarPinned ? 'md:ml-64' : 'md:ml-16'">
         <nav
             class="sticky top-0 z-10 flex items-center border-b border-neutral-300 bg-neutral-50 px-4 py-2 dark:border-neutral-700 dark:bg-neutral-900"
             aria-label="top navigation bar">

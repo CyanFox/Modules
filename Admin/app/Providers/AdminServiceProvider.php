@@ -4,11 +4,13 @@ namespace Modules\Admin\Providers;
 
 use App\Http\ViewIntegrationManager;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Spatie\Permission\Models\Permission;
 
 class AdminServiceProvider extends ServiceProvider
 {
@@ -34,12 +36,50 @@ class AdminServiceProvider extends ServiceProvider
 
         View::composer('*', function ($view) {
             if (!$this->integrationsAdded) {
-                if (auth()->check() && auth()->user()->hasRole('Super Admin')) {
+                if (auth()->check() && auth()->user()->can('admin.dashboard')) {
                     ViewIntegrationManager::add('dashboard.profile.items',
                         '<x-dashboard::profile-item icon="icon-wrench" label="' . __('admin::navigation.admin') . '" route="admin.dashboard" :external="true"/>');
                 }
                 $this->integrationsAdded = true;
             }
+
+            Cache::rememberForever('admin.permissions', function () {
+                $permissions = [
+                    'admin.dashboard',
+
+                    'admin.users',
+                    'admin.users.create',
+                    'admin.users.update',
+                    'admin.users.delete',
+
+                    'admin.groups',
+                    'admin.groups.create',
+                    'admin.groups.update',
+                    'admin.groups.delete',
+
+                    'admin.permissions',
+                    'admin.permissions.create',
+                    'admin.permissions.update',
+                    'admin.permissions.delete',
+
+                    'admin.settings',
+                    'admin.settings.update',
+                    'admin.settings.modules',
+                    'admin.settings.editor',
+
+                    'admin.modules',
+                    'admin.modules.install',
+                    'admin.modules.disable',
+                    'admin.modules.enable',
+                    'admin.modules.delete',
+                ];
+
+                foreach ($permissions as $permission) {
+                    Permission::findOrCreate($permission);
+                }
+
+                return true;
+            });
         });
     }
 

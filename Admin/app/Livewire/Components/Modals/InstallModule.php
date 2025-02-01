@@ -5,9 +5,7 @@ namespace Modules\Admin\Livewire\Components\Modals;
 use App\Facades\ModuleManager;
 use App\Livewire\CFModalComponent;
 use Filament\Notifications\Notification;
-use Illuminate\Support\Facades\File;
 use Livewire\WithFileUploads;
-use ZipArchive;
 
 class InstallModule extends CFModalComponent
 {
@@ -18,6 +16,10 @@ class InstallModule extends CFModalComponent
 
     public function installModule()
     {
+        if (auth()->user()->cannot('admin.modules.install')) {
+            return;
+        }
+
         if ($this->moduleUrl) {
             $this->validate([
                 'moduleUrl' => 'required|url',

@@ -26,31 +26,31 @@ use Modules\Admin\Livewire\Users\Users;
 */
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'role:Super Admin']], function () {
-    Route::get('dashboard', Dashboard::class)->name('dashboard');
+    Route::get('dashboard', Dashboard::class)->name('dashboard')->can('admin.dashboard');
 
     Route::group(['prefix' => 'users'], function () {
-        Route::get('/', Users::class)->name('users');
-        Route::get('create', CreateUser::class)->name('users.create');
-        Route::get('update/{userId}', UpdateUser::class)->name('users.update');
+        Route::get('/', Users::class)->name('users')->can('admin.users');
+        Route::get('create', CreateUser::class)->name('users.create')->can('admin.users.create');
+        Route::get('update/{userId}', UpdateUser::class)->name('users.update')->can('admin.users.update');
     });
 
     Route::group(['prefix' => 'groups'], function () {
-        Route::get('/', Groups::class)->name('groups');
-        Route::get('create', CreateGroup::class)->name('groups.create');
-        Route::get('update/{groupId}', UpdateGroup::class)->name('groups.update');
+        Route::get('/', Groups::class)->name('groups')->can('admin.groups');
+        Route::get('create', CreateGroup::class)->name('groups.create')->can('admin.groups.create');
+        Route::get('update/{groupId}', UpdateGroup::class)->name('groups.update')->can('admin.groups.update');
     });
 
     Route::group(['prefix' => 'permissions'], function () {
-        Route::get('/', Permissions::class)->name('permissions');
-        Route::get('create', CreatePermission::class)->name('permissions.create');
-        Route::get('update/{permissionId}', UpdatePermission::class)->name('permissions.update');
+        Route::get('/', Permissions::class)->name('permissions')->can('admin.permissions');
+        Route::get('create', CreatePermission::class)->name('permissions.create')->can('admin.permissions.create');
+        Route::get('update/{permissionId}', UpdatePermission::class)->name('permissions.update')->can('admin.permissions.update');
     });
 
     Route::group(['prefix' => 'settings'], function () {
-        Route::get('/', Settings::class)->name('settings');
+        Route::get('/', Settings::class)->name('settings')->can('admin.settings');
     });
 
     Route::group(['prefix' => 'modules'], function () {
-        Route::get('/', Modules::class)->name('modules');
+        Route::get('/', Modules::class)->name('modules')->can('admin.modules');
     });
 });

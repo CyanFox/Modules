@@ -94,9 +94,12 @@
                                 {{ __('auth::profile.actions.buttons.activate_two_factor') }}
                             </x-button>
                         @endif
-                        <x-button wire:click="deleteAccount" loading="deleteAccount" color="danger" class="flex-1">
-                            {{ __('auth::profile.actions.buttons.delete_account') }}
-                        </x-button>
+
+                        @if(settings('auth.profile.enable.delete_account'))
+                            <x-button wire:click="deleteAccount" loading="deleteAccount" color="danger" class="flex-1">
+                                {{ __('auth::profile.actions.buttons.delete_account') }}
+                            </x-button>
+                        @endif
 
                         <x-view-integration name="auth.profile.overview.actions"/>
                     </div>

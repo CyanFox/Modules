@@ -6,16 +6,22 @@
                 <i class="icon-house"></i>
                 <span class="ml-2">{{ __('admin::settings.tabs.general') }}</span>
             </x-tab.item>
-            <x-tab.item class="flex-1 flex items-center justify-center" uuid="modules"
-                        wire:click="$set('tab', 'modules')">
-                <i class="icon-package"></i>
-                <span class="ml-2">{{ __('admin::settings.tabs.modules') }}</span>
-            </x-tab.item>
-            <x-tab.item class="flex-1 flex items-center justify-center" uuid="editor"
-                        wire:click="$set('tab', 'editor')">
-                <i class="icon-pen"></i>
-                <span class="ml-2">{{ __('admin::settings.tabs.editor') }}</span>
-            </x-tab.item>
+
+            @can('admin.settings.modules')
+                <x-tab.item class="flex-1 flex items-center justify-center" uuid="modules"
+                            wire:click="$set('tab', 'modules')">
+                    <i class="icon-package"></i>
+                    <span class="ml-2">{{ __('admin::settings.tabs.modules') }}</span>
+                </x-tab.item>
+            @endcan
+
+            @can('admin.settings.editor')
+                <x-tab.item class="flex-1 flex items-center justify-center" uuid="editor"
+                            wire:click="$set('tab', 'editor')">
+                    <i class="icon-pen"></i>
+                    <span class="ml-2">{{ __('admin::settings.tabs.editor') }}</span>
+                </x-tab.item>
+            @endcan
 
             <x-view-integration name="admin.settings.tabs"/>
         </x-tab>
@@ -52,16 +58,18 @@
                     </x-file>
                 </div>
 
-                <x-cf.buttons.update :show-cancel="false" :update-text="__('messages.buttons.save')"
-                                     target="updateGeneralSettings" class="mt-0">
-                    <x-button type="button" wire:click="resetLogo" loading="resetLogo" color="danger" class="ml-2">
-                        {{ __('admin::settings.buttons.reset_logo') }}
-                    </x-button>
-                </x-cf.buttons.update>
+                @can('admin.settings.update')
+                    <x-cf.buttons.update :show-cancel="false" :update-text="__('messages.buttons.save')"
+                                         target="updateGeneralSettings" class="mt-0">
+                        <x-button type="button" wire:click="resetLogo" loading="resetLogo" color="danger" class="ml-2">
+                            {{ __('admin::settings.buttons.reset_logo') }}
+                        </x-button>
+                    </x-cf.buttons.update>
+                @endcan
             </form>
         </x-cf.card>
     @endif
-    @if($tab === 'modules')
+    @if($tab === 'modules' && auth()->user()->can('admin.settings.modules'))
         <x-card>
             <x-input wire:model="moduleSearch"
                      wire:change="searchModule">
@@ -78,7 +86,7 @@
 
             @foreach($moduleList as $module)
                 @if(modules()->getSettingsPage($module) !== null)
-                    <a href="{{ modules()->getSettingsPage($module) }}" class="flex-grow" wire:navigate>
+                    <a href="{{ modules()->getSettingsPage($module) }}" class="grow" wire:navigate>
                         <x-card>
                             <div class="flex justify-center items-center">
                                 <i class="icon-settings text-2xl"></i>
@@ -106,7 +114,7 @@
             </x-card>
         @endif
     @endif
-    @if($tab === 'editor')
+    @if($tab === 'editor' && auth()->user()->can('admin.settings.editor'))
         <x-card>
             <div class="mb-4">
                 <x-input wire:model="editorSearch"
@@ -173,19 +181,23 @@
                                 @endif
                             </div>
 
-                            <div class="mt-auto">
-                                @if($value['is_locked'])
-                                    <x-button color="danger" variant="outline" type="button" class="mt-0.5" wire:click="setLockState('{{ $key }}', false)"
-                                              loading="setLockState">
-                                        <i class="icon-lock"></i>
-                                    </x-button>
-                                @else
-                                    <x-button color="success" variant="outline" type="button" class="mt-0.5" wire:click="setLockState('{{ $key }}', true)"
-                                              loading="setLockState">
-                                        <i class="icon-lock-open"></i>
-                                    </x-button>
-                                @endif
-                            </div>
+                            @can('admin.settings.update')
+                                <div class="mt-auto">
+                                    @if($value['is_locked'])
+                                        <x-button color="danger" variant="outline" type="button" class="mt-0.5"
+                                                  wire:click="setLockState('{{ $key }}', false)"
+                                                  loading="setLockState">
+                                            <i class="icon-lock"></i>
+                                        </x-button>
+                                    @else
+                                        <x-button color="success" variant="outline" type="button" class="mt-0.5"
+                                                  wire:click="setLockState('{{ $key }}', true)"
+                                                  loading="setLockState">
+                                            <i class="icon-lock-open"></i>
+                                        </x-button>
+                                    @endif
+                                </div>
+                            @endcan
 
                             <x-view-integration name="admin.settings.editor.encrypt"/>
                         </div>
@@ -198,13 +210,15 @@
 
                 <x-divider/>
 
-                <div class="space-x-1 mt-3">
-                    <x-button type="submit" loading="updateEditorSettings">
-                        {{ __('messages.buttons.save') }}
-                    </x-button>
+                @can('admin.settings.update')
+                    <div class="space-x-1 mt-3">
+                        <x-button type="submit" loading="updateEditorSettings">
+                            {{ __('messages.buttons.save') }}
+                        </x-button>
 
-                    <x-view-integration name="admin.settings.editor.buttons"/>
-                </div>
+                        <x-view-integration name="admin.settings.editor.buttons"/>
+                    </div>
+                @endcan
 
                 <x-view-integration name="admin.settings.editor.footer"/>
             </form>

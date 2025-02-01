@@ -23,6 +23,10 @@ class Modules extends CFComponent
 
     public function enableModule($moduleName)
     {
+        if (auth()->user()->cannot('admin.modules.enable')) {
+            return;
+        }
+
         if (!(ModuleManager::checkRequirements($moduleName) && ModuleManager::checkBaseVersion($moduleName))) {
             Notification::make()
                 ->title(__('admin::modules.notifications.module_requirements_not_met'))
@@ -59,6 +63,10 @@ class Modules extends CFComponent
 
     public function disableModule($moduleName)
     {
+        if (auth()->user()->cannot('admin.modules.disable')) {
+            return;
+        }
+
         foreach (Module::all() as $module) {
             if (in_array($moduleName, ModuleManager::getRequirements($module->getName()))) {
                 Notification::make()
@@ -94,6 +102,10 @@ class Modules extends CFComponent
 
     public function deleteModule($moduleName, $confirmed = true)
     {
+        if (auth()->user()->cannot('admin.modules.delete')) {
+            return;
+        }
+
         foreach (Module::all() as $module) {
             if (in_array($moduleName, ModuleManager::getRequirements($module->getName()))) {
                 Notification::make()

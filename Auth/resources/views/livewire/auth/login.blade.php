@@ -9,15 +9,17 @@
             </div>
 
             <x-card class="space-y-4 mx-auto">
-                <x-tab selected-tab="login" class="justify-center">
-                    <x-tab.item uuid="login" class="w-1/2">
-                        {{ __('auth::login.tabs.login') }}
-                    </x-tab.item>
-                    <x-tab.item href="{{ route('auth.register') }}" class="w-1/2" wire:navigate>
-                        {{ __('auth::login.tabs.register') }}
-                    </x-tab.item>
-                    <x-view-integration name="auth.login.card.tabs"/>
-                </x-tab>
+                @if(settings('auth.register.enable'))
+                    <x-tab selected-tab="login" class="justify-center">
+                        <x-tab.item uuid="login" class="w-1/2">
+                            {{ __('auth::login.tabs.login') }}
+                        </x-tab.item>
+                        <x-tab.item href="{{ route('auth.register') }}" class="w-1/2" wire:navigate>
+                            {{ __('auth::login.tabs.register') }}
+                        </x-tab.item>
+                        <x-view-integration name="auth.login.card.tabs"/>
+                    </x-tab>
+                @endif
 
                 @if($user)
                     <div class="rounded-2xl border border-gray-500">
@@ -44,43 +46,59 @@
                     <x-view-integration name="auth.login.card.rate_limit"/>
                 @endif
 
-                <form class="space-y-4" wire:submit="attemptLogin">
-                    <x-input wire:model="username" wire:blur="checkIfUserExists($event.target.value)" required autofocus>
-                        {{ __('auth::login.username') }}
-                    </x-input>
-                    <x-password wire:model="password" required>
-                        <x-slot:hint>
-                            <a href="{{ route('auth.forgot-password') }}" class="hover:underline" wire:navigate>
-                                {{ __('auth::login.forgot_password') }}
-                            </a>
-                        </x-slot:hint>
-                        {{ __('auth::login.password') }}
-                    </x-password>
+                @if(settings('auth.login.enable'))
+                    <form class="space-y-4" wire:submit="attemptLogin">
+                        <x-input wire:model="username" wire:blur="checkIfUserExists($event.target.value)" required
+                                 autofocus>
+                            {{ __('auth::login.username') }}
+                        </x-input>
+                        <x-password wire:model="password" required>
+                            @if(settings('auth.forgot_password.enable'))
+                                <x-slot:hint>
+                                    <a href="{{ route('auth.forgot-password') }}" class="hover:underline" wire:navigate>
+                                        {{ __('auth::login.forgot_password') }}
+                                    </a>
+                                </x-slot:hint>
+                            @endif
 
-                    <x-checkbox wire:model="remember">
-                        {{ __('auth::login.remember') }}
-                    </x-checkbox>
+                            {{ __('auth::login.password') }}
+                        </x-password>
 
-                    <x-view-integration name="auth.login.card.form"/>
+                        <x-checkbox wire:model="remember">
+                            {{ __('auth::login.remember') }}
+                        </x-checkbox>
 
-                    @if(settings('auth.login.enable.captcha', config('auth.login.captcha')))
-                        <div class="gap-3 lg:flex space-y-3">
-                            <img src="{{ captcha_src('inverse') }}" class="rounded-lg lg:w-1/2 w-full" alt="Captcha">
+                        <x-view-integration name="auth.login.card.form"/>
 
-                            <x-input wire:model="captcha" required>
-                                {{ __('auth::login.captcha') }}
-                            </x-input>
+                        @if(settings('auth.login.enable.captcha', config('auth.login.captcha')))
+                            <div class="gap-3 lg:flex space-y-3">
+                                <img src="{{ captcha_src('inverse') }}" class="rounded-lg lg:w-1/2 w-full"
+                                     alt="Captcha">
 
-                            <x-view-integration name="auth.login.card.captcha"/>
-                        </div>
-                    @endif
+                                <x-input wire:model="captcha" required>
+                                    {{ __('auth::login.captcha') }}
+                                </x-input>
 
-                    <x-button class="w-full" type="submit" loading="attemptLogin">
-                        {{ __('auth::login.buttons.login') }}
+                                <x-view-integration name="auth.login.card.captcha"/>
+                            </div>
+                        @endif
+
+                        <x-button class="w-full" type="submit" loading="attemptLogin">
+                            {{ __('auth::login.buttons.login') }}
+                        </x-button>
+                        <x-view-integration name="auth.login.card.form.buttons"/>
+
+                    </form>
+                @endif
+
+                @if(settings('auth.oauth.enable'))
+                    <x-divider/>
+
+                    <x-button class="w-full" href="{{ route('oauth.redirect', ['provider' => 'custom']) }}"
+                              :color="settings('auth.oauth.login_color')">
+                        {{ settings('auth.oauth.login_text') }}
                     </x-button>
-                    <x-view-integration name="auth.login.card.form.buttons"/>
-
-                </form>
+                @endif
 
                 <x-view-integration name="auth.login.card.end"/>
 

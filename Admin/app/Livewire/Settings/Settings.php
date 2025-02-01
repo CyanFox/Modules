@@ -37,6 +37,10 @@ class Settings extends CFComponent
 
     public function updateGeneralSettings()
     {
+        if (auth()->user()->cannot('admin.settings.update')) {
+            return;
+        }
+
         $this->validate([
             'appName' => 'required|string',
             'appUrl' => 'required|url',
@@ -72,6 +76,10 @@ class Settings extends CFComponent
 
     public function resetLogo()
     {
+        if (auth()->user()->cannot('admin.settings.update')) {
+            return;
+        }
+
         Storage::disk('public')->delete('img/' . str_replace('/storage/img/', '', settings('internal.app.logo')));
 
         settings()->updateSetting('internal.app.logo', '/img/Logo.svg');
@@ -95,6 +103,10 @@ class Settings extends CFComponent
 
     public function updateEditorSettings()
     {
+        if (auth()->user()->cannot('admin.settings.update')) {
+            return;
+        }
+
         $settings = [];
         foreach ($this->editorSettings as $key => $value) {
             $newKey = str_replace(':', '.', $key);
@@ -143,6 +155,9 @@ class Settings extends CFComponent
 
     public function setLockState($key, $state)
     {
+        if (auth()->user()->cannot('admin.settings.update')) {
+            return;
+        }
 
         $setting = Setting::where('key', $key)->first();
         $setting->is_locked = $state;

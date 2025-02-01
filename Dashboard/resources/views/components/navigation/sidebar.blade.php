@@ -31,7 +31,7 @@
     <a class="sr-only" href="#main-content">skip to the main content</a>
 
     <div x-cloak x-show="sidebarIsOpen"
-         class="fixed inset-0 z-20 bg-neutral-950/10 backdrop-blur-sm md:hidden"
+         class="fixed inset-0 z-20 bg-neutral-950/10 backdrop-blur-xs md:hidden"
          aria-hidden="true"
          x-on:click="sidebarIsOpen = false"
          x-transition.opacity></div>
@@ -40,7 +40,7 @@
          x-ref="sidebar"
          x-on:mouseenter="sidebarHovered = true"
          x-on:mouseleave="sidebarHovered = false"
-         class="fixed left-0 z-30 flex h-svh shrink-0 flex-col border-r border-neutral-300 bg-neutral-50 transition-all duration-300 ease-in-out md:relative dark:border-neutral-700 dark:bg-neutral-900 overflow-hidden"
+         class="fixed left-0 z-30 flex h-svh shrink-0 flex-col border-r border-neutral-300 bg-neutral-50 transition-all duration-300 ease-in-out dark:border-neutral-700 dark:bg-neutral-900 overflow-hidden"
          :class="[
        sidebarIsOpen ? 'translate-x-0' : '-translate-x-60 md:translate-x-0',
        sidebarPinned ? 'md:w-64' : 'md:w-16'
@@ -81,14 +81,14 @@
 
         <button
             x-on:click="sidebarPinned = !sidebarPinned"
-            class="hidden md:flex items-center justify-center h-8 mx-2 my-2 mt-auto rounded-md font-medium text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-none dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white overflow-hidden"
+            class="hidden cursor-pointer md:flex items-center justify-center h-8 mx-2 my-2 mt-auto rounded-md font-medium text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white overflow-hidden"
         >
             <i :class="[sidebarPinned ? 'transform rotate-90 transition-transform duration-300' :
             'transform rotate-0 transition-transform duration-300']" class="icon-pin dark:text-white"></i>
         </button>
     </nav>
 
-    <div class="h-svh w-full overflow-y-auto bg-white dark:bg-neutral-950">
+    <div class="h-svh w-full overflow-y-auto bg-white dark:bg-neutral-950 transition-all duration-300 ease-in-out" :class="sidebarPinned ? 'md:ml-64' : 'md:ml-16'">
         <nav
             class="sticky top-0 z-10 flex items-center border-b border-neutral-300 bg-neutral-50 px-4 py-2 dark:border-neutral-700 dark:bg-neutral-900"
             aria-label="top navigation bar">

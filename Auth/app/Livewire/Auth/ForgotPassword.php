@@ -138,6 +138,10 @@ class ForgotPassword extends CFComponent
 
     public function mount()
     {
+        if (!settings('auth.forgot_password.enable')) {
+            abort(404);
+        }
+
         $this->unsplash = UnsplashManager::returnBackground();
 
         if ($this->unsplash['error'] != null) {

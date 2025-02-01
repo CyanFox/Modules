@@ -2,10 +2,12 @@
     <div class="mb-4">
         <x-card>
             <div class="flex md:justify-between md:flex-row flex-col">
-                <x-button
-                    wire:click="$dispatch('openModal', {component: 'admin::components.modals.install-module'})">
-                    {{ __('admin::modules.buttons.install_module') }}
-                </x-button>
+                @can('admin.modules.install')
+                    <x-button
+                        wire:click="$dispatch('openModal', {component: 'admin::components.modals.install-module'})">
+                        {{ __('admin::modules.buttons.install_module') }}
+                    </x-button>
+                @endcan
 
                 <x-view-integration name="admin.modules.header.install"/>
 
@@ -76,20 +78,27 @@
                         <x-view-integration name="admin.modules.table"/>
 
                         <x-table.body.item>
-                            <x-button wire:click="deleteModule('{{ $module }}', false)"
-                                      loading="deleteModule" class="px-2 py-1" color="danger">
-                                <i class="icon-trash"></i>
-                            </x-button>
+                            @can('admin.modules.delete')
+                                <x-button wire:click="deleteModule('{{ $module }}', false)"
+                                          loading="deleteModule" class="px-2 py-1" color="danger">
+                                    <i class="icon-trash"></i>
+                                </x-button>
+                            @endcan
+
                             @if(modules()->getModule($module)->isDisabled())
-                                <x-button wire:click="enableModule('{{ $module }}')"
-                                          loading="enableModule" class="px-2 py-1" color="success">
-                                    <i class="icon-check"></i>
-                                </x-button>
+                                @can('admin.modules.enable')
+                                    <x-button wire:click="enableModule('{{ $module }}')"
+                                              loading="enableModule" class="px-2 py-1" color="success">
+                                        <i class="icon-check"></i>
+                                    </x-button>
+                                @endcan
                             @else
-                                <x-button wire:click="disableModule('{{ $module }}')"
-                                          loading="deleteModule" class="px-2 py-1" color="warning">
-                                    <i class="icon-ban"></i>
-                                </x-button>
+                                @can('admin.modules.disable')
+                                    <x-button wire:click="disableModule('{{ $module }}')"
+                                              loading="deleteModule" class="px-2 py-1" color="warning">
+                                        <i class="icon-ban"></i>
+                                    </x-button>
+                                @endcan
                             @endif
                         </x-table.body.item>
                     </tr>

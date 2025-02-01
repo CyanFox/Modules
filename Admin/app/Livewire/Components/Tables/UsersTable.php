@@ -40,6 +40,10 @@ final class UsersTable extends PowerGridComponent
 
     public function header(): array
     {
+        if (auth()->user()->cannot('admin.users.create')) {
+            return [];
+        }
+
         return [
             Button::add('create')
                 ->slot(Blade::render('<x-button class="flex" wire:navigate link="' . route('admin.users.create') . '">' . __('admin::users.buttons.create_user') . '</x-button>')),
@@ -119,6 +123,10 @@ final class UsersTable extends PowerGridComponent
 
     public function deleteUser($userId, $confirmed = true)
     {
+        if (auth()->user()->cannot('admin.users.delete')) {
+            return;
+        }
+
         if ($userId === auth()->id()) {
             return;
         }
@@ -163,6 +171,14 @@ final class UsersTable extends PowerGridComponent
         return [
             Rule::button('delete')
                 ->when(fn($row) => $row->id == auth()->id())
+                ->hide(),
+
+            Rule::button('delete')
+                ->when(fn($row) => auth()->user()->cannot('admin.users.delete'))
+                ->hide(),
+
+            Rule::button('update')
+                ->when(fn($row) => auth()->user()->cannot('admin.users.update'))
                 ->hide(),
         ];
     }

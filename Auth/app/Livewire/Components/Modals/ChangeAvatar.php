@@ -18,6 +18,10 @@ class ChangeAvatar extends CFModalComponent
 
     public function changeAvatar()
     {
+        if (!settings('auth.profile.enable.change_avatar')) {
+            return;
+        }
+
         if ($this->avatar) {
             $this->validate([
                 'avatar' => 'image|max:10000',
@@ -53,6 +57,10 @@ class ChangeAvatar extends CFModalComponent
 
     public function resetAvatar()
     {
+        if (!settings('auth.profile.enable.change_avatar')) {
+            return;
+        }
+
         Storage::disk('public')->delete('avatars/' . auth()->id() . '.png');
 
         auth()->user()->update([
@@ -70,6 +78,10 @@ class ChangeAvatar extends CFModalComponent
 
     public function mount()
     {
+        if (!settings('auth.profile.enable.change_avatar')) {
+            abort(403);
+        }
+
         $this->avatarUrl = auth()->user()->custom_avatar_url;
     }
 

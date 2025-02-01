@@ -27,15 +27,15 @@ class UpdateUser extends CFComponent
     public $permissions;
     public $disabled;
 
-    public function createUser()
+    public function updateUser()
     {
         $this->validate([
             'firstName' => 'required',
             'lastName' => 'required',
             'username' => 'required',
             'email' => 'required|email',
-            'password' => 'required',
-            'confirmPassword' => 'required|same:password',
+            'password' => 'nullable',
+            'confirmPassword' => 'nullable|same:password',
             'forceActivateTwoFactor' => 'nullable|boolean',
             'forceChangePassword' => 'nullable|boolean',
             'groups' => 'nullable|array',
@@ -43,20 +43,25 @@ class UpdateUser extends CFComponent
             'disabled' => 'nullable|boolean',
         ]);
 
-        $user = User::create([
+        $this->user->update([
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
             'username' => $this->username,
             'email' => $this->email,
-            'password' => Hash::make($this->password),
             'force_activate_two_factor' => $this->forceActivateTwoFactor,
             'force_change_password' => $this->forceChangePassword,
             'disabled' => $this->disabled,
         ]);
 
-        $user->roles()->sync($this->groups);
+        if ($this->password) {
+            $this->user->update([
+                'password' => Hash::make($this->password),
+            ]);
+        }
 
-        $user->permissions()->sync($this->permissions);
+        $this->user->roles()->sync($this->groups);
+
+        $this->user->permissions()->sync($this->permissions);
 
         Notification::make()
             ->title(__('admin::users.create_user.notifications.user_created'))
