@@ -19,7 +19,7 @@
             <x-button type="button" wire:click="resetAvatar" loading="resetAvatar" color="warning" class="w-full lg:w-1/2">
                 {{ __('auth::profile.modals.change_avatar.buttons.reset') }}
             </x-button>
-            <x-button loading="changeAvatar" class="w-full lg:w-1/2">
+            <x-button type="submit" loading="changeAvatar" class="w-full lg:w-1/2">
                 {{ __('messages.buttons.confirm') }}
             </x-button>
         </x-modal.footer>

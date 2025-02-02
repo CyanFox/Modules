@@ -19,7 +19,7 @@
         </div>
 
         <x-modal.footer>
-            <x-button type="button" loading="confirmPassword" class="w-full lg:w-32 lg:ms-3">
+            <x-button type="submit" loading="confirmPassword" class="w-full lg:w-32 lg:ms-3">
                 {{ __('messages.buttons.confirm') }}
             </x-button>
         </x-modal.footer>

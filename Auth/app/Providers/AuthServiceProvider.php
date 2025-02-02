@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Socialite\Contracts\Factory;
+use Modules\Auth\Console\Users\CreateUserCommand;
+use Modules\Auth\Console\Users\DeleteUserCommand;
+use Modules\Auth\Console\Users\UpdateUserCommand;
 use Modules\Auth\Socialite\CustomOAuthProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
@@ -71,7 +74,11 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        // $this->commands([]);
+         $this->commands([
+             new CreateUserCommand(),
+             new UpdateUserCommand(),
+             new DeleteUserCommand(),
+         ]);
     }
 
     /**

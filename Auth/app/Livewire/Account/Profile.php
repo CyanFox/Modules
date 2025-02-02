@@ -141,7 +141,7 @@ class Profile extends CFComponent
 
     public function deleteAccount($confirmed = false)
     {
-        if (settings('auth.profile.enable.delete_account')) {
+        if (!settings('auth.profile.enable.delete_account')) {
             return;
         }
 
