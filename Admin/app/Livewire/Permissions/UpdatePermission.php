@@ -13,14 +13,17 @@ class UpdatePermission extends CFComponent
     use WithCustomLivewireException;
 
     public $permissionId;
+
     public $permission;
+
     public $name;
+
     public $guardName;
 
     public function updatePermission()
     {
         $this->validate([
-            'name' => 'required|string|unique:permissions,name,' . $this->permissionId,
+            'name' => 'required|string|unique:permissions,name,'.$this->permissionId,
             'guardName' => 'required|string',
         ]);
 
@@ -41,7 +44,7 @@ class UpdatePermission extends CFComponent
     {
         try {
             $this->permission = Permission::findById($this->permissionId);
-        }catch (PermissionDoesNotExist) {
+        } catch (PermissionDoesNotExist) {
             abort(404);
         }
 

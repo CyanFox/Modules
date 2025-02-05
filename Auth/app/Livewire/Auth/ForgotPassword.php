@@ -19,7 +19,7 @@ use Modules\Auth\Rules\Password;
 
 class ForgotPassword extends CFComponent
 {
-    use WithRateLimiting, WithCustomLivewireException;
+    use WithCustomLivewireException, WithRateLimiting;
 
     public $unsplash = [];
 
@@ -72,7 +72,7 @@ class ForgotPassword extends CFComponent
             return;
         }
 
-        $resetToken = Str::random(20) . time() . '-' . $this->user->id;
+        $resetToken = Str::random(20).time().'-'.$this->user->id;
 
         $this->user->update([
             'password_reset_token' => Hash::make($resetToken),
@@ -138,7 +138,7 @@ class ForgotPassword extends CFComponent
 
     public function mount()
     {
-        if (!settings('auth.forgot_password.enable')) {
+        if (! settings('auth.forgot_password.enable')) {
             abort(404);
         }
 
@@ -153,7 +153,7 @@ class ForgotPassword extends CFComponent
                 $userId = explode('-', $this->passwordResetToken)[1];
                 $this->user = User::findOrFail($userId);
 
-                if (!Hash::check($this->passwordResetToken, $this->user->password_reset_token) || $this->user->password_reset_expiration < now()) {
+                if (! Hash::check($this->passwordResetToken, $this->user->password_reset_token) || $this->user->password_reset_expiration < now()) {
                     Notification::make()
                         ->title(__('auth::forgot-password.notifications.invalid_reset_token'))
                         ->danger()

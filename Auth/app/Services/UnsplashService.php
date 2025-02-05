@@ -40,12 +40,12 @@ class UnsplashService
             }
 
             $imagePath = $imageData[0]['urls']['regular'];
-            $photoLink = $imageData[0]['links']['html'] . $utmSource;
+            $photoLink = $imageData[0]['links']['html'].$utmSource;
             $authorName = $imageData[0]['user']['name'];
-            $authorLink = $imageData[0]['user']['links']['html'] . $utmSource;
+            $authorLink = $imageData[0]['user']['links']['html'].$utmSource;
             $error = null;
 
-            $css = "background-image: url('" . $imagePath . "');
+            $css = "background-image: url('".$imagePath."');
                     background-size: cover;
                     background-repeat: no-repeat;
                     background-position: center;
@@ -68,7 +68,7 @@ class UnsplashService
             'photo' => $photoLink,
             'author' => $authorName,
             'authorURL' => $authorLink,
-            'utm' => 'https://unsplash.com/' . $this->getUTM(),
+            'utm' => 'https://unsplash.com/'.$this->getUTM(),
         ];
     }
 
@@ -106,11 +106,11 @@ class UnsplashService
             'Authorization' => "Client-ID $apiKey",
         ];
 
-        $response = $client->request('GET', 'https://api.unsplash.com/photos/random?count=1&query=' .
+        $response = $client->request('GET', 'https://api.unsplash.com/photos/random?count=1&query='.
             settings('auth.unsplash.query', config('auth.unsplash.query')), ['headers' => $headers]);
 
-        Cache::put('unsplash_image', (string)$response->getBody(), now()->addHours());
+        Cache::put('unsplash_image', (string) $response->getBody(), now()->addHours());
 
-        return json_decode((string)$response->getBody(), true);
+        return json_decode((string) $response->getBody(), true);
     }
 }

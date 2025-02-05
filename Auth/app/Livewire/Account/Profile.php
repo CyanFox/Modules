@@ -13,21 +13,27 @@ use Modules\Auth\Traits\WithPasswordConfirmation;
 
 class Profile extends CFComponent
 {
-    use WithCustomLivewireException, WithPasswordConfirmation, WithConfirmation;
+    use WithConfirmation, WithCustomLivewireException, WithPasswordConfirmation;
 
     #[Url]
     public $tab;
 
     public $firstName;
+
     public $lastName;
+
     public $username;
+
     public $email;
 
     public $language;
+
     public $theme;
 
     public $currentPassword;
+
     public $newPassword;
+
     public $confirmPassword;
 
     public function updateLanguageAndTheme()
@@ -41,7 +47,6 @@ class Profile extends CFComponent
             'language' => $this->language ?? 'en',
             'theme' => $this->theme ?? 'light',
         ]);
-
 
         Notification::make()
             ->title(__('auth::profile.notifications.profile_updated'))
@@ -89,7 +94,7 @@ class Profile extends CFComponent
                 'confirmPassword' => 'required|same:newPassword',
             ]);
 
-            if (!Hash::check($this->currentPassword, auth()->user()->password)) {
+            if (! Hash::check($this->currentPassword, auth()->user()->password)) {
                 $this->addError('currentPassword', __('validation.current_password'));
 
                 return;
@@ -110,7 +115,7 @@ class Profile extends CFComponent
 
     public function disableTwoFA($confirmed = false)
     {
-        if (!$confirmed) {
+        if (! $confirmed) {
             $this->dialog()
                 ->question(__('auth::profile.modals.disable_two_fa.title'),
                     __('auth::profile.modals.disable_two_fa.description'))
@@ -141,11 +146,11 @@ class Profile extends CFComponent
 
     public function deleteAccount($confirmed = false)
     {
-        if (!settings('auth.profile.enable.delete_account')) {
+        if (! settings('auth.profile.enable.delete_account')) {
             return;
         }
 
-        if (!$confirmed) {
+        if (! $confirmed) {
             $this->dialog()
                 ->question(__('auth::profile.modals.delete_account.title'),
                     __('auth::profile.modals.delete_account.description'))
@@ -170,7 +175,7 @@ class Profile extends CFComponent
 
     public function logoutSession($sessionId)
     {
-        if (!$this->checkPasswordConfirmation()->passwordMethod('logoutSession', $sessionId)->checkPassword()) {
+        if (! $this->checkPasswordConfirmation()->passwordMethod('logoutSession', $sessionId)->checkPassword()) {
             return;
         }
 
@@ -186,7 +191,7 @@ class Profile extends CFComponent
 
     public function logoutAllSessions($confirmed = false)
     {
-        if (!$confirmed) {
+        if (! $confirmed) {
             $this->dialog()
                 ->question(__('auth::profile.sessions.modals.logout_all.title'),
                     __('auth::profile.sessions.modals.logout_all.description'))

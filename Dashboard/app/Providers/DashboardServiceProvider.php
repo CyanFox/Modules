@@ -4,7 +4,6 @@ namespace Modules\Dashboard\Providers;
 
 use App\Facades\SettingsManager;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
@@ -23,7 +22,11 @@ class DashboardServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        SettingsManager::setSetting('auth.profile.layout', 'dashboard::components.layouts.app', updateIfExists: true);
+
+        if (! app()->runningInConsole()) {
+            SettingsManager::setSetting('auth.profile.layout', 'dashboard::components.layouts.app', updateIfExists: true);
+        }
+
         $this->registerCommands();
         $this->registerCommandSchedules();
         $this->registerTranslations();
@@ -89,8 +92,8 @@ class DashboardServiceProvider extends ServiceProvider
 
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
-                    $relativePath = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
-                    $configKey = $this->nameLower . '.' . str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
+                    $relativePath = str_replace($configPath.DIRECTORY_SEPARATOR, '', $file->getPathname());
+                    $configKey = $this->nameLower.'.'.str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
                     $key = ($relativePath === 'dashboard.php') ? $this->nameLower : $configKey;
 
                     $this->publishes([$file->getPathname() => config_path($relativePath)], 'config');

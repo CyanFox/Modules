@@ -8,24 +8,24 @@ use Modules\Auth\Traits\WithPasswordConfirmation;
 
 class RegenerateRecoveryCodes extends CFModalComponent
 {
-    use WithPasswordConfirmation, WithCustomLivewireException;
+    use WithCustomLivewireException, WithPasswordConfirmation;
 
     public $recoveryCodes = [];
 
     public function downloadRecoveryCodes()
     {
-        if (!$this->hasPasswordConfirmedSession()) {
+        if (! $this->hasPasswordConfirmedSession()) {
             return;
         }
 
         return response()->streamDownload(function () {
             echo implode(PHP_EOL, $this->recoveryCodes);
-        }, 'recovery-codes-' . auth()->user()->username . '.txt');
+        }, 'recovery-codes-'.auth()->user()->username.'.txt');
     }
 
     public function regenerateRecoveryCodes()
     {
-        if (!$this->hasPasswordConfirmedSession()) {
+        if (! $this->hasPasswordConfirmedSession()) {
             return;
         }
 
@@ -34,7 +34,7 @@ class RegenerateRecoveryCodes extends CFModalComponent
 
     public function mount()
     {
-        if (!$this->checkPasswordConfirmation()->passwordMethod('render')->checkPassword()) {
+        if (! $this->checkPasswordConfirmation()->passwordMethod('render')->checkPassword()) {
             return;
         }
     }

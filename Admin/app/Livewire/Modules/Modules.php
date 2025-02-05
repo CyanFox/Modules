@@ -7,7 +7,6 @@ use App\Livewire\CFComponent;
 use App\Models\Setting;
 use App\Traits\WithConfirmation;
 use App\Traits\WithCustomLivewireException;
-use Exception;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Artisan;
 use Nwidart\Modules\Facades\Module;
@@ -15,7 +14,7 @@ use Symfony\Component\Process\Process;
 
 class Modules extends CFComponent
 {
-    use WithCustomLivewireException, WithConfirmation;
+    use WithConfirmation, WithCustomLivewireException;
 
     public $moduleList;
 
@@ -27,7 +26,7 @@ class Modules extends CFComponent
             return;
         }
 
-        if (!(ModuleManager::checkRequirements($moduleName) && ModuleManager::checkBaseVersion($moduleName))) {
+        if (! (ModuleManager::checkRequirements($moduleName) && ModuleManager::checkBaseVersion($moduleName))) {
             Notification::make()
                 ->title(__('admin::modules.notifications.module_requirements_not_met'))
                 ->danger()
@@ -44,8 +43,8 @@ class Modules extends CFComponent
         Artisan::call('cache:clear');
 
         $files = glob(base_path('bootstrap/cache/*.php'));
-        foreach($files as $file) {
-            if(is_file($file)) {
+        foreach ($files as $file) {
+            if (is_file($file)) {
                 unlink($file);
             }
         }
@@ -83,8 +82,8 @@ class Modules extends CFComponent
         ModuleManager::getModule($moduleName)->disable();
 
         $files = glob(base_path('bootstrap/cache/*.php'));
-        foreach($files as $file) {
-            if(is_file($file)) {
+        foreach ($files as $file) {
+            if (is_file($file)) {
                 unlink($file);
             }
         }
@@ -120,15 +119,15 @@ class Modules extends CFComponent
         }
 
         if ($confirmed) {
-            Setting::where('key', 'LIKE', strtolower($moduleName) . '%')->delete();
+            Setting::where('key', 'LIKE', strtolower($moduleName).'%')->delete();
 
             $module = Module::find($moduleName);
             $module->disable();
             $module->delete();
 
             $files = glob(base_path('bootstrap/cache/*.php'));
-            foreach($files as $file) {
-                if(is_file($file)) {
+            foreach ($files as $file) {
+                if (is_file($file)) {
                     unlink($file);
                 }
             }

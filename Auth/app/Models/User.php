@@ -11,7 +11,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasRoles, Notifiable, WithTwoFactorAuth, WithSession;
+    use HasRoles, Notifiable, WithSession, WithTwoFactorAuth;
 
     protected $guarded = [];
 
@@ -42,7 +42,7 @@ class User extends Authenticatable
 
     public function fullName()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return $this->first_name.' '.$this->last_name;
     }
 
     public function avatar()
@@ -51,7 +51,7 @@ class User extends Authenticatable
             return e($this->custom_avatar_url);
         }
 
-        $filePath = 'avatars/' . $this->id . '.png';
+        $filePath = 'avatars/'.$this->id.'.png';
         if (Storage::disk('public')->exists($filePath)) {
             return Storage::disk('public')->url($filePath);
         }

@@ -15,7 +15,6 @@ return [
     'disabled' => 'Disabled',
     'enabled' => 'Enabled',
 
-
     'notifications' => [
         'module_enabled' => 'Module successfully enabled.',
         'module_disabled' => 'Module successfully disabled.',
@@ -52,5 +51,5 @@ return [
         'notifications' => [
             'module_installed' => 'Module successfully installed.',
         ],
-    ]
+    ],
 ];

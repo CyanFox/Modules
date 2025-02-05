@@ -10,7 +10,7 @@ use Modules\Auth\Traits\WithPasswordConfirmation;
 
 class ActivateTwoFA extends CFModalComponent
 {
-    use WithPasswordConfirmation, WithCustomLivewireException;
+    use WithCustomLivewireException, WithPasswordConfirmation;
 
     public $twoFactorCode;
 
@@ -18,7 +18,7 @@ class ActivateTwoFA extends CFModalComponent
 
     public function activateTwoFA()
     {
-        if (!$this->hasPasswordConfirmedSession()) {
+        if (! $this->hasPasswordConfirmedSession()) {
             return;
         }
 
@@ -26,7 +26,7 @@ class ActivateTwoFA extends CFModalComponent
             'twoFactorCode' => 'required|digits:6',
         ]);
 
-        if (!auth()->user()->checkTwoFACode($this->twoFactorCode, false)) {
+        if (! auth()->user()->checkTwoFACode($this->twoFactorCode, false)) {
             throw ValidationException::withMessages(['twoFactorCode' => __('auth::profile.modals.activate_two_fa.invalid_two_factor_code')]);
         }
 
@@ -44,18 +44,18 @@ class ActivateTwoFA extends CFModalComponent
 
     public function downloadRecoveryCodes()
     {
-        if (!$this->hasPasswordConfirmedSession()) {
+        if (! $this->hasPasswordConfirmedSession()) {
             return;
         }
 
         return response()->streamDownload(function () {
             echo implode(PHP_EOL, $this->recoveryCodes);
-        }, 'recovery-codes-' . auth()->user()->username . '.txt');
+        }, 'recovery-codes-'.auth()->user()->username.'.txt');
     }
 
     public function regenerateRecoveryCodes()
     {
-        if (!$this->hasPasswordConfirmedSession()) {
+        if (! $this->hasPasswordConfirmedSession()) {
             return;
         }
 
@@ -69,7 +69,7 @@ class ActivateTwoFA extends CFModalComponent
 
     public function mount()
     {
-        if (!$this->checkPasswordConfirmation()->passwordMethod('render')->checkPassword()) {
+        if (! $this->checkPasswordConfirmation()->passwordMethod('render')->checkPassword()) {
             return;
         }
     }

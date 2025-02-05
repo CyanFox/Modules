@@ -17,7 +17,7 @@ class Password implements ValidationRule
     {
         if (settings('auth.password.minimum_length')) {
             $rules = [
-                'min:' . settings('auth.password.minimum_length'),
+                'min:'.settings('auth.password.minimum_length'),
             ];
 
             $messages = ['min' => __('validation.min.string', ['attribute' => $attribute, 'min' => settings('auth.password.minimum_length')])];
@@ -44,11 +44,11 @@ class Password implements ValidationRule
         }
 
         if (settings('auth.password.blacklist')) {
-            $rules[] = 'not_in:' . settings('auth.password.blacklist');
+            $rules[] = 'not_in:'.settings('auth.password.blacklist');
             $messages['not_in'] = __('validation.password.blacklist', ['attribute' => $attribute]);
         }
 
-        if (!isset($rules) || !isset($messages)) {
+        if (! isset($rules) || ! isset($messages)) {
             return;
         }
 

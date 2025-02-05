@@ -37,8 +37,7 @@
 
                 @if ($rateLimitTime > 1)
                     <div wire:poll.1s="setRateLimit">
-                        <x-alert color="error">
-                            <i class="icon-triangle-alert"></i>
+                        <x-alert color="error">z
                             {{ __('auth.throttle', ['seconds' => $rateLimitTime]) }}
                         </x-alert>
                     </div>

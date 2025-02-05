@@ -26,7 +26,7 @@ class ConfirmPassword extends CFModalComponent
             'password' => 'required|string',
         ]);
 
-        if (!Hash::check($this->password, auth()->user()->password)) {
+        if (! Hash::check($this->password, auth()->user()->password)) {
             throw ValidationException::withMessages([
                 'password' => [__('validation.current_password')],
             ]);
@@ -46,11 +46,11 @@ class ConfirmPassword extends CFModalComponent
 
     public function mount()
     {
-        if (!$this->title) {
+        if (! $this->title) {
             $this->title = __('auth::confirm-password.title');
         }
 
-        if (!$this->description) {
+        if (! $this->description) {
             $this->description = __('auth::confirm-password.description');
         }
 

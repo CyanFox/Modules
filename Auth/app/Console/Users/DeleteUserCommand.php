@@ -3,15 +3,9 @@
 namespace Modules\Auth\Console\Users;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Hash;
 use Modules\Auth\Models\User;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 use function Laravel\Prompts\confirm;
-use function Laravel\Prompts\multiselect;
-use function Laravel\Prompts\password;
-use function Laravel\Prompts\text;
 
 class DeleteUserCommand extends Command
 {
@@ -39,7 +33,7 @@ class DeleteUserCommand extends Command
     public function handle()
     {
         $user = User::where('username', $this->argument('username'))->first();
-        if (!$user) {
+        if (! $user) {
             $this->error('User not found');
 
             return;
@@ -47,7 +41,7 @@ class DeleteUserCommand extends Command
 
         $delete = confirm('Are you sure you want to delete this user?');
 
-        if (!$delete) {
+        if (! $delete) {
             $this->info('User not deleted');
 
             return;

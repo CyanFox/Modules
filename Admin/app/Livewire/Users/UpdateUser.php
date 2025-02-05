@@ -14,17 +14,29 @@ class UpdateUser extends CFComponent
     use WithCustomLivewireException;
 
     public $userId;
+
     public $user;
+
     public $firstName;
+
     public $lastName;
+
     public $username;
+
     public $email;
+
     public $password;
+
     public $confirmPassword;
+
     public $forceActivateTwoFactor;
+
     public $forceChangePassword;
+
     public $groups;
+
     public $permissions;
+
     public $disabled;
 
     public function updateUser()
@@ -75,7 +87,7 @@ class UpdateUser extends CFComponent
     {
         try {
             $this->user = User::findOrFail($this->userId);
-        }catch (Exception) {
+        } catch (Exception) {
             abort(404);
         }
 

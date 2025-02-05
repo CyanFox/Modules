@@ -2,7 +2,6 @@
 
 namespace Modules\Dashboard\Facades;
 
-
 use Illuminate\Support\Facades\Facade;
 use Modules\Dashboard\Services\SidebarService;
 

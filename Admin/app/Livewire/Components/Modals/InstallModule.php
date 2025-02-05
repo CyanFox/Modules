@@ -12,6 +12,7 @@ class InstallModule extends CFModalComponent
     use WithFileUploads;
 
     public $moduleFile;
+
     public $moduleUrl;
 
     public function installModule()
@@ -25,7 +26,7 @@ class InstallModule extends CFModalComponent
                 'moduleUrl' => 'required|url',
             ]);
 
-            if (!ModuleManager::installModuleFromURL($this->moduleUrl)) {
+            if (! ModuleManager::installModuleFromURL($this->moduleUrl)) {
                 Notification::make()
                     ->title(__('messages.notifications.something_went_wrong'))
                     ->danger()
@@ -49,7 +50,7 @@ class InstallModule extends CFModalComponent
         ]);
 
         $path = $this->moduleFile->store('temp');
-        if (!ModuleManager::installModule('app/private/' . $path)) {
+        if (! ModuleManager::installModule('app/private/'.$path)) {
             Notification::make()
                 ->title(__('messages.notifications.something_went_wrong'))
                 ->danger()

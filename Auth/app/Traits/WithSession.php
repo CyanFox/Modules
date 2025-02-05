@@ -6,7 +6,6 @@ use Modules\Auth\Models\Session;
 
 trait WithSession
 {
-
     public function getAllSessions()
     {
         return Session::where('user_id', auth()->id())->get();
@@ -21,5 +20,4 @@ trait WithSession
     {
         Session::where('user_id', auth()->id())->whereNotIn('id', [session()->id()])->delete();
     }
-
 }

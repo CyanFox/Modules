@@ -7,7 +7,6 @@ use Livewire\Attributes\On;
 
 trait WithPasswordConfirmation
 {
-
     private $passwordConfirmationData = [];
 
     public function hasPasswordConfirmedSession($expiration = 300, $sleep = 0.25)
@@ -65,7 +64,8 @@ trait WithPasswordConfirmation
 
     public function passwordMethod(string $callable, ...$args): static
     {
-        $this->passwordConfirmationData['event'] = $callable . '(' . implode(', ', $args) . ')';
+        $this->passwordConfirmationData['event'] = $callable.'('.implode(', ', $args).')';
+
         return $this;
     }
 

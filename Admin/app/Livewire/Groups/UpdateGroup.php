@@ -13,15 +13,19 @@ class UpdateGroup extends CFComponent
     use WithCustomLivewireException;
 
     public $groupId;
+
     public $group;
+
     public $name;
+
     public $guardName;
+
     public $permissions = [];
 
     public function updateGroup()
     {
         $this->validate([
-            'name' => 'required|string|unique:roles,name,' . $this->groupId,
+            'name' => 'required|string|unique:roles,name,'.$this->groupId,
             'guardName' => 'required|string',
             'permissions' => 'nullable|array',
         ]);
@@ -47,7 +51,7 @@ class UpdateGroup extends CFComponent
     {
         try {
             $this->group = Role::findById($this->groupId);
-        }catch (RoleDoesNotExist) {
+        } catch (RoleDoesNotExist) {
             abort(404);
         }
 

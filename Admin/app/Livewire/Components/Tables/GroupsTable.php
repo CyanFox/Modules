@@ -18,7 +18,7 @@ use Spatie\Permission\Models\Role;
 
 final class GroupsTable extends PowerGridComponent
 {
-    use WithCustomLivewireException, WithConfirmation;
+    use WithConfirmation, WithCustomLivewireException;
 
     public string $tableName = 'admin-groups-table';
 
@@ -46,7 +46,7 @@ final class GroupsTable extends PowerGridComponent
 
         return [
             Button::add('create')
-                ->slot(Blade::render('<x-button class="flex" wire:navigate link="' . route('admin.groups.create') . '">' . __('admin::groups.buttons.create_group') . '</x-button>')),
+                ->slot(Blade::render('<x-button class="flex" wire:navigate link="'.route('admin.groups.create').'">'.__('admin::groups.buttons.create_group').'</x-button>')),
         ];
     }
 
@@ -61,8 +61,8 @@ final class GroupsTable extends PowerGridComponent
             ->add('id')
             ->add('name')
             ->add('guard_name')
-            ->add('created_at_formatted', fn($row) => $row->created_at->format('d.m.Y H:i'))
-            ->add('updated_at_formatted', fn($row) => $row->updated_at->format('d.m.Y H:i'));
+            ->add('created_at_formatted', fn ($row) => $row->created_at->format('d.m.Y H:i'))
+            ->add('updated_at_formatted', fn ($row) => $row->updated_at->format('d.m.Y H:i'));
     }
 
     public function columns(): array
@@ -134,10 +134,10 @@ final class GroupsTable extends PowerGridComponent
     {
         return [
             Button::add('update')
-                ->slot(Blade::render('<x-button class="px-2 py-1 flex" wire:navigate link="' . route('admin.groups.update', ['groupId' => $row->id]) . '"><i class="icon-pen"></i></x-button>')),
+                ->slot(Blade::render('<x-button class="px-2 py-1 flex" wire:navigate link="'.route('admin.groups.update', ['groupId' => $row->id]).'"><i class="icon-pen"></i></x-button>')),
 
             Button::add('delete')
-                ->slot(Blade::render('<x-button color="danger" class="px-2 py-1 flex" wire:click="deleteGroup(`' . $row->id . '`, false)"><i class="icon-trash"></i></x-button>')),
+                ->slot(Blade::render('<x-button color="danger" class="px-2 py-1 flex" wire:click="deleteGroup(`'.$row->id.'`, false)"><i class="icon-trash"></i></x-button>')),
         ];
     }
 
@@ -145,19 +145,19 @@ final class GroupsTable extends PowerGridComponent
     {
         return [
             Rule::button('delete')
-                ->when(fn($row) => $row->id == Role::findByName('Super Admin')->id)
+                ->when(fn ($row) => $row->id == Role::findByName('Super Admin')->id)
                 ->hide(),
 
             Rule::button('delete')
-                ->when(fn($row) => auth()->user()->cannot('admin.groups.delete'))
+                ->when(fn ($row) => auth()->user()->cannot('admin.groups.delete'))
                 ->hide(),
 
             Rule::button('update')
-                ->when(fn($row) => $row->id == Role::findByName('Super Admin')->id)
+                ->when(fn ($row) => $row->id == Role::findByName('Super Admin')->id)
                 ->hide(),
 
             Rule::button('update')
-                ->when(fn($row) => auth()->user()->cannot('admin.groups.update'))
+                ->when(fn ($row) => auth()->user()->cannot('admin.groups.update'))
                 ->hide(),
         ];
     }

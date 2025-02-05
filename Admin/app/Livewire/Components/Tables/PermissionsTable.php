@@ -18,7 +18,7 @@ use Spatie\Permission\Models\Permission;
 
 final class PermissionsTable extends PowerGridComponent
 {
-    use WithCustomLivewireException, WithConfirmation;
+    use WithConfirmation, WithCustomLivewireException;
 
     public string $tableName = 'admin-permissions-table';
 
@@ -46,7 +46,7 @@ final class PermissionsTable extends PowerGridComponent
 
         return [
             Button::add('create')
-                ->slot(Blade::render('<x-button class="flex" wire:navigate link="' . route('admin.permissions.create') . '">' . __('admin::permissions.buttons.create_permission') . '</x-button>')),
+                ->slot(Blade::render('<x-button class="flex" wire:navigate link="'.route('admin.permissions.create').'">'.__('admin::permissions.buttons.create_permission').'</x-button>')),
         ];
     }
 
@@ -61,8 +61,8 @@ final class PermissionsTable extends PowerGridComponent
             ->add('id')
             ->add('name')
             ->add('guard_name')
-            ->add('created_at_formatted', fn($row) => $row->created_at->format('d.m.Y H:i'))
-            ->add('updated_at_formatted', fn($row) => $row->updated_at->format('d.m.Y H:i'));
+            ->add('created_at_formatted', fn ($row) => $row->created_at->format('d.m.Y H:i'))
+            ->add('updated_at_formatted', fn ($row) => $row->updated_at->format('d.m.Y H:i'));
     }
 
     public function columns(): array
@@ -131,10 +131,10 @@ final class PermissionsTable extends PowerGridComponent
     {
         return [
             Button::add('update')
-                ->slot(Blade::render('<x-button class="px-2 py-1 flex" wire:navigate link="' . route('admin.permissions.update', ['permissionId' => $row->id]) . '"><i class="icon-pen"></i></x-button>')),
+                ->slot(Blade::render('<x-button class="px-2 py-1 flex" wire:navigate link="'.route('admin.permissions.update', ['permissionId' => $row->id]).'"><i class="icon-pen"></i></x-button>')),
 
             Button::add('delete')
-                ->slot(Blade::render('<x-button color="danger" class="px-2 py-1 flex" wire:click="deletePermission(`' . $row->id . '`, false)"><i class="icon-trash"></i></x-button>')),
+                ->slot(Blade::render('<x-button color="danger" class="px-2 py-1 flex" wire:click="deletePermission(`'.$row->id.'`, false)"><i class="icon-trash"></i></x-button>')),
         ];
     }
 
@@ -142,11 +142,11 @@ final class PermissionsTable extends PowerGridComponent
     {
         return [
             Rule::button('delete')
-                ->when(fn($row) => auth()->user()->cannot('admin.permissions.delete'))
+                ->when(fn ($row) => auth()->user()->cannot('admin.permissions.delete'))
                 ->hide(),
 
             Rule::button('update')
-                ->when(fn($row) => auth()->user()->cannot('admin.permissions.update'))
+                ->when(fn ($row) => auth()->user()->cannot('admin.permissions.update'))
                 ->hide(),
         ];
     }

@@ -141,6 +141,6 @@ return [
                 'avatar_changed' => 'Avatar changed successfully.',
                 'avatar_reset' => 'Avatar reset successfully.',
             ],
-        ]
+        ],
     ],
 ];

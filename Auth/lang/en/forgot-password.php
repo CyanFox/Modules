@@ -19,10 +19,9 @@ return [
         'reset_password' => 'Reset Password',
     ],
 
-
     'password_same' => 'The password confirmation does not match.',
 
     'notifications' => [
         'invalid_reset_token' => 'This password reset token is invalid or has expired.',
-    ]
+    ],
 ];

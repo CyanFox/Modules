@@ -5,7 +5,6 @@ namespace Modules\Auth\Http\Middleware;
 use Closure;
 use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class CheckIfUserIsDisabled
 {

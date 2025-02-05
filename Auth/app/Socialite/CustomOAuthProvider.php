@@ -31,7 +31,7 @@ class CustomOAuthProvider extends AbstractProvider
 
     protected function mapUserToObject(array $user)
     {
-        return (new User())->setRaw($user)->map([
+        return (new User)->setRaw($user)->map([
             'id' => $user[settings('auth.oauth.id_field')],
             'name' => $user[settings('auth.oauth.username_field')],
             'email' => $user[settings('auth.oauth.email_field')],

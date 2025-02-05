@@ -38,7 +38,7 @@ class UpdateUserCommand extends Command
     public function handle()
     {
         $user = User::where('username', $this->argument('username'))->first();
-        if (!$user) {
+        if (! $user) {
             $this->error('User not found');
 
             return;
@@ -46,8 +46,8 @@ class UpdateUserCommand extends Command
 
         $firstName = text('First Name', required: true, default: $user->first_name);
         $lastName = text('Last Name', required: true, default: $user->last_name);
-        $username = text('Username', required: true, validate: ['unique:users,username,' . $user->id], default: $user->username);
-        $email = text('Email', required: true, validate: ['email', 'unique:users,email,' . $user->id], default: $user->email);
+        $username = text('Username', required: true, validate: ['unique:users,username,'.$user->id], default: $user->username);
+        $email = text('Email', required: true, validate: ['email', 'unique:users,email,'.$user->id], default: $user->email);
         $password = password('Password', hint: 'Leave empty to keep the same password');
         $groups = multiselect(
             'Groups',

@@ -9,10 +9,9 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 trait WithTwoFactorAuth
 {
-
     public function generateTwoFASecret()
     {
-        $twoFactor = new Google2FA();
+        $twoFactor = new Google2FA;
         $this->update(['two_factor_secret' => encrypt($twoFactor->generateSecretKey())]);
     }
 
@@ -43,6 +42,7 @@ trait WithTwoFactorAuth
             foreach ($recoveryCodes as $recoveryCode) {
                 if (Hash::check($key, $recoveryCode->code)) {
                     $recoveryCode->delete();
+
                     return true;
                 }
             }
@@ -64,5 +64,4 @@ trait WithTwoFactorAuth
 
         return base64_encode(QrCode::format($format)->size($size)->generate($QRCode));
     }
-
 }

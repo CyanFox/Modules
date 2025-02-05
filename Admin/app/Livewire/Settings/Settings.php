@@ -22,17 +22,29 @@ class Settings extends CFComponent
     public $tab;
 
     public $appName;
+
     public $appUrl;
+
     public $appTimezone;
+
     public $appLanguage;
+
     public $baseVersionUrl;
+
     public $logo;
+
     public $moduleList;
+
     public $moduleSearch;
+
     public $editorEncryption;
+
     public $editorDecryption;
+
     public $editorSearch;
+
     public $originalEditorSettings;
+
     public $editorSettings;
 
     public function updateGeneralSettings()
@@ -59,11 +71,11 @@ class Settings extends CFComponent
         ]);
 
         if ($this->logo) {
-            Storage::disk('public')->delete('img/' . str_replace('/storage/img/', '', settings('internal.app.logo')));
+            Storage::disk('public')->delete('img/'.str_replace('/storage/img/', '', settings('internal.app.logo')));
 
-            $this->logo->storeAs('img', 'Logo.' . $this->logo->getClientOriginalExtension(), 'public');
+            $this->logo->storeAs('img', 'Logo.'.$this->logo->getClientOriginalExtension(), 'public');
 
-            settings()->updateSetting('internal.app.logo', '/storage/img/Logo.' . $this->logo->getClientOriginalExtension());
+            settings()->updateSetting('internal.app.logo', '/storage/img/Logo.'.$this->logo->getClientOriginalExtension());
         }
 
         Notification::make()
@@ -80,13 +92,12 @@ class Settings extends CFComponent
             return;
         }
 
-        Storage::disk('public')->delete('img/' . str_replace('/storage/img/', '', settings('internal.app.logo')));
+        Storage::disk('public')->delete('img/'.str_replace('/storage/img/', '', settings('internal.app.logo')));
 
         settings()->updateSetting('internal.app.logo', '/img/Logo.svg');
 
         $this->redirect(route('admin.settings', ['tab' => 'general']), true);
     }
-
 
     public function searchModule()
     {

@@ -162,8 +162,8 @@
                      x-transition="" x-trap="userDropdownIsOpen">
 
                     <div class="flex flex-col py-1.5">
-                        <x-dashboard::profile-item icon="icon-user" label="Profile" route="account.profile"/>
-                        <x-dashboard::profile-item icon="icon-house" label="Home" url="/" :external="true"/>
+                        <x-dashboard::profile-item icon="icon-user" label="{{ __('admin::navigation.profile') }}" route="account.profile"/>
+                        <x-dashboard::profile-item icon="icon-house" label="{{ __('admin::navigation.home') }}" url="/" :external="true"/>
 
                         <x-view-integration name="admin.profile.items"/>
                     </div>
@@ -171,7 +171,7 @@
                     <x-view-integration name="admin.profile.items.end"/>
 
                     <div class="flex flex-col py-1.5">
-                        <x-dashboard::profile-item icon="icon-log-out" label="Logout" route="auth.logout"
+                        <x-dashboard::profile-item icon="icon-log-out" label="{{ __('admin::navigation.logout') }}" route="auth.logout"
                                                    external/>
                     </div>
                 </div>

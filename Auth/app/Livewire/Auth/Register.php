@@ -6,21 +6,17 @@ use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
-use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use Livewire\Component;
-use Modules\Auth\Facades\SidebarManager;
 use Modules\Auth\Facades\UnsplashManager;
 use Modules\Auth\Models\User;
 use Modules\Auth\Rules\Password;
-use PragmaRX\Google2FA\Google2FA;
 
 class Register extends CFComponent
 {
-    use WithRateLimiting, WithCustomLivewireException;
+    use WithCustomLivewireException, WithRateLimiting;
 
     public $unsplash = [];
 
@@ -114,7 +110,7 @@ class Register extends CFComponent
 
     public function mount()
     {
-        if (!settings('auth.register.enable')) {
+        if (! settings('auth.register.enable')) {
             abort(404);
         }
 

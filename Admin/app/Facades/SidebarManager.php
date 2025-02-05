@@ -2,7 +2,6 @@
 
 namespace Modules\Admin\Facades;
 
-
 use Illuminate\Support\Facades\Facade;
 use Modules\Admin\Services\SidebarService;
 

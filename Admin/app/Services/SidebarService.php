@@ -2,14 +2,13 @@
 
 namespace Modules\Admin\Services;
 
-use Closure;
 use Illuminate\Support\Collection;
 
 class SidebarService
 {
     protected array $sidebarItems = [];
 
-    public function add(string $label, string $icon, string $route = 'dashboard', string $link = null, bool $isExternal = false)
+    public function add(string $label, string $icon, string $route = 'dashboard', ?string $link = null, bool $isExternal = false)
     {
         $this->sidebarItems[] = [
             'label' => $label,
@@ -24,7 +23,7 @@ class SidebarService
     {
         $sidebarItems = $this->sidebarItems;
         if ($label != null) {
-            if (!isset($this->menu[$label])) {
+            if (! isset($this->menu[$label])) {
                 return null;
             }
             $sidebarItems = $this->sidebarItems[$label];

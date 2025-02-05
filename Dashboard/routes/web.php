@@ -17,5 +17,5 @@ use Modules\Dashboard\Livewire\Dashboard;
 Route::group(['middleware' => ['auth', 'web']], function () {
     Route::get('dashboard', Dashboard::class)->name('dashboard');
 
-    Route::get('/', fn() => redirect()->route('dashboard'));
+    Route::get('/', fn () => redirect()->route('dashboard'));
 });

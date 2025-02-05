@@ -12,7 +12,9 @@ class CreateGroup extends CFComponent
     use WithCustomLivewireException;
 
     public $name;
+
     public $guardName;
+
     public $permissions = [];
 
     public function createGroup()

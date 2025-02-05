@@ -19,10 +19,9 @@ return [
         'reset_password' => 'Passwort zurücksetzen',
     ],
 
-
     'password_same' => 'Das Passwort und die Bestätigung müssen übereinstimmen.',
 
     'notifications' => [
         'invalid_reset_token' => 'Ungültiger Zurücksetzungs-Token.',
-    ]
+    ],
 ];

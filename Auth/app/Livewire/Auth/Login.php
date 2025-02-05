@@ -10,13 +10,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use Modules\Auth\Facades\SidebarManager;
 use Modules\Auth\Facades\UnsplashManager;
 use Modules\Auth\Models\User;
 
 class Login extends CFComponent
 {
-    use WithRateLimiting, WithCustomLivewireException;
+    use WithCustomLivewireException, WithRateLimiting;
 
     public $unsplash = [];
 
@@ -42,7 +41,7 @@ class Login extends CFComponent
 
         $this->checkIfUserExists($this->username);
 
-        if (!$this->user) {
+        if (! $this->user) {
             return;
         }
 
@@ -56,7 +55,7 @@ class Login extends CFComponent
             }
         }
 
-        if (!Hash::check($this->password, $this->user->password)) {
+        if (! Hash::check($this->password, $this->user->password)) {
             throw ValidationException::withMessages([
                 'password' => __('auth.password'),
             ]);

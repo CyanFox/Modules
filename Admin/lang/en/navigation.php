@@ -9,4 +9,7 @@ return [
     'permissions' => 'Permissions',
     'settings' => 'Settings',
     'modules' => 'Modules',
+    'profile' => 'Profile',
+    'home' => 'Home',
+    'logout' => 'Logout',
 ];

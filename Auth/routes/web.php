@@ -42,7 +42,7 @@ Route::group(['prefix' => 'account', 'as' => 'account.', 'middleware' => ['auth'
 
 Route::group(['prefix' => 'oauth', 'as' => 'oauth.'], function () {
     Route::get('{provider}', function ($provider) {
-        if (!settings('auth.oauth.enable')) {
+        if (! settings('auth.oauth.enable')) {
             abort(404);
         }
 
@@ -50,14 +50,14 @@ Route::group(['prefix' => 'oauth', 'as' => 'oauth.'], function () {
     })->name('redirect');
 
     Route::get('{provider}/callback', function ($provider) {
-        if (!settings('auth.oauth.enable')) {
+        if (! settings('auth.oauth.enable')) {
             abort(404);
         }
 
         $providerUser = Socialite::driver($provider)->user();
         $user = User::where('oauth_id', $providerUser->id)->first();
 
-        if (!$user) {
+        if (! $user) {
             try {
                 $user = User::create([
                     'username' => $providerUser->getName(),
@@ -66,8 +66,8 @@ Route::group(['prefix' => 'oauth', 'as' => 'oauth.'], function () {
                 ]);
             } catch (Exception) {
                 $user = User::create([
-                    'username' => $providerUser->getName() . $providerUser->getId(),
-                    'email' => $providerUser->getEmail() . $providerUser->getId(),
+                    'username' => $providerUser->getName().$providerUser->getId(),
+                    'email' => $providerUser->getEmail().$providerUser->getId(),
                     'oauth_id' => $providerUser->getId(),
                 ]);
             }

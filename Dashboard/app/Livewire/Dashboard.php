@@ -3,7 +3,6 @@
 namespace Modules\Dashboard\Livewire;
 
 use App\Livewire\CFComponent;
-use Livewire\Component;
 
 class Dashboard extends CFComponent
 {

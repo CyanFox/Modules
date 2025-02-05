@@ -14,15 +14,25 @@ class CreateUser extends CFComponent
     use WithCustomLivewireException;
 
     public $firstName;
+
     public $lastName;
+
     public $username;
+
     public $email;
+
     public $password;
+
     public $confirmPassword;
+
     public $forceActivateTwoFactor;
+
     public $forceChangePassword;
+
     public $groups;
+
     public $permissions;
+
     public $disabled;
 
     public function createUser()

@@ -12,6 +12,7 @@ class CreatePermission extends CFComponent
     use WithCustomLivewireException;
 
     public $name;
+
     public $guardName;
 
     public function createPermission()

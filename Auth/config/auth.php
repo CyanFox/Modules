@@ -24,7 +24,7 @@ return [
         'enable' => [
             'change_avatar' => true,
             'delete_account' => true,
-        ]
+        ],
     ],
     'oauth' => [
         'enable' => true,
@@ -39,5 +39,5 @@ return [
         'id_field' => 'sub',
         'username_field' => 'preferred_username',
         'email_field' => 'email',
-    ]
+    ],
 ];

@@ -9,4 +9,7 @@ return [
     'permissions' => 'Berechtigungen',
     'settings' => 'Einstellungen',
     'modules' => 'Module',
+    'profile' => 'Profil',
+    'home' => 'Startseite',
+    'logout' => 'Abmelden',
 ];
