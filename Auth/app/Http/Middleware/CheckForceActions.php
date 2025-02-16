@@ -3,6 +3,7 @@
 namespace Modules\Auth\Http\Middleware;
 
 use Closure;
+use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
 
 class CheckForceActions
@@ -12,12 +13,22 @@ class CheckForceActions
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->user()->force_change_password === 1) {
-            return redirect()->route('account.force-change-password');
-        }
+        if (auth()->check()) {
+            if ($request->routeIs('account.force.change-password') && ! auth()->user()->force_change_password
+                || $request->routeIs('account.force.activate-two-factor') && ! auth()->user()->force_activate_two_factor) {
+                return redirect()->route('dashboard');
+            }
 
-        if (auth()->user()->force_activate_two_factor === 1) {
-            return redirect()->route('account.force-activate-two-factor');
+            if ($request->routeIs('account.force.change-password') || $request->routeIs('account.force.activate-two-factor')) {
+                return $next($request);
+            }
+
+            if (auth()->user()->force_change_password) {
+                return redirect()->route('account.force.change-password');
+            }
+            if (auth()->user()->force_activate_two_factor) {
+                return redirect()->route('account.force.activate-two-factor');
+            }
         }
 
         return $next($request);

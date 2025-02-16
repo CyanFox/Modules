@@ -2,16 +2,19 @@
 
 namespace Modules\Auth\Models;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
+use Modules\Auth\Database\Factories\UserFactory;
 use Modules\Auth\Traits\WithSession;
 use Modules\Auth\Traits\WithTwoFactorAuth;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasRoles, Notifiable, WithSession, WithTwoFactorAuth;
+    use HasRoles, Notifiable, WithSession, WithTwoFactorAuth, HasFactory;
 
     protected $guarded = [];
 
@@ -70,5 +73,10 @@ class User extends Authenticatable
     public function guardName()
     {
         return config('auth.defaults.guard');
+    }
+
+    protected static function newFactory(): Factory
+    {
+        return UserFactory::new();
     }
 }

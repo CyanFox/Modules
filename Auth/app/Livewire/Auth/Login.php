@@ -31,6 +31,12 @@ class Login extends CFComponent
 
     public $captcha;
 
+    public $twoFactorEnabled = false;
+
+    public $useRecoveryCode = false;
+
+    public $twoFactorCode;
+
     public function attemptLogin()
     {
         $this->validate([
@@ -68,6 +74,11 @@ class Login extends CFComponent
             ]);
         }
 
+        if ($this->user->two_factor_enabled) {
+            $this->twoFactorEnabled = true;
+            return;
+        }
+
         Auth::login($this->user, $this->remember);
 
         if (settings('auth.login.redirect')) {
@@ -75,6 +86,53 @@ class Login extends CFComponent
         }
 
         redirect()->intended();
+    }
+
+    public function checkTwoFactorCode(): void
+    {
+        if ($this->setRateLimit()) {
+            return;
+        }
+
+        $this->checkIfUserExists($this->username);
+
+        if (!$this->user->two_factor_enabled) {
+            return;
+        }
+
+        if ($this->useRecoveryCode) {
+            foreach ($this->user->recoveryCodes as $recoveryCode) {
+                if (Hash::check($this->twoFactorCode, $recoveryCode->code)) {
+                    $recoveryCode->delete();
+                    Auth::login($this->user, $this->remember);
+
+                    if (settings('auth.login.redirect')) {
+                        $this->redirect(settings('auth.login.redirect'));
+                    }
+
+                    redirect()->intended();
+                }
+            }
+
+            throw ValidationException::withMessages([
+                'twoFactorCode' => __('auth::login.recovery_code_invalid'),
+            ]);
+        }
+
+        if ($this->user->checkTwoFACode($this->twoFactorCode)) {
+
+            Auth::login($this->user, $this->remember);
+
+            if (settings('auth.login.redirect')) {
+                $this->redirect(settings('auth.login.redirect'));
+            }
+
+            redirect()->intended();
+        }
+
+        throw ValidationException::withMessages([
+            'twoFactorCode' => __('auth::login.two_factor_code_invalid'),
+        ]);
     }
 
     public function checkIfUserExists($username)

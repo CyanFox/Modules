@@ -17,7 +17,7 @@ class CheckIfUserIsDisabled
             auth()->logout();
 
             Notification::make()
-                ->title(__('authmodule::auth.login.user_disabled'))
+                ->title(__('auth::login.user_disabled'))
                 ->danger()
                 ->send();
 

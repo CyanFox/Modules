@@ -9,7 +9,7 @@
             </div>
 
             <x-card class="space-y-4 mx-auto">
-                @if(settings('auth.register.enable'))
+                @if(settings('auth.register.enable') && !$twoFactorEnabled)
                     <x-tab selected-tab="login" class="justify-center">
                         <x-tab.item uuid="login" class="w-1/2">
                             {{ __('auth::login.tabs.login') }}
@@ -37,7 +37,7 @@
 
                 @if ($rateLimitTime > 1)
                     <div wire:poll.1s="setRateLimit">
-                        <x-alert color="error">z
+                        <x-alert color="error">
                             {{ __('auth.throttle', ['seconds' => $rateLimitTime]) }}
                         </x-alert>
                     </div>
@@ -46,51 +46,89 @@
                 @endif
 
                 @if(settings('auth.login.enable'))
-                    <form class="space-y-4" wire:submit="attemptLogin">
-                        <x-input wire:model="username" wire:blur="checkIfUserExists($event.target.value)" required
-                                 autofocus>
-                            {{ __('auth::login.username') }}
-                        </x-input>
-                        <x-password wire:model="password" required>
-                            @if(settings('auth.forgot_password.enable'))
-                                <x-slot:hint>
-                                    <a href="{{ route('auth.forgot-password') }}" class="hover:underline" wire:navigate>
-                                        {{ __('auth::login.forgot_password') }}
-                                    </a>
-                                </x-slot:hint>
+                    @if($twoFactorEnabled)
+                        <form class="space-y-4" wire:submit="checkTwoFactorCode">
+                            @if($useRecoveryCode)
+                                <x-input wire:model="twoFactorCode" required
+                                         autofocus>
+                                    <x-slot:hint>
+                                        <span class="hover:underline cursor-pointer"
+                                              wire:click="$set('useRecoveryCode', false)">
+                                            {{ __('auth::login.use_two_factor') }}
+                                        </span>
+                                    </x-slot:hint>
+
+                                    {{ __('auth::login.recovery_code') }}
+                                </x-input>
+                            @else
+                                <x-input wire:model="twoFactorCode" required
+                                         autofocus>
+                                    <x-slot:hint>
+                                        <span class="hover:underline cursor-pointer"
+                                              wire:click="$set('useRecoveryCode', true)">
+                                            {{ __('auth::login.use_recovery_code') }}
+                                        </span>
+                                    </x-slot:hint>
+
+                                    {{ __('auth::login.two_factor_code') }}
+                                </x-input>
                             @endif
 
-                            {{ __('auth::login.password') }}
-                        </x-password>
+                            <x-view-integration name="auth.login.two-fa.card.form"/>
 
-                        <x-checkbox wire:model="remember">
-                            {{ __('auth::login.remember') }}
-                        </x-checkbox>
+                            <x-button class="w-full" type="submit" loading="checkTwoFactorCode">
+                                {{ __('auth::login.buttons.login') }}
+                            </x-button>
+                            <x-view-integration name="auth.login.two-fa.card.form.buttons"/>
+                        </form>
+                    @else
+                        <form class="space-y-4" wire:submit="attemptLogin">
+                            <x-input wire:model="username" wire:blur="checkIfUserExists($event.target.value)" required
+                                     autofocus>
+                                {{ __('auth::login.username') }}
+                            </x-input>
+                            <x-password wire:model="password" required>
+                                @if(settings('auth.forgot_password.enable'))
+                                    <x-slot:hint>
+                                        <a href="{{ route('auth.forgot-password') }}" class="hover:underline"
+                                           wire:navigate>
+                                            {{ __('auth::login.forgot_password') }}
+                                        </a>
+                                    </x-slot:hint>
+                                @endif
 
-                        <x-view-integration name="auth.login.card.form"/>
+                                {{ __('auth::login.password') }}
+                            </x-password>
 
-                        @if(settings('auth.login.enable.captcha', config('auth.login.captcha')))
-                            <div class="gap-3 lg:flex space-y-3">
-                                <img src="{{ captcha_src('inverse') }}" class="rounded-lg lg:w-1/2 w-full"
-                                     alt="Captcha">
+                            <x-checkbox wire:model="remember">
+                                {{ __('auth::login.remember') }}
+                            </x-checkbox>
 
-                                <x-input wire:model="captcha" required>
-                                    {{ __('auth::login.captcha') }}
-                                </x-input>
+                            <x-view-integration name="auth.login.card.form"/>
 
-                                <x-view-integration name="auth.login.card.captcha"/>
-                            </div>
-                        @endif
+                            @if(settings('auth.login.enable.captcha', config('auth.login.captcha')))
+                                <div class="gap-3 lg:flex space-y-3">
+                                    <img src="{{ captcha_src('inverse') }}" class="rounded-lg lg:w-1/2 w-full"
+                                         alt="Captcha">
 
-                        <x-button class="w-full" type="submit" loading="attemptLogin">
-                            {{ __('auth::login.buttons.login') }}
-                        </x-button>
-                        <x-view-integration name="auth.login.card.form.buttons"/>
+                                    <x-input wire:model="captcha" required>
+                                        {{ __('auth::login.captcha') }}
+                                    </x-input>
 
-                    </form>
+                                    <x-view-integration name="auth.login.card.captcha"/>
+                                </div>
+                            @endif
+
+                            <x-button class="w-full" type="submit" loading="attemptLogin">
+                                {{ __('auth::login.buttons.login') }}
+                            </x-button>
+                            <x-view-integration name="auth.login.card.form.buttons"/>
+
+                        </form>
+                    @endif
                 @endif
 
-                @if(settings('auth.oauth.enable'))
+                @if(settings('auth.oauth.enable') && !$twoFactorEnabled)
                     <x-divider/>
 
                     <x-button class="w-full" href="{{ route('oauth.redirect', ['provider' => 'custom']) }}"

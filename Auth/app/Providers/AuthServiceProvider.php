@@ -10,6 +10,10 @@ use Laravel\Socialite\Contracts\Factory;
 use Modules\Auth\Console\Users\CreateUserCommand;
 use Modules\Auth\Console\Users\DeleteUserCommand;
 use Modules\Auth\Console\Users\UpdateUserCommand;
+use Modules\Auth\Http\Middleware\Authenticate;
+use Modules\Auth\Http\Middleware\CheckForceActions;
+use Modules\Auth\Http\Middleware\CheckIfUserIsDisabled;
+use Modules\Auth\Http\Middleware\CheckLanguage;
 use Modules\Auth\Socialite\CustomOAuthProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
@@ -97,12 +101,10 @@ class AuthServiceProvider extends ServiceProvider
     }
 
     protected $middleware = [
-        'Auth' => [
-            'auth' => 'Authenticate',
-            'disabled' => 'CheckIfUserIsDisabled',
-            'language' => 'CheckLanguage',
-            'force_actions' => 'CheckForceActions',
-        ],
+            'language' => CheckLanguage::class,
+            'role' => RoleMiddleware::class,
+            'permission' => PermissionMiddleware::class,
+            'role_or_permission' => RoleOrPermissionMiddleware::class,
     ];
 
     /**
@@ -110,16 +112,16 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function registerMiddleware(Router $router)
     {
-        foreach ($this->middleware as $module => $middlewares) {
-            foreach ($middlewares as $name => $middleware) {
-                $class = "Modules\\{$module}\\Http\\Middleware\\{$middleware}";
-
-                $router->aliasMiddleware($name, $class);
-            }
+        foreach ($this->middleware as $key => $middleware) {
+            $router->aliasMiddleware($key, $middleware);
         }
-        $router->aliasMiddleware('role', RoleMiddleware::class);
-        $router->aliasMiddleware('permission', PermissionMiddleware::class);
-        $router->aliasMiddleware('role_or_permission', RoleOrPermissionMiddleware::class);
+
+        $router->middlewareGroup('auth', [
+            Authenticate::class,
+            CheckForceActions::class,
+            CheckIfUserIsDisabled::class,
+            CheckLanguage::class,
+        ]);
     }
 
     /**

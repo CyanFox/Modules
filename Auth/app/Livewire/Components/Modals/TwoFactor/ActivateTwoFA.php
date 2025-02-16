@@ -69,6 +69,10 @@ class ActivateTwoFA extends CFModalComponent
 
     public function mount()
     {
+        if (auth()->user()->two_factor_secret == null) {
+            auth()->user()->generateTwoFASecret();
+        }
+
         if (! $this->checkPasswordConfirmation()->passwordMethod('render')->checkPassword()) {
             return;
         }

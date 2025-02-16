@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
+use Modules\Auth\Livewire\Account\ForceActivateTwoFactor;
+use Modules\Auth\Livewire\Account\ForceChangePassword;
 use Modules\Auth\Livewire\Account\Profile;
 use Modules\Auth\Livewire\Auth\ForgotPassword;
 use Modules\Auth\Livewire\Auth\Login;
@@ -38,6 +40,12 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
 
 Route::group(['prefix' => 'account', 'as' => 'account.', 'middleware' => ['auth']], function () {
     Route::get('profile', Profile::class)->name('profile');
+
+    Route::group(['prefix' => 'force', 'as' => 'force.'], function () {
+        Route::get('change-password', ForceChangePassword::class)->name('change-password');
+
+        Route::get('activate-two-factor', ForceActivateTwoFactor::class)->name('activate-two-factor');
+    });
 });
 
 Route::group(['prefix' => 'oauth', 'as' => 'oauth.'], function () {
