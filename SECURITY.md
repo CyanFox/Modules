@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-The following versions of CyanFox-Base are receiving active support and maintenance. Any security vulnerabilities discovered must be reproducible in supported versions.
+The following versions of CyanFox-Base-Modules are receiving active support and maintenance. Any security vulnerabilities discovered must be reproducible in supported versions.
 
 | Version | Supported          |
 |---------|--------------------|

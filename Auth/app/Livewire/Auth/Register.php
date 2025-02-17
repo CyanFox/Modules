@@ -52,7 +52,7 @@ class Register extends CFComponent
             'passwordConfirmation.same' => __('auth::register.password_same'),
         ]);
 
-        if (settings()->isTrue('auth.register.enable.captcha', config('auth.register.captcha'))) {
+        if (settings('auth.register.enable.captcha', config('auth.register.captcha'))) {
             $validator = Validator::make(['captcha' => $this->captcha], ['captcha' => 'required|captcha']);
 
             if ($validator->fails()) {
@@ -72,8 +72,9 @@ class Register extends CFComponent
             'email' => $this->email,
             'username' => $this->username,
             'password' => Hash::make($this->password),
-            // TODO: generate two factor secret
         ]);
+
+        $user->generateTwoFASecret();
 
         Auth::login($user);
 

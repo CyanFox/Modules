@@ -131,7 +131,7 @@ final class UsersTable extends PowerGridComponent
             return;
         }
         if ($confirmed) {
-            $user = User::findOrFail($userId)->first();
+            $user = User::findOrFail($userId);
 
             $user->delete();
 

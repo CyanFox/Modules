@@ -36,13 +36,18 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/php.json"
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
+      - name: Install dependencies
+        run: |
+          cd CyanFox-Base
+          composer update --prefer-dist --no-interaction
+
       - name: Copy modules
         run: |
           cd CyanFox-Base
           mkdir modules
           rsync -a --exclude='CyanFox-Base' ../ modules/
 
-      - name: Install dependencies
+      - name: Install dependencies for modules
         run: |
           cd CyanFox-Base
           composer update --prefer-dist --no-interaction

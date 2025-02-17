@@ -43,7 +43,7 @@ class PermissionSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::findOrCreate($permission);
+            Permission::findOrCreate($permission, 'web');
         }
     }
 }
