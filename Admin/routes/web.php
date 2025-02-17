@@ -25,7 +25,7 @@ use Modules\Admin\Livewire\Users\Users;
 |
 */
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'role:Super Admin']], function () {
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'can:admin.dashboard']], function () {
     Route::get('dashboard', Dashboard::class)->name('dashboard')->can('admin.dashboard');
 
     Route::group(['prefix' => 'users'], function () {

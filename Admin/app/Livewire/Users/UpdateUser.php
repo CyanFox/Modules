@@ -76,7 +76,7 @@ class UpdateUser extends CFComponent
         $this->user->permissions()->sync($this->permissions);
 
         Notification::make()
-            ->title(__('admin::users.create_user.notifications.user_created'))
+            ->title(__('admin::users.update_user.notifications.user_updated'))
             ->success()
             ->send();
 

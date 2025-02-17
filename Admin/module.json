@@ -11,5 +11,10 @@
     "providers": [
         "Modules\\Admin\\Providers\\AdminServiceProvider"
     ],
+    "migration": {
+        "seeds": [
+            "Modules\\Admin\\Database\\Seeders\\DatabaseSeeder"
+        ]
+    },
     "files": []
 }

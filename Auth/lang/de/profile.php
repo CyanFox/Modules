@@ -92,7 +92,7 @@ return [
         'activate_two_fa' => [
             'title' => '2-Faktor-Authentifizierung aktivieren',
             'two_fa_code' => '2-Faktor-Code',
-            'invalid_two_factor_code' => 'Der eingegebene 2-Faktor-Code ist ungültig.',
+            'invalid_two_factor_code' => 'Dieser 2-Faktor-Code ist ungültig.',
 
             'notifications' => [
                 'two_fa_enabled' => '2-Faktor-Authentifizierung erfolgreich aktiviert.',
@@ -112,7 +112,7 @@ return [
         ],
         'recovery_codes' => [
             'title' => 'Wiederherstellungscodes',
-            'description' => 'Speichern Sie diese Wiederherstellungscodes an einem sicheren Ort. Sie können danach nicht mehr angezeigt werden.',
+            'description' => 'Speichere diese Wiederherstellungscodes an einem sicheren Ort. Sie können danach nicht mehr angezeigt werden.',
 
             'buttons' => [
                 'regenerate' => 'Neu generieren',
