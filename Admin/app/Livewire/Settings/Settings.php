@@ -6,6 +6,7 @@ use App\Facades\ModuleManager;
 use App\Facades\SettingsManager;
 use App\Livewire\CFComponent;
 use App\Models\Setting;
+use App\Traits\WithConfirmation;
 use App\Traits\WithCustomLivewireException;
 use Exception;
 use Filament\Notifications\Notification;
@@ -16,7 +17,7 @@ use Nwidart\Modules\Facades\Module;
 
 class Settings extends CFComponent
 {
-    use WithCustomLivewireException, WithFileUploads;
+    use WithCustomLivewireException, WithFileUploads, WithConfirmation;
 
     #[Url]
     public $tab;
@@ -46,6 +47,10 @@ class Settings extends CFComponent
     public $originalEditorSettings;
 
     public $editorSettings;
+
+    public $newSettingKey;
+
+    public $newSettingValue;
 
     public function updateGeneralSettings()
     {
@@ -133,6 +138,58 @@ class Settings extends CFComponent
             ->send();
 
         $this->redirect(route('admin.settings', ['tab' => 'editor']), navigate: true);
+    }
+
+    public function createSetting()
+    {
+        if (auth()->user()->cannot('admin.settings.update')) {
+            return;
+        }
+
+        $this->validate([
+            'newSettingKey' => 'required|string',
+            'newSettingValue' => 'required|string',
+        ]);
+
+        settings()->updateSetting($this->newSettingKey, $this->newSettingValue);
+
+        $this->newSettingKey = '';
+        $this->newSettingValue = '';
+
+        Notification::make()
+            ->title(__('admin::settings.notifications.setting_created'))
+            ->success()
+            ->send();
+
+        $this->redirect(route('admin.settings', ['tab' => 'editor']), true);
+    }
+
+    public function deleteSetting($key, $confirmed = true)
+    {
+        if (auth()->user()->cannot('admin.settings.update')) {
+            return;
+        }
+
+        if (!$confirmed) {
+            $this->dialog()
+                ->question(__('admin::settings.delete_setting.title'),
+                    __('admin::settings.delete_setting.description'))
+                ->icon('icon-triangle-alert')
+                ->confirm(__('admin::settings.delete_setting.buttons.delete_setting'), 'danger')
+                ->method('deleteSetting', $key)
+                ->send();
+
+            return;
+        }
+
+        settings()->deleteSetting($key);
+
+        Notification::make()
+            ->title(__('admin::settings.delete_setting.notifications.setting_deleted'))
+            ->success()
+            ->send();
+
+        $this->redirect(route('admin.settings', ['tab' => 'editor']), true);
     }
 
     public function searchEditorSetting()

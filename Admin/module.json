@@ -1,13 +1,13 @@
 {
     "name": "Admin",
     "alias": "admin",
-    "description": "",
-    "keywords": [],
-    "require": [
-        "Auth",
-        "Dashboard"
-    ],
-    "priority": 0,
+    "description": "Admin module for CyanFox-Base v4",
+    "keywords": ["admin", "cyanfox", "base"],
+    "authors": ["CyanFox"],
+    "license": "MIT",
+    "version": "0.1.0",
+    "remote_version_url": "https://raw.githubusercontent.com/CyanFox-Projects/CyanFox-Base-Modules/v4/Admin/module.json",
+    "priority": 200,
     "providers": [
         "Modules\\Admin\\Providers\\AdminServiceProvider"
     ],
@@ -15,6 +15,5 @@
         "seeds": [
             "Modules\\Admin\\Database\\Seeders\\DatabaseSeeder"
         ]
-    },
-    "files": []
+    }
 }

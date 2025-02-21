@@ -27,7 +27,7 @@ return [
         ],
     ],
     'oauth' => [
-        'enable' => true,
+        'enable' => false,
         'login_text' => 'Login with Authentik',
         'login_color' => 'info',
         'client_id' => '',

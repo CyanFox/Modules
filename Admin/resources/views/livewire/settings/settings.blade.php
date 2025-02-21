@@ -162,6 +162,29 @@
 
             <x-divider/>
 
+            <form wire:submit="createSetting" class="flex flex-row gap-3 my-4">
+                <div class="w-full">
+                    <x-input wire:model="newSettingKey">
+                        {{ __('admin::settings.key') }}
+                    </x-input>
+                </div>
+                <div class="w-full">
+                    <x-input wire:model="newSettingValue">
+                        {{ __('admin::settings.value') }}
+                    </x-input>
+                </div>
+
+                <div class="mt-auto mb-0.5">
+                    <x-button type="submit" loading="createSetting">
+                        {{ __('admin::settings.buttons.create') }}
+                    </x-button>
+                </div>
+
+                <x-view-integration name="admin.settings.editor.key_value"/>
+            </form>
+
+            <x-divider/>
+
             <form wire:submit="updateEditorSettings">
                 <div class="space-y-3 my-4 overflow-x-auto">
                     @foreach($originalEditorSettings as $key => $value)
@@ -182,7 +205,7 @@
                             </div>
 
                             @can('admin.settings.update')
-                                <div class="mt-auto">
+                                <div class="mt-auto flex gap-3">
                                     @if($value['is_locked'])
                                         <x-button color="danger" variant="outline" type="button" class="mt-0.5"
                                                   wire:click="setLockState('{{ $key }}', false)"
@@ -196,6 +219,11 @@
                                             <i class="icon-lock-open"></i>
                                         </x-button>
                                     @endif
+                                    <x-button color="danger" variant="outline" type="button" class="mt-0.5"
+                                              wire:click="deleteSetting('{{ $key }}', false)"
+                                              loading="deleteSetting">
+                                        <i class="icon-trash"></i>
+                                    </x-button>
                                 </div>
                             @endcan
 
