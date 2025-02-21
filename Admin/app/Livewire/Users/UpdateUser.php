@@ -45,7 +45,7 @@ class UpdateUser extends CFComponent
             'firstName' => 'required',
             'lastName' => 'required',
             'username' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email,' . $this->userId,
             'password' => 'nullable',
             'confirmPassword' => 'nullable|same:password',
             'forceActivateTwoFactor' => 'nullable|boolean',
