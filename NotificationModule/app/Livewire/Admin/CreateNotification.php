@@ -20,6 +20,7 @@ class CreateNotification extends LWComponent
     public $icon = 'bell';
     public $message;
     public $files = [];
+    public $permissions = [];
 
     public function createNotification()
     {
@@ -41,6 +42,7 @@ class CreateNotification extends LWComponent
                 'dismissible' => $this->dismissible,
                 'location' => $this->location,
                 'message' => $this->message,
+                'permissions' => json_encode($this->permissions),
             ]);
 
             if ($this->files) {

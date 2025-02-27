@@ -11,6 +11,7 @@ return [
     'dismissible' => 'Schließbar',
     'location' => 'Ort',
     'files' => 'Dateien',
+    'permissions' => 'Berechtigungen',
 
     'types' => [
         'info' => 'Info',

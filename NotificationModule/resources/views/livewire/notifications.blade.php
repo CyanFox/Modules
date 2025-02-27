@@ -3,6 +3,13 @@
         @if($notification->location !== $currentLocation)
             @continue
         @endif
+
+        @foreach(json_decode($notification->permissions) as $permission)
+            @if(auth()->user()->cannot($permission))
+                @continue(2)
+            @endif
+        @endforeach
+
         <div class="my-4">
             <x-card class="border-2 rounded-lg {{ $notification->border }}" wire:ignore>
                 <div class="md:flex md:justify-between">
