@@ -15,10 +15,11 @@ use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\Facades\Rule;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
+use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
 final class UsersTable extends PowerGridComponent
 {
-    use WithConfirmation, WithCustomLivewireException;
+    use WithConfirmation, WithCustomLivewireException, WithExport;
 
     public string $tableName = 'admin-users-table';
 

@@ -14,11 +14,12 @@ use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\Facades\Rule;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
+use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 use Spatie\Permission\Models\Role;
 
 final class GroupsTable extends PowerGridComponent
 {
-    use WithConfirmation, WithCustomLivewireException;
+    use WithConfirmation, WithCustomLivewireException, WithExport;
 
     public string $tableName = 'admin-groups-table';
 
