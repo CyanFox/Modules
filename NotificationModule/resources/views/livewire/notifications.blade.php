@@ -4,11 +4,13 @@
             @continue
         @endif
 
-        @foreach(json_decode($notification->permissions) as $permission)
-            @if(auth()->user()->cannot($permission))
-                @continue(2)
-            @endif
-        @endforeach
+        @if(!empty($notification->permissions))
+            @foreach(json_decode($notification->permissions) as $permission)
+                @if(auth()->user()->cannot($permission))
+                    @continue(2)
+                @endif
+            @endforeach
+        @endif
 
         <div class="my-4">
             <x-card class="border-2 rounded-lg {{ $notification->border }}" wire:ignore>
