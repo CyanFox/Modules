@@ -41,7 +41,7 @@ class CreateUser extends CFComponent
             'firstName' => 'required',
             'lastName' => 'required',
             'username' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'password' => ['nullable', new Password],
             'confirmPassword' => 'required|same:password',
             'forceActivateTwoFactor' => 'nullable|boolean',
