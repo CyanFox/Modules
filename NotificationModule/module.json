@@ -15,7 +15,7 @@
     "requirements": [
         "AdminModule"
     ],
-    "version": "1.0.2",
+    "version": "1.1.0",
     "template_version": "3.x.x",
     "remote_version": "https://raw.githubusercontent.com/CyanFox-Projects/CyanFox-Base-Modules/v3/NotificationModule/module.json",
     "description": "Simple application-wide notifications for CyanFox-Base v3.",
