@@ -26,7 +26,7 @@ class AdminModuleServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(module_path($this->moduleName, 'database/migrations'));
 
         $this->app->booted(function () {
-            if (config('app.env') == 'testing') {
+            if (config('app.env') == 'testing' || $this->app->runningInConsole()) {
                 return;
             }
             $permissions = [

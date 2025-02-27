@@ -13,7 +13,7 @@
 
         <div class="space-y-4 mb-3">
 
-            <x-upload wire:model="avatarFile"></x-upload>
+            <x-upload wire:model="avatarFile" close-after-upload></x-upload>
 
             <div class="flex justify-center">
                 <span class="text-sm mt-3">

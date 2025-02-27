@@ -30,6 +30,7 @@ class UpdateNotification extends LWComponent
 
     public $message;
 
+    public $permissions = [];
     public $files = [];
     public $existingFiles = [];
 
@@ -54,6 +55,7 @@ class UpdateNotification extends LWComponent
                 'dismissible' => $this->dismissible,
                 'location' => $this->location,
                 'message' => $this->message,
+                'permissions' => json_encode($this->permissions),
             ]);
 
             if ($this->files) {
@@ -88,11 +90,11 @@ class UpdateNotification extends LWComponent
 
         $files = Arr::wrap($this->files);
 
-        $file = collect($files)->filter(fn (UploadedFile $item) => $item->getFilename() === $content['temporary_name'])->first();
+        $file = collect($files)->filter(fn(UploadedFile $item) => $item->getFilename() === $content['temporary_name'])->first();
 
-        rescue(fn () => $file->delete(), report: false);
+        rescue(fn() => $file->delete(), report: false);
 
-        $collect = collect($files)->filter(fn (UploadedFile $item) => $item->getFilename() !== $content['temporary_name']);
+        $collect = collect($files)->filter(fn(UploadedFile $item) => $item->getFilename() !== $content['temporary_name']);
 
         $this->files = is_array($this->files) ? $collect->toArray() : $collect->first();
     }
@@ -112,6 +114,7 @@ class UpdateNotification extends LWComponent
         $this->dismissible = $notification->dismissible;
         $this->location = $notification->location;
         $this->message = $notification->message;
+        $this->permissions = json_decode($notification->permissions, true);
         $this->existingFiles = Storage::files('public/notifications/' . $notification->id);
     }
 

@@ -11,6 +11,7 @@ return [
     'dismissible' => 'Dismissible',
     'location' => 'Location',
     'files' => 'Files',
+    'permissions' => 'Permissions',
 
     'types' => [
         'info' => 'Info',

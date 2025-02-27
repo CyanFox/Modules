@@ -33,6 +33,9 @@
     <x-textarea label="{{ __('notificationmodule::notifications.message') }}" wire:model="message" :hint="__('notificationmodule::notifications.message_hint')" resize-auto/>
 </div>
 
-<div class="mb-4">
+<div class="grid md:grid-cols-2 gap-4 mb-4">
     <x-upload label="{{ __('notificationmodule::notifications.files') }}" wire:model="files" delete-method="deleteFile" delete multiple />
+
+    <x-select.styled label="{{ __('notificationmodule::notifications.permissions') }}" :options="\Spatie\Permission\Models\Permission::pluck('name', 'name')->toArray()"
+                     select="label:label|value:value" wire:model="permissions" multiple searchable/>
 </div>

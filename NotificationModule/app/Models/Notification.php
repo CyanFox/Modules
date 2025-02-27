@@ -18,6 +18,7 @@ class Notification extends Model
         'icon',
         'dismissible',
         'location',
+        'permissions',
     ];
 
     public function dismissedNotification(): BelongsTo
