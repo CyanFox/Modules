@@ -9,7 +9,7 @@
             </div>
 
             <x-card class="space-y-4 mx-auto">
-                <x-tab selected-tab="forgot-password" class="justify-center">
+                <x-tab selected-tab="forgot-password" class="justify-center text-center">
                     <x-tab.item href="{{ route('auth.login') }}" class="w-1/2" wire:navigate>
                         {{ __('auth::forgot-password.tabs.login') }}
                     </x-tab.item>
@@ -35,7 +35,7 @@
 
                 @if ($rateLimitTime > 1)
                     <div wire:poll.1s="setRateLimit">
-                        <x-alert color="error">z
+                        <x-alert type="error">
                             <i class="icon-triangle-alert"></i>
                             {{ __('auth.throttle', ['seconds' => $rateLimitTime]) }}
                         </x-alert>
@@ -46,13 +46,9 @@
 
                 @if($passwordResetToken)
                     <form class="space-y-4" wire:submit="resetPassword">
-                        <x-password wire:model="password" required>
-                            {{ __('auth::forgot-password.password') }}
-                        </x-password>
+                        <x-password wire:model="password" label="{{ __('auth::forgot-password.password') }}" :showGenerator="true" required/>
 
-                        <x-password wire:model="passwordConfirmation" required>
-                            {{ __('auth::forgot-password.password_confirmation') }}
-                        </x-password>
+                        <x-password wire:model="passwordConfirmation" label="{{ __('auth::forgot-password.password_confirmation') }}" :showGenerator="true" required/>
 
                         <x-view-integration name="auth.reset-password.card.form"/>
 
@@ -64,10 +60,8 @@
                     </form>
                 @else
                     <form class="space-y-4" wire:submit="sendResetLink">
-                        <x-input wire:model="email" wire:blur="checkIfUserExists($event.target.value)" required
-                                 autofocus>
-                            {{ __('auth::forgot-password.email') }}
-                        </x-input>
+                        <x-input wire:model="email" wire:blur="checkIfUserExists($event.target.value)" label="{{ __('auth::forgot-password.email') }}" required
+                                 autofocus/>
 
                         <x-view-integration name="auth.forgot-password.card.form"/>
 
@@ -76,9 +70,7 @@
                                 <img src="{{ captcha_src('inverse') }}" class="rounded-lg lg:w-1/2 w-full"
                                      alt="Captcha">
 
-                                <x-input wire:model="captcha" required>
-                                    {{ __('auth::forgot-password.captcha') }}
-                                </x-input>
+                                <x-input wire:model="captcha" label="{{ __('auth::forgot-password.captcha') }}" required/>
 
                                 <x-view-integration name="auth.forgot-password.card.captcha"/>
                             </div>
@@ -108,7 +100,7 @@
         @endif
 
         <div class="absolute bottom-6 left-0 p-4 sm:bottom-0 sm:right-0 sm:left-auto">
-            <x-select class="max-w-sm" wire:change="changeLanguage($event.target.value)">
+            <x-select class="pr-5" wire:change="changeLanguage($event.target.value)">
                 <option value="en" @if(app()->getLocale() == 'en') selected @endif>English</option>
                 <option value="de" @if(app()->getLocale() == 'de') selected @endif>Deutsch</option>
 

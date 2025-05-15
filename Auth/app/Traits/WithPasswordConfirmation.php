@@ -9,16 +9,11 @@ trait WithPasswordConfirmation
 {
     private $passwordConfirmationData = [];
 
-    public function hasPasswordConfirmedSession($expiration = 300, $sleep = 0.25)
+    public function hasPasswordConfirmedSession($expiration = 300): bool
     {
-        Sleep::sleep($sleep); // To prevent other modals closing
+        $confirmedAt = session('auth.password_confirmed_at');
 
-        if (session()->has('auth.password_confirmed_at') &&
-            session('auth.password_confirmed_at') >= time() - $expiration) {
-            return true;
-        }
-
-        return false;
+        return $confirmedAt && $confirmedAt >= (time() - $expiration);
     }
 
     public function checkPasswordConfirmation()
@@ -56,15 +51,26 @@ trait WithPasswordConfirmation
         $this->dispatch('openModal', 'auth::components.modals.confirm-password', [
             'title' => $this->passwordConfirmationData['title'] ?? null,
             'description' => $this->passwordConfirmationData['description'] ?? null,
-            'event' => $this->passwordConfirmationData['event'],
+            'event' => $this->passwordConfirmationData['event'] ?? null,
+            'dispatch' => $this->passwordConfirmationData['dispatch'] ?? null,
         ]);
 
         return false;
     }
 
-    public function passwordMethod(string $callable, ...$args): static
+    public function passwordFunction(string $callable, ...$args): static
     {
-        $this->passwordConfirmationData['event'] = $callable.'('.implode(', ', $args).')';
+        $this->passwordConfirmationData['event'] = $callable . '(' . implode(', ', $args) . ')';
+
+        return $this;
+    }
+
+    public function passwordDispatch(string $dispatch, ...$args): static
+    {
+        $this->passwordConfirmationData['dispatch'] = [
+            'event' => $dispatch,
+            'args' => $args
+        ];
 
         return $this;
     }
@@ -75,7 +81,10 @@ trait WithPasswordConfirmation
         if (preg_match('/^(\w+)\((.*)\)$/', $event, $matches)) {
             $methodName = $matches[1];
             $arguments = array_map('trim', explode(',', $matches[2]));
-            call_user_func_array([$this, $methodName], $arguments);
+
+            if (method_exists($this, $methodName)) {
+                call_user_func_array([$this, $methodName], $arguments);
+            }
         }
     }
 }

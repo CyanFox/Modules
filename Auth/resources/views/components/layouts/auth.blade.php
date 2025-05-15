@@ -15,6 +15,7 @@
     @filamentStyles
     @vite('resources/css/app.css')
     @livewireStyles
+    <script src="{{ asset('modules/auth/js/webauthn.js') }}"></script>
 
     <title>{{ ($title ?? '') . ' · ' . settings('internal.app.name', config('app.name')) }}</title>
 </head>

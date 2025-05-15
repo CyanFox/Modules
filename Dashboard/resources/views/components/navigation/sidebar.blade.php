@@ -1,14 +1,12 @@
 <div x-data="{
-    sidebarIsOpen: false, // State for whether the sidebar is open
-    sidebarPinned: $persist(false), // State for whether the sidebar is pinned, persisted across sessions
-    sidebarHovered: false, // State for whether the sidebar is hovered
+    sidebarIsOpen: false,
+    sidebarPinned: $persist(false),
+    sidebarHovered: false,
     init() {
-        this.updateSidebarState(); // Initialize the sidebar state
+        this.updateSidebarState();
 
-        // Update sidebar state on window resize
         window.addEventListener('resize', () => this.updateSidebarState());
 
-        // Watch for changes in sidebarHovered state to adjust sidebar width
         this.$watch('sidebarHovered', value => {
             if (value && !this.sidebarPinned) {
                 this.$refs.sidebar.style.width = '16rem';
@@ -19,10 +17,10 @@
     },
     updateSidebarState() {
         if (window.innerWidth < 768) {
-            this.sidebarPinned = true; // Pin the sidebar on smaller screens
-            this.sidebarIsOpen = false; // Close the sidebar on smaller screens
+            this.sidebarPinned = true;
+            this.sidebarIsOpen = false;
         } else if (!this.sidebarPinned) {
-            this.sidebarIsOpen = false; // Ensure the sidebar is closed if not pinned
+            this.sidebarIsOpen = false;
         }
     }
 }"
@@ -32,7 +30,6 @@
 
     <div x-cloak x-show="sidebarIsOpen"
          class="fixed inset-0 z-20 bg-neutral-950/10 backdrop-blur-xs md:hidden"
-         aria-hidden="true"
          x-on:click="sidebarIsOpen = false"
          x-transition.opacity></div>
 
@@ -52,11 +49,14 @@
                class="flex items-center text-xl font-bold text-neutral-900 dark:text-white"
                :class="(!sidebarPinned && !sidebarHovered) ? 'justify-center' : ''">
                 <span class="sr-only">dashboard</span>
-                <img src="{{ settings('internal.app.logo', config('settings.logo_path')) }}" alt="Logo" class="{{ settings('dashboard.logo_size') }}">
-                <p class="pl-4 truncate transition-opacity duration-300"
-                   :class="(!sidebarPinned && !sidebarHovered) ? 'md:hidden' : 'md:block'">
-                    {{ settings('internal.app.name', config('app.name')) }}
-                </p>
+                <img src="{{ settings('internal.app.logo', config('settings.logo_path')) }}" alt="Logo"
+                     class="{{ settings('dashboard.logo_size') }}">
+                @if(!settings('dashboard.disable_logo_text'))
+                    <p class="pl-4 truncate transition-opacity duration-300"
+                       :class="(!sidebarPinned && !sidebarHovered) ? 'md:hidden' : 'md:block'">
+                        {{ settings('internal.app.name', config('app.name')) }}
+                    </p>
+                @endif
             </a>
         </div>
 
@@ -88,7 +88,8 @@
         </button>
     </nav>
 
-    <div class="h-svh w-full overflow-y-auto bg-white dark:bg-neutral-950 transition-all duration-300 ease-in-out" :class="sidebarPinned ? 'md:ml-64' : 'md:ml-16'">
+    <div class="h-svh w-full overflow-y-auto bg-white dark:bg-neutral-950 transition-all duration-300 ease-in-out"
+         :class="sidebarPinned ? 'md:ml-64' : 'md:ml-16'">
         <nav
             class="sticky top-0 z-10 flex items-center border-b border-neutral-300 bg-neutral-50 px-4 py-2 dark:border-neutral-700 dark:bg-neutral-900"
             aria-label="top navigation bar">
@@ -106,12 +107,11 @@
                         x-bind:class="userDropdownIsOpen ? 'bg-black/10 dark:bg-white/10' : ''" aria-haspopup="true"
                         x-on:click="userDropdownIsOpen = ! userDropdownIsOpen"
                         x-bind:aria-expanded="userDropdownIsOpen">
-                    <img src="{{ auth()->user()->avatar() }}" class="size-8 object-cover rounded-md" alt="avatar"
-                         aria-hidden="true"/>
+                    <img src="{{ auth()->user()->avatar() }}" class="size-8 object-cover rounded-md" alt="avatar"/>
                     <div class="hidden md:flex flex-col">
                         <span
                             class="text-sm font-bold text-neutral-900 dark:text-white">{{ auth()->user()->fullName() }}</span>
-                        <span class="text-xs" aria-hidden="true">{{ auth()->user()->username }}</span>
+                        <span class="text-xs">{{ auth()->user()->username }}</span>
                         <span class="sr-only">profile settings</span>
                     </div>
                 </button>
@@ -123,7 +123,8 @@
                      x-transition="" x-trap="userDropdownIsOpen">
 
                     <div class="flex flex-col py-1.5">
-                        <x-dashboard::profile-item icon="icon-user" :label="__('dashboard::navigation.profile')" route="account.profile"/>
+                        <x-dashboard::profile-item icon="icon-user" :label="__('dashboard::navigation.profile')"
+                                                   route="account.profile"/>
 
                         <x-view-integration name="dashboard.profile.items"/>
                     </div>
@@ -131,7 +132,8 @@
                     <x-view-integration name="dashboard.profile.items.end"/>
 
                     <div class="flex flex-col py-1.5">
-                        <x-dashboard::profile-item icon="icon-log-out" :label="__('dashboard::navigation.logout')" route="auth.logout"
+                        <x-dashboard::profile-item icon="icon-log-out" :label="__('dashboard::navigation.logout')"
+                                                   route="auth.logout"
                                                    external/>
                     </div>
                 </div>

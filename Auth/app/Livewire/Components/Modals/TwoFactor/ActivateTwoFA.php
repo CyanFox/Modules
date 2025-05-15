@@ -6,6 +6,8 @@ use App\Livewire\CFModalComponent;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\On;
+use Modules\Auth\Livewire\Account\Profile;
 use Modules\Auth\Traits\WithPasswordConfirmation;
 
 class ActivateTwoFA extends CFModalComponent
@@ -40,6 +42,8 @@ class ActivateTwoFA extends CFModalComponent
             ->title(__('auth::profile.modals.activate_two_fa.notifications.two_fa_enabled'))
             ->success()
             ->send();
+
+        $this->dispatch('refreshProfile')->to(Profile::class);
     }
 
     public function downloadRecoveryCodes()
@@ -73,7 +77,7 @@ class ActivateTwoFA extends CFModalComponent
             auth()->user()->generateTwoFASecret();
         }
 
-        if (! $this->checkPasswordConfirmation()->passwordMethod('render')->checkPassword()) {
+        if (! $this->checkPasswordConfirmation()->passwordFunction('render')->checkPassword()) {
             return;
         }
     }

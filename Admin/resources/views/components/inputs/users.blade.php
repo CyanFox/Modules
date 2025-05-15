@@ -1,44 +1,47 @@
 <div class="grid md:grid-cols-2 gap-4 mb-4">
-    <x-input wire:model="firstName" required>
-        {{ __('admin::users.first_name') }}
-    </x-input>
+    <x-input wire:model="firstName" label="{{ __('admin::users.first_name') }}" required/>
 
-    <x-input wire:model="lastName" required>
-        {{ __('admin::users.last_name') }}
-    </x-input>
+    <x-input wire:model="lastName" label="{{ __('admin::users.last_name') }}" required/>
 
-    <x-input wire:model="username" required>
-        {{ __('admin::users.username') }}
-    </x-input>
+    <x-input wire:model="username" label="{{ __('admin::users.username') }}" required/>
 
     <x-input type="email"
-             wire:model="email" required>
-        {{ __('admin::users.email') }}
-    </x-input>
+             wire:model="email" label="{{ __('admin::users.email') }}" required/>
 
     <x-password wire:model="password"
-                :required="$passwordRequired">
-        {{ __('admin::users.password') }}
-    </x-password>
+                :showGenerate="true"
+                label="{{ __('admin::users.password') }}"
+                :required="$passwordRequired"/>
 
     <x-password wire:model="confirmPassword"
-                :required="$passwordRequired">
-        {{ __('admin::users.confirm_password') }}
-    </x-password>
+                label="{{ __('admin::users.confirm_password') }}"
+                :required="$passwordRequired"/>
 
-    <x-select label="{{ __('admin::users.groups') }}"
-        wire:model="groups" multiple>
-        @foreach(\Spatie\Permission\Models\Role::all() as $group)
-            <option value="{{ $group->id }}">{{ $group->name }}</option>
-        @endforeach
-    </x-select>
+    <x-select.multiple
+        label="{{ __('admin::users.groups') }}"
+        :options="
+        \Spatie\Permission\Models\Role::all()
+            ->map(fn($group) => [
+                'value' => $group->id,
+                'label' => $group->name
+            ])
+            ->toArray()
+    "
+        wire:model="groups"
+    />
 
-    <x-select label="{{ __('admin::users.permissions') }}"
-                     wire:model="permissions" multiple>
-        @foreach(\Spatie\Permission\Models\Permission::all() as $permission)
-            <option value="{{ $permission->id }}">{{ $permission->name }}</option>
-        @endforeach
-    </x-select>
+    <x-select.multiple
+        label="{{ __('admin::users.permissions') }}"
+        :options="
+        \Spatie\Permission\Models\Permission::all()
+            ->map(fn($permission) => [
+                'value' => $permission->id,
+                'label' => $permission->name
+            ])
+            ->toArray()
+    "
+        wire:model="permissions"
+    />
 
 
     <div class="space-y-4">

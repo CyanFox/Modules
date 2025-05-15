@@ -91,3 +91,5 @@ Route::group(['prefix' => 'oauth', 'as' => 'oauth.'], function () {
         return redirect('/');
     })->name('callback');
 });
+
+Route::passkeys();

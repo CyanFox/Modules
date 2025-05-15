@@ -64,7 +64,7 @@ Please adhere to the coding style used in the project. This includes:
 
 ## Additional Resources
 
-- [Project Documentation](https://github.com/CyanFox-Labs/CyanFox-Base-Modules/wiki)
-- [Issue Tracker](https://github.com/CyanFox-Labs/CyanFox-Base-Modules/issues)
+- [Project Documentation](https://github.com/CyanFox-Base/CyanFox-Base-Modules/wiki)
+- [Issue Tracker](https://github.com/CyanFox-Base/CyanFox-Base-Modules/issues)
 
 We are grateful for your contributions and look forward to collaborating with you!

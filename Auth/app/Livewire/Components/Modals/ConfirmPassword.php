@@ -18,6 +18,9 @@ class ConfirmPassword extends CFModalComponent
     #[Locked]
     public $event;
 
+    #[Locked]
+    public $dispatch;
+
     public $password;
 
     public function confirmPassword()
@@ -26,7 +29,7 @@ class ConfirmPassword extends CFModalComponent
             'password' => 'required|string',
         ]);
 
-        if (! Hash::check($this->password, auth()->user()->password)) {
+        if (!Hash::check($this->password, auth()->user()->password)) {
             throw ValidationException::withMessages([
                 'password' => [__('validation.current_password')],
             ]);
@@ -34,7 +37,15 @@ class ConfirmPassword extends CFModalComponent
 
         session(['auth.password_confirmed_at' => time()]);
 
+        if ($this->event) {
         $this->dispatch('auth.passwordConfirmed', $this->event);
+        }
+        if ($this->dispatch) {
+            $this->dispatch(
+                $this->dispatch['event'],
+                ...$this->dispatch['args']
+            );
+        }
 
         $this->closeModal();
     }
@@ -46,14 +57,13 @@ class ConfirmPassword extends CFModalComponent
 
     public function mount()
     {
-        if (! $this->title) {
+        if (!$this->title) {
             $this->title = __('auth::confirm-password.title');
         }
 
-        if (! $this->description) {
+        if (!$this->description) {
             $this->description = __('auth::confirm-password.description');
         }
-
     }
 
     public function render()

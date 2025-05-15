@@ -6,13 +6,14 @@ use App\Facades\ModuleManager;
 use App\Facades\SettingsManager;
 use App\Livewire\CFComponent;
 use App\Models\Setting;
-use App\Traits\WithConfirmation;
 use App\Traits\WithCustomLivewireException;
 use Exception;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Url;
 use Livewire\WithFileUploads;
+use Modules\Auth\Traits\WithConfirmation;
 use Nwidart\Modules\Facades\Module;
 
 class Settings extends CFComponent
@@ -51,6 +52,8 @@ class Settings extends CFComponent
     public $newSettingKey;
 
     public $newSettingValue;
+    public $encryptedSettings = [];
+    public $editorSettingsMap = [];
 
     public function updateGeneralSettings()
     {
@@ -64,7 +67,7 @@ class Settings extends CFComponent
             'appTimezone' => 'required|string',
             'appLanguage' => 'required|string',
             'baseVersionUrl' => 'required|url',
-            'logo' => 'nullable|image',
+            'logo' => 'nullable|image:allow_svg',
         ]);
 
         settings()->updateSettings([
@@ -76,11 +79,11 @@ class Settings extends CFComponent
         ]);
 
         if ($this->logo) {
-            Storage::disk('public')->delete('img/'.str_replace('/storage/img/', '', settings('internal.app.logo')));
+            Storage::disk('public')->delete('img/' . str_replace('/storage/img/', '', settings('internal.app.logo')));
 
-            $this->logo->storeAs('img', 'Logo.'.$this->logo->getClientOriginalExtension(), 'public');
+            $this->logo->storeAs('img', 'Logo.' . $this->logo->getClientOriginalExtension(), 'public');
 
-            settings()->updateSetting('internal.app.logo', '/storage/img/Logo.'.$this->logo->getClientOriginalExtension());
+            settings()->updateSetting('internal.app.logo', '/storage/img/Logo.' . $this->logo->getClientOriginalExtension());
         }
 
         Notification::make()
@@ -97,7 +100,7 @@ class Settings extends CFComponent
             return;
         }
 
-        Storage::disk('public')->delete('img/'.str_replace('/storage/img/', '', settings('internal.app.logo')));
+        Storage::disk('public')->delete('img/' . str_replace('/storage/img/', '', settings('internal.app.logo')));
 
         settings()->updateSetting('internal.app.logo', '/img/Logo.svg');
 
@@ -124,13 +127,21 @@ class Settings extends CFComponent
         }
 
         $settings = [];
-        foreach ($this->editorSettings as $key => $value) {
-            $newKey = str_replace(':', '.', $key);
-            $settings[$newKey] = $value;
+        foreach ($this->editorSettings as $formKey => $value) {
+            $dbKey = $this->editorSettingsMap[$formKey] ?? null;
+
+            if ($dbKey && isset($this->originalEditorSettings[$dbKey])) {
+                if (isset($this->encryptedSettings[$dbKey]) && !$this->isEncrypted($value) && !Str::contains($dbKey, ['key', 'password', 'secret', 'token'])) {
+                    $value = encrypt($value);
+                }
+
+                $settings[$dbKey] = $value;
+            }
         }
 
-        Setting::truncate();
-        SettingsManager::updateSettings($settings);
+        foreach ($settings as $key => $value) {
+            SettingsManager::updateSetting($key, $value);
+        }
 
         Notification::make()
             ->title(__('admin::settings.notifications.settings_updated'))
@@ -195,10 +206,9 @@ class Settings extends CFComponent
     public function searchEditorSetting()
     {
         $keyword = $this->editorSearch;
+        $settings = Setting::where('key', 'like', "%$keyword%")->get();
 
-        $this->originalEditorSettings = Setting::where('key', 'like', "%$keyword%")->get()->mapWithKeys(function ($setting) {
-            return [$setting->key => ['value' => $setting->value, 'is_locked' => $setting->is_locked]];
-        });
+        $this->loadEditorSettings($settings);
     }
 
     public function cryptEditorSetting($type)
@@ -236,6 +246,47 @@ class Settings extends CFComponent
         });
     }
 
+    private function isEncrypted($value)
+    {
+        return is_string($value) && str_starts_with($value, 'eyJ') && strlen($value) > 40;
+    }
+
+    private function loadEditorSettings($settingsCollection)
+    {
+        $this->originalEditorSettings = [];
+        $this->editorSettings = [];
+        $this->encryptedSettings = [];
+
+        $settingsCollection->each(function ($setting, $index) {
+            $key = $setting->key;
+            $value = $setting->value;
+
+            if ($this->isEncrypted($value)) {
+                $this->encryptedSettings[$key] = true;
+                $value = $this->tryDecrypt($value);
+            }
+
+            $this->originalEditorSettings[$key] = [
+                'value' => $value,
+                'is_locked' => $setting->is_locked
+            ];
+
+            $formKey = 'setting_' . md5($key);
+            $this->editorSettings[$formKey] = $value;
+
+            $this->editorSettingsMap[$formKey] = $key;
+        });
+    }
+
+    private function tryDecrypt($value)
+    {
+        try {
+            return decrypt($value);
+        } catch (Exception) {
+            return $value;
+        }
+    }
+
     public function mount()
     {
         if (blank($this->tab)) {
@@ -253,13 +304,7 @@ class Settings extends CFComponent
             $this->moduleList[] = $module->getName();
         }
 
-        $this->originalEditorSettings = Setting::all()->mapWithKeys(function ($setting) {
-            return [$setting->key => ['value' => $setting->value, 'is_locked' => $setting->is_locked]];
-        });
-
-        foreach ($this->originalEditorSettings as $key => $value) {
-            $this->editorSettings[str_replace('.', ':', $key)] = $value['value'];
-        }
+        $this->loadEditorSettings(Setting::all());
     }
 
     public function render()

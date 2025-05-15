@@ -5,10 +5,10 @@ namespace Modules\Admin\Livewire\Modules;
 use App\Facades\ModuleManager;
 use App\Livewire\CFComponent;
 use App\Models\Setting;
-use App\Traits\WithConfirmation;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Artisan;
+use Modules\Auth\Traits\WithConfirmation;
 use Nwidart\Modules\Facades\Module;
 use Symfony\Component\Process\Process;
 
@@ -40,6 +40,7 @@ class Modules extends CFComponent
         ModuleManager::getModule($moduleName)->enable();
 
         Artisan::call('module:migrate', ['module' => $moduleName]);
+        Artisan::call('module:publish', ['module' => $moduleName]);
         Artisan::call('cache:clear');
 
         $files = glob(base_path('bootstrap/cache/*.php'));

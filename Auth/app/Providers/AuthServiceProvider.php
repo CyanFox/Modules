@@ -14,6 +14,7 @@ use Modules\Auth\Http\Middleware\Authenticate;
 use Modules\Auth\Http\Middleware\CheckForceActions;
 use Modules\Auth\Http\Middleware\CheckIfUserIsDisabled;
 use Modules\Auth\Http\Middleware\CheckLanguage;
+use Modules\Auth\Models\User;
 use Modules\Auth\Socialite\CustomOAuthProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
@@ -39,6 +40,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         Config::set('auth.providers.users.driver', 'eloquent');
         Config::set('auth.providers.users.model', '\Modules\Auth\Models\User');
+        Config::set('passkeys.relying_party.name', settings('internal.app.name'));
+        Config::set('passkeys.relying_party.id', parse_url(settings('internal.app.url'), PHP_URL_HOST));
+        Config::set('passkeys.models.authenticatable', User::class);
+        Config::set('passkeys.redirect_to_after_login', '/');
 
         if (! app()->runningInConsole()) {
             $group = Role::findOrCreate('Super Admin');
@@ -137,6 +142,12 @@ class AuthServiceProvider extends ServiceProvider
         } else {
             $this->loadTranslationsFrom(module_path($this->name, 'lang'), $this->nameLower);
             $this->loadJsonTranslationsFrom(module_path($this->name, 'lang'));
+        }
+
+        $vendorPath = module_path($this->name, 'lang/vendor/passkeys');
+        if (is_dir($vendorPath)) {
+            $this->loadTranslationsFrom($vendorPath, 'passkeys');
+            $this->loadJsonTranslationsFrom($vendorPath);
         }
     }
 

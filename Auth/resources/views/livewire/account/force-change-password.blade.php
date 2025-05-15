@@ -10,17 +10,11 @@
 
             <x-card class="space-y-4 mx-auto">
                 <form class="space-y-4" wire:submit="changePassword">
-                    <x-password wire:model="currentPassword" required>
-                        {{ __('auth::force.change_password.current_password') }}
-                    </x-password>
+                    <x-password wire:model="currentPassword" label="{{ __('auth::force.change_password.current_password') }}" required/>
 
                     <div class="grid md:grid-cols-2 gap-4">
-                        <x-password wire:model="newPassword" required>
-                            {{ __('auth::force.change_password.new_password') }}
-                        </x-password>
-                        <x-password wire:model="confirmPassword" required>
-                            {{ __('auth::force.change_password.confirm_password') }}
-                        </x-password>
+                        <x-password wire:model="newPassword" label="{{ __('auth::force.change_password.new_password') }}" required/>
+                        <x-password wire:model="confirmPassword" label="{{ __('auth::force.change_password.confirm_password') }}" required/>
                     </div>
 
                     <x-view-integration name="auth.force.change-password.card.form"/>

@@ -34,7 +34,7 @@ class RegenerateRecoveryCodes extends CFModalComponent
 
     public function mount()
     {
-        if (! $this->checkPasswordConfirmation()->passwordMethod('render')->checkPassword()) {
+        if (! $this->checkPasswordConfirmation()->passwordFunction('render')->checkPassword()) {
             return;
         }
     }

@@ -10,11 +10,13 @@ use Illuminate\Support\Facades\Storage;
 use Modules\Auth\Database\Factories\UserFactory;
 use Modules\Auth\Traits\WithSession;
 use Modules\Auth\Traits\WithTwoFactorAuth;
+use Spatie\LaravelPasskeys\Models\Concerns\HasPasskeys;
+use Spatie\LaravelPasskeys\Models\Concerns\InteractsWithPasskeys;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasPasskeys
 {
-    use HasRoles, Notifiable, WithSession, WithTwoFactorAuth, HasFactory;
+    use HasRoles, Notifiable, WithSession, WithTwoFactorAuth, HasFactory, InteractsWithPasskeys;
 
     protected $guarded = [];
 
@@ -73,6 +75,11 @@ class User extends Authenticatable
     public function guardName()
     {
         return config('auth.defaults.guard');
+    }
+
+    public function getPasskeyDisplayName(): string
+    {
+        return $this->username;
     }
 
     protected static function newFactory(): Factory

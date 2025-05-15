@@ -18,12 +18,10 @@
                     </div>
 
                     <form wire:submit="activateTwoFA" class="space-y-4">
-                        <x-password wire:model="currentPassword" required>
-                            {{ __('auth::force.activate_two_factor.current_password') }}
-                        </x-password>
+                        <x-password wire:model="currentPassword" label="{{ __('auth::force.activate_two_factor.current_password') }}" required/>
 
                         <x-input wire:model="twoFactorCode"
-                                 required>{{ __('auth::force.activate_two_factor.two_fa_code') }}</x-input>
+                                 label="{{ __('auth::force.activate_two_factor.two_fa_code') }}" required/>
 
                         <x-button type="submit" loading="activateTwoFA" class="w-full">
                             {{ __('auth::force.activate_two_factor.buttons.activate_two_fa') }}

@@ -10,7 +10,7 @@
 
             <x-card class="space-y-4 mx-auto">
                 @if(settings('auth.register.enable') && !$twoFactorEnabled)
-                    <x-tab selected-tab="login" class="justify-center">
+                    <x-tab selected-tab="login" class="justify-center text-center">
                         <x-tab.item uuid="login" class="w-1/2">
                             {{ __('auth::login.tabs.login') }}
                         </x-tab.item>
@@ -37,19 +37,27 @@
 
                 @if ($rateLimitTime > 1)
                     <div wire:poll.1s="setRateLimit">
-                        <x-alert color="error">
+                        <x-alert type="error">
                             {{ __('auth.throttle', ['seconds' => $rateLimitTime]) }}
                         </x-alert>
                     </div>
 
                     <x-view-integration name="auth.login.card.rate_limit"/>
                 @endif
+                <div class="mb-4" wire:ignore>
+                    @if($message = session()->get('authenticatePasskey::message'))
+                        <x-alert type="error">
+                            {{ $message }}
+                        </x-alert>
+                    @endif
+                </div>
 
                 @if(settings('auth.login.enable'))
                     @if($twoFactorEnabled)
                         <form class="space-y-4" wire:submit="checkTwoFactorCode">
                             @if($useRecoveryCode)
-                                <x-input wire:model="twoFactorCode" required
+                                <x-input wire:model="twoFactorCode" label="{{ __('auth::login.recovery_code') }}"
+                                         required
                                          autofocus>
                                     <x-slot:hint>
                                         <span class="hover:underline cursor-pointer"
@@ -57,11 +65,10 @@
                                             {{ __('auth::login.use_two_factor') }}
                                         </span>
                                     </x-slot:hint>
-
-                                    {{ __('auth::login.recovery_code') }}
                                 </x-input>
                             @else
-                                <x-input wire:model="twoFactorCode" required
+                                <x-input wire:model="twoFactorCode" label="{{ __('auth::login.two_factor_code') }}"
+                                         required
                                          autofocus>
                                     <x-slot:hint>
                                         <span class="hover:underline cursor-pointer"
@@ -69,8 +76,6 @@
                                             {{ __('auth::login.use_recovery_code') }}
                                         </span>
                                     </x-slot:hint>
-
-                                    {{ __('auth::login.two_factor_code') }}
                                 </x-input>
                             @endif
 
@@ -83,11 +88,10 @@
                         </form>
                     @else
                         <form class="space-y-4" wire:submit="attemptLogin">
-                            <x-input wire:model="username" wire:blur="checkIfUserExists($event.target.value)" required
-                                     autofocus>
-                                {{ __('auth::login.username') }}
-                            </x-input>
-                            <x-password wire:model="password" required>
+                            <x-input wire:model="username" wire:blur="checkIfUserExists($event.target.value)"
+                                     label="{{ __('auth::login.username') }}" required
+                                     autofocus/>
+                            <x-password wire:model="password" label="{{ __('auth::login.password') }}" required>
                                 @if(settings('auth.forgot_password.enable'))
                                     <x-slot:hint>
                                         <a href="{{ route('auth.forgot-password') }}" class="hover:underline"
@@ -96,8 +100,6 @@
                                         </a>
                                     </x-slot:hint>
                                 @endif
-
-                                {{ __('auth::login.password') }}
                             </x-password>
 
                             <x-checkbox wire:model="remember">
@@ -111,9 +113,7 @@
                                     <img src="{{ captcha_src('inverse') }}" class="rounded-lg lg:w-1/2 w-full"
                                          alt="Captcha">
 
-                                    <x-input wire:model="captcha" required>
-                                        {{ __('auth::login.captcha') }}
-                                    </x-input>
+                                    <x-input wire:model="captcha" label="{{ __('auth::login.captcha') }}" required/>
 
                                     <x-view-integration name="auth.login.card.captcha"/>
                                 </div>
@@ -123,8 +123,10 @@
                                 {{ __('auth::login.buttons.login') }}
                             </x-button>
                             <x-view-integration name="auth.login.card.form.buttons"/>
-
                         </form>
+                        <x-auth::passkey-auth>
+                            <x-link>{{ __('passkeys::passkeys.authenticate_using_passkey') }}</x-link>
+                        </x-auth::passkey-auth>
                     @endif
                 @endif
 
@@ -153,7 +155,7 @@
         @endif
 
         <div class="absolute bottom-6 left-0 p-4 sm:bottom-0 sm:right-0 sm:left-auto">
-            <x-select class="max-w-sm" wire:change="changeLanguage($event.target.value)">
+            <x-select class="pr-5" wire:change="changeLanguage($event.target.value)">
                 <option value="en" @if(app()->getLocale() == 'en') selected @endif>English</option>
                 <option value="de" @if(app()->getLocale() == 'de') selected @endif>Deutsch</option>
 

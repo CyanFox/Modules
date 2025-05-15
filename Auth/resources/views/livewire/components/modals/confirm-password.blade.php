@@ -3,7 +3,7 @@
         <h3 class="font-semibold tracking-wide text-neutral-900 dark:text-white">
             {{ $title }}
         </h3>
-        <button wire:click="forceCloseModal" aria-label="close modal">
+        <button wire:click="forceCloseModal" aria-label="close modal" class="cursor-pointer">
             <i class="icon-x"></i>
         </button>
     </div>

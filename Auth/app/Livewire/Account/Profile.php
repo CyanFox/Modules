@@ -3,12 +3,13 @@
 namespace Modules\Auth\Livewire\Account;
 
 use App\Livewire\CFComponent;
-use App\Traits\WithConfirmation;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Modules\Auth\Rules\Password;
+use Modules\Auth\Traits\WithConfirmation;
 use Modules\Auth\Traits\WithPasswordConfirmation;
 
 class Profile extends CFComponent
@@ -17,6 +18,9 @@ class Profile extends CFComponent
 
     #[Url]
     public $tab;
+
+    #[Url]
+    public $passTab = 'password';
 
     public $firstName;
 
@@ -94,7 +98,7 @@ class Profile extends CFComponent
                 'confirmPassword' => 'required|same:newPassword',
             ]);
 
-            if (! Hash::check($this->currentPassword, auth()->user()->password)) {
+            if (!Hash::check($this->currentPassword, auth()->user()->password)) {
                 $this->addError('currentPassword', __('validation.current_password'));
 
                 return;
@@ -115,7 +119,7 @@ class Profile extends CFComponent
 
     public function disableTwoFA($confirmed = false)
     {
-        if (! $confirmed) {
+        if (!$confirmed) {
             $this->dialog()
                 ->question(__('auth::profile.modals.disable_two_fa.title'),
                     __('auth::profile.modals.disable_two_fa.description'))
@@ -146,11 +150,11 @@ class Profile extends CFComponent
 
     public function deleteAccount($confirmed = false)
     {
-        if (! settings('auth.profile.enable.delete_account')) {
+        if (!settings('auth.profile.enable.delete_account')) {
             return;
         }
 
-        if (! $confirmed) {
+        if (!$confirmed) {
             $this->dialog()
                 ->question(__('auth::profile.modals.delete_account.title'),
                     __('auth::profile.modals.delete_account.description'))
@@ -175,7 +179,7 @@ class Profile extends CFComponent
 
     public function logoutSession($sessionId)
     {
-        if (! $this->checkPasswordConfirmation()->passwordMethod('logoutSession', $sessionId)->checkPassword()) {
+        if (!$this->checkPasswordConfirmation()->passwordFunction('logoutSession', $sessionId)->checkPassword()) {
             return;
         }
 
@@ -186,12 +190,12 @@ class Profile extends CFComponent
             ->success()
             ->send();
 
-        $this->redirect(route('account.profile'), true);
+        $this->redirect(route('account.profile', ['tab' => 'sessions']), true);
     }
 
     public function logoutAllSessions($confirmed = false)
     {
-        if (! $confirmed) {
+        if (!$confirmed) {
             $this->dialog()
                 ->question(__('auth::profile.sessions.modals.logout_all.title'),
                     __('auth::profile.sessions.modals.logout_all.description'))
@@ -211,13 +215,17 @@ class Profile extends CFComponent
             ->success()
             ->send();
 
-        $this->redirect(route('account.profile'), true);
+        $this->redirect(route('account.profile', ['tab' => 'sessions']), true);
     }
 
     public function mount()
     {
         if (empty($this->tab)) {
             $this->tab = 'overview';
+        }
+
+        if (empty($this->passTab)) {
+            $this->passTab = 'password';
         }
 
         $user = auth()->user();
@@ -235,6 +243,7 @@ class Profile extends CFComponent
         $this->confirmPassword = '';
     }
 
+    #[On('refreshProfile')]
     public function render()
     {
         return $this->renderView('auth::livewire.account.profile', __('auth::profile.tab_title'), settings('auth.profile.layout', config('auth.profile.layout')));

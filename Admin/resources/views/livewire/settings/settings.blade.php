@@ -31,12 +31,8 @@
         <x-cf.card view-integration="admin.settings.general">
             <form wire:submit="updateGeneralSettings">
                 <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-4">
-                    <x-input wire:model="appName" required>
-                        {{ __('admin::settings.app_name') }}
-                    </x-input>
-                    <x-input wire:model="appUrl" required>
-                        {{ __('admin::settings.app_url') }}
-                    </x-input>
+                    <x-input wire:model="appName" label="{{ __('admin::settings.app_name') }}" required/>
+                    <x-input wire:model="appUrl" label="{{ __('admin::settings.app_url') }}" required/>
                     <x-select :label="__('admin::settings.app_timezone')" wire:model="appTimezone" required>
                         @foreach(timezone_identifiers_list() as $timezone)
                             <option value="{{ $timezone }}">{{ $timezone }}</option>
@@ -50,18 +46,14 @@
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-4 mt-4">
-                    <x-input wire:model="baseVersionUrl" required>
-                        {{ __('admin::settings.base_version_url') }}
-                    </x-input>
-                    <x-file wire:model="logo">
-                        {{ __('admin::settings.logo') }}
-                    </x-file>
+                    <x-input wire:model="baseVersionUrl" label="{{ __('admin::settings.base_version_url') }}" required/>
+                    <x-file wire:model="logo" label="{{ __('admin::settings.logo') }}"/>
                 </div>
 
                 @can('admin.settings.update')
                     <x-cf.buttons.update :show-cancel="false" :update-text="__('messages.buttons.save')"
                                          target="updateGeneralSettings" class="mt-0">
-                        <x-button type="button" wire:click="resetLogo" loading="resetLogo" color="danger" class="ml-2">
+                        <x-button type="button" wire:click="resetLogo" loading="resetLogo" color="danger">
                             {{ __('admin::settings.buttons.reset_logo') }}
                         </x-button>
                     </x-cf.buttons.update>
@@ -72,9 +64,7 @@
     @if($tab === 'modules' && auth()->user()->can('admin.settings.modules'))
         <x-card>
             <x-input wire:model="moduleSearch"
-                     wire:change="searchModule">
-                {{ __('admin::settings.search') }}
-            </x-input>
+                     wire:change="searchModule" label="{{ __('admin::settings.search') }}"/>
 
             <x-view-integration name="admin.settings.modules.search"/>
         </x-card>
@@ -118,9 +108,7 @@
         <x-card>
             <div class="mb-4">
                 <x-input wire:model="editorSearch"
-                         wire:change="searchEditorSetting">
-                    {{ __('admin::settings.search') }}
-                </x-input>
+                         wire:change="searchEditorSetting" label="{{ __('admin::settings.search') }}"/>
 
                 <x-view-integration name="admin.settings.editor.search"/>
             </div>
@@ -131,9 +119,7 @@
 
             <form wire:submit="cryptEditorSetting('encrypt')" class="flex flex-row gap-3 my-4">
                 <div class="w-full">
-                    <x-input wire:model="editorEncryption">
-                        {{ __('admin::settings.encrypt') }}
-                    </x-input>
+                    <x-input wire:model="editorEncryption" label="{{ __('admin::settings.encrypt') }}"/>
                 </div>
 
                 <div class="mt-auto mb-0.5">
@@ -147,9 +133,7 @@
 
             <form wire:submit="cryptEditorSetting('decrypt')" class="flex flex-row gap-3 my-4">
                 <div class="w-full">
-                    <x-input wire:model="editorDecryption">
-                        {{ __('admin::settings.decrypt') }}
-                    </x-input>
+                    <x-input wire:model="editorDecryption" label="{{ __('admin::settings.decrypt') }}"/>
                 </div>
                 <div class="mt-auto mb-0.5">
                     <x-button type="submit" loading="cryptEditorSetting">
@@ -164,14 +148,10 @@
 
             <form wire:submit="createSetting" class="flex flex-row gap-3 my-4">
                 <div class="w-full">
-                    <x-input wire:model="newSettingKey">
-                        {{ __('admin::settings.key') }}
-                    </x-input>
+                    <x-input wire:model="newSettingKey" label="{{ __('admin::settings.key') }}"/>
                 </div>
                 <div class="w-full">
-                    <x-input wire:model="newSettingValue">
-                        {{ __('admin::settings.value') }}
-                    </x-input>
+                    <x-input wire:model="newSettingValue" label="{{ __('admin::settings.value') }}"/>
                 </div>
 
                 <div class="mt-auto mb-0.5">
@@ -190,16 +170,17 @@
                     @foreach($originalEditorSettings as $key => $value)
                         <div class="flex flex-row gap-3 my-4">
                             <div class="w-full">
+                                @php $formKey = 'setting_' . md5($key); @endphp
                                 @if ($value['is_locked'])
                                     <x-input
-                                        wire:model="editorSettings.{{ str_replace('.', ':', $key) }}"
+                                        label="{{ $key }}"
+                                        wire:model="editorSettings.{{ $formKey }}"
                                         disabled>
-                                        {{ $key }}
                                     </x-input>
                                 @else
                                     <x-input
-                                        wire:model="editorSettings.{{ str_replace('.', ':', $key) }}">
-                                        {{ $key }}
+                                        label="{{ $key }}"
+                                        wire:model="editorSettings.{{ $formKey }}">
                                     </x-input>
                                 @endif
                             </div>
@@ -207,19 +188,19 @@
                             @can('admin.settings.update')
                                 <div class="mt-auto flex gap-3">
                                     @if($value['is_locked'])
-                                        <x-button color="danger" variant="outline" type="button" class="mt-0.5"
+                                        <x-button :hideTextWhileLoading="true" color="danger" variant="outline" type="button" class="mt-0.5"
                                                   wire:click="setLockState('{{ $key }}', false)"
                                                   loading="setLockState">
                                             <i class="icon-lock"></i>
                                         </x-button>
                                     @else
-                                        <x-button color="success" variant="outline" type="button" class="mt-0.5"
+                                        <x-button :hideTextWhileLoading="true" color="success" variant="outline" type="button" class="mt-0.5"
                                                   wire:click="setLockState('{{ $key }}', true)"
                                                   loading="setLockState">
                                             <i class="icon-lock-open"></i>
                                         </x-button>
                                     @endif
-                                    <x-button color="danger" variant="outline" type="button" class="mt-0.5"
+                                    <x-button :hideTextWhileLoading="true" color="danger" variant="outline" type="button" class="mt-0.5"
                                               wire:click="deleteSetting('{{ $key }}', false)"
                                               loading="deleteSetting">
                                         <i class="icon-trash"></i>

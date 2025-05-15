@@ -2,11 +2,11 @@
 
 namespace Modules\Admin\Livewire\Components\Tables;
 
-use App\Traits\WithConfirmation;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Blade;
+use Modules\Auth\Traits\WithConfirmation;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
@@ -135,10 +135,10 @@ final class GroupsTable extends PowerGridComponent
     {
         return [
             Button::add('update')
-                ->slot(Blade::render('<x-button class="px-2 py-1 flex" wire:navigate link="'.route('admin.groups.update', ['groupId' => $row->id]).'"><i class="icon-pen"></i></x-button>')),
+                ->slot(Blade::render('<x-button.floating size="sm" wire:navigate link="'.route('admin.groups.update', ['groupId' => $row->id]).'"><i class="icon-pen"></i></x-button.floating>')),
 
             Button::add('delete')
-                ->slot(Blade::render('<x-button color="danger" class="px-2 py-1 flex" wire:click="deleteGroup(`'.$row->id.'`, false)"><i class="icon-trash"></i></x-button>')),
+                ->slot(Blade::render('<x-button.floating color="danger" size="sm" wire:click="deleteGroup(`'.$row->id.'`, false)"><i class="icon-trash"></i></x-button.floating>')),
         ];
     }
 

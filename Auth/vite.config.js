@@ -15,8 +15,7 @@ export default defineConfig({
             publicDirectory: '../../public',
             buildDirectory: 'build-auth',
             input: [
-                __dirname + '/resources/assets/sass/app.scss',
-                __dirname + '/resources/assets/js/app.js'
+                __dirname + '/resources/assets/js/webauthn.js'
             ],
             refresh: true,
         }),

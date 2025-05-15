@@ -5,10 +5,10 @@
 
     <form wire:submit="installModule" wire:ignore>
         <div class="space-y-4 p-4">
-            <x-file accept=".zip" wire:model="moduleFile">{{ __('admin::modules.install_module.file') }}</x-file>
+            <x-file accept=".zip" wire:model="moduleFile" label="{{ __('admin::modules.install_module.file') }}"/>
 
             <x-divider/>
-            <x-input type="url" wire:model="moduleUrl">{{ __('admin::modules.install_module.url') }}</x-input>
+            <x-input type="url" wire:model="moduleUrl" label="{{ __('admin::modules.install_module.url') }}"/>
         </div>
 
         <x-modal.footer>

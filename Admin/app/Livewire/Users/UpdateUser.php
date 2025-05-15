@@ -33,9 +33,9 @@ class UpdateUser extends CFComponent
 
     public $forceChangePassword;
 
-    public $groups;
+    public $groups = [];
 
-    public $permissions;
+    public $permissions = [];
 
     public $disabled;
 
@@ -44,7 +44,7 @@ class UpdateUser extends CFComponent
         $this->validate([
             'firstName' => 'required',
             'lastName' => 'required',
-            'username' => 'required',
+            'username' => 'required|unique:users,username,' . $this->userId,
             'email' => 'required|email|unique:users,email,' . $this->userId,
             'password' => 'nullable',
             'confirmPassword' => 'nullable|same:password',

@@ -7,6 +7,8 @@ return [
         'overview' => 'Overview',
         'sessions' => 'Sessions',
         'apiKeys' => 'API Keys',
+        'password' => 'Password',
+        'passkeys' => 'Passkeys',
     ],
 
     'notifications' => [
@@ -49,11 +51,19 @@ return [
     ],
 
     'password' => [
-        'title' => 'Password',
-
         'current_password' => 'Current Password',
         'new_password' => 'New Password',
         'confirm_password' => 'Confirm Password',
+    ],
+
+    'passkeys' => [
+        'name' => 'Name',
+        'last_used' => 'Last Used',
+
+        'notifications' => [
+            'passkey_created' => 'Passkey created successfully.',
+            'passkey_deleted' => 'Passkey deleted successfully.',
+        ]
     ],
 
     'sessions' => [

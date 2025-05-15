@@ -29,9 +29,9 @@ class CreateUser extends CFComponent
 
     public $forceChangePassword;
 
-    public $groups;
+    public $groups = [];
 
-    public $permissions;
+    public $permissions = [];
 
     public $disabled;
 
@@ -40,7 +40,7 @@ class CreateUser extends CFComponent
         $this->validate([
             'firstName' => 'required',
             'lastName' => 'required',
-            'username' => 'required',
+            'username' => 'required|unique:users,username',
             'email' => 'required|email|unique:users,email',
             'password' => ['nullable', new Password],
             'confirmPassword' => 'required|same:password',

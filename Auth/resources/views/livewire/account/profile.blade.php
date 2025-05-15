@@ -1,4 +1,5 @@
 <div>
+    <script src="{{ asset('modules/auth/js/webauthn.js') }}"></script>
     <x-tab wire:model="tab">
         <x-tab.item class="flex-1 flex items-center justify-center" uuid="overview"
                     wire:click="$set('tab', 'overview')">
@@ -67,7 +68,7 @@
 
                         <x-divider/>
 
-                        <x-button type="submit" class="w-full" loading="updateLanguageAndTheme">
+                        <x-button type="submit" class="w-fit" loading="updateLanguageAndTheme">
                             {{ __('messages.buttons.save') }}
                         </x-button>
                     </form>
@@ -115,18 +116,18 @@
 
                     <form wire:submit="updateProfile" class="space-y-3">
                         <div class="grid md:grid-cols-2 gap-4 mb-3">
-                            <x-input wire:model="firstName">{{ __('auth::profile.profile.first_name') }}</x-input>
-                            <x-input wire:model="lastName">{{ __('auth::profile.profile.last_name') }}</x-input>
+                            <x-input wire:model="firstName" label="{{ __('auth::profile.profile.first_name') }}"/>
+                            <x-input wire:model="lastName" label="{{ __('auth::profile.profile.last_name') }}"/>
 
-                            <x-input wire:model="username" required>{{ __('auth::profile.profile.username') }}</x-input>
-                            <x-input wire:model="email" required>{{ __('auth::profile.profile.email') }}</x-input>
+                            <x-input wire:model="username" label="{{ __('auth::profile.profile.username') }}" required/>
+                            <x-input wire:model="email" label="{{ __('auth::profile.profile.email') }}" required/>
 
                             <x-view-integration name="auth.profile.overview.profile"/>
                         </div>
 
                         <x-divider/>
 
-                        <x-button type="submit" class="w-full lg:w-32" loading="updateProfile">
+                        <x-button type="submit" class="w-fit" loading="updateProfile">
                             {{ __('messages.buttons.save') }}
                         </x-button>
                     </form>
@@ -134,30 +135,50 @@
 
                 <div class="col-span-2 space-y-4">
                     <x-card>
-                        <x-card.title>
-                            {{ __('auth::profile.password.title') }}
-                        </x-card.title>
+                        <x-tab wire:model="passTab">
+                            <x-tab.item class="flex-1 flex items-center justify-center" uuid="password"
+                                        wire:click="$set('passTab', 'password')">
+                                <i class="icon-rectangle-ellipsis"></i>
+                                <span class="ml-2">{{ __('auth::profile.tabs.password') }}</span>
+                            </x-tab.item>
+                            <x-tab.item class="flex-1 flex items-center justify-center" uuid="passkeys"
+                                        wire:click="$set('passTab', 'passkeys')">
+                                <i class="icon-key-round"></i>
+                                <span class="ml-2">{{ __('auth::profile.tabs.passkeys') }}</span>
+                            </x-tab.item>
 
-                        <form wire:submit="updatePassword" class="space-y-4">
-                            @if(auth()->user()->password)
-                                <x-password wire:model="currentPassword" required
-                                            type="password">{{ __('auth::profile.password.current_password') }}</x-password>
-                            @endif
-                            <div class="grid md:grid-cols-2 gap-4 mb-3">
-                                <x-password required
-                                            wire:model="newPassword">{{ __('auth::profile.password.new_password') }}</x-password>
-                                <x-password required
-                                            wire:model="confirmPassword">{{ __('auth::profile.password.confirm_password') }}</x-password>
+                            <x-view-integration name="auth.profile.tabs"/>
+                        </x-tab>
+
+                        @if($passTab == 'password')
+                            <div class="mt-4">
+                                <form wire:submit="updatePassword" class="space-y-4">
+                                    @if(auth()->user()->password)
+                                        <x-password wire:model="currentPassword" required
+                                                    type="password"
+                                                    label="{{ __('auth::profile.password.current_password') }}"/>
+                                    @endif
+                                    <div class="grid md:grid-cols-2 gap-4 mb-3">
+                                        <x-password required
+                                                    wire:model="newPassword"
+                                                    label="{{ __('auth::profile.password.new_password') }}"/>
+                                        <x-password required
+                                                    wire:model="confirmPassword"
+                                                    label="{{ __('auth::profile.password.confirm_password') }}"/>
+                                    </div>
+
+                                    <x-view-integration name="auth.profile.overview.password"/>
+
+                                    <x-divider/>
+
+                                    <x-button type="submit" class="w-fit" loading="updatePassword">
+                                        {{ __('messages.buttons.save') }}
+                                    </x-button>
+                                </form>
                             </div>
-
-                            <x-view-integration name="auth.profile.overview.password"/>
-
-                            <x-divider/>
-
-                            <x-button type="submit" class="w-full lg:w-32" loading="updatePassword">
-                                {{ __('messages.buttons.save') }}
-                            </x-button>
-                        </form>
+                        @elseif($passTab == 'passkeys')
+                            @livewire('auth::components.passkeys.passkeys-component')
+                        @endif
                     </x-card>
                 </div>
             </div>
@@ -165,7 +186,7 @@
     @elseif($tab === 'sessions')
         <x-card class="mt-4">
             <x-card.title>
-                <div class="flex justify-between">
+                <div class="flex items-center justify-between">
                     <p>{{ __('auth::profile.sessions.title') }}</p>
                     <x-button wire:click="logoutAllSessions" loading="logoutAllSessions" color="danger">
                         {{ __('auth::profile.sessions.buttons.logout_all') }}
@@ -213,17 +234,19 @@
                                 {{ $session->user_agent }}
                             </x-table.body.item>
                             <x-table.body.item>
-                                {!! $userAgent !!}
+                                <span class="flex items-center gap-1">
+                                    {!! $userAgent !!}
+                                </span>
                             </x-table.body.item>
                             <x-table.body.item>
                                 {{ \Illuminate\Support\Carbon::parse($session->last_active)->diffForHumans() }}
                             </x-table.body.item>
                             <x-table.body.item>
                                 @if($session->id != session()->getId())
-                                    <x-button wire:click="logoutSession('{{ $session->id }}')"
-                                              loading="logoutSession" class="px-2 py-1" color="danger">
+                                    <x-button.floating wire:click="logoutSession('{{ $session->id }}')"
+                                                       loading="logoutSession" size="sm" color="danger">
                                         <i class="icon-log-out"></i>
-                                    </x-button>
+                                    </x-button.floating>
                                 @endif
                             </x-table.body.item>
                         </tr>

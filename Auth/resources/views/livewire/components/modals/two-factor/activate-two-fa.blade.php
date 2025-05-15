@@ -14,7 +14,7 @@
             <form wire:submit="activateTwoFA">
                 <div class="p-4">
                     <x-input wire:model="twoFactorCode"
-                             required>{{ __('auth::profile.modals.activate_two_fa.two_fa_code') }}</x-input>
+                             label="{{ __('auth::profile.modals.activate_two_fa.two_fa_code') }}" required/>
                 </div>
 
                 <x-modal.footer>
