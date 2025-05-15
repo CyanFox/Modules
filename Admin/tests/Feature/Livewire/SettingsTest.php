@@ -61,14 +61,18 @@ class SettingsTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('Super Admin');
 
+        $settingKey = 'internal.app.name';
+        $formKey = 'setting_' . md5($settingKey);
+
         Livewire::actingAs($user)
             ->test(Settings::class)
-            ->set('editorSettings', ['test' => 'test'])
+            ->set('editorSettings', [$formKey => 'Test-App'])
+            ->set('editorSettingsMap', [$formKey => $settingKey])
             ->call('updateEditorSettings');
 
         $this->assertDatabaseHas('settings', [
-            'key' => 'test',
-            'value' => 'test',
+            'key' => 'internal.app.name',
+            'value' => 'Test-App',
         ]);
     }
 }

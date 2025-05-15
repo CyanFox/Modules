@@ -248,7 +248,15 @@ class Settings extends CFComponent
 
     private function isEncrypted($value)
     {
-        return is_string($value) && str_starts_with($value, 'eyJ') && strlen($value) > 40;
+        if (!is_string($value) || strlen($value) <= 40) {
+            return false;
+        }
+        try {
+            decrypt($value);
+            return true;
+        } catch (Exception) {
+            return false;
+        }
     }
 
     private function loadEditorSettings($settingsCollection)
