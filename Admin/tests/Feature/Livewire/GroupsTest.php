@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Livewire\Livewire;
 use Modules\Admin\Livewire\Components\Tables\AnnouncementsTable;
+use Modules\Admin\Livewire\Components\Tables\GroupsTable;
 use Modules\Admin\Livewire\Groups\CreateGroup;
 use Modules\Admin\Livewire\Groups\Groups;
 use Modules\Admin\Livewire\Groups\UpdateGroup;
@@ -79,7 +80,7 @@ class GroupsTest extends TestCase
         $groupToDelete = Role::create(['name' => 'Test1', 'guard_name' => 'web']);
 
         Livewire::actingAs($user)
-            ->test(AnnouncementsTable::class)
+            ->test(GroupsTable::class)
             ->call('deleteGroup', $groupToDelete->id);
 
         $this->assertDatabaseMissing('roles', [

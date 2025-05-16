@@ -17,7 +17,7 @@ use Modules\Announcements\Livewire\Admin\UpdateAnnouncement;
 |
 */
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'can:admin.dashboard']], function () {
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], function () {
     Route::group(['prefix' => 'announcements'], function () {
         Route::get('/', Announcements::class)->name('announcements')->can('admin.announcements');
         Route::get('create', CreateAnnouncement::class)->name('announcements.create')->can('admin.announcements.create');
