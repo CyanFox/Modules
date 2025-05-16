@@ -44,7 +44,7 @@ class UpdateGroup extends CFComponent
             ->success()
             ->send();
 
-        $this->redirect(route('admin.groups'), true);
+        $this->redirect(route('admin.groups.update', ['groupId' => $this->groupId]), true);
     }
 
     public function mount()

@@ -113,7 +113,7 @@ final class PermissionsTable extends PowerGridComponent
                 ->success()
                 ->send();
 
-            $this->redirect(route('admin.permissions'), navigate: true);
+            $this->redirect(route('admin.permissions'), true);
 
             return;
         }

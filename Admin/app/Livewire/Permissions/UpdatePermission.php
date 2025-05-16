@@ -37,7 +37,7 @@ class UpdatePermission extends CFComponent
             ->success()
             ->send();
 
-        $this->redirect(route('admin.permissions'), true);
+        $this->redirect(route('admin.permissions.update', ['permissionId' => $this->permissionId]), true);
     }
 
     public function mount()

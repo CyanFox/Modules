@@ -65,10 +65,10 @@ final class UsersTable extends PowerGridComponent
             ->add('last_name')
             ->add('username')
             ->add('email')
-            ->add('two_factor_enabled_formatted', fn ($row) => $row->two_factor_enabled ? '<i class="icon-check text-green-600"></i>' : '<i class="icon-x text-red-600"></i>')
-            ->add('force_change_password_formatted', fn ($row) => $row->force_change_password ? '<i class="icon-check text-green-600"></i>' : '<i class="icon-x text-red-600"></i>')
-            ->add('force_activate_two_factor_formatted', fn ($row) => $row->force_activate_two_factor ? '<i class="icon-check text-green-600"></i>' : '<i class="icon-x text-red-600"></i>')
-            ->add('disabled_formatted', fn ($row) => $row->disabled ? '<i class="icon-check text-green-600"></i>' : '<i class="icon-x text-red-600"></i>')
+            ->add('two_factor_enabled_formatted', fn ($row) => $row->two_factor_enabled ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
+            ->add('force_change_password_formatted', fn ($row) => $row->force_change_password ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
+            ->add('force_activate_two_factor_formatted', fn ($row) => $row->force_activate_two_factor ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
+            ->add('disabled_formatted', fn ($row) => $row->disabled ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
             ->add('created_at_formatted', fn ($row) => $row->created_at->format('d.m.Y H:i'))
             ->add('updated_at_formatted', fn ($row) => $row->updated_at->format('d.m.Y H:i'));
     }
@@ -141,7 +141,7 @@ final class UsersTable extends PowerGridComponent
                 ->success()
                 ->send();
 
-            $this->redirect(route('admin.users'), navigate: true);
+            $this->redirect(route('admin.users'), true);
 
             return;
         }

@@ -19,8 +19,14 @@
         if (window.innerWidth < 768) {
             this.sidebarPinned = true;
             this.sidebarIsOpen = false;
-        } else if (!this.sidebarPinned) {
+            this.$refs.sidebar.style.width = '16rem';
+        } else {
+            if (this.sidebarPinned) {
+                this.sidebarPinned = false;
+            }
             this.sidebarIsOpen = false;
+            this.sidebarHovered = false;
+            this.$refs.sidebar.style.width = this.sidebarPinned ? '16rem' : '4rem';
         }
     }
 }"
@@ -94,7 +100,7 @@
             class="sticky top-0 z-10 flex items-center border-b border-neutral-300 bg-neutral-50 px-4 py-2 dark:border-neutral-700 dark:bg-neutral-900"
             aria-label="top navigation bar">
 
-            <button type="button" class="md:hidden inline-block text-neutral-600 dark:text-neutral-300"
+            <button type="button" class="md:hidden cursor-pointer inline-block text-neutral-600 dark:text-neutral-300"
                     x-on:click="sidebarIsOpen = true">
                 <i class="icon-panel-right-close text-xl"></i>
                 <span class="sr-only">sidebar toggle</span>

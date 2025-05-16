@@ -1,0 +1,30 @@
+{
+    "name": "cyanfox/announcements",
+    "description": "Announcements module for CyanFox-Base v4",
+    "authors": [
+        {
+            "name": "CyanFox Labs",
+            "email": "info@cyanfox.de"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Announcements\\": "app/",
+            "Modules\\Announcements\\Database\\Factories\\": "database/factories/",
+            "Modules\\Announcements\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Announcements\\Tests\\": "tests/"
+        }
+    }
+}

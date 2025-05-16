@@ -80,7 +80,7 @@ class UpdateUser extends CFComponent
             ->success()
             ->send();
 
-        $this->redirect(route('admin.users'), true);
+        $this->redirect(route('admin.users.update', ['userId' => $this->userId]));
     }
 
     public function mount()

@@ -1,14 +1,12 @@
 <div x-data="{
-    sidebarIsOpen: false, // State for whether the sidebar is open
-    sidebarPinned: $persist(false), // State for whether the sidebar is pinned, persisted across sessions
-    sidebarHovered: false, // State for whether the sidebar is hovered
+    sidebarIsOpen: false,
+    sidebarPinned: $persist(false),
+    sidebarHovered: false,
     init() {
-        this.updateSidebarState(); // Initialize the sidebar state
+        this.updateSidebarState();
 
-        // Update sidebar state on window resize
         window.addEventListener('resize', () => this.updateSidebarState());
 
-        // Watch for changes in sidebarHovered state to adjust sidebar width
         this.$watch('sidebarHovered', value => {
             if (value && !this.sidebarPinned) {
                 this.$refs.sidebar.style.width = '16rem';
@@ -19,10 +17,16 @@
     },
     updateSidebarState() {
         if (window.innerWidth < 768) {
-            this.sidebarPinned = true; // Pin the sidebar on smaller screens
-            this.sidebarIsOpen = false; // Close the sidebar on smaller screens
-        } else if (!this.sidebarPinned) {
-            this.sidebarIsOpen = false; // Ensure the sidebar is closed if not pinned
+            this.sidebarPinned = true;
+            this.sidebarIsOpen = false;
+            this.$refs.sidebar.style.width = '16rem';
+        } else {
+            if (this.sidebarPinned) {
+                this.sidebarPinned = false;
+            }
+            this.sidebarIsOpen = false;
+            this.sidebarHovered = false;
+            this.$refs.sidebar.style.width = this.sidebarPinned ? '16rem' : '4rem';
         }
     }
 }"
@@ -132,7 +136,7 @@
             class="sticky top-0 z-10 flex items-center border-b border-neutral-300 bg-neutral-50 px-4 py-2 dark:border-neutral-700 dark:bg-neutral-900"
             aria-label="top navigation bar">
 
-            <button type="button" class="md:hidden inline-block text-neutral-600 dark:text-neutral-300"
+            <button type="button" class="md:hidden cursor-pointer inline-block text-neutral-600 dark:text-neutral-300"
                     x-on:click="sidebarIsOpen = true">
                 <i class="icon-panel-right-close text-xl"></i>
                 <span class="sr-only">sidebar toggle</span>
