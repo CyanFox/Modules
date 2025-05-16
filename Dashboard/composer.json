@@ -1,10 +1,10 @@
 {
     "name": "cyanfox/dashboard",
-    "description": "",
+    "description": "Dashboard module for CyanFox-Base v4",
     "authors": [
         {
             "name": "CyanFox Labs",
-            "email": "opensouce@cyanfox.de"
+            "email": "info@cyanfox.de"
         }
     ],
     "extra": {

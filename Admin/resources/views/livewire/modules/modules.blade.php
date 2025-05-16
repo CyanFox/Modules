@@ -70,7 +70,7 @@
                             </x-table.body.item>
                             <x-table.body.item>
                                 @if(modules()->getModule($module)->isDisabled())
-                                    <x-badge color="error">{{ __('admin::modules.disabled') }}</x-badge>
+                                    <x-badge color="danger">{{ __('admin::modules.disabled') }}</x-badge>
                                 @else
                                     <x-badge color="success">{{ __('admin::modules.enabled') }}</x-badge>
                                 @endif
@@ -80,25 +80,25 @@
 
                             <x-table.body.item>
                                 @can('admin.modules.delete')
-                                    <x-button wire:click="deleteModule('{{ $module }}', false)"
-                                              loading="deleteModule" class="px-2 py-1" color="danger">
+                                    <x-button.floating wire:click="deleteModule('{{ $module }}', false)"
+                                              loading="deleteModule" size="sm" color="danger">
                                         <i class="icon-trash"></i>
-                                    </x-button>
+                                    </x-button.floating>
                                 @endcan
 
                                 @if(modules()->getModule($module)->isDisabled())
                                     @can('admin.modules.enable')
-                                        <x-button wire:click="enableModule('{{ $module }}')"
-                                                  loading="enableModule" class="px-2 py-1" color="success">
+                                        <x-button.floating wire:click="enableModule('{{ $module }}')"
+                                                  loading="enableModule" size="sm" color="success">
                                             <i class="icon-check"></i>
-                                        </x-button>
+                                        </x-button.floating>
                                     @endcan
                                 @else
                                     @can('admin.modules.disable')
-                                        <x-button wire:click="disableModule('{{ $module }}')"
-                                                  loading="deleteModule" class="px-2 py-1" color="warning">
+                                        <x-button.floating wire:click="disableModule('{{ $module }}')"
+                                                  loading="disableModule" size="sm" color="warning">
                                             <i class="icon-ban"></i>
-                                        </x-button>
+                                        </x-button.floating>
                                     @endcan
                                 @endif
                             </x-table.body.item>

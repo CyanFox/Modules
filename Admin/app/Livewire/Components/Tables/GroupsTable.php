@@ -116,7 +116,7 @@ final class GroupsTable extends PowerGridComponent
                 ->success()
                 ->send();
 
-            $this->redirect(route('admin.groups'), navigate: true);
+            $this->redirect(route('admin.groups'), true);
 
             return;
         }

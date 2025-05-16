@@ -11,6 +11,9 @@
     "providers": [
         "Modules\\Admin\\Providers\\AdminServiceProvider"
     ],
+    "require": [
+        "Auth"
+    ],
     "migration": {
         "seeds": [
             "Modules\\Admin\\Database\\Seeders\\DatabaseSeeder"
