@@ -102,9 +102,7 @@
                                 @endif
                             </x-password>
 
-                            <x-checkbox wire:model="remember">
-                                {{ __('auth::login.remember') }}
-                            </x-checkbox>
+                            <x-checkbox wire:model="remember" label="{{ __('auth::login.remember') }}"/>
 
                             <x-view-integration name="auth.login.card.form"/>
 

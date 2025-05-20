@@ -5,39 +5,17 @@ namespace Modules\Admin\Livewire\Components\Tables;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Blade;
 use Modules\Auth\Traits\WithConfirmation;
-use PowerComponents\LivewirePowerGrid\Button;
-use PowerComponents\LivewirePowerGrid\Column;
-use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
-use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
-use PowerComponents\LivewirePowerGrid\Facades\Rule;
-use PowerComponents\LivewirePowerGrid\PowerGridComponent;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
-use PowerComponents\LivewirePowerGrid\Traits\WithExport;
+use RealZone22\PenguTables\Livewire\PenguTable;
+use RealZone22\PenguTables\Table\Action;
+use RealZone22\PenguTables\Table\Column;
+use RealZone22\PenguTables\Table\Header;
+use RealZone22\PenguTables\Traits\WithExport;
 use Spatie\Permission\Models\Role;
 
-final class GroupsTable extends PowerGridComponent
+final class GroupsTable extends PenguTable
 {
     use WithConfirmation, WithCustomLivewireException, WithExport;
-
-    public string $tableName = 'admin-groups-table';
-
-    public function setUp(): array
-    {
-        $this->showCheckBox();
-
-        return [
-            PowerGrid::exportable('groups')
-                ->striped()
-                ->type(Exportable::TYPE_CSV, Exportable::TYPE_XLS),
-            PowerGrid::header()
-                ->showSearchInput(),
-            PowerGrid::footer()
-                ->showPerPage()
-                ->showRecordCount(),
-        ];
-    }
 
     public function header(): array
     {
@@ -46,24 +24,13 @@ final class GroupsTable extends PowerGridComponent
         }
 
         return [
-            Button::add('create')
-                ->slot(Blade::render('<x-button class="flex" wire:navigate link="'.route('admin.groups.create').'">'.__('admin::groups.buttons.create_group').'</x-button>')),
+            Header::make('<x-button class="flex" wire:navigate link="' . route('admin.groups.create') . '">' . __('admin::groups.buttons.create_group') . '</x-button>'),
         ];
     }
 
-    public function datasource(): Builder
+    public function query(): Builder
     {
         return Role::query();
-    }
-
-    public function fields(): PowerGridFields
-    {
-        return PowerGrid::fields()
-            ->add('id')
-            ->add('name')
-            ->add('guard_name')
-            ->add('created_at_formatted', fn ($row) => $row->created_at->format('d.m.Y H:i'))
-            ->add('updated_at_formatted', fn ($row) => $row->updated_at->format('d.m.Y H:i'));
     }
 
     public function columns(): array
@@ -81,15 +48,27 @@ final class GroupsTable extends PowerGridComponent
                 ->searchable()
                 ->sortable(),
 
-            Column::make(__('messages.tables.created_at'), 'created_at_formatted', 'created_at')
+            Column::make(__('messages.tables.created_at'), 'created_at')
                 ->searchable()
                 ->sortable(),
 
-            Column::make(__('messages.tables.updated_at'), 'updated_at_formatted', 'updated_at')
+            Column::make(__('messages.tables.updated_at'), 'updated_at')
                 ->searchable()
                 ->sortable(),
 
-            Column::action(__('messages.tables.actions')),
+            Column::actions(__('messages.tables.actions'), function ($row) {
+                $actions = [];
+
+                if (auth()->user()->can('admin.groups.update') && $row->id !== Role::findByName('Super Admin')->id) {
+                    $actions[] = Action::make('<x-button.floating size="sm" wire:navigate link="' . route('admin.groups.update', ['groupId' => $row->id]) . '"><i class="icon-pen"></i></x-button.floating>');
+                }
+
+                if (auth()->user()->can('admin.groups.delete') && $row->id !== Role::findByName('Super Admin')->id) {
+                    $actions[] = Action::make('<x-button.floating color="danger" size="sm" wire:click="deleteGroup(`' . $row->id . '`, false)"><i class="icon-trash"></i></x-button.floating>');
+                }
+
+                return $actions;
+            }),
         ];
     }
 
@@ -116,7 +95,7 @@ final class GroupsTable extends PowerGridComponent
                 ->success()
                 ->send();
 
-            $this->redirect(route('admin.groups'), true);
+            $this->redirect(url()->previous(), true);
 
             return;
         }
@@ -129,37 +108,5 @@ final class GroupsTable extends PowerGridComponent
             ->method('deleteGroup', $groupId)
             ->send();
 
-    }
-
-    public function actions(Role $row): array
-    {
-        return [
-            Button::add('update')
-                ->slot(Blade::render('<x-button.floating size="sm" wire:navigate link="'.route('admin.groups.update', ['groupId' => $row->id]).'"><i class="icon-pen"></i></x-button.floating>')),
-
-            Button::add('delete')
-                ->slot(Blade::render('<x-button.floating color="danger" size="sm" wire:click="deleteGroup(`'.$row->id.'`, false)"><i class="icon-trash"></i></x-button.floating>')),
-        ];
-    }
-
-    public function actionRules(): array
-    {
-        return [
-            Rule::button('delete')
-                ->when(fn ($row) => $row->id == Role::findByName('Super Admin')->id)
-                ->hide(),
-
-            Rule::button('delete')
-                ->when(fn ($row) => auth()->user()->cannot('admin.groups.delete'))
-                ->hide(),
-
-            Rule::button('update')
-                ->when(fn ($row) => $row->id == Role::findByName('Super Admin')->id)
-                ->hide(),
-
-            Rule::button('update')
-                ->when(fn ($row) => auth()->user()->cannot('admin.groups.update'))
-                ->hide(),
-        ];
     }
 }

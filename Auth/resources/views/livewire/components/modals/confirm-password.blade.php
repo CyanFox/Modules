@@ -15,7 +15,7 @@
 
     <form wire:submit="confirmPassword">
         <div class="p-4">
-            <x-password wire:model="password" required>{{ __('auth::confirm-password.password') }}</x-password>
+            <x-password wire:model="password" label="{{ __('auth::confirm-password.password') }}" required/>
         </div>
 
         <x-modal.footer>

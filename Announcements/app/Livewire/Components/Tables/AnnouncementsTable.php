@@ -10,36 +10,15 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Modules\Announcements\Models\Announcement;
 use Modules\Auth\Traits\WithConfirmation;
-use PowerComponents\LivewirePowerGrid\Button;
-use PowerComponents\LivewirePowerGrid\Column;
-use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
-use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
-use PowerComponents\LivewirePowerGrid\Facades\Rule;
-use PowerComponents\LivewirePowerGrid\PowerGridComponent;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
-use PowerComponents\LivewirePowerGrid\Traits\WithExport;
+use RealZone22\PenguTables\Livewire\PenguTable;
+use RealZone22\PenguTables\Table\Action;
+use RealZone22\PenguTables\Table\Column;
+use RealZone22\PenguTables\Table\Header;
+use RealZone22\PenguTables\Traits\WithExport;
 
-final class AnnouncementsTable extends PowerGridComponent
+final class AnnouncementsTable extends PenguTable
 {
     use WithConfirmation, WithCustomLivewireException, WithExport;
-
-    public string $tableName = 'admin-announcements-table';
-
-    public function setUp(): array
-    {
-        $this->showCheckBox();
-
-        return [
-            PowerGrid::exportable('announcements')
-                ->striped()
-                ->type(Exportable::TYPE_CSV, Exportable::TYPE_XLS),
-            PowerGrid::header()
-                ->showSearchInput(),
-            PowerGrid::footer()
-                ->showPerPage()
-                ->showRecordCount(),
-        ];
-    }
 
     public function header(): array
     {
@@ -48,28 +27,13 @@ final class AnnouncementsTable extends PowerGridComponent
         }
 
         return [
-            Button::add('create')
-                ->slot(Blade::render('<x-button class="flex" wire:navigate link="'.route('admin.announcements.create').'">'.__('announcements::announcements.buttons.create_announcement').'</x-button>')),
+            Header::make('<x-button class="flex" wire:navigate link="' . route('admin.announcements.create') . '">' . __('announcements::announcements.buttons.create_announcement') . '</x-button>'),
         ];
     }
 
-    public function datasource(): Builder
+    public function query(): Builder
     {
         return Announcement::query();
-    }
-
-    public function fields(): PowerGridFields
-    {
-        return PowerGrid::fields()
-            ->add('id')
-            ->add('title')
-            ->add('icon_formatted', fn($row) => Blade::render('<i class="icon-' . $row->icon . '"></i>'))
-            ->add('color_formatted', fn($row) => Blade::render('<x-badge color="'.$row->color.'">'.__('announcements::announcements.colors.'.$row->color).'</x-badge>'))
-            ->add('description', fn($row) => Str::limit($row->description, 30, preserveWords: true))
-            ->add('dismissible_formatted', fn($row) => $row->dismissible ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
-            ->add('disabled_formatted', fn($row) => $row->disabled ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
-            ->add('created_at_formatted', fn ($row) => $row->created_at->format('d.m.Y H:i'))
-            ->add('updated_at_formatted', fn ($row) => $row->updated_at->format('d.m.Y H:i'));
     }
 
     public function columns(): array
@@ -83,30 +47,52 @@ final class AnnouncementsTable extends PowerGridComponent
                 ->searchable()
                 ->sortable(),
 
-            Column::make(__('announcements::announcements.icon'), 'icon_formatted', 'icon'),
+            Column::make(__('announcements::announcements.icon'), 'icon')
+                ->format(fn($col) => '<i class="icon-' . $col . '"></i>')
+                ->html(),
 
-            Column::make(__('announcements::announcements.color'), 'color_formatted', 'color')
+            Column::make(__('announcements::announcements.color'), 'color')
+                ->format(fn($col) => Blade::render('<x-badge color="' . $col . '">' . __('announcements::announcements.colors.' . $col) . '</x-badge>'))
+                ->html()
                 ->searchable()
                 ->sortable(),
 
             Column::make(__('announcements::announcements.description'), 'description')
+                ->format(fn($col) => Str::limit($col, 30, preserveWords: true))
+                ->html()
                 ->searchable(),
 
-            Column::make(__('announcements::announcements.dismissible'), 'dismissible_formatted', 'dismissible')
+            Column::make(__('announcements::announcements.dismissible'), 'dismissible')
+                ->format(fn($col) => $col ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
+                ->html()
                 ->sortable(),
 
-            Column::make(__('announcements::announcements.disabled'), 'disabled_formatted', 'disabled')
+            Column::make(__('announcements::announcements.disabled'), 'disabled')
+                ->format(fn($col) => $col ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
+                ->html()
                 ->sortable(),
 
-            Column::make(__('messages.tables.created_at'), 'created_at_formatted', 'created_at')
+            Column::make(__('messages.tables.created_at'), 'created_at')
                 ->searchable()
                 ->sortable(),
 
-            Column::make(__('messages.tables.updated_at'), 'updated_at_formatted', 'updated_at')
+            Column::make(__('messages.tables.updated_at'), 'updated_at')
                 ->searchable()
                 ->sortable(),
 
-            Column::action(__('messages.tables.actions')),
+            Column::actions(__('messages.tables.actions'), function ($row) {
+                $actions = [];
+
+                if (auth()->user()->can('admin.announcements.update')) {
+                    $actions[] = Action::make('<x-button.floating size="sm" wire:navigate link="' . route('admin.announcements.update', ['announcementId' => $row->id]) . '"><i class="icon-pen"></i></x-button.floating>');
+                }
+
+                if (auth()->user()->can('admin.announcements.delete')) {
+                    $actions[] = Action::make('<x-button.floating color="danger" size="sm" wire:click="deleteAnnouncement(`' . $row->id . '`, false)"><i class="icon-trash"></i></x-button.floating>');
+                }
+
+                return $actions;
+            }),
         ];
     }
 
@@ -119,7 +105,7 @@ final class AnnouncementsTable extends PowerGridComponent
         if ($confirmed) {
             $announcement = Announcement::find($announcementId);
 
-            Storage::disk('local')->deleteDirectory('announcements/'.$announcement->id);
+            Storage::disk('local')->deleteDirectory('announcements/' . $announcement->id);
 
             $announcement->delete();
 
@@ -141,29 +127,5 @@ final class AnnouncementsTable extends PowerGridComponent
             ->method('deleteAnnouncement', $announcementId)
             ->send();
 
-    }
-
-    public function actions(Announcement $row): array
-    {
-        return [
-            Button::add('update')
-                ->slot(Blade::render('<x-button.floating size="sm" wire:navigate link="'.route('admin.announcements.update', ['announcementId' => $row->id]).'"><i class="icon-pen"></i></x-button.floating>')),
-
-            Button::add('delete')
-                ->slot(Blade::render('<x-button.floating color="danger" size="sm" wire:click="deleteAnnouncement(`'.$row->id.'`, false)"><i class="icon-trash"></i></x-button.floating>')),
-        ];
-    }
-
-    public function actionRules(): array
-    {
-        return [
-            Rule::button('delete')
-                ->when(fn ($row) => auth()->user()->cannot('admin.announcements.delete'))
-                ->hide(),
-
-            Rule::button('update')
-                ->when(fn ($row) => auth()->user()->cannot('admin.announcements.update'))
-                ->hide(),
-        ];
     }
 }
