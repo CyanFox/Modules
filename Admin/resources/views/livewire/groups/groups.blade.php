@@ -1,3 +1,5 @@
 <div>
-    @livewire('admin::components.tables.groups-table')
+    <x-card>
+        @livewire('admin::components.tables.groups-table')
+    </x-card>
 </div>

@@ -10,9 +10,9 @@
 
     <form wire:submit="changeAvatar" wire:ignore>
         <div class="space-y-4 p-4">
-            <x-file wire:model="avatar">{{ __('auth::profile.modals.change_avatar.avatar') }}</x-file>
+            <x-file wire:model="avatar" label="{{ __('auth::profile.modals.change_avatar.avatar') }}"/>
 
-            <x-input type="url" wire:model="avatarUrl">{{ __('auth::profile.modals.change_avatar.avatar_url') }}</x-input>
+            <x-input type="url" wire:model="avatarUrl" label="{{ __('auth::profile.modals.change_avatar.avatar_url') }}"/>
         </div>
 
         <x-modal.footer>

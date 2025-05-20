@@ -45,17 +45,11 @@
 
 
     <div class="space-y-4">
-        <x-checkbox wire:model="forceActivateTwoFactor">
-            {{ __('admin::users.force_activate_two_factor') }}
-        </x-checkbox>
+        <x-checkbox wire:model="forceActivateTwoFactor" label="{{ __('admin::users.force_activate_two_factor') }}"/>
 
-        <x-checkbox wire:model="forceChangePassword">
-            {{ __('admin::users.force_change_password') }}
-        </x-checkbox>
+        <x-checkbox wire:model="forceChangePassword" label="{{ __('admin::users.force_change_password') }}"/>
 
-        <x-checkbox wire:model="disabled">
-            {{ __('admin::users.disabled') }}
-        </x-checkbox>
+        <x-checkbox wire:model="disabled" label="{{ __('admin::users.disabled') }}"/>
     </div>
 
 </div>

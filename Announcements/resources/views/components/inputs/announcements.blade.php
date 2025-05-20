@@ -27,15 +27,9 @@
         multiple
         label="{{ __('announcements::announcements.files') }}"/>
 
-    <x-checkbox
-        wire:model="dismissible">
-        {{ __('announcements::announcements.dismissible') }}
-    </x-checkbox>
+    <x-checkbox wire:model="dismissible" label="{{ __('announcements::announcements.dismissible') }}"/>
 
-    <x-checkbox
-        wire:model="disabled">
-        {{ __('announcements::announcements.disabled') }}
-    </x-checkbox>
+    <x-checkbox wire:model="disabled" label="{{ __('announcements::announcements.disabled') }}"/>
 </div>
 
 <x-card.title>
