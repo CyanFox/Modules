@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Modules\Admin\Http\Controllers\AdminController;
-
 /*
  *--------------------------------------------------------------------------
  * API Routes
@@ -13,7 +10,3 @@ use Modules\Admin\Http\Controllers\AdminController;
  * is assigned the "api" middleware group. Enjoy building your API!
  *
 */
-
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    Route::apiResource('admin', AdminController::class)->names('admin');
-});

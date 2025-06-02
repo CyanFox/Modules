@@ -58,10 +58,12 @@
                 <span class="sr-only">dashboard</span>
                 <img src="{{ settings('internal.app.logo', config('settings.logo_path')) }}" alt="Logo"
                      class="{{ settings('dashboard.logo_size') }}">
-                <p class="pl-4 truncate transition-opacity duration-300"
-                   :class="(!sidebarPinned && !sidebarHovered) ? 'md:hidden' : 'md:block'">
-                    {{ settings('internal.app.name', config('app.name')) }}
-                </p>
+                @if(!settings('dashboard.disable_logo_text'))
+                    <p class="pl-4 truncate transition-opacity duration-300"
+                       :class="(!sidebarPinned && !sidebarHovered) ? 'md:hidden' : 'md:block'">
+                        {{ settings('internal.app.name', config('app.name')) }}
+                    </p>
+                @endif
             </a>
         </div>
 

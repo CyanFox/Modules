@@ -27,7 +27,7 @@ class PasskeysComponent extends Component
     public function render(): View
     {
         return view('auth::livewire.components.passkeys.passkeys', data: [
-            'passkeys' => $this->currentUser()->passkeys,
+            'passkeys' => $this->currentUser()->passkeys, // @phpstan-ignore-line
         ]);
     }
 
