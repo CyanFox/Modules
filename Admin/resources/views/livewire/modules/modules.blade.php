@@ -63,7 +63,7 @@
                             </x-table.body.item>
                             <x-table.body.item>
                                 @if(is_array(modules()->getAuthors($module)))
-                                    {{ implode(',', modules()->getAuthors($module)) }}
+                                    {{ implode(', ', modules()->getAuthors($module)) }}
                                 @else
                                     {{ modules()->getAuthors($module) }}
                                 @endif

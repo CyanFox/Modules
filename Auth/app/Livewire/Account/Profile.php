@@ -5,6 +5,7 @@ namespace Modules\Auth\Livewire\Account;
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
@@ -51,6 +52,8 @@ class Profile extends CFComponent
             'language' => $this->language ?? 'en',
             'theme' => $this->theme ?? 'light',
         ]);
+
+        App::setLocale($this->language ?? 'en');
 
         Notification::make()
             ->title(__('auth::profile.notifications.profile_updated'))

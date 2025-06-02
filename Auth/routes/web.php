@@ -63,7 +63,7 @@ Route::group(['prefix' => 'oauth', 'as' => 'oauth.'], function () {
         }
 
         $providerUser = Socialite::driver($provider)->user();
-        $user = User::where('oauth_id', $providerUser->id)->first();
+        $user = User::where('oauth_id', $providerUser->id)->first(); // @phpstan-ignore-line
 
         if (! $user) {
             try {

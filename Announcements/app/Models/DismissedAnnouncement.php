@@ -3,8 +3,18 @@
 namespace Modules\Announcements\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Modules\Auth\Models\User;
 
+/**
+ * @property int $id
+ * @property int $announcement_id
+ * @property int $user_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Announcement $announcement
+ * @property-read User $user
+ */
 class DismissedAnnouncement extends Model
 {
     protected $fillable = [

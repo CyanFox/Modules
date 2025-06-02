@@ -109,7 +109,7 @@ class Settings extends CFComponent
 
     public function searchModule()
     {
-        $moduleList = ModuleManager::getModules();
+        $moduleList = Module::all();
         $results = [];
         foreach ($moduleList as $module) {
             if (str_contains($module->getName(), $this->moduleSearch)) {
