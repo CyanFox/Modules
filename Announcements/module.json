@@ -5,7 +5,7 @@
     "keywords": ["announcements", "cyanfox", "base"],
     "authors": ["CyanFox"],
     "license": "MIT",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "remote_version_url": "https://raw.githubusercontent.com/CyanFox-Projects/CyanFox-Base-Modules/v4/Announcements/module.json",
     "priority": 0,
     "providers": [

@@ -49,7 +49,9 @@
                 </div>
                 @if($announcement->description)
                     <x-divider/>
-                    {!! str()->markdown($announcement->description) !!}
+                    <div class="prose dark:prose-invert max-w-none">
+                        {!! str()->markdown($announcement->description) !!}
+                    </div>
                 @endif
                 @if($files)
                     <x-divider/>
