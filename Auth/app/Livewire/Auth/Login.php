@@ -81,6 +81,7 @@ class Login extends CFComponent
 
         if ($this->user->two_factor_enabled) {
             $this->twoFactorEnabled = true;
+
             return;
         }
 

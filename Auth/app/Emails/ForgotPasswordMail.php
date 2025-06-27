@@ -29,18 +29,6 @@ class ForgotPasswordMail extends Mailable
         $this->resetLink = $resetLink;
     }
 
-    private function replacePlaceholders($string)
-    {
-        $replacementArray = [
-            '{username}' => $this->username,
-            '{first_name}' => $this->firstName,
-            '{last_name}' => $this->lastName,
-            '{resetLink}' => $this->resetLink,
-        ];
-
-        return str_replace(array_keys($replacementArray), array_values($replacementArray), $string);
-    }
-
     /**
      * Build the message.
      */
@@ -57,5 +45,17 @@ class ForgotPasswordMail extends Mailable
                 'lastName' => $this->lastName,
                 'resetLink' => $this->resetLink,
             ]);
+    }
+
+    private function replacePlaceholders($string)
+    {
+        $replacementArray = [
+            '{username}' => $this->username,
+            '{first_name}' => $this->firstName,
+            '{last_name}' => $this->lastName,
+            '{resetLink}' => $this->resetLink,
+        ];
+
+        return str_replace(array_keys($replacementArray), array_values($replacementArray), $string);
     }
 }

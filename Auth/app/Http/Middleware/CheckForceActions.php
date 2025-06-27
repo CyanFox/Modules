@@ -3,7 +3,6 @@
 namespace Modules\Auth\Http\Middleware;
 
 use Closure;
-use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
 
 class CheckForceActions

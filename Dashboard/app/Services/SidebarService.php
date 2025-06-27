@@ -22,7 +22,7 @@ class SidebarService
     public function get(?string $label = null)
     {
         $sidebarItems = $this->sidebarItems;
-        if ($label != null) {
+        if ($label !== null) {
             if (! isset($this->menu[$label])) {
                 return null;
             }

@@ -12,8 +12,11 @@ class Dashboard extends CFComponent
     use WithCustomLivewireException;
 
     public $isDevVersion;
+
     public $currentBaseVersion;
+
     public $remoteBaseVersion;
+
     public $upToDate;
 
     public function mount(): void

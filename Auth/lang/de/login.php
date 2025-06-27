@@ -20,7 +20,6 @@ return [
     'recovery_code_invalid' => 'Der Wiederherstellungscode ist ungültig.',
     'two_factor_code_invalid' => 'Der 2-Faktor-Code ist ungültig.',
 
-
     'forgot_password' => 'Passwort vergessen?',
 
     'buttons' => [

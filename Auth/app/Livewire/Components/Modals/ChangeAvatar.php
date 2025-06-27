@@ -18,7 +18,7 @@ class ChangeAvatar extends CFModalComponent
 
     public function changeAvatar()
     {
-        if (!settings('auth.profile.enable.change_avatar')) {
+        if (! settings('auth.profile.enable.change_avatar')) {
             return;
         }
 
@@ -27,7 +27,7 @@ class ChangeAvatar extends CFModalComponent
                 'avatar' => 'image:allow_svg|max:10000',
             ]);
 
-            $this->avatar->storeAs('avatars', auth()->id() . '.png', 'public');
+            $this->avatar->storeAs('avatars', auth()->id().'.png', 'public');
 
             Notification::make()
                 ->title(__('auth::profile.modals.change_avatar.notifications.avatar_changed'))
@@ -57,11 +57,11 @@ class ChangeAvatar extends CFModalComponent
 
     public function resetAvatar()
     {
-        if (!settings('auth.profile.enable.change_avatar')) {
+        if (! settings('auth.profile.enable.change_avatar')) {
             return;
         }
 
-        Storage::disk('public')->delete('avatars/' . auth()->id() . '.png');
+        Storage::disk('public')->delete('avatars/'.auth()->id().'.png');
 
         auth()->user()->update([
             'custom_avatar_url' => null,
@@ -77,7 +77,7 @@ class ChangeAvatar extends CFModalComponent
 
     public function mount()
     {
-        if (!settings('auth.profile.enable.change_avatar')) {
+        if (! settings('auth.profile.enable.change_avatar')) {
             abort(403);
         }
 

@@ -24,7 +24,7 @@ final class GroupsTable extends PenguTable
         }
 
         return [
-            Header::make('<x-button class="flex" wire:navigate link="' . route('admin.groups.create') . '">' . __('admin::groups.buttons.create_group') . '</x-button>'),
+            Header::make('<x-button class="flex" wire:navigate link="'.route('admin.groups.create').'">'.__('admin::groups.buttons.create_group').'</x-button>'),
         ];
     }
 
@@ -60,11 +60,11 @@ final class GroupsTable extends PenguTable
                 $actions = [];
 
                 if (auth()->user()->can('admin.groups.update') && $row->id !== Role::findByName('Super Admin')->id) {
-                    $actions[] = Action::make('<x-button.floating size="sm" wire:navigate link="' . route('admin.groups.update', ['groupId' => $row->id]) . '"><i class="icon-pen"></i></x-button.floating>');
+                    $actions[] = Action::make('<x-button.floating size="sm" wire:navigate link="'.route('admin.groups.update', ['groupId' => $row->id]).'"><i class="icon-pen"></i></x-button.floating>');
                 }
 
                 if (auth()->user()->can('admin.groups.delete') && $row->id !== Role::findByName('Super Admin')->id) {
-                    $actions[] = Action::make('<x-button.floating color="danger" size="sm" wire:click="deleteGroup(`' . $row->id . '`, false)"><i class="icon-trash"></i></x-button.floating>');
+                    $actions[] = Action::make('<x-button.floating color="danger" size="sm" wire:click="deleteGroup(`'.$row->id.'`, false)"><i class="icon-trash"></i></x-button.floating>');
                 }
 
                 return $actions;

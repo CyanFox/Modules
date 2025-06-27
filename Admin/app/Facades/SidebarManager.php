@@ -10,7 +10,7 @@ use Modules\Admin\Services\SidebarService;
  * @method static void get(string|null $label = null)
  * @method static array getAll()
  *
- * @see \Modules\Admin\Services\SidebarService
+ * @see SidebarService
  */
 class SidebarManager extends Facade
 {

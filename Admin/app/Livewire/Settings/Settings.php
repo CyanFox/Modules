@@ -2,7 +2,6 @@
 
 namespace Modules\Admin\Livewire\Settings;
 
-use App\Facades\ModuleManager;
 use App\Facades\SettingsManager;
 use App\Livewire\CFComponent;
 use App\Models\Setting;
@@ -18,7 +17,7 @@ use Nwidart\Modules\Facades\Module;
 
 class Settings extends CFComponent
 {
-    use WithCustomLivewireException, WithFileUploads, WithConfirmation;
+    use WithConfirmation, WithCustomLivewireException, WithFileUploads;
 
     #[Url]
     public $tab;
@@ -52,7 +51,9 @@ class Settings extends CFComponent
     public $newSettingKey;
 
     public $newSettingValue;
+
     public $encryptedSettings = [];
+
     public $editorSettingsMap = [];
 
     public function updateGeneralSettings()
@@ -79,11 +80,11 @@ class Settings extends CFComponent
         ]);
 
         if ($this->logo) {
-            Storage::disk('public')->delete('img/' . str_replace('/storage/img/', '', settings('internal.app.logo')));
+            Storage::disk('public')->delete('img/'.str_replace('/storage/img/', '', settings('internal.app.logo')));
 
-            $this->logo->storeAs('img', 'Logo.' . $this->logo->getClientOriginalExtension(), 'public');
+            $this->logo->storeAs('img', 'Logo.'.$this->logo->getClientOriginalExtension(), 'public');
 
-            settings()->updateSetting('internal.app.logo', '/storage/img/Logo.' . $this->logo->getClientOriginalExtension());
+            settings()->updateSetting('internal.app.logo', '/storage/img/Logo.'.$this->logo->getClientOriginalExtension());
         }
 
         activity()
@@ -104,7 +105,7 @@ class Settings extends CFComponent
             return;
         }
 
-        Storage::disk('public')->delete('img/' . str_replace('/storage/img/', '', settings('internal.app.logo')));
+        Storage::disk('public')->delete('img/'.str_replace('/storage/img/', '', settings('internal.app.logo')));
 
         settings()->updateSetting('internal.app.logo', '/img/Logo.svg');
 
@@ -139,7 +140,7 @@ class Settings extends CFComponent
             $dbKey = $this->editorSettingsMap[$formKey] ?? null;
 
             if ($dbKey && isset($this->originalEditorSettings[$dbKey])) {
-                if (isset($this->encryptedSettings[$dbKey]) && !$this->isEncrypted($value) && !Str::contains($dbKey, ['key', 'password', 'secret', 'token'])) {
+                if (isset($this->encryptedSettings[$dbKey]) && ! $this->isEncrypted($value) && ! Str::contains($dbKey, ['key', 'password', 'secret', 'token'])) {
                     $value = encrypt($value);
                 }
 
@@ -197,7 +198,7 @@ class Settings extends CFComponent
             return;
         }
 
-        if (!$confirmed) {
+        if (! $confirmed) {
             $this->dialog()
                 ->question(__('admin::settings.delete_setting.title'),
                     __('admin::settings.delete_setting.description'))
@@ -263,60 +264,11 @@ class Settings extends CFComponent
 
         activity()
             ->causedBy(auth()->user())
-            ->log('settings_lock_' . ($state ? 'enabled' : 'disabled'));
+            ->log('settings_lock_'.($state ? 'enabled' : 'disabled'));
 
         $this->originalEditorSettings = Setting::all()->mapWithKeys(function ($setting) {
             return [$setting->key => ['value' => $setting->value, 'is_locked' => $setting->is_locked]];
         });
-    }
-
-    private function isEncrypted($value)
-    {
-        if (!is_string($value) || strlen($value) <= 40) {
-            return false;
-        }
-        try {
-            decrypt($value);
-            return true;
-        } catch (Exception) {
-            return false;
-        }
-    }
-
-    private function loadEditorSettings($settingsCollection)
-    {
-        $this->originalEditorSettings = [];
-        $this->editorSettings = [];
-        $this->encryptedSettings = [];
-
-        $settingsCollection->each(function ($setting, $index) {
-            $key = $setting->key;
-            $value = $setting->value;
-
-            if ($this->isEncrypted($value)) {
-                $this->encryptedSettings[$key] = true;
-                $value = $this->tryDecrypt($value);
-            }
-
-            $this->originalEditorSettings[$key] = [
-                'value' => $value,
-                'is_locked' => $setting->is_locked
-            ];
-
-            $formKey = 'setting_' . md5($key);
-            $this->editorSettings[$formKey] = $value;
-
-            $this->editorSettingsMap[$formKey] = $key;
-        });
-    }
-
-    private function tryDecrypt($value)
-    {
-        try {
-            return decrypt($value);
-        } catch (Exception) {
-            return $value;
-        }
     }
 
     public function mount()
@@ -342,5 +294,55 @@ class Settings extends CFComponent
     public function render()
     {
         return $this->renderView('admin::livewire.settings.settings', __('admin::settings.tab_title'), 'admin::components.layouts.app');
+    }
+
+    private function isEncrypted($value)
+    {
+        if (! is_string($value) || mb_strlen($value) <= 40) {
+            return false;
+        }
+        try {
+            decrypt($value);
+
+            return true;
+        } catch (Exception) {
+            return false;
+        }
+    }
+
+    private function loadEditorSettings($settingsCollection)
+    {
+        $this->originalEditorSettings = [];
+        $this->editorSettings = [];
+        $this->encryptedSettings = [];
+
+        $settingsCollection->each(function ($setting, $index) {
+            $key = $setting->key;
+            $value = $setting->value;
+
+            if ($this->isEncrypted($value)) {
+                $this->encryptedSettings[$key] = true;
+                $value = $this->tryDecrypt($value);
+            }
+
+            $this->originalEditorSettings[$key] = [
+                'value' => $value,
+                'is_locked' => $setting->is_locked,
+            ];
+
+            $formKey = 'setting_'.md5($key);
+            $this->editorSettings[$formKey] = $value;
+
+            $this->editorSettingsMap[$formKey] = $key;
+        });
+    }
+
+    private function tryDecrypt($value)
+    {
+        try {
+            return decrypt($value);
+        } catch (Exception) {
+            return $value;
+        }
     }
 }

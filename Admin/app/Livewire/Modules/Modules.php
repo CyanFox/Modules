@@ -26,7 +26,7 @@ class Modules extends CFComponent
             return;
         }
 
-        if (!(ModuleManager::checkRequirements($moduleName) && ModuleManager::checkBaseVersion($moduleName))) {
+        if (! (ModuleManager::checkRequirements($moduleName) && ModuleManager::checkBaseVersion($moduleName))) {
             Notification::make()
                 ->title(__('admin::modules.notifications.module_requirements_not_met'))
                 ->danger()
@@ -55,7 +55,7 @@ class Modules extends CFComponent
 
         activity()
             ->causedBy(auth()->user())
-            ->log('module.' . strtolower($moduleName) . '.enabled');
+            ->log('module.'.mb_strtolower($moduleName).'.enabled');
 
         Notification::make()
             ->title(__('admin::modules.notifications.module_enabled'))
@@ -98,7 +98,7 @@ class Modules extends CFComponent
 
         activity()
             ->causedBy(auth()->user())
-            ->log('module.' . strtolower($moduleName) . '.disabled');
+            ->log('module.'.mb_strtolower($moduleName).'.disabled');
 
         Notification::make()
             ->title(__('admin::modules.notifications.module_disabled'))
@@ -128,7 +128,7 @@ class Modules extends CFComponent
         }
 
         if ($confirmed) {
-            Setting::where('key', 'LIKE', strtolower($moduleName) . '%')->delete();
+            Setting::where('key', 'LIKE', mb_strtolower($moduleName).'%')->delete();
 
             $module = Module::find($moduleName);
             $module->disable();
@@ -144,10 +144,9 @@ class Modules extends CFComponent
             Process::fromShellCommandline('composer update')->run();
             Process::fromShellCommandline('npm run build')->run();
 
-
             activity()
                 ->causedBy(auth()->user())
-                ->log('module.' . strtolower($moduleName) . '.deleted');
+                ->log('module.'.mb_strtolower($moduleName).'.deleted');
 
             Notification::make()
                 ->title(__('admin::modules.delete_module.notifications.module_deleted'))

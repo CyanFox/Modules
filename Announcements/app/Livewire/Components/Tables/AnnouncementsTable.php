@@ -27,7 +27,7 @@ final class AnnouncementsTable extends PenguTable
         }
 
         return [
-            Header::make('<x-button class="flex" wire:navigate link="' . route('admin.announcements.create') . '">' . __('announcements::announcements.buttons.create_announcement') . '</x-button>'),
+            Header::make('<x-button class="flex" wire:navigate link="'.route('admin.announcements.create').'">'.__('announcements::announcements.buttons.create_announcement').'</x-button>'),
         ];
     }
 
@@ -48,27 +48,27 @@ final class AnnouncementsTable extends PenguTable
                 ->sortable(),
 
             Column::make(__('announcements::announcements.icon'), 'icon')
-                ->format(fn($col) => '<i class="icon-' . $col . '"></i>')
+                ->format(fn ($col) => '<i class="icon-'.$col.'"></i>')
                 ->html(),
 
             Column::make(__('announcements::announcements.color'), 'color')
-                ->format(fn($col) => Blade::render('<x-badge color="' . $col . '">' . __('announcements::announcements.colors.' . $col) . '</x-badge>'))
+                ->format(fn ($col) => Blade::render('<x-badge color="'.$col.'">'.__('announcements::announcements.colors.'.$col).'</x-badge>'))
                 ->html()
                 ->searchable()
                 ->sortable(),
 
             Column::make(__('announcements::announcements.description'), 'description')
-                ->format(fn($col) => Str::limit($col, 30, preserveWords: true))
+                ->format(fn ($col) => Str::limit($col, 30, preserveWords: true))
                 ->html()
                 ->searchable(),
 
             Column::make(__('announcements::announcements.dismissible'), 'dismissible')
-                ->format(fn($col) => $col ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
+                ->format(fn ($col) => $col ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
                 ->html()
                 ->sortable(),
 
             Column::make(__('announcements::announcements.disabled'), 'disabled')
-                ->format(fn($col) => $col ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
+                ->format(fn ($col) => $col ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
                 ->html()
                 ->sortable(),
 
@@ -84,11 +84,11 @@ final class AnnouncementsTable extends PenguTable
                 $actions = [];
 
                 if (auth()->user()->can('admin.announcements.update')) {
-                    $actions[] = Action::make('<x-button.floating size="sm" wire:navigate link="' . route('admin.announcements.update', ['announcementId' => $row->id]) . '"><i class="icon-pen"></i></x-button.floating>');
+                    $actions[] = Action::make('<x-button.floating size="sm" wire:navigate link="'.route('admin.announcements.update', ['announcementId' => $row->id]).'"><i class="icon-pen"></i></x-button.floating>');
                 }
 
                 if (auth()->user()->can('admin.announcements.delete')) {
-                    $actions[] = Action::make('<x-button.floating color="danger" size="sm" wire:click="deleteAnnouncement(`' . $row->id . '`, false)"><i class="icon-trash"></i></x-button.floating>');
+                    $actions[] = Action::make('<x-button.floating color="danger" size="sm" wire:click="deleteAnnouncement(`'.$row->id.'`, false)"><i class="icon-trash"></i></x-button.floating>');
                 }
 
                 return $actions;
@@ -105,7 +105,7 @@ final class AnnouncementsTable extends PenguTable
         if ($confirmed) {
             $announcement = Announcement::find($announcementId);
 
-            Storage::disk('local')->deleteDirectory('announcements/' . $announcement->id);
+            Storage::disk('local')->deleteDirectory('announcements/'.$announcement->id);
 
             $announcement->delete();
 

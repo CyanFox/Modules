@@ -15,7 +15,7 @@ return [
     'actions' => [
         'generate_passkey_register_options' => Spatie\LaravelPasskeys\Actions\GeneratePasskeyRegisterOptionsAction::class,
         'store_passkey' => Spatie\LaravelPasskeys\Actions\StorePasskeyAction::class,
-        'generate_passkey_authentication_options' => \Spatie\LaravelPasskeys\Actions\GeneratePasskeyAuthenticationOptionsAction::class,
+        'generate_passkey_authentication_options' => Spatie\LaravelPasskeys\Actions\GeneratePasskeyAuthenticationOptionsAction::class,
         'find_passkey' => Spatie\LaravelPasskeys\Actions\FindPasskeyToAuthenticateAction::class,
     ],
 
@@ -35,6 +35,6 @@ return [
      */
     'models' => [
         'passkey' => Spatie\LaravelPasskeys\Models\Passkey::class,
-        'authenticatable' => env('AUTH_MODEL', \Modules\Auth\Models\User::class),
+        'authenticatable' => env('AUTH_MODEL', Modules\Auth\Models\User::class),
     ],
 ];

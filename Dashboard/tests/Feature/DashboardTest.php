@@ -2,9 +2,7 @@
 
 namespace Feature;
 
-use App\Facades\SettingsManager;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Livewire\Livewire;
 use Modules\Auth\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;

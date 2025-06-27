@@ -6,7 +6,6 @@ use App\Livewire\CFModalComponent;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Validation\ValidationException;
-use Livewire\Attributes\On;
 use Modules\Auth\Livewire\Account\Profile;
 use Modules\Auth\Traits\WithPasswordConfirmation;
 
@@ -73,7 +72,7 @@ class ActivateTwoFA extends CFModalComponent
 
     public function mount()
     {
-        if (auth()->user()->two_factor_secret == null) {
+        if (auth()->user()->two_factor_secret === null) {
             auth()->user()->generateTwoFASecret();
         }
 

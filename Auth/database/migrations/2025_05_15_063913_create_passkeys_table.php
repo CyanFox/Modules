@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Modules\Auth\Models\User;
-use Spatie\LaravelPasskeys\Support\Config;
 
 return new class extends Migration
 {
@@ -14,7 +13,7 @@ return new class extends Migration
 
         $authenticatableTableName = (new $authenticatableClass)->getTable();
 
-        Schema::create('passkeys', function (Blueprint $table) use ($authenticatableTableName,$authenticatableClass) {
+        Schema::create('passkeys', function (Blueprint $table) use ($authenticatableTableName, $authenticatableClass) {
             $table->id();
 
             $table

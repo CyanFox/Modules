@@ -10,7 +10,7 @@ use Modules\Auth\Services\UnsplashService;
  * @method static string|null getUTM()
  * @method static array|null getRandomUnsplashImage(void $cache = true)
  *
- * @see \Modules\Auth\Services\UnsplashService
+ * @see UnsplashService
  */
 class UnsplashManager extends Facade
 {

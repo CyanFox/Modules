@@ -42,7 +42,7 @@ class Confirmation extends CFModalComponent
 
     public function confirmAction()
     {
-        if ($this->needsPasswordConfirmation && !$this->hasPasswordConfirmedSession()) {
+        if ($this->needsPasswordConfirmation && ! $this->hasPasswordConfirmedSession()) {
             return;
         }
 
@@ -53,7 +53,7 @@ class Confirmation extends CFModalComponent
 
     public function mount()
     {
-        if ($this->needsPasswordConfirmation && !$this->checkPasswordConfirmation()->passwordFunction('render')->checkPassword()) {
+        if ($this->needsPasswordConfirmation && ! $this->checkPasswordConfirmation()->passwordFunction('render')->checkPassword()) {
             return;
         }
     }

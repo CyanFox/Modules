@@ -38,5 +38,5 @@ return [
         'notifications' => [
             'two_fa_enabled' => '2-Faktor-Authentifizierung erfolgreich aktiviert.',
         ],
-    ]
+    ],
 ];

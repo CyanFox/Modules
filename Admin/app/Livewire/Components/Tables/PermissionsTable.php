@@ -5,8 +5,6 @@ namespace Modules\Admin\Livewire\Components\Tables;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Blade;
-use Modules\Auth\Models\User;
 use Modules\Auth\Traits\WithConfirmation;
 use RealZone22\PenguTables\Livewire\PenguTable;
 use RealZone22\PenguTables\Table\Action;
@@ -73,7 +71,6 @@ final class PermissionsTable extends PenguTable
             }),
         ];
     }
-
 
     public function deletePermission($permissionId, $confirmed = true)
     {

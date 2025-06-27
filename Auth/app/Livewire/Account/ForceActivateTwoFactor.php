@@ -14,8 +14,11 @@ class ForceActivateTwoFactor extends CFComponent
     use WithCustomLivewireException;
 
     public $unsplash;
+
     public $currentPassword;
+
     public $twoFactorCode;
+
     public $recoveryCodes;
 
     public function activateTwoFA()
@@ -25,8 +28,9 @@ class ForceActivateTwoFactor extends CFComponent
             'twoFactorCode' => 'required|digits:6',
         ]);
 
-        if (!Hash::check($this->currentPassword, auth()->user()->password)) {
+        if (! Hash::check($this->currentPassword, auth()->user()->password)) {
             $this->addError('currentPassword', __('auth.password'));
+
             return;
         }
 
@@ -65,11 +69,11 @@ class ForceActivateTwoFactor extends CFComponent
     {
         $this->unsplash = UnsplashManager::returnBackground();
 
-        if ($this->unsplash['error'] != null) {
+        if ($this->unsplash['error'] !== null) {
             $this->log($this->unsplash['error'], 'error');
         }
 
-        if (auth()->user()->two_factor_secret == null) {
+        if (auth()->user()->two_factor_secret === null) {
             auth()->user()->generateTwoFASecret();
         }
     }

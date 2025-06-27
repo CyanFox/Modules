@@ -27,15 +27,15 @@ class CheckLanguage
             App::setLocale($language);
 
             return $next($request);
-        } else {
-            App::setLocale(settings('internal.app.lang', config('app.locale')));
-            $response = $next($request);
-
-            if ($response instanceof Response) {
-                $response->withCookie(cookie()->forever('language', settings('internal.app.lang', config('app.locale'))));
-            }
-
-            return $response;
         }
+        App::setLocale(settings('internal.app.lang', config('app.locale')));
+        $response = $next($request);
+
+        if ($response instanceof Response) {
+            $response->withCookie(cookie()->forever('language', settings('internal.app.lang', config('app.locale'))));
+        }
+
+        return $response;
+
     }
 }

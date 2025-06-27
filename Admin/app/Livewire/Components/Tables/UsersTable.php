@@ -24,7 +24,7 @@ final class UsersTable extends PenguTable
         }
 
         return [
-            Header::make('<x-button class="flex" wire:navigate link="' . route('admin.users.create') . '">' . __('admin::users.buttons.create_user') . '</x-button>'),
+            Header::make('<x-button class="flex" wire:navigate link="'.route('admin.users.create').'">'.__('admin::users.buttons.create_user').'</x-button>'),
         ];
     }
 
@@ -41,7 +41,7 @@ final class UsersTable extends PenguTable
                 ->sortable(),
 
             Column::make(__('admin::users.avatar'))
-                ->format(fn($col, $row) => '<img src="' . $row->avatar() . '" alt="avatar" class="h-8 w-8 rounded-full">')
+                ->format(fn ($col, $row) => '<img src="'.$row->avatar().'" alt="avatar" class="h-8 w-8 rounded-full">')
                 ->html(),
 
             Column::make(__('admin::users.first_name'), 'first_name')
@@ -61,22 +61,22 @@ final class UsersTable extends PenguTable
                 ->sortable(),
 
             Column::make(__('admin::users.two_factor_enabled'), 'two_factor_enabled')
-                ->format(fn($col) => $col ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
+                ->format(fn ($col) => $col ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
                 ->html()
                 ->sortable(),
 
             Column::make(__('admin::users.force_change_password'), 'force_change_password')
-                ->format(fn($col) => $col ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
+                ->format(fn ($col) => $col ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
                 ->html()
                 ->sortable(),
 
             Column::make(__('admin::users.force_activate_two_factor'), 'force_activate_two_factor')
-                ->format(fn($col) => $col ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
+                ->format(fn ($col) => $col ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
                 ->html()
                 ->sortable(),
 
             Column::make(__('admin::users.disabled'), 'disabled')
-                ->format(fn($col) => $col ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
+                ->format(fn ($col) => $col ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
                 ->html()
                 ->sortable(),
 
@@ -92,11 +92,11 @@ final class UsersTable extends PenguTable
                 $actions = [];
 
                 if (auth()->user()->can('admin.users.update')) {
-                    $actions[] = Action::make('<x-button.floating size="sm" wire:navigate link="' . route('admin.users.update', ['userId' => $row->id]) . '"><i class="icon-pen"></i></x-button.floating>');
+                    $actions[] = Action::make('<x-button.floating size="sm" wire:navigate link="'.route('admin.users.update', ['userId' => $row->id]).'"><i class="icon-pen"></i></x-button.floating>');
                 }
 
                 if (auth()->user()->can('admin.users.delete') && $row->id !== auth()->id()) {
-                    $actions[] = Action::make('<x-button.floating color="danger" size="sm" wire:click="deleteUser(`' . $row->id . '`, false)"><i class="icon-trash"></i></x-button.floating>');
+                    $actions[] = Action::make('<x-button.floating color="danger" size="sm" wire:click="deleteUser(`'.$row->id.'`, false)"><i class="icon-trash"></i></x-button.floating>');
                 }
 
                 return $actions;
