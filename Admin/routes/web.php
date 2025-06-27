@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Admin\Livewire\ActivityLog;
 use Modules\Admin\Livewire\Dashboard;
 use Modules\Admin\Livewire\Groups\CreateGroup;
 use Modules\Admin\Livewire\Groups\Groups;
@@ -27,6 +28,7 @@ use Modules\Admin\Livewire\Users\Users;
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'can:admin.dashboard']], function () {
     Route::get('dashboard', Dashboard::class)->name('dashboard')->can('admin.dashboard');
+    Route::get('activity', ActivityLog::class)->name('activity')->can('admin.activity');
 
     Route::group(['prefix' => 'users'], function () {
         Route::get('/', Users::class)->name('users')->can('admin.users');

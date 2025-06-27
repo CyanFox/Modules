@@ -11,6 +11,11 @@
             <i class="icon-monitor-dot"></i>
             <span class="ml-2">{{ __('auth::profile.tabs.sessions') }}</span>
         </x-tab.item>
+        <x-tab.item class="flex-1 flex items-center justify-center" uuid="activity"
+                    wire:click="$set('tab', 'activity')">
+            <i class="icon-eye"></i>
+            <span class="ml-2">{{ __('auth::profile.tabs.activity') }}</span>
+        </x-tab.item>
 
         <x-view-integration name="auth.profile.tabs"/>
     </x-tab>
@@ -239,7 +244,7 @@
                                 </span>
                             </x-table.body.item>
                             <x-table.body.item>
-                                {{ \Illuminate\Support\Carbon::parse($session->last_active)->diffForHumans() }}
+                                {{ \Illuminate\Support\Carbon::parse($session->last_activity ?? 0)->diffForHumans() }}
                             </x-table.body.item>
                             <x-table.body.item>
                                 @if($session->id != session()->getId())
@@ -253,6 +258,136 @@
                     @endforeach
                 </x-table.body>
             </x-table>
+        </x-card>
+    @elseif($tab === 'activity')
+        <x-card class="mt-4">
+            <x-card.title>
+                {{ __('auth::profile.activity.title') }}
+            </x-card.title>
+
+            <x-table>
+                <x-table.header>
+                    <x-table.header.item>
+                        {{ __('auth::profile.activity.description') }}
+                    </x-table.header.item>
+                    <x-table.header.item>
+                        {{ __('auth::profile.activity.caused_by') }}
+                    </x-table.header.item>
+                    <x-table.header.item>
+                        {{ __('auth::profile.activity.subject') }}
+                    </x-table.header.item>
+                    <x-table.header.item>
+                        {{ __('auth::profile.activity.performed_at') }}
+                    </x-table.header.item>
+                    <x-table.header.item>
+                        {{ __('messages.tables.actions') }}
+                    </x-table.header.item>
+                </x-table.header>
+                <x-table.body>
+                    @foreach($this->activities as $activity)
+                        <tr>
+                            <x-table.body.item>
+                                {{ $activity->description }}
+                            </x-table.body.item>
+                            <x-table.body.item>
+                                {{ $activity->causer ? $activity->causer->displayName() : __('auth::profile.activity.unknown_causer') }}
+                            </x-table.body.item>
+                            <x-table.body.item>
+                                {{ $activity->subject ? $activity->subject->displayName() : __('auth::profile.activity.unknown_subject') }}
+                            </x-table.body.item>
+                            <x-table.body.item>
+                                <span
+                                    x-tooltip.raw="{{ $activity->created_at ? date('d.m.Y H:i', strtotime($activity->created_at)) : '' }}">
+                                    {{ \Illuminate\Support\Carbon::parse($activity->created_at ?? 0)->diffForHumans() }}
+                                </span>
+                            </x-table.body.item>
+                            <x-table.body.item>
+                                @if(filled($activity->properties))
+                                    <x-button.floating
+                                        wire:click="$dispatch('openModal', {component: 'auth::components.modals.activity-details', arguments: {activityLogId: {{ $activity->id }} }})"
+                                        size="sm" color="info">
+                                        <i class="icon-eye"></i>
+                                    </x-button.floating>
+                                @endif
+                            </x-table.body.item>
+                        </tr>
+                    @endforeach
+                </x-table.body>
+            </x-table>
+            @php
+                $currentPage = $this->activities->currentPage();
+                $lastPage = $this->activities->lastPage();
+                $total = $this->activities->total();
+                $perPage = $this->activities->perPage();
+                $from = $this->activities->firstItem();
+                $to = $this->activities->lastItem();
+                $tab = request('tab', 'activity');
+                $pageLinks = [];
+
+                $pageLinks[] = 1;
+                for ($i = max(2, $currentPage - 1); $i <= min($lastPage - 1, $currentPage + 1); $i++) {
+                    $pageLinks[] = $i;
+                }
+                if ($lastPage > 1) {
+                    $pageLinks[] = $lastPage;
+                }
+                $pageLinks = array_unique($pageLinks);
+                sort($pageLinks);
+            @endphp
+
+            @if ($lastPage > 1)
+                <div class="flex items-center justify-between mt-4">
+                    <div class="text-sm text-on-surface dark:text-on-surface-dark">
+                        {{ __('auth::profile.activity.pagination_text', ['first' => $from, 'last' => $to, 'total' => $total]) }}
+                    </div>
+                    <nav aria-label="pagination">
+                        <ul class="flex shrink-0 items-center gap-2 text-sm font-medium">
+                            <li>
+                                <a href="{{ $this->activities->previousPageUrl() ? app('request')->fullUrlWithQuery(['page' => $currentPage - 1, 'tab' => $tab]) : '#' }}"
+                                   class="flex items-center rounded-radius p-1 text-on-surface hover:text-primary dark:text-on-surface-dark dark:hover:text-primary-dark {{ $currentPage == 1 ? 'opacity-50 pointer-events-none' : '' }}"
+                                   aria-label="{{ __('auth::profile.activity.pagination_previous') }}" wire:navigate>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                         aria-hidden="true" class="size-6">
+                                        <path fill-rule="evenodd"
+                                              d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z"
+                                              clip-rule="evenodd"/>
+                                    </svg>
+                                    {{ __('auth::profile.activity.pagination_previous') }}
+                                </a>
+                            </li>
+                            @foreach ($pageLinks as $index => $page)
+                                @if ($index > 0 && $pageLinks[$index] - $pageLinks[$index - 1] > 1)
+                                    <li>
+                                        <span
+                                            class="flex size-6 items-center justify-center rounded-radius p-1 text-on-surface dark:text-on-surface-dark">...</span>
+                                    </li>
+                                @endif
+                                <li>
+                                    <a href="{{ app('request')->fullUrlWithQuery(['page' => $page, 'tab' => $tab]) }}"
+                                       class="flex size-6 items-center justify-center rounded-radius p-1 {{ $currentPage == $page ? 'bg-primary font-bold text-on-primary dark:bg-primary-dark dark:text-on-primary-dark' : 'text-on-surface hover:text-primary dark:text-on-surface-dark dark:hover:text-primary-dark' }}"
+                                       aria-label="page {{ $page }}" wire:navigate
+                                       @if($currentPage == $page) aria-current="page" @endif>
+                                        {{ $page }}
+                                    </a>
+                                </li>
+                            @endforeach
+                            <li>
+                                <a href="{{ $this->activities->nextPageUrl() ? app('request')->fullUrlWithQuery(['page' => $currentPage + 1, 'tab' => $tab]) : '#' }}"
+                                   class="flex items-center rounded-radius p-1 text-on-surface hover:text-primary dark:text-on-surface-dark dark:hover:text-primary-dark {{ $currentPage == $lastPage ? 'opacity-50 pointer-events-none' : '' }}"
+                                   aria-label="{{ __('auth::profile.activity.pagination_next') }}" wire:navigate>
+                                    {{ __('auth::profile.activity.pagination_next') }}
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                         aria-hidden="true" class="size-6">
+                                        <path fill-rule="evenodd"
+                                              d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
+                                              clip-rule="evenodd"/>
+                                    </svg>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            @endif
         </x-card>
     @endif
 </div>

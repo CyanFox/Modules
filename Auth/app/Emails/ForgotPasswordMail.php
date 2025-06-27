@@ -33,8 +33,8 @@ class ForgotPasswordMail extends Mailable
     {
         $replacementArray = [
             '{username}' => $this->username,
-            '{firstName}' => $this->firstName,
-            '{lastName}' => $this->lastName,
+            '{first_name}' => $this->firstName,
+            '{last_name}' => $this->lastName,
             '{resetLink}' => $this->resetLink,
         ];
 

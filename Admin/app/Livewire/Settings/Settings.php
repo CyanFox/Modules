@@ -86,6 +86,10 @@ class Settings extends CFComponent
             settings()->updateSetting('internal.app.logo', '/storage/img/Logo.' . $this->logo->getClientOriginalExtension());
         }
 
+        activity()
+            ->causedBy(auth()->user())
+            ->log('settings.general.updated');
+
         Notification::make()
             ->title(__('admin::settings.notifications.settings_updated'))
             ->success()
@@ -103,6 +107,10 @@ class Settings extends CFComponent
         Storage::disk('public')->delete('img/' . str_replace('/storage/img/', '', settings('internal.app.logo')));
 
         settings()->updateSetting('internal.app.logo', '/img/Logo.svg');
+
+        activity()
+            ->causedBy(auth()->user())
+            ->log('settings.logo.reset');
 
         $this->redirect(route('admin.settings', ['tab' => 'general']), true);
     }
@@ -143,6 +151,10 @@ class Settings extends CFComponent
             SettingsManager::updateSetting($key, $value);
         }
 
+        activity()
+            ->causedBy(auth()->user())
+            ->log('settings.editor.updated');
+
         Notification::make()
             ->title(__('admin::settings.notifications.settings_updated'))
             ->success()
@@ -166,6 +178,10 @@ class Settings extends CFComponent
 
         $this->newSettingKey = '';
         $this->newSettingValue = '';
+
+        activity()
+            ->causedBy(auth()->user())
+            ->log('setting_created');
 
         Notification::make()
             ->title(__('admin::settings.notifications.setting_created'))
@@ -194,6 +210,10 @@ class Settings extends CFComponent
         }
 
         settings()->deleteSetting($key);
+
+        activity()
+            ->causedBy(auth()->user())
+            ->log('setting_deleted');
 
         Notification::make()
             ->title(__('admin::settings.delete_setting.notifications.setting_deleted'))
@@ -240,6 +260,10 @@ class Settings extends CFComponent
         $setting = Setting::where('key', $key)->first();
         $setting->is_locked = $state;
         $setting->save();
+
+        activity()
+            ->causedBy(auth()->user())
+            ->log('settings_lock_' . ($state ? 'enabled' : 'disabled'));
 
         $this->originalEditorSettings = Setting::all()->mapWithKeys(function ($setting) {
             return [$setting->key => ['value' => $setting->value, 'is_locked' => $setting->is_locked]];

@@ -79,6 +79,11 @@ class ForgotPassword extends CFComponent
             'password_reset_expiration' => now()->addDay(),
         ]);
 
+        activity()
+            ->performedOn($this->user)
+            ->causedByAnonymous()
+            ->log('auth.forgot_password.sent');
+
         $resetLink = route('auth.forgot-password', ['passwordResetToken' => $resetToken]);
 
         $mail = new ForgotPasswordMail($this->user->email, $this->user->username, $this->user->first_name, $this->user->last_name, $resetLink);
@@ -114,7 +119,7 @@ class ForgotPassword extends CFComponent
 
     public function changeLanguage($language)
     {
-        if ($language == request()->cookie('language')) {
+        if ($language === request()->cookie('language')) {
             return;
         }
         cookie()->queue(cookie()->forget('language'));
@@ -144,7 +149,7 @@ class ForgotPassword extends CFComponent
 
         $this->unsplash = UnsplashManager::returnBackground();
 
-        if ($this->unsplash['error'] != null) {
+        if ($this->unsplash['error'] !== null) {
             $this->log($this->unsplash['error'], 'error');
         }
 
