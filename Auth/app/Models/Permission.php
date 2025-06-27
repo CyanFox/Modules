@@ -15,7 +15,7 @@ use Spatie\Permission\PermissionRegistrar;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Traits\RefreshesPermissionCache;
 
-class Permission extends Model implements PermissionContract
+class Permission extends Model implements PermissionContract // @phpstan-ignore-line
 {
     use HasRoles;
     use LogsActivity;

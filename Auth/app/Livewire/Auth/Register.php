@@ -79,7 +79,7 @@ class Register extends CFComponent
         Auth::login($user);
 
         activity()
-            ->performedOn($this->user)
+            ->performedOn($user)
             ->causedByAnonymous()
             ->log('auth.register');
 
