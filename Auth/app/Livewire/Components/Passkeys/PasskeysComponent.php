@@ -4,7 +4,6 @@ namespace Modules\Auth\Livewire\Components\Passkeys;
 
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\On;
@@ -43,7 +42,7 @@ class PasskeysComponent extends Component
     #[On('auth.profile.passkeys.store')]
     public function storePasskey(string $passkey): void
     {
-        if (!$this->checkPasswordConfirmation()->passwordDispatch('auth.profile.passkeys.store', $passkey)->checkPassword()) {
+        if (! $this->checkPasswordConfirmation()->passwordDispatch('auth.profile.passkeys.store', $passkey)->checkPassword()) {
             return;
         }
 
@@ -75,7 +74,7 @@ class PasskeysComponent extends Component
     #[On('auth.profile.passkeys.delete')]
     public function deletePasskey(int $passkeyId): void
     {
-        if (!$this->checkPasswordConfirmation()->passwordDispatch('auth.profile.passkeys.delete', $passkeyId)->checkPassword()) {
+        if (! $this->checkPasswordConfirmation()->passwordDispatch('auth.profile.passkeys.delete', $passkeyId)->checkPassword()) {
             return;
         }
 

@@ -62,6 +62,11 @@ class Login extends CFComponent
         }
 
         if (! Hash::check($this->password, $this->user->password)) {
+            activity()
+                ->performedOn($this->user)
+                ->causedByAnonymous()
+                ->log('auth.login_failed');
+
             throw ValidationException::withMessages([
                 'password' => __('auth.password'),
             ]);
@@ -76,10 +81,16 @@ class Login extends CFComponent
 
         if ($this->user->two_factor_enabled) {
             $this->twoFactorEnabled = true;
+
             return;
         }
 
         Auth::login($this->user, $this->remember);
+
+        activity()
+            ->performedOn($this->user)
+            ->causedByAnonymous()
+            ->log('auth.login');
 
         if (settings('auth.login.redirect')) {
             $this->redirect(settings('auth.login.redirect'));
@@ -96,7 +107,7 @@ class Login extends CFComponent
 
         $this->checkIfUserExists($this->username);
 
-        if (!$this->user->two_factor_enabled) {
+        if (! $this->user->two_factor_enabled) {
             return;
         }
 
@@ -106,6 +117,11 @@ class Login extends CFComponent
                     $recoveryCode->delete();
                     Auth::login($this->user, $this->remember);
 
+                    activity()
+                        ->performedOn($this->user)
+                        ->causedByAnonymous()
+                        ->log('auth.login.recovery_code');
+
                     if (settings('auth.login.redirect')) {
                         $this->redirect(settings('auth.login.redirect'));
                     }
@@ -113,6 +129,11 @@ class Login extends CFComponent
                     redirect()->intended();
                 }
             }
+
+            activity()
+                ->performedOn($this->user)
+                ->causedByAnonymous()
+                ->log('auth.login.recovery_code.failed');
 
             throw ValidationException::withMessages([
                 'twoFactorCode' => __('auth::login.recovery_code_invalid'),
@@ -123,12 +144,22 @@ class Login extends CFComponent
 
             Auth::login($this->user, $this->remember);
 
+            activity()
+                ->performedOn($this->user)
+                ->causedByAnonymous()
+                ->log('auth.login.two_factor');
+
             if (settings('auth.login.redirect')) {
                 $this->redirect(settings('auth.login.redirect'));
             }
 
             redirect()->intended();
         }
+
+        activity()
+            ->performedOn($this->user)
+            ->causedByAnonymous()
+            ->log('auth.login.two_factor.failed');
 
         throw ValidationException::withMessages([
             'twoFactorCode' => __('auth::login.two_factor_code_invalid'),
@@ -158,7 +189,7 @@ class Login extends CFComponent
 
     public function changeLanguage($language)
     {
-        if ($language == request()->cookie('language')) {
+        if ($language === request()->cookie('language')) {
             return;
         }
         cookie()->queue(cookie()->forget('language'));
@@ -184,7 +215,7 @@ class Login extends CFComponent
     {
         $this->unsplash = UnsplashManager::returnBackground();
 
-        if ($this->unsplash['error'] != null) {
+        if ($this->unsplash['error'] !== null) {
             $this->log($this->unsplash['error'], 'error');
         }
     }

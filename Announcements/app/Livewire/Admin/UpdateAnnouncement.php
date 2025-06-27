@@ -6,27 +6,38 @@ use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
-use Livewire\Component;
 use Livewire\WithFileUploads;
 use Modules\Announcements\Models\Announcement;
 use Modules\Auth\Traits\WithConfirmation;
 
 class UpdateAnnouncement extends CFComponent
 {
-    use WithCustomLivewireException, WithFileUploads, WithConfirmation;
+    use WithConfirmation, WithCustomLivewireException, WithFileUploads;
 
     public $announcementId;
+
     public $announcement;
+
     public $title;
+
     public $icon = 'megaphone';
+
     public $color = 'info';
+
     public $description;
+
     public $dismissible = false;
+
     public $disabled = false;
+
     public $uploadedFiles = [];
+
     public $files = [];
+
     public $groups = [];
+
     public $permissions = [];
+
     public $users = [];
 
     public function updateAnnouncement()
@@ -54,7 +65,7 @@ class UpdateAnnouncement extends CFComponent
         ]);
 
         foreach ($this->files as $file) {
-            $file->storeAs('announcements/' . $this->announcementId, $file->getClientOriginalName(), 'local');
+            $file->storeAs('announcements/'.$this->announcementId, $file->getClientOriginalName(), 'local');
         }
 
         $this->announcement->access()->where('announcement_id', $this->announcementId)->delete();
@@ -94,8 +105,8 @@ class UpdateAnnouncement extends CFComponent
                 return;
             }
 
-            if (Storage::disk('local')->exists('announcements/' . $this->announcementId . '/' . $file)) {
-                Storage::disk('local')->delete('announcements/' . $this->announcementId . '/' . $file);
+            if (Storage::disk('local')->exists('announcements/'.$this->announcementId.'/'.$file)) {
+                Storage::disk('local')->delete('announcements/'.$this->announcementId.'/'.$file);
 
                 Notification::make()
                     ->title(__('announcements::announcements.update_announcement.notifications.file_deleted'))
@@ -131,12 +142,12 @@ class UpdateAnnouncement extends CFComponent
         $this->permissions = $this->announcement->access->where('permission_id', '!=', null)->pluck('permission_id')->toArray();
         $this->users = $this->announcement->access->where('user_id', '!=', null)->pluck('user_id')->toArray();
 
-        $this->uploadedFiles = collect(Storage::disk('local')->files('announcements/' . $this->announcement->id))
+        $this->uploadedFiles = collect(Storage::disk('local')->files('announcements/'.$this->announcement->id))
             ->map(function ($filePath) {
                 return [
                     'name' => basename($filePath),
                     'size' => formatFileSize(Storage::disk('local')->size($filePath)),
-                    'path' => $filePath
+                    'path' => $filePath,
                 ];
             })->toArray();
     }

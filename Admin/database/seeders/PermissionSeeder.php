@@ -3,7 +3,7 @@
 namespace Modules\Admin\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Permission;
+use Modules\Auth\Models\Permission;
 
 class PermissionSeeder extends Seeder
 {
@@ -40,6 +40,8 @@ class PermissionSeeder extends Seeder
             'admin.modules.disable',
             'admin.modules.enable',
             'admin.modules.delete',
+
+            'admin.activity',
         ];
 
         foreach ($permissions as $permission) {

@@ -9,6 +9,7 @@ return [
         'apiKeys' => 'API-Schlüssel',
         'password' => 'Passwort',
         'passkeys' => 'Passkeys',
+        'activity' => 'Aktivitäten',
     ],
 
     'notifications' => [
@@ -41,6 +42,7 @@ return [
             'delete_account' => 'Konto löschen',
         ],
     ],
+
     'profile' => [
         'title' => 'Profil',
 
@@ -63,7 +65,7 @@ return [
         'notifications' => [
             'passkey_created' => 'Passkey erfolgreich erstellt.',
             'passkey_deleted' => 'Passkey erfolgreich gelöscht.',
-        ]
+        ],
     ],
 
     'sessions' => [
@@ -95,6 +97,25 @@ return [
         'notifications' => [
             'logged_out' => 'Erfolgreich abgemeldet.',
             'logged_out_all' => 'Erfolgreich aus allen anderen Sitzungen abgemeldet.',
+        ],
+    ],
+
+    'activity' => [
+        'title' => 'Aktivitäten',
+        'description' => 'Beschreibung',
+        'caused_by' => 'Ausgeführt von',
+        'subject' => 'Subjekt',
+        'performed_at' => 'Durchgeführt am',
+        'unknown_causer' => 'Unbekannter Ausführer',
+        'unknown_subject' => 'Unbekanntes Subjekt',
+        'pagination_previous' => 'Vorherige',
+        'pagination_next' => 'Nächste',
+        'pagination_text' => 'Zeige :first bis :last von :total Einträgen',
+
+        'details' => [
+            'title' => 'Aktivitätsdetails',
+            'old_values' => 'Alte Werte',
+            'new_values' => 'Neue Werte',
         ],
     ],
 

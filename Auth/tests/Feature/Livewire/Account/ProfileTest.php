@@ -6,7 +6,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Livewire;
 use Modules\Auth\Livewire\Account\Profile;
-use Modules\Auth\Livewire\Auth\Login;
 use Modules\Auth\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -21,10 +20,18 @@ class ProfileTest extends TestCase
         $user = User::factory()->create();
         $user->generateTwoFASecret();
 
+        activity()
+            ->performedOn($user)
+            ->causedBy($user)
+            ->log('Test activity log');
+
         $this->actingAs($user)->get(route('account.profile'))
             ->assertStatus(200);
 
         $this->actingAs($user)->get(route('account.profile', ['tab' => 'sessions']))
+            ->assertStatus(200);
+
+        $this->actingAs($user)->get(route('account.profile', ['tab' => 'activity']))
             ->assertStatus(200);
     }
 

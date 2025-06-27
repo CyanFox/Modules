@@ -12,9 +12,9 @@ class Session extends Model
 
     public $timestamps = false;
 
-    protected $primaryKey = 'id';
-
     public $incrementing = false;
+
+    protected $primaryKey = 'id';
 
     protected $keyType = 'string';
 

@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
+use Modules\Auth\Models\User;
 use Modules\Auth\Rules\Password;
 use Modules\Auth\Traits\WithConfirmation;
 use Modules\Auth\Traits\WithPasswordConfirmation;
+use Spatie\Activitylog\Models\Activity;
 
 class Profile extends CFComponent
 {
@@ -101,7 +103,7 @@ class Profile extends CFComponent
                 'confirmPassword' => 'required|same:newPassword',
             ]);
 
-            if (!Hash::check($this->currentPassword, auth()->user()->password)) {
+            if (! Hash::check($this->currentPassword, auth()->user()->password)) {
                 $this->addError('currentPassword', __('validation.current_password'));
 
                 return;
@@ -122,7 +124,7 @@ class Profile extends CFComponent
 
     public function disableTwoFA($confirmed = false)
     {
-        if (!$confirmed) {
+        if (! $confirmed) {
             $this->dialog()
                 ->question(__('auth::profile.modals.disable_two_fa.title'),
                     __('auth::profile.modals.disable_two_fa.description'))
@@ -153,11 +155,11 @@ class Profile extends CFComponent
 
     public function deleteAccount($confirmed = false)
     {
-        if (!settings('auth.profile.enable.delete_account')) {
+        if (! settings('auth.profile.enable.delete_account')) {
             return;
         }
 
-        if (!$confirmed) {
+        if (! $confirmed) {
             $this->dialog()
                 ->question(__('auth::profile.modals.delete_account.title'),
                     __('auth::profile.modals.delete_account.description'))
@@ -182,7 +184,7 @@ class Profile extends CFComponent
 
     public function logoutSession($sessionId)
     {
-        if (!$this->checkPasswordConfirmation()->passwordFunction('logoutSession', $sessionId)->checkPassword()) {
+        if (! $this->checkPasswordConfirmation()->passwordFunction('logoutSession', $sessionId)->checkPassword()) {
             return;
         }
 
@@ -198,7 +200,7 @@ class Profile extends CFComponent
 
     public function logoutAllSessions($confirmed = false)
     {
-        if (!$confirmed) {
+        if (! $confirmed) {
             $this->dialog()
                 ->question(__('auth::profile.sessions.modals.logout_all.title'),
                     __('auth::profile.sessions.modals.logout_all.description'))
@@ -219,6 +221,14 @@ class Profile extends CFComponent
             ->send();
 
         $this->redirect(route('account.profile', ['tab' => 'sessions']), true);
+    }
+
+    public function getActivitiesProperty()
+    {
+        return Activity::where([
+            'subject_id' => auth()->id(),
+            'subject_type' => User::class,
+        ])->orderByDesc('id')->paginate(10);
     }
 
     public function mount()

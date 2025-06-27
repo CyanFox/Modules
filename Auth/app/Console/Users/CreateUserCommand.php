@@ -4,9 +4,9 @@ namespace Modules\Auth\Console\Users;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
+use Modules\Auth\Models\Permission;
+use Modules\Auth\Models\Role;
 use Modules\Auth\Models\User;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 use function Laravel\Prompts\multiselect;
 use function Laravel\Prompts\password;

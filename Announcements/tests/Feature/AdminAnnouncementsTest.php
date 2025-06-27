@@ -8,9 +8,9 @@ use Modules\Announcements\Livewire\Admin\CreateAnnouncement;
 use Modules\Announcements\Livewire\Admin\UpdateAnnouncement;
 use Modules\Announcements\Livewire\Components\Tables\AnnouncementsTable;
 use Modules\Announcements\Models\Announcement;
+use Modules\Announcements\tests\TestCase;
 use Modules\Auth\Models\User;
 use PHPUnit\Framework\Attributes\Test;
-use Modules\Announcements\tests\TestCase;
 
 class AdminAnnouncementsTest extends TestCase
 {

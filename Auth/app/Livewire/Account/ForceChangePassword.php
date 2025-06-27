@@ -14,15 +14,18 @@ class ForceChangePassword extends CFComponent
     use WithCustomLivewireException;
 
     public $unsplash;
+
     public $currentPassword;
+
     public $newPassword;
+
     public $confirmPassword;
 
     public function changePassword()
     {
         $this->validate([
             'currentPassword' => 'required',
-            'newPassword' => ['required', 'same:confirmPassword', 'not_in:' . $this->currentPassword, new Password],
+            'newPassword' => ['required', 'same:confirmPassword', 'not_in:'.$this->currentPassword, new Password],
             'confirmPassword' => 'required|same:newPassword',
         ], [
             'password.same' => __('auth::force.change_password.password_same'),
@@ -30,8 +33,9 @@ class ForceChangePassword extends CFComponent
             'newPassword.not_in' => __('auth::force.change_password.old_password_used'),
         ]);
 
-        if (!Hash::check($this->currentPassword, auth()->user()->password)) {
+        if (! Hash::check($this->currentPassword, auth()->user()->password)) {
             $this->addError('currentPassword', __('auth.password'));
+
             return;
         }
 
@@ -56,7 +60,7 @@ class ForceChangePassword extends CFComponent
     {
         $this->unsplash = UnsplashManager::returnBackground();
 
-        if ($this->unsplash['error'] != null) {
+        if ($this->unsplash['error'] !== null) {
             $this->log($this->unsplash['error'], 'error');
         }
     }

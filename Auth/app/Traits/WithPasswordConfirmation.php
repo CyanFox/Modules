@@ -2,7 +2,6 @@
 
 namespace Modules\Auth\Traits;
 
-use Illuminate\Support\Sleep;
 use Livewire\Attributes\On;
 
 trait WithPasswordConfirmation
@@ -60,7 +59,7 @@ trait WithPasswordConfirmation
 
     public function passwordFunction(string $callable, ...$args): static
     {
-        $this->passwordConfirmationData['event'] = $callable . '(' . implode(', ', $args) . ')';
+        $this->passwordConfirmationData['event'] = $callable.'('.implode(', ', $args).')';
 
         return $this;
     }
@@ -69,7 +68,7 @@ trait WithPasswordConfirmation
     {
         $this->passwordConfirmationData['dispatch'] = [
             'event' => $dispatch,
-            'args' => $args
+            'args' => $args,
         ];
 
         return $this;

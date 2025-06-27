@@ -9,6 +9,7 @@ return [
         'apiKeys' => 'API Keys',
         'password' => 'Password',
         'passkeys' => 'Passkeys',
+        'activity' => 'Activity',
     ],
 
     'notifications' => [
@@ -63,7 +64,7 @@ return [
         'notifications' => [
             'passkey_created' => 'Passkey created successfully.',
             'passkey_deleted' => 'Passkey deleted successfully.',
-        ]
+        ],
     ],
 
     'sessions' => [
@@ -95,6 +96,25 @@ return [
         'notifications' => [
             'logged_out' => 'Logged out successfully.',
             'logged_out_all' => 'Logged out all other sessions successfully.',
+        ],
+    ],
+
+    'activity' => [
+        'title' => 'Activities',
+        'description' => 'Description',
+        'caused_by' => 'Caused by',
+        'subject' => 'Subject',
+        'performed_at' => 'Performed at',
+        'unknown_causer' => 'Unknown Causer',
+        'unknown_subject' => 'Unknown Subject',
+        'pagination_previous' => 'Previous',
+        'pagination_next' => 'Next',
+        'pagination_text' => 'Showing :first to :last of :total entries',
+
+        'details' => [
+            'title' => 'Activity Details',
+            'old_values' => 'Old Values',
+            'new_values' => 'New Values',
         ],
     ],
 

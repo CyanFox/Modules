@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Announcements\Http\Controllers\AnnouncementsController;
 use Modules\Announcements\Livewire\Admin\Announcements;
 use Modules\Announcements\Livewire\Admin\CreateAnnouncement;
 use Modules\Announcements\Livewire\Admin\UpdateAnnouncement;

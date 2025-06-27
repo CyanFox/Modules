@@ -14,6 +14,8 @@ use Modules\Auth\Http\Middleware\Authenticate;
 use Modules\Auth\Http\Middleware\CheckForceActions;
 use Modules\Auth\Http\Middleware\CheckIfUserIsDisabled;
 use Modules\Auth\Http\Middleware\CheckLanguage;
+use Modules\Auth\Models\Permission;
+use Modules\Auth\Models\Role;
 use Modules\Auth\Models\User;
 use Modules\Auth\Socialite\CustomOAuthProvider;
 use Nwidart\Modules\Traits\PathNamespace;
@@ -22,8 +24,6 @@ use RecursiveIteratorIterator;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -32,6 +32,13 @@ class AuthServiceProvider extends ServiceProvider
     protected string $name = 'Auth';
 
     protected string $nameLower = 'auth';
+
+    protected $middleware = [
+        'language' => CheckLanguage::class,
+        'role' => RoleMiddleware::class,
+        'permission' => PermissionMiddleware::class,
+        'role_or_permission' => RoleOrPermissionMiddleware::class,
+    ];
 
     /**
      * Boot the application events.
@@ -83,36 +90,6 @@ class AuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register commands in the format of Command::class
-     */
-    protected function registerCommands(): void
-    {
-        $this->commands([
-            new CreateUserCommand,
-            new UpdateUserCommand,
-            new DeleteUserCommand,
-        ]);
-    }
-
-    /**
-     * Register command Schedules.
-     */
-    protected function registerCommandSchedules(): void
-    {
-        // $this->app->booted(function () {
-        //     $schedule = $this->app->make(Schedule::class);
-        //     $schedule->command('inspire')->hourly();
-        // });
-    }
-
-    protected $middleware = [
-            'language' => CheckLanguage::class,
-            'role' => RoleMiddleware::class,
-            'permission' => PermissionMiddleware::class,
-            'role_or_permission' => RoleOrPermissionMiddleware::class,
-    ];
-
-    /**
      * Register middlewares
      */
     public function registerMiddleware(Router $router)
@@ -152,30 +129,6 @@ class AuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register config.
-     */
-    protected function registerConfig(): void
-    {
-        $relativeConfigPath = config('modules.paths.generator.config.path');
-        $configPath = module_path($this->name, $relativeConfigPath);
-
-        if (is_dir($configPath)) {
-            $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($configPath));
-
-            foreach ($iterator as $file) {
-                if ($file->isFile() && $file->getExtension() === 'php') {
-                    $relativePath = str_replace($configPath.DIRECTORY_SEPARATOR, '', $file->getPathname());
-                    $configKey = $this->nameLower.'.'.str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
-                    $key = ($relativePath === 'auth.php') ? $this->nameLower : $configKey;
-
-                    $this->publishes([$file->getPathname() => config_path($relativePath)], 'config');
-                    $this->mergeConfigFrom($file->getPathname(), $key);
-                }
-            }
-        }
-    }
-
-    /**
      * Register views.
      */
     public function registerViews(): void
@@ -197,6 +150,53 @@ class AuthServiceProvider extends ServiceProvider
     public function provides(): array
     {
         return [];
+    }
+
+    /**
+     * Register commands in the format of Command::class
+     */
+    protected function registerCommands(): void
+    {
+        $this->commands([
+            new CreateUserCommand,
+            new UpdateUserCommand,
+            new DeleteUserCommand,
+        ]);
+    }
+
+    /**
+     * Register command Schedules.
+     */
+    protected function registerCommandSchedules(): void
+    {
+        // $this->app->booted(function () {
+        //     $schedule = $this->app->make(Schedule::class);
+        //     $schedule->command('inspire')->hourly();
+        // });
+    }
+
+    /**
+     * Register config.
+     */
+    protected function registerConfig(): void
+    {
+        $relativeConfigPath = config('modules.paths.generator.config.path');
+        $configPath = module_path($this->name, $relativeConfigPath);
+
+        if (is_dir($configPath)) {
+            $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($configPath));
+
+            foreach ($iterator as $file) {
+                if ($file->isFile() && $file->getExtension() === 'php') {
+                    $relativePath = str_replace($configPath.DIRECTORY_SEPARATOR, '', $file->getPathname());
+                    $configKey = $this->nameLower.'.'.str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
+                    $key = ($relativePath === 'auth.php') ? $this->nameLower : $configKey;
+
+                    $this->publishes([$file->getPathname() => config_path($relativePath)], 'config');
+                    $this->mergeConfigFrom($file->getPathname(), $key);
+                }
+            }
+        }
     }
 
     private function getPublishableViewPaths(): array

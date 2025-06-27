@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\Storage;
 use Modules\Auth\Database\Factories\UserFactory;
 use Modules\Auth\Traits\WithSession;
 use Modules\Auth\Traits\WithTwoFactorAuth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\LaravelPasskeys\Models\Concerns\HasPasskeys;
 use Spatie\LaravelPasskeys\Models\Concerns\InteractsWithPasskeys;
 use Spatie\LaravelPasskeys\Models\Passkey;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
@@ -50,7 +50,7 @@ use Spatie\Permission\Traits\HasRoles;
  */
 class User extends Authenticatable implements HasPasskeys
 {
-    use HasRoles, Notifiable, WithSession, WithTwoFactorAuth, HasFactory, InteractsWithPasskeys;
+    use HasFactory, HasRoles, InteractsWithPasskeys, LogsActivity, Notifiable, WithSession, WithTwoFactorAuth;
 
     protected $guarded = [];
 
@@ -114,6 +114,36 @@ class User extends Authenticatable implements HasPasskeys
     public function getPasskeyDisplayName(): string
     {
         return $this->username;
+    }
+
+    public function displayName()
+    {
+        if ($this->first_name || $this->last_name) {
+            return $this->fullName();
+        }
+
+        return $this->username;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logExcept($this->hidden)
+            ->setDescriptionForEvent(function ($eventName) {
+                $changes = $this->getChanges();
+                unset($changes['updated_at']);
+
+                if (array_keys($changes) === ['password']) {
+                    return 'auth.user.password_'.$eventName;
+                }
+
+                if (array_keys($changes) === ['password', 'password_reset_token', 'password_reset_expiration']) {
+                    return 'auth.user.forgot_password.reset';
+                }
+
+                return 'auth.user_'.$eventName;
+            });
     }
 
     protected static function newFactory(): Factory

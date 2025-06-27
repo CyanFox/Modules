@@ -78,6 +78,11 @@ class Register extends CFComponent
 
         Auth::login($user);
 
+        activity()
+            ->performedOn($user)
+            ->causedByAnonymous()
+            ->log('auth.register');
+
         if (settings('auth.register.redirect')) {
             $this->redirect(settings('auth.register.redirect'));
         }
@@ -87,7 +92,7 @@ class Register extends CFComponent
 
     public function changeLanguage($language)
     {
-        if ($language == request()->cookie('language')) {
+        if ($language === request()->cookie('language')) {
             return;
         }
         cookie()->queue(cookie()->forget('language'));
@@ -117,7 +122,7 @@ class Register extends CFComponent
 
         $this->unsplash = UnsplashManager::returnBackground();
 
-        if ($this->unsplash['error'] != null) {
+        if ($this->unsplash['error'] !== null) {
             $this->log($this->unsplash['error'], 'error');
         }
     }

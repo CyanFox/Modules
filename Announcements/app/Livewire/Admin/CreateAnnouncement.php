@@ -5,7 +5,6 @@ namespace Modules\Announcements\Livewire\Admin;
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
-use Livewire\Component;
 use Livewire\WithFileUploads;
 use Modules\Announcements\Models\Announcement;
 
@@ -14,14 +13,23 @@ class CreateAnnouncement extends CFComponent
     use WithCustomLivewireException, WithFileUploads;
 
     public $title;
+
     public $icon = 'megaphone';
+
     public $color = 'info';
+
     public $description;
+
     public $dismissible = false;
+
     public $disabled = false;
+
     public $files = [];
+
     public $groups = [];
+
     public $permissions = [];
+
     public $users = [];
 
     public function createAnnouncement()
@@ -49,7 +57,7 @@ class CreateAnnouncement extends CFComponent
         ]);
 
         foreach ($this->files as $file) {
-            $file->storeAs('announcements/' . $announcement->id, $file->getClientOriginalName(), 'local');
+            $file->storeAs('announcements/'.$announcement->id, $file->getClientOriginalName(), 'local');
         }
 
         foreach ($this->groups as $group) {

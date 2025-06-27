@@ -3,15 +3,11 @@
 namespace Feature\Livewire;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Artisan;
 use Livewire\Livewire;
-use Modules\Admin\Livewire\Groups\CreateGroup;
-use Modules\Admin\Livewire\Groups\UpdateGroup;
 use Modules\Admin\Livewire\Settings\Settings;
 use Modules\Admin\tests\TestCase;
 use Modules\Auth\Models\User;
 use PHPUnit\Framework\Attributes\Test;
-use Spatie\Permission\Models\Role;
 
 class SettingsTest extends TestCase
 {
@@ -62,7 +58,7 @@ class SettingsTest extends TestCase
         $user->assignRole('Super Admin');
 
         $settingKey = 'internal.app.name';
-        $formKey = 'setting_' . md5($settingKey);
+        $formKey = 'setting_'.md5($settingKey);
 
         Livewire::actingAs($user)
             ->test(Settings::class)

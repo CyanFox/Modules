@@ -35,7 +35,7 @@ class UnsplashService
             $imageData = self::getRandomUnsplashImage();
             $utmSource = self::getUTM();
 
-            if ($imageData == null) {
+            if ($imageData === null) {
                 throw new Exception('Unsplash API key is not set.');
             }
 

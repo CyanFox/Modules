@@ -70,53 +70,60 @@
         <div class="flex flex-col gap-2 items-center overflow-y-auto py-6 px-2">
             @can('admin.dashboard')
                 <x-admin::sidebar-item
-                    icon="icon-layout-dashboard"
-                    :label="__('admin::navigation.dashboard')"
-                    route="admin.dashboard"/>
+                        icon="icon-layout-dashboard"
+                        :label="__('admin::navigation.dashboard')"
+                        route="admin.dashboard"/>
             @endcan
 
             @can('admin.users')
                 <x-admin::sidebar-item
-                    icon="icon-users"
-                    :label="__('admin::navigation.users')"
-                    route="admin.users"/>
+                        icon="icon-users"
+                        :label="__('admin::navigation.users')"
+                        route="admin.users"/>
             @endcan
 
 
             @can('admin.groups')
                 <x-admin::sidebar-item
-                    icon="icon-shield"
-                    :label="__('admin::navigation.groups')"
-                    route="admin.groups"/>
+                        icon="icon-shield"
+                        :label="__('admin::navigation.groups')"
+                        route="admin.groups"/>
             @endcan
 
             @can('admin.permissions')
                 <x-admin::sidebar-item
-                    icon="icon-key-round"
-                    :label="__('admin::navigation.permissions')"
-                    route="admin.permissions"/>
+                        icon="icon-key-round"
+                        :label="__('admin::navigation.permissions')"
+                        route="admin.permissions"/>
             @endcan
 
             @can('admin.settings')
                 <x-admin::sidebar-item
-                    icon="icon-settings"
-                    :label="__('admin::navigation.settings')"
-                    route="admin.settings"/>
+                        icon="icon-settings"
+                        :label="__('admin::navigation.settings')"
+                        route="admin.settings"/>
             @endcan
 
             @can('admin.modules')
                 <x-admin::sidebar-item
-                    icon="icon-package"
-                    :label="__('admin::navigation.modules')"
-                    route="admin.modules"/>
+                        icon="icon-package"
+                        :label="__('admin::navigation.modules')"
+                        route="admin.modules"/>
+            @endcan
+
+            @can('admin.activity')
+                <x-admin::sidebar-item
+                        icon="icon-eye"
+                        :label="__('admin::navigation.activity')"
+                        route="admin.activity"/>
             @endcan
 
             @foreach(\Modules\Admin\Facades\SidebarManager::getAll() as $sidebarItem)
                 <x-admin::sidebar-item
-                    :icon="$sidebarItem['icon']"
-                    :label="$sidebarItem['label']"
-                    :url="$sidebarItem['url']"
-                    :route="$sidebarItem['route']"/>
+                        :icon="$sidebarItem['icon']"
+                        :label="$sidebarItem['label']"
+                        :url="$sidebarItem['url']"
+                        :route="$sidebarItem['route']"/>
 
                 <x-view-integration name="admin.sidebar.items.{{ $sidebarItem['label'] }}"/>
             @endforeach
@@ -125,18 +132,19 @@
         </div>
 
         <button
-            x-on:click="sidebarPinned = !sidebarPinned"
-            class="hidden cursor-pointer md:flex items-center justify-center h-8 mx-2 my-2 mt-auto rounded-md font-medium text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white overflow-hidden"
+                x-on:click="sidebarPinned = !sidebarPinned"
+                class="hidden cursor-pointer md:flex items-center justify-center h-8 mx-2 my-2 mt-auto rounded-md font-medium text-neutral-600 underline-offset-2 hover:bg-black/5 hover:text-neutral-900 focus-visible:underline focus:outline-hidden dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white overflow-hidden"
         >
             <i :class="[sidebarPinned ? 'transform rotate-90 transition-transform duration-300' :
             'transform rotate-0 transition-transform duration-300']" class="icon-pin dark:text-white"></i>
         </button>
     </nav>
 
-    <div class="h-svh w-full overflow-y-auto bg-white dark:bg-neutral-950 transition-all duration-300 ease-in-out" :class="sidebarPinned ? 'md:ml-64' : 'md:ml-16'">
+    <div class="h-svh w-full overflow-y-auto bg-white dark:bg-neutral-950 transition-all duration-300 ease-in-out"
+         :class="sidebarPinned ? 'md:ml-64' : 'md:ml-16'">
         <nav
-            class="sticky top-0 z-10 flex items-center border-b border-neutral-300 bg-neutral-50 px-4 py-2 dark:border-neutral-700 dark:bg-neutral-900"
-            aria-label="top navigation bar">
+                class="sticky top-0 z-10 flex items-center border-b border-neutral-300 bg-neutral-50 px-4 py-2 dark:border-neutral-700 dark:bg-neutral-900"
+                aria-label="top navigation bar">
 
             <button type="button" class="md:hidden cursor-pointer inline-block text-neutral-600 dark:text-neutral-300"
                     x-on:click="sidebarIsOpen = true">
@@ -155,7 +163,7 @@
                          aria-hidden="true"/>
                     <div class="hidden md:flex flex-col">
                         <span
-                            class="text-sm font-bold text-neutral-900 dark:text-white">{{ auth()->user()->fullName() }}</span>
+                                class="text-sm font-bold text-neutral-900 dark:text-white">{{ auth()->user()->fullName() }}</span>
                         <span class="text-xs" aria-hidden="true">{{ auth()->user()->username }}</span>
                         <span class="sr-only">profile settings</span>
                     </div>
@@ -168,8 +176,10 @@
                      x-transition="" x-trap="userDropdownIsOpen">
 
                     <div class="flex flex-col py-1.5">
-                        <x-dashboard::profile-item icon="icon-user" label="{{ __('admin::navigation.profile') }}" route="account.profile"/>
-                        <x-dashboard::profile-item icon="icon-house" label="{{ __('admin::navigation.home') }}" url="/" :external="true"/>
+                        <x-dashboard::profile-item icon="icon-user" label="{{ __('admin::navigation.profile') }}"
+                                                   route="account.profile"/>
+                        <x-dashboard::profile-item icon="icon-house" label="{{ __('admin::navigation.home') }}" url="/"
+                                                   :external="true"/>
 
                         <x-view-integration name="admin.profile.items"/>
                     </div>
@@ -177,7 +187,8 @@
                     <x-view-integration name="admin.profile.items.end"/>
 
                     <div class="flex flex-col py-1.5">
-                        <x-dashboard::profile-item icon="icon-log-out" label="{{ __('admin::navigation.logout') }}" route="auth.logout"
+                        <x-dashboard::profile-item icon="icon-log-out" label="{{ __('admin::navigation.logout') }}"
+                                                   route="auth.logout"
                                                    external/>
                     </div>
                 </div>

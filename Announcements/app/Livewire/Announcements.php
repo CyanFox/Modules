@@ -23,7 +23,7 @@ class Announcements extends Component
                 return null;
             }
 
-            return Storage::disk('local')->download('announcements/' . $announcementId . '/' . $file);
+            return Storage::disk('local')->download('announcements/'.$announcementId.'/'.$file);
         }
 
         return null;
@@ -34,7 +34,7 @@ class Announcements extends Component
         $announcement = Announcement::find($announcementId);
 
         if ($announcement) {
-            if (!$dismissed) {
+            if (! $dismissed) {
                 $announcement->dismissed()->where('user_id', auth()->id())->delete();
             } else {
                 $announcement->dismissed()->create([
@@ -48,7 +48,7 @@ class Announcements extends Component
 
     public function toggleShowDismissed()
     {
-        $this->showDismissed = !$this->showDismissed;
+        $this->showDismissed = ! $this->showDismissed;
 
         $this->mount();
     }

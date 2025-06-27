@@ -44,8 +44,8 @@ class UpdateUser extends CFComponent
         $this->validate([
             'firstName' => 'required',
             'lastName' => 'required',
-            'username' => 'required|unique:users,username,' . $this->userId,
-            'email' => 'required|email|unique:users,email,' . $this->userId,
+            'username' => 'required|unique:users,username,'.$this->userId,
+            'email' => 'required|email|unique:users,email,'.$this->userId,
             'password' => 'nullable',
             'confirmPassword' => 'nullable|same:password',
             'forceActivateTwoFactor' => 'nullable|boolean',

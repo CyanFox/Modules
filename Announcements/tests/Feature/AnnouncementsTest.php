@@ -4,9 +4,9 @@ namespace Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Announcements\Models\Announcement;
+use Modules\Announcements\tests\TestCase;
 use Modules\Auth\Models\User;
 use PHPUnit\Framework\Attributes\Test;
-use Modules\Announcements\tests\TestCase;
 
 class AnnouncementsTest extends TestCase
 {
