@@ -8,6 +8,7 @@ use Modules\Announcements\Models\Announcement;
 use Modules\Auth\Models\Permission;
 use Modules\Auth\Models\Role;
 use Modules\Auth\Models\User;
+
 use function Laravel\Prompts\multiselect;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
@@ -18,6 +19,7 @@ class CreateAnnouncementAction
     use AsAction;
 
     public string $commandSignature = 'announcements:create';
+
     public string $commandDescription = 'Create a new Announcement';
 
     public function handle($data)
@@ -96,5 +98,4 @@ class CreateAnnouncementAction
 
         $command->info('Announcement created successfully');
     }
-
 }

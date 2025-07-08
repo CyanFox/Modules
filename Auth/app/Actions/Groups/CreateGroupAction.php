@@ -4,8 +4,8 @@ namespace Modules\Auth\Actions\Groups;
 
 use Illuminate\Console\Command;
 use Lorisleiva\Actions\Concerns\AsAction;
-use Modules\Auth\Models\Permission;
 use Modules\Auth\Models\Role;
+
 use function Laravel\Prompts\text;
 
 class CreateGroupAction
@@ -13,6 +13,7 @@ class CreateGroupAction
     use AsAction;
 
     public string $commandSignature = 'auth:groups.create';
+
     public string $commandDescription = 'Create a new Group';
 
     public function handle($data)
@@ -42,5 +43,4 @@ class CreateGroupAction
 
         $command->info('Group created successfully');
     }
-
 }

@@ -5,6 +5,7 @@ namespace Modules\Auth\Actions\Permissions;
 use Illuminate\Console\Command;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Modules\Auth\Models\Permission;
+
 use function Laravel\Prompts\text;
 
 class CreatePermissionAction
@@ -12,6 +13,7 @@ class CreatePermissionAction
     use AsAction;
 
     public string $commandSignature = 'auth:permissions.create';
+
     public string $commandDescription = 'Create a new permission';
 
     public function handle($data)
@@ -41,5 +43,4 @@ class CreatePermissionAction
 
         $command->info('Permission created successfully');
     }
-
 }

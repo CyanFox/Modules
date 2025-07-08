@@ -87,11 +87,12 @@ final class PermissionsTable extends PenguTable
                 'guard_name' => 'web',
             ]);
 
-            if (!DeletePermissionAction::run($permission)) {
+            if (! DeletePermissionAction::run($permission)) {
                 Notification::make()
                     ->title(__('messages.notifications.something_went_wrong'))
                     ->danger()
                     ->send();
+
                 return;
             }
 

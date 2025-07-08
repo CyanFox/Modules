@@ -5,6 +5,7 @@ namespace Modules\Auth\Actions\Permissions;
 use Illuminate\Console\Command;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Modules\Auth\Models\Permission;
+
 use function Laravel\Prompts\confirm;
 
 class DeletePermissionAction
@@ -12,6 +13,7 @@ class DeletePermissionAction
     use AsAction;
 
     public string $commandSignature = 'auth:permissions.delete {name}';
+
     public string $commandDescription = 'Delete an permission';
 
     public function handle(Permission $permission)
@@ -32,7 +34,7 @@ class DeletePermissionAction
     public function asCommand(Command $command)
     {
         $permission = Permission::where('name', $command->argument('name'))->first();
-        if (!$permission) {
+        if (! $permission) {
             $command->error('Permission not found');
 
             return;
@@ -40,7 +42,7 @@ class DeletePermissionAction
 
         $delete = confirm('Are you sure you want to delete this permission?');
 
-        if (!$delete) {
+        if (! $delete) {
             $command->info('Permission not deleted');
 
             return;
@@ -50,5 +52,4 @@ class DeletePermissionAction
 
         $command->info('Permission deleted successfully');
     }
-
 }

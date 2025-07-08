@@ -136,11 +136,12 @@ final class UsersTable extends PenguTable
         if ($confirmed) {
             $user = User::findOrFail($userId);
 
-            if (!DeleteUserAction::run($user)) {
+            if (! DeleteUserAction::run($user)) {
                 Notification::make()
                     ->title(__('messages.notifications.something_went_wrong'))
                     ->danger()
                     ->send();
+
                 return;
             }
 

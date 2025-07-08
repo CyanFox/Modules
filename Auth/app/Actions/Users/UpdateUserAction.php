@@ -5,6 +5,7 @@ namespace Modules\Auth\Actions\Users;
 use Illuminate\Console\Command;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Modules\Auth\Models\User;
+
 use function Laravel\Prompts\multiselect;
 use function Laravel\Prompts\password;
 use function Laravel\Prompts\text;
@@ -14,6 +15,7 @@ class UpdateUserAction
     use AsAction;
 
     public string $commandSignature = 'auth:users.update {username}';
+
     public string $commandDescription = 'Update an existing user';
 
     public function handle(User $user, $data)
@@ -72,5 +74,4 @@ class UpdateUserAction
 
         $command->info('User updated successfully');
     }
-
 }

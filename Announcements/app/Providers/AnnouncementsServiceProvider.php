@@ -104,10 +104,10 @@ class AnnouncementsServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-         $this->commands([
-             CreateAnnouncementAction::class,
-             UpdateAnnouncementAction::class,
-         ]);
+        $this->commands([
+            CreateAnnouncementAction::class,
+            UpdateAnnouncementAction::class,
+        ]);
     }
 
     /**

@@ -7,7 +7,6 @@ use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Livewire\WithFileUploads;
 use Modules\Announcements\app\Actions\CreateAnnouncementAction;
-use Modules\Announcements\Models\Announcement;
 
 class CreateAnnouncement extends CFComponent
 {

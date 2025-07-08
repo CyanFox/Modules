@@ -108,7 +108,7 @@ final class AnnouncementsTable extends PenguTable
 
             Storage::disk('local')->deleteDirectory('announcements/'.$announcement->id);
 
-            if (!DeleteAnnouncementAction::run($announcement)) {
+            if (! DeleteAnnouncementAction::run($announcement)) {
                 Notification::make()
                     ->title(__('messages.notifications.something_went_wrong'))
                     ->danger()

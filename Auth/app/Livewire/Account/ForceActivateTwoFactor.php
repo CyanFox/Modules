@@ -29,13 +29,13 @@ class ForceActivateTwoFactor extends CFComponent
             'twoFactorCode' => 'required|digits:6',
         ]);
 
-        if (!Hash::check($this->currentPassword, auth()->user()->password)) {
+        if (! Hash::check($this->currentPassword, auth()->user()->password)) {
             $this->addError('currentPassword', __('auth.password'));
 
             return;
         }
 
-        if (!auth()->user()->checkTwoFACode($this->twoFactorCode, false)) {
+        if (! auth()->user()->checkTwoFACode($this->twoFactorCode, false)) {
             throw ValidationException::withMessages(['twoFactorCode' => __('auth::force.activate_two_factor.invalid_two_factor_code')]);
         }
 
@@ -52,7 +52,7 @@ class ForceActivateTwoFactor extends CFComponent
     {
         return response()->streamDownload(function () {
             echo implode(PHP_EOL, $this->recoveryCodes);
-        }, 'recovery-codes-' . auth()->user()->username . '.txt');
+        }, 'recovery-codes-'.auth()->user()->username.'.txt');
     }
 
     public function finish()

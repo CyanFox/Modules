@@ -6,7 +6,6 @@ use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Modules\Auth\Actions\Groups\CreateGroupAction;
-use Spatie\Permission\Models\Role;
 
 class CreateGroup extends CFComponent
 {

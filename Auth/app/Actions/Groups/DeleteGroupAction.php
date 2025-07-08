@@ -4,8 +4,8 @@ namespace Modules\Auth\Actions\Groups;
 
 use Illuminate\Console\Command;
 use Lorisleiva\Actions\Concerns\AsAction;
-use Modules\Auth\Models\Permission;
 use Modules\Auth\Models\Role;
+
 use function Laravel\Prompts\confirm;
 
 class DeleteGroupAction
@@ -13,6 +13,7 @@ class DeleteGroupAction
     use AsAction;
 
     public string $commandSignature = 'auth:groups.delete {name}';
+
     public string $commandDescription = 'Delete an Group';
 
     public function handle(Role $role)
@@ -33,7 +34,7 @@ class DeleteGroupAction
     public function asCommand(Command $command)
     {
         $role = Role::where('name', $command->argument('name'))->first();
-        if (!$role) {
+        if (! $role) {
             $command->error('Group not found');
 
             return;
@@ -41,7 +42,7 @@ class DeleteGroupAction
 
         $delete = confirm('Are you sure you want to delete this group?');
 
-        if (!$delete) {
+        if (! $delete) {
             $command->info('Group not deleted');
 
             return;
@@ -51,5 +52,4 @@ class DeleteGroupAction
 
         $command->info('Group deleted successfully');
     }
-
 }

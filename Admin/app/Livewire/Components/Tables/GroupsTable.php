@@ -90,14 +90,14 @@ final class GroupsTable extends PenguTable
                 'guard_name' => 'web',
             ]);
 
-            if (!DeleteGroupAction::run($group)) {
+            if (! DeleteGroupAction::run($group)) {
                 Notification::make()
                     ->title(__('messages.notifications.something_went_wrong'))
                     ->danger()
                     ->send();
+
                 return;
             }
-
 
             Notification::make()
                 ->title(__('admin::groups.delete_group.notifications.group_deleted'))

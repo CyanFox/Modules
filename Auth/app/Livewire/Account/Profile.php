@@ -174,11 +174,12 @@ class Profile extends CFComponent
             return;
         }
 
-        if (!DeleteUserAction::run(auth()->user())) {
+        if (! DeleteUserAction::run(auth()->user())) {
             Notification::make()
                 ->title(__('messages.notifications.something_went_wrong'))
                 ->danger()
                 ->send();
+
             return;
         }
 

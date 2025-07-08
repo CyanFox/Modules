@@ -8,6 +8,7 @@ use Modules\Announcements\Models\Announcement;
 use Modules\Auth\Models\Permission;
 use Modules\Auth\Models\Role;
 use Modules\Auth\Models\User;
+
 use function Laravel\Prompts\multiselect;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
@@ -18,6 +19,7 @@ class UpdateAnnouncementAction
     use AsAction;
 
     public string $commandSignature = 'announcements:update {id}';
+
     public string $commandDescription = 'Update an existing Announcement';
 
     public function handle(Announcement $announcement, $data)
@@ -38,7 +40,7 @@ class UpdateAnnouncementAction
     public function asCommand(Command $command)
     {
         $announcement = Announcement::find($command->argument('id'));
-        if (!$announcement) {
+        if (! $announcement) {
             $command->error('Announcement not found');
 
             return;
@@ -108,5 +110,4 @@ class UpdateAnnouncementAction
 
         $command->info('Announcement updated successfully');
     }
-
 }

@@ -8,6 +8,7 @@ use Lorisleiva\Actions\Concerns\AsAction;
 use Modules\Auth\Models\Permission;
 use Modules\Auth\Models\Role;
 use Modules\Auth\Models\User;
+
 use function Laravel\Prompts\multiselect;
 use function Laravel\Prompts\password;
 use function Laravel\Prompts\text;
@@ -17,6 +18,7 @@ class CreateUserAction
     use AsAction;
 
     public string $commandSignature = 'auth:users.create';
+
     public string $commandDescription = 'Create a new user';
 
     public function handle($data)
@@ -67,5 +69,4 @@ class CreateUserAction
 
         $command->info('User created successfully');
     }
-
 }

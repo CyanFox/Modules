@@ -5,6 +5,7 @@ namespace Modules\Auth\Actions\Users;
 use Illuminate\Console\Command;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Modules\Auth\Models\User;
+
 use function Laravel\Prompts\confirm;
 
 class DeleteUserAction
@@ -12,6 +13,7 @@ class DeleteUserAction
     use AsAction;
 
     public string $commandSignature = 'auth:users.delete {username}';
+
     public string $commandDescription = 'Delete a user';
 
     public function handle(User $user)
@@ -32,7 +34,7 @@ class DeleteUserAction
     public function asCommand(Command $command)
     {
         $user = User::where('username', $command->argument('username'))->first();
-        if (!$user) {
+        if (! $user) {
             $command->error('User not found');
 
             return;
@@ -40,7 +42,7 @@ class DeleteUserAction
 
         $delete = confirm('Are you sure you want to delete this user?');
 
-        if (!$delete) {
+        if (! $delete) {
             $command->info('User not deleted');
 
             return;
@@ -50,5 +52,4 @@ class DeleteUserAction
 
         $command->info('User deleted successfully');
     }
-
 }
