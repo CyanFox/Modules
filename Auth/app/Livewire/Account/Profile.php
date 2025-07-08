@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
+use Modules\Auth\Actions\Users\DeleteUserAction;
+use Modules\Auth\Actions\Users\UpdateUserAction;
 use Modules\Auth\Models\User;
 use Modules\Auth\Rules\Password;
 use Modules\Auth\Traits\WithConfirmation;
@@ -50,7 +52,7 @@ class Profile extends CFComponent
             'theme' => 'nullable|string|in:light,dark',
         ]);
 
-        auth()->user()->update([
+        UpdateUserAction::run(auth()->user(), [
             'language' => $this->language ?? 'en',
             'theme' => $this->theme ?? 'light',
         ]);
@@ -74,7 +76,7 @@ class Profile extends CFComponent
             'email' => 'required|email',
         ]);
 
-        auth()->user()->update([
+        UpdateUserAction::run(auth()->user(), [
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
             'username' => $this->username,
@@ -110,8 +112,8 @@ class Profile extends CFComponent
             }
         }
 
-        auth()->user()->update([
-            'password' => Hash::make($this->newPassword),
+        UpdateUserAction::run(auth()->user(), [
+            'password' => $this->newPassword,
         ]);
 
         Notification::make()
@@ -137,7 +139,7 @@ class Profile extends CFComponent
             return;
         }
 
-        auth()->user()->update([
+        UpdateUserAction::run(auth()->user(), [
             'two_factor_secret' => null,
             'two_factor_enabled' => false,
         ]);
@@ -172,7 +174,13 @@ class Profile extends CFComponent
             return;
         }
 
-        auth()->user()->delete();
+        if (!DeleteUserAction::run(auth()->user())) {
+            Notification::make()
+                ->title(__('messages.notifications.something_went_wrong'))
+                ->danger()
+                ->send();
+            return;
+        }
 
         Notification::make()
             ->title(__('auth::profile.modals.delete_account.notifications.account_deleted'))

@@ -6,6 +6,7 @@ use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Livewire\WithFileUploads;
+use Modules\Announcements\app\Actions\CreateAnnouncementAction;
 use Modules\Announcements\Models\Announcement;
 
 class CreateAnnouncement extends CFComponent
@@ -47,7 +48,7 @@ class CreateAnnouncement extends CFComponent
             'users' => 'array|exists:users,id',
         ]);
 
-        $announcement = Announcement::create([
+        $announcement = CreateAnnouncementAction::run([
             'title' => $this->title,
             'icon' => $this->icon,
             'color' => $this->color,

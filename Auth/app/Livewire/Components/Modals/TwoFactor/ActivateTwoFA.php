@@ -6,6 +6,7 @@ use App\Livewire\CFModalComponent;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Validation\ValidationException;
+use Modules\Auth\Actions\Users\UpdateUserAction;
 use Modules\Auth\Livewire\Account\Profile;
 use Modules\Auth\Traits\WithPasswordConfirmation;
 
@@ -19,7 +20,7 @@ class ActivateTwoFA extends CFModalComponent
 
     public function activateTwoFA()
     {
-        if (! $this->hasPasswordConfirmedSession()) {
+        if (!$this->hasPasswordConfirmedSession()) {
             return;
         }
 
@@ -27,13 +28,15 @@ class ActivateTwoFA extends CFModalComponent
             'twoFactorCode' => 'required|digits:6',
         ]);
 
-        if (! auth()->user()->checkTwoFACode($this->twoFactorCode, false)) {
+        if (!auth()->user()->checkTwoFACode($this->twoFactorCode, false)) {
             throw ValidationException::withMessages(['twoFactorCode' => __('auth::profile.modals.activate_two_fa.invalid_two_factor_code')]);
         }
 
         $this->recoveryCodes = auth()->user()->generateRecoveryCodes();
 
-        auth()->user()->update(['two_factor_enabled' => true]);
+        UpdateUserAction::run(auth()->user(), [
+            'two_factor_enabled' => true
+        ]);
 
         auth()->user()->revokeOtherSessions();
 
@@ -47,18 +50,18 @@ class ActivateTwoFA extends CFModalComponent
 
     public function downloadRecoveryCodes()
     {
-        if (! $this->hasPasswordConfirmedSession()) {
+        if (!$this->hasPasswordConfirmedSession()) {
             return;
         }
 
         return response()->streamDownload(function () {
             echo implode(PHP_EOL, $this->recoveryCodes);
-        }, 'recovery-codes-'.auth()->user()->username.'.txt');
+        }, 'recovery-codes-' . auth()->user()->username . '.txt');
     }
 
     public function regenerateRecoveryCodes()
     {
-        if (! $this->hasPasswordConfirmedSession()) {
+        if (!$this->hasPasswordConfirmedSession()) {
             return;
         }
 
@@ -76,7 +79,7 @@ class ActivateTwoFA extends CFModalComponent
             auth()->user()->generateTwoFASecret();
         }
 
-        if (! $this->checkPasswordConfirmation()->passwordFunction('render')->checkPassword()) {
+        if (!$this->checkPasswordConfirmation()->passwordFunction('render')->checkPassword()) {
             return;
         }
     }

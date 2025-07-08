@@ -7,9 +7,15 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Socialite\Contracts\Factory;
-use Modules\Auth\Console\Users\CreateUserCommand;
-use Modules\Auth\Console\Users\DeleteUserCommand;
-use Modules\Auth\Console\Users\UpdateUserCommand;
+use Modules\Auth\Actions\Groups\CreateGroupAction;
+use Modules\Auth\Actions\Groups\DeleteGroupAction;
+use Modules\Auth\Actions\Groups\UpdateGroupAction;
+use Modules\Auth\Actions\Permissions\CreatePermissionAction;
+use Modules\Auth\Actions\Permissions\DeletePermissionAction;
+use Modules\Auth\Actions\Permissions\UpdatePermissionAction;
+use Modules\Auth\Actions\Users\CreateUserAction;
+use Modules\Auth\Actions\Users\DeleteUserAction;
+use Modules\Auth\Actions\Users\UpdateUserAction;
 use Modules\Auth\Http\Middleware\Authenticate;
 use Modules\Auth\Http\Middleware\CheckForceActions;
 use Modules\Auth\Http\Middleware\CheckIfUserIsDisabled;
@@ -52,7 +58,7 @@ class AuthServiceProvider extends ServiceProvider
         Config::set('passkeys.models.authenticatable', User::class);
         Config::set('passkeys.redirect_to_after_login', '/');
 
-        if (! app()->runningInConsole()) {
+        if (!app()->runningInConsole()) {
             $group = Role::findOrCreate('Super Admin');
             $group->givePermissionTo(Permission::all());
         }
@@ -67,7 +73,7 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->app['router']->pushMiddlewareToGroup('web', 'language');
 
-        if (! app()->runningInConsole()) {
+        if (!app()->runningInConsole()) {
             $socialite = $this->app->make(Factory::class);
 
             $socialite->extend('custom', function () use ($socialite) {
@@ -111,7 +117,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function registerTranslations(): void
     {
-        $langPath = resource_path('lang/modules/'.$this->nameLower);
+        $langPath = resource_path('lang/modules/' . $this->nameLower);
 
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->nameLower);
@@ -133,10 +139,10 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function registerViews(): void
     {
-        $viewPath = resource_path('views/modules/'.$this->nameLower);
+        $viewPath = resource_path('views/modules/' . $this->nameLower);
         $sourcePath = module_path($this->name, 'resources/views');
 
-        $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower.'-module-views']);
+        $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower . '-module-views']);
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->nameLower);
 
@@ -158,9 +164,15 @@ class AuthServiceProvider extends ServiceProvider
     protected function registerCommands(): void
     {
         $this->commands([
-            new CreateUserCommand,
-            new UpdateUserCommand,
-            new DeleteUserCommand,
+            CreateUserAction::class,
+            UpdateUserAction::class,
+            DeleteUserAction::class,
+            CreateGroupAction::class,
+            UpdateGroupAction::class,
+            DeleteGroupAction::class,
+            CreatePermissionAction::class,
+            UpdatePermissionAction::class,
+            DeletePermissionAction::class,
         ]);
     }
 
@@ -188,8 +200,8 @@ class AuthServiceProvider extends ServiceProvider
 
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
-                    $relativePath = str_replace($configPath.DIRECTORY_SEPARATOR, '', $file->getPathname());
-                    $configKey = $this->nameLower.'.'.str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
+                    $relativePath = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
+                    $configKey = $this->nameLower . '.' . str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
                     $key = ($relativePath === 'auth.php') ? $this->nameLower : $configKey;
 
                     $this->publishes([$file->getPathname() => config_path($relativePath)], 'config');
@@ -203,8 +215,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $paths = [];
         foreach (config('view.paths') as $path) {
-            if (is_dir($path.'/modules/'.$this->nameLower)) {
-                $paths[] = $path.'/modules/'.$this->nameLower;
+            if (is_dir($path . '/modules/' . $this->nameLower)) {
+                $paths[] = $path . '/modules/' . $this->nameLower;
             }
         }
 

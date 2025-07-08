@@ -58,7 +58,7 @@
 
                                 @if(modules()->getRemoteVersion($module) != null && modules()->getVersion($module) != null &&
                                     modules()->getVersion($module) != modules()->getRemoteVersion($module))
-                                    <x-badge color="warning">{{ __('admin::modules.update_available') }}</x-badge>
+                                    <x-badge color="warning">{{ __('admin::modules.update_available', ['remoteVersion' => modules()->getRemoteVersion($module)]) }}</x-badge>
                                 @endif
                             </x-table.body.item>
                             <x-table.body.item>

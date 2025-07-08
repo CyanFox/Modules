@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Modules\Admin\Facades\SidebarManager;
+use Modules\Announcements\app\Actions\CreateAnnouncementAction;
+use Modules\Announcements\app\Actions\UpdateAnnouncementAction;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -102,7 +104,10 @@ class AnnouncementsServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        // $this->commands([]);
+         $this->commands([
+             CreateAnnouncementAction::class,
+             UpdateAnnouncementAction::class,
+         ]);
     }
 
     /**

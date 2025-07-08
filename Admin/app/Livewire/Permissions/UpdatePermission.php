@@ -5,8 +5,9 @@ namespace Modules\Admin\Livewire\Permissions;
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
+use Modules\Auth\Actions\Permissions\UpdatePermissionAction;
+use Modules\Auth\Models\Permission;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
-use Spatie\Permission\Models\Permission;
 
 class UpdatePermission extends CFComponent
 {
@@ -27,7 +28,7 @@ class UpdatePermission extends CFComponent
             'guardName' => 'required|string',
         ]);
 
-        $this->permission->update([
+        UpdatePermissionAction::run($this->permission, [
             'name' => $this->name,
             'guard_name' => $this->guardName,
         ]);

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Modules\Announcements\app\Actions\DeleteAnnouncementAction;
 use Modules\Announcements\Models\Announcement;
 use Modules\Auth\Traits\WithConfirmation;
 use RealZone22\PenguTables\Livewire\PenguTable;
@@ -107,7 +108,14 @@ final class AnnouncementsTable extends PenguTable
 
             Storage::disk('local')->deleteDirectory('announcements/'.$announcement->id);
 
-            $announcement->delete();
+            if (!DeleteAnnouncementAction::run($announcement)) {
+                Notification::make()
+                    ->title(__('messages.notifications.something_went_wrong'))
+                    ->danger()
+                    ->send();
+
+                return;
+            }
 
             Notification::make()
                 ->title(__('announcements::announcements.delete_announcement.notifications.announcement_deleted'))

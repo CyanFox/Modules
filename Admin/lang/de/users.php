@@ -16,6 +16,8 @@ return [
     'permissions' => 'Berechtigungen',
     'password' => 'Passwort',
     'confirm_password' => 'Passwort bestätigen',
+    'last_seen' => 'Zuletzt gesehen',
+    'never' => 'Nie',
 
     'buttons' => [
         'create_user' => 'Benutzer erstellen',

@@ -40,7 +40,7 @@
     <x-select.multiple
         label="{{ __('announcements::announcements.groups') }}"
         :options="
-        \Spatie\Permission\Models\Role::all()
+        \Modules\Auth\Models\Role::all()
             ->map(fn($group) => [
                 'value' => $group->id,
                 'label' => $group->name
@@ -53,7 +53,7 @@
     <x-select.multiple
         label="{{ __('announcements::announcements.permissions') }}"
         :options="
-        \Spatie\Permission\Models\Permission::all()
+        \Modules\Auth\Models\Permission::all()
             ->map(fn($permission) => [
                 'value' => $permission->id,
                 'label' => $permission->name

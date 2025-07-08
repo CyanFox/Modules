@@ -7,6 +7,7 @@ use App\Traits\WithCustomLivewireException;
 use Exception;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
+use Modules\Auth\Actions\Users\UpdateUserAction;
 use Modules\Auth\Models\User;
 
 class UpdateUser extends CFComponent
@@ -55,7 +56,7 @@ class UpdateUser extends CFComponent
             'disabled' => 'nullable|boolean',
         ]);
 
-        $this->user->update([
+        $this->user = UpdateUserAction::run($this->user, [
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
             'username' => $this->username,
@@ -66,7 +67,7 @@ class UpdateUser extends CFComponent
         ]);
 
         if ($this->password) {
-            $this->user->update([
+            $this->user = UpdateUserAction::run($this->user, [
                 'password' => Hash::make($this->password),
             ]);
         }

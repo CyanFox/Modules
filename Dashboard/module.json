@@ -5,7 +5,7 @@
     "keywords": ["dashboard", "cyanfox", "base"],
     "authors": ["CyanFox"],
     "license": "MIT",
-    "version": "1.0.0",
+    "version": "25.07",
     "remote_version_url": "https://raw.githubusercontent.com/CyanFox-Projects/CyanFox-Base-Modules/v4/Dashboard/module.json",
     "priority": 0,
     "providers": [

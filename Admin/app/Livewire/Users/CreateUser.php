@@ -6,7 +6,7 @@ use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
-use Modules\Auth\Models\User;
+use Modules\Auth\Actions\Users\CreateUserAction;
 use Modules\Auth\Rules\Password;
 
 class CreateUser extends CFComponent
@@ -51,7 +51,7 @@ class CreateUser extends CFComponent
             'disabled' => 'nullable|boolean',
         ]);
 
-        $user = User::create([
+        $user = CreateUserAction::run([
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
             'username' => $this->username,

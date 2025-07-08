@@ -5,13 +5,15 @@ namespace Modules\Admin\Livewire\Components\Tables;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
+use Modules\Auth\Actions\Groups\DeleteGroupAction;
+use Modules\Auth\Actions\Groups\UpdateGroupAction;
+use Modules\Auth\Models\Role;
 use Modules\Auth\Traits\WithConfirmation;
 use RealZone22\PenguTables\Livewire\PenguTable;
 use RealZone22\PenguTables\Table\Action;
 use RealZone22\PenguTables\Table\Column;
 use RealZone22\PenguTables\Table\Header;
 use RealZone22\PenguTables\Traits\WithExport;
-use Spatie\Permission\Models\Role;
 
 final class GroupsTable extends PenguTable
 {
@@ -84,11 +86,18 @@ final class GroupsTable extends PenguTable
         if ($confirmed) {
             $group = Role::find($groupId);
 
-            $group->update([
+            UpdateGroupAction::run($group, [
                 'guard_name' => 'web',
             ]);
 
-            $group->delete();
+            if (!DeleteGroupAction::run($group)) {
+                Notification::make()
+                    ->title(__('messages.notifications.something_went_wrong'))
+                    ->danger()
+                    ->send();
+                return;
+            }
+
 
             Notification::make()
                 ->title(__('admin::groups.delete_group.notifications.group_deleted'))

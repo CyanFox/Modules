@@ -3,7 +3,6 @@ name: Test
 on:
   push:
     branches:
-      - v4-develop
       - v4
 
 jobs:

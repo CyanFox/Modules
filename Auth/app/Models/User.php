@@ -67,6 +67,7 @@ class User extends Authenticatable implements HasPasskeys
         'force_change_password' => 'boolean',
         'force_activate_two_factor' => 'boolean',
         'disabled' => 'boolean',
+        'password' => 'hashed',
     ];
 
     public function recoveryCodes()

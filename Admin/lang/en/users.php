@@ -16,6 +16,8 @@ return [
     'permissions' => 'Permissions',
     'password' => 'Password',
     'confirm_password' => 'Confirm Password',
+    'last_seen' => 'Last Seen',
+    'never' => 'Never',
 
     'buttons' => [
         'create_user' => 'Create User',
