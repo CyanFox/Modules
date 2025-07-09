@@ -49,4 +49,9 @@ class ApiKey extends Model
                 return 'auth.user.api_keys.'.$eventName;
             });
     }
+
+    public function displayName()
+    {
+        return $this->name;
+    }
 }
