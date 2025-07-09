@@ -431,14 +431,14 @@
                     </x-table.header.item>
                 </x-table.header>
                 <x-table.body>
-                    @foreach(auth()->user()->apiKeys()->get() as $apiKey)
+                    @foreach(auth()->user()->apiKeys()->with('permissions.permission')->get() as $apiKey)
                         <tr>
                             <x-table.body.item>
                                 {{ $apiKey->name }}
                             </x-table.body.item>
                             <x-table.body.item>
-                                <span x-data x-tooltip.raw="{{ $apiKey->permissions->map(fn($perm) => $perm->permission->name ?? '')->filter()->implode(', ') }}">
-                                    {{ str()->limit($apiKey->permissions->map(fn($perm) => $perm->permission->name ?? '')->filter()->implode(', '), 100, preserveWords: true) }}
+                                <span x-data x-tooltip.raw="{{ $apiKey->permissions->pluck('permission.name')->implode(', ') }}">
+                                    {{ str()->limit($apiKey->permissions->pluck('permission.name')->implode(', '), 100, preserveWords: true) }}
                                 </span>
                             </x-table.body.item>
                             <x-table.body.item>

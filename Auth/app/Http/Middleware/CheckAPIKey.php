@@ -18,6 +18,10 @@ class CheckAPIKey
             return response()->json(['error' => 'API key is missing'], 401);
         }
 
+        if (!$request->header('Authorization') || !str_contains($request->header('Authorization'), '-')) {
+            return response()->json(['error' => 'Invalid API key'], 401);
+        }
+
         list($apiKeyId, $apiKeyValue) = explode('-', $request->header('Authorization'), 2);
 
         $apiKey = ApiKey::find($apiKeyId);
