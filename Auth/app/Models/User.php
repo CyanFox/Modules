@@ -80,6 +80,11 @@ class User extends Authenticatable implements HasPasskeys
         return $this->hasMany(Session::class);
     }
 
+    public function apiKeys()
+    {
+        return $this->hasMany(ApiKey::class);
+    }
+
     public function fullName()
     {
         return $this->first_name.' '.$this->last_name;

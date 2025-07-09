@@ -6,7 +6,7 @@ return [
     'tabs' => [
         'overview' => 'Overview',
         'sessions' => 'Sessions',
-        'apiKeys' => 'API Keys',
+        'api_keys' => 'API Keys',
         'password' => 'Password',
         'passkeys' => 'Passkeys',
         'activity' => 'Activity',
@@ -115,6 +115,48 @@ return [
             'title' => 'Activity Details',
             'old_values' => 'Old Values',
             'new_values' => 'New Values',
+        ],
+    ],
+
+    'api_keys' => [
+        'title' => 'API Keys',
+        'name' => 'Name',
+        'permissions' => 'Permissions',
+        'last_used' => 'Last Used',
+        'never_used' => 'Never Used',
+
+        'buttons' => [
+            'create_api_key' => 'Create API Key',
+            'api_docs' => 'API Documentation',
+        ],
+
+        'modals' => [
+            'create_api_key' => [
+                'title' => 'Create API Key',
+
+                'generated_key' => 'API Key',
+                'generated_key_description' => 'This key is generated and will not be shown again. Please copy it now.',
+
+                'buttons' => [
+                    'create_api_key' => 'Create API Key',
+                ],
+
+                'notifications' => [
+                    'api_key_created' => 'API Key created successfully.',
+                ],
+            ],
+            'delete_api_key' => [
+                'title' => 'Delete API Key',
+                'description' => 'Are you sure you want to delete this API key? This action cannot be undone.',
+
+                'buttons' => [
+                    'delete_api_key' => 'Delete API Key',
+                ],
+
+                'notifications' => [
+                    'api_key_deleted' => 'API Key deleted successfully.',
+                ],
+            ],
         ],
     ],
 
