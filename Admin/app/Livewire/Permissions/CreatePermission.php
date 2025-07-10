@@ -5,7 +5,7 @@ namespace Modules\Admin\Livewire\Permissions;
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
-use Spatie\Permission\Models\Permission;
+use Modules\Auth\Actions\Permissions\CreatePermissionAction;
 
 class CreatePermission extends CFComponent
 {
@@ -22,7 +22,7 @@ class CreatePermission extends CFComponent
             'guardName' => 'required|string',
         ]);
 
-        Permission::create([
+        CreatePermissionAction::run([
             'name' => $this->name,
             'guard_name' => $this->guardName,
         ]);

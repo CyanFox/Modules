@@ -7,6 +7,7 @@ use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Modules\Auth\Actions\Users\UpdateUserAction;
 use Modules\Auth\Facades\UnsplashManager;
 
 class ForceActivateTwoFactor extends CFComponent
@@ -40,7 +41,9 @@ class ForceActivateTwoFactor extends CFComponent
 
         $this->recoveryCodes = auth()->user()->generateRecoveryCodes();
 
-        auth()->user()->update(['two_factor_enabled' => true]);
+        UpdateUserAction::run(auth()->user(), [
+            'two_factor_enabled' => true,
+        ]);
 
         auth()->user()->revokeOtherSessions();
     }

@@ -5,8 +5,9 @@ namespace Modules\Admin\Livewire\Groups;
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
+use Modules\Auth\Actions\Groups\UpdateGroupAction;
+use Modules\Auth\Models\Role;
 use Spatie\Permission\Exceptions\RoleDoesNotExist;
-use Spatie\Permission\Models\Role;
 
 class UpdateGroup extends CFComponent
 {
@@ -30,7 +31,7 @@ class UpdateGroup extends CFComponent
             'permissions' => 'nullable|array',
         ]);
 
-        $this->group->update([
+        UpdateGroupAction::run($this->group, [
             'name' => $this->name,
             'guard_name' => $this->guardName,
         ]);

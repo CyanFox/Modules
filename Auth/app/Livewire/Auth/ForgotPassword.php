@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Url;
+use Modules\Auth\Actions\Users\UpdateUserAction;
 use Modules\Auth\Emails\ForgotPasswordMail;
 use Modules\Auth\Facades\UnsplashManager;
 use Modules\Auth\Models\User;
@@ -46,7 +47,7 @@ class ForgotPassword extends CFComponent
             'passwordConfirmation.same' => __('auth::forgot-password.password_same'),
         ]);
 
-        $this->user->update([
+        UpdateUserAction::run($this->user, [
             'password' => Hash::make($this->password),
             'password_reset_token' => null,
             'password_reset_expiration' => null,
@@ -74,7 +75,7 @@ class ForgotPassword extends CFComponent
 
         $resetToken = Str::random(20).time().'-'.$this->user->id;
 
-        $this->user->update([
+        UpdateUserAction::run($this->user, [
             'password_reset_token' => Hash::make($resetToken),
             'password_reset_expiration' => now()->addDay(),
         ]);

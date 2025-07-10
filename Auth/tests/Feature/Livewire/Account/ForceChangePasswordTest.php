@@ -8,7 +8,7 @@ use Livewire\Livewire;
 use Modules\Auth\Livewire\Account\ForceChangePassword;
 use Modules\Auth\Models\User;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\TestCase;
+use Modules\Auth\Tests\TestCase;
 
 class ForceChangePasswordTest extends TestCase
 {

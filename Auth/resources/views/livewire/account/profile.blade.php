@@ -16,6 +16,11 @@
             <i class="icon-eye"></i>
             <span class="ml-2">{{ __('auth::profile.tabs.activity') }}</span>
         </x-tab.item>
+        <x-tab.item class="flex-1 flex items-center justify-center" uuid="apiKeys"
+                    wire:click="$set('tab', 'apiKeys')">
+            <i class="icon-key"></i>
+            <span class="ml-2">{{ __('auth::profile.tabs.api_keys') }}</span>
+        </x-tab.item>
 
         <x-view-integration name="auth.profile.tabs"/>
     </x-tab>
@@ -343,7 +348,7 @@
                     <nav aria-label="pagination">
                         <ul class="flex shrink-0 items-center gap-2 text-sm font-medium">
                             <li>
-                                <a href="{{ $this->activities->previousPageUrl() ? app('request')->fullUrlWithQuery(['page' => $currentPage - 1, 'tab' => $tab]) : '#' }}"
+                                <a href="{{ $this->activities->previousPageUrl() ? route('account.profile', ['page' => $currentPage - 1, 'tab' => $tab]) : '#' }}"
                                    class="flex items-center rounded-radius p-1 text-on-surface hover:text-primary dark:text-on-surface-dark dark:hover:text-primary-dark {{ $currentPage == 1 ? 'opacity-50 pointer-events-none' : '' }}"
                                    aria-label="{{ __('auth::profile.activity.pagination_previous') }}" wire:navigate>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
@@ -363,7 +368,7 @@
                                     </li>
                                 @endif
                                 <li>
-                                    <a href="{{ app('request')->fullUrlWithQuery(['page' => $page, 'tab' => $tab]) }}"
+                                    <a href="{{ route('account.profile', ['page' => $page, 'tab' => $tab]) }}"
                                        class="flex size-6 items-center justify-center rounded-radius p-1 {{ $currentPage == $page ? 'bg-primary font-bold text-on-primary dark:bg-primary-dark dark:text-on-primary-dark' : 'text-on-surface hover:text-primary dark:text-on-surface-dark dark:hover:text-primary-dark' }}"
                                        aria-label="page {{ $page }}" wire:navigate
                                        @if($currentPage == $page) aria-current="page" @endif>
@@ -372,7 +377,7 @@
                                 </li>
                             @endforeach
                             <li>
-                                <a href="{{ $this->activities->nextPageUrl() ? app('request')->fullUrlWithQuery(['page' => $currentPage + 1, 'tab' => $tab]) : '#' }}"
+                                <a href="{{ $this->activities->nextPageUrl() ? route('account.profile', ['page' => $currentPage + 1, 'tab' => $tab]) : '#' }}"
                                    class="flex items-center rounded-radius p-1 text-on-surface hover:text-primary dark:text-on-surface-dark dark:hover:text-primary-dark {{ $currentPage == $lastPage ? 'opacity-50 pointer-events-none' : '' }}"
                                    aria-label="{{ __('auth::profile.activity.pagination_next') }}" wire:navigate>
                                     {{ __('auth::profile.activity.pagination_next') }}
@@ -388,6 +393,70 @@
                     </nav>
                 </div>
             @endif
+        </x-card>
+    @elseif($tab === 'apiKeys')
+        <x-card class="mt-4">
+            <x-card.title>
+                <div class="flex items-center justify-between">
+                    <p>{{ __('auth::profile.api_keys.title') }}</p>
+                    <div>
+                        <x-button
+                            link="/docs/api" target="_blank">
+                            {{ __('auth::profile.api_keys.buttons.api_docs') }}
+                        </x-button>
+                        <x-button
+                            wire:click="$dispatch('openModal', {component: 'auth::components.modals.create-api-key'})">
+                            {{ __('auth::profile.api_keys.buttons.create_api_key') }}
+                        </x-button>
+                    </div>
+                </div>
+            </x-card.title>
+
+            <x-table>
+                <x-table.header>
+                    <x-table.header.item>
+                        {{ __('auth::profile.api_keys.name') }}
+                    </x-table.header.item>
+                    <x-table.header.item>
+                        {{ __('auth::profile.api_keys.permissions') }}
+                    </x-table.header.item>
+                    <x-table.header.item>
+                        {{ __('auth::profile.api_keys.last_used') }}
+                    </x-table.header.item>
+                    <x-table.header.item>
+                        {{ __('messages.tables.created_at') }}
+                    </x-table.header.item>
+                    <x-table.header.item>
+                        {{ __('messages.tables.actions') }}
+                    </x-table.header.item>
+                </x-table.header>
+                <x-table.body>
+                    @foreach(auth()->user()->apiKeys()->with('permissions.permission')->get() as $apiKey)
+                        <tr>
+                            <x-table.body.item>
+                                {{ $apiKey->name }}
+                            </x-table.body.item>
+                            <x-table.body.item>
+                                <span x-data x-tooltip.raw="{{ $apiKey->permissions->pluck('permission.name')->implode(', ') }}">
+                                    {{ str()->limit($apiKey->permissions->pluck('permission.name')->implode(', '), 100, preserveWords: true) }}
+                                </span>
+                            </x-table.body.item>
+                            <x-table.body.item>
+                                {{ $apiKey->last_used ? \Illuminate\Support\Carbon::parse($apiKey->last_used)->diffForHumans() : __('auth::profile.api_keys.never_used') }}
+                            </x-table.body.item>
+                            <x-table.body.item>
+                                {{ date('d.m.Y H:i', strtotime($apiKey->created_at)) }}
+                            </x-table.body.item>
+                            <x-table.body.item>
+                                <x-button.floating wire:click="deleteApiKey('{{ $apiKey->id }}', false)"
+                                                   loading="deleteApiKey" size="sm" color="danger">
+                                    <i class="icon-trash"></i>
+                                </x-button.floating>
+                            </x-table.body.item>
+                        </tr>
+                    @endforeach
+                </x-table.body>
+            </x-table>
         </x-card>
     @endif
 </div>

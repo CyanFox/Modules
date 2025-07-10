@@ -6,6 +6,7 @@ use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
+use Modules\Auth\Actions\Users\UpdateUserAction;
 use Modules\Auth\Facades\UnsplashManager;
 use Modules\Auth\Rules\Password;
 
@@ -39,7 +40,7 @@ class ForceChangePassword extends CFComponent
             return;
         }
 
-        auth()->user()->update([
+        UpdateUserAction::run(auth()->user(), [
             'password' => Hash::make($this->newPassword),
             'force_change_password' => false,
         ]);

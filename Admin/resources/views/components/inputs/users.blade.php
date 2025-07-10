@@ -18,29 +18,29 @@
                 :required="$passwordRequired"/>
 
     <x-select.multiple
-        label="{{ __('admin::users.groups') }}"
-        :options="
-        \Spatie\Permission\Models\Role::all()
+            label="{{ __('admin::users.groups') }}"
+            :options="
+        \Modules\Auth\Models\Role::all()
             ->map(fn($group) => [
                 'value' => $group->id,
                 'label' => $group->name
             ])
             ->toArray()
     "
-        wire:model="groups"
+            wire:model="groups"
     />
 
     <x-select.multiple
-        label="{{ __('admin::users.permissions') }}"
-        :options="
-        \Spatie\Permission\Models\Permission::all()
+            label="{{ __('admin::users.permissions') }}"
+            :options="
+       \Modules\Auth\Models\Permission::all()
             ->map(fn($permission) => [
                 'value' => $permission->id,
                 'label' => $permission->name
             ])
             ->toArray()
     "
-        wire:model="permissions"
+            wire:model="permissions"
     />
 
 

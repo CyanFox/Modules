@@ -7,6 +7,7 @@ use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithFileUploads;
+use Modules\Auth\Actions\Users\UpdateUserAction;
 
 class ChangeAvatar extends CFModalComponent
 {
@@ -41,7 +42,7 @@ class ChangeAvatar extends CFModalComponent
 
         if ($this->avatarUrl) {
 
-            auth()->user()->update([
+            UpdateUserAction::run(auth()->user(), [
                 'custom_avatar_url' => htmlspecialchars($this->avatarUrl),
             ]);
 
@@ -63,7 +64,7 @@ class ChangeAvatar extends CFModalComponent
 
         Storage::disk('public')->delete('avatars/'.auth()->id().'.png');
 
-        auth()->user()->update([
+        UpdateUserAction::run(auth()->user(), [
             'custom_avatar_url' => null,
         ]);
 

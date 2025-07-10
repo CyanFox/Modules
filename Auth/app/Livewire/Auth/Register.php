@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Modules\Auth\Actions\Users\CreateUserAction;
 use Modules\Auth\Facades\UnsplashManager;
-use Modules\Auth\Models\User;
 use Modules\Auth\Rules\Password;
 
 class Register extends CFComponent
@@ -66,15 +66,13 @@ class Register extends CFComponent
             return;
         }
 
-        $user = User::create([
+        $user = CreateUserAction::run([
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
             'email' => $this->email,
             'username' => $this->username,
             'password' => Hash::make($this->password),
         ]);
-
-        $user->generateTwoFASecret();
 
         Auth::login($user);
 

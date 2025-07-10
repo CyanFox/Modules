@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Hash;
 use Livewire\Livewire;
 use Modules\Auth\Livewire\Account\ForceActivateTwoFactor;
 use Modules\Auth\Models\User;
+use Modules\Auth\Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 use PragmaRX\Google2FA\Google2FA;
-use Tests\TestCase;
 
 class ForceActivateTwoFactorTest extends TestCase
 {

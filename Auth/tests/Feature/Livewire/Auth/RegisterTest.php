@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Modules\Auth\Livewire\Auth\Register;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\TestCase;
+use Modules\Auth\Tests\TestCase;
 
 class RegisterTest extends TestCase
 {

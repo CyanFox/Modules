@@ -6,6 +6,7 @@ use App\Livewire\CFModalComponent;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Validation\ValidationException;
+use Modules\Auth\Actions\Users\UpdateUserAction;
 use Modules\Auth\Livewire\Account\Profile;
 use Modules\Auth\Traits\WithPasswordConfirmation;
 
@@ -33,7 +34,9 @@ class ActivateTwoFA extends CFModalComponent
 
         $this->recoveryCodes = auth()->user()->generateRecoveryCodes();
 
-        auth()->user()->update(['two_factor_enabled' => true]);
+        UpdateUserAction::run(auth()->user(), [
+            'two_factor_enabled' => true,
+        ]);
 
         auth()->user()->revokeOtherSessions();
 

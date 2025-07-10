@@ -10,7 +10,7 @@ return [
     'version' => 'Version',
     'status' => 'Status',
     'authors' => 'Authors',
-    'update_available' => 'Update Available',
+    'update_available' => 'Update Available (:remoteVersion)',
 
     'disabled' => 'Disabled',
     'enabled' => 'Enabled',

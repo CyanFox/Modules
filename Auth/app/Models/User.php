@@ -67,6 +67,7 @@ class User extends Authenticatable implements HasPasskeys
         'force_change_password' => 'boolean',
         'force_activate_two_factor' => 'boolean',
         'disabled' => 'boolean',
+        'password' => 'hashed',
     ];
 
     public function recoveryCodes()
@@ -77,6 +78,11 @@ class User extends Authenticatable implements HasPasskeys
     public function sessions()
     {
         return $this->hasMany(Session::class);
+    }
+
+    public function apiKeys()
+    {
+        return $this->hasMany(ApiKey::class);
     }
 
     public function fullName()

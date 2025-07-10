@@ -2,15 +2,27 @@
 
 namespace Modules\Auth\Providers;
 
+use App\Facades\ModuleManager;
+use Dedoc\Scramble\Scramble;
+use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Contracts\Factory;
-use Modules\Auth\Console\Users\CreateUserCommand;
-use Modules\Auth\Console\Users\DeleteUserCommand;
-use Modules\Auth\Console\Users\UpdateUserCommand;
+use Modules\Auth\Actions\Groups\CreateGroupAction;
+use Modules\Auth\Actions\Groups\DeleteGroupAction;
+use Modules\Auth\Actions\Groups\UpdateGroupAction;
+use Modules\Auth\Actions\Permissions\CreatePermissionAction;
+use Modules\Auth\Actions\Permissions\DeletePermissionAction;
+use Modules\Auth\Actions\Permissions\UpdatePermissionAction;
+use Modules\Auth\Actions\Users\CreateUserAction;
+use Modules\Auth\Actions\Users\DeleteUserAction;
+use Modules\Auth\Actions\Users\UpdateUserAction;
 use Modules\Auth\Http\Middleware\Authenticate;
+use Modules\Auth\Http\Middleware\CheckAPIKey;
 use Modules\Auth\Http\Middleware\CheckForceActions;
 use Modules\Auth\Http\Middleware\CheckIfUserIsDisabled;
 use Modules\Auth\Http\Middleware\CheckLanguage;
@@ -38,6 +50,7 @@ class AuthServiceProvider extends ServiceProvider
         'role' => RoleMiddleware::class,
         'permission' => PermissionMiddleware::class,
         'role_or_permission' => RoleOrPermissionMiddleware::class,
+        'api_key' => CheckAPIKey::class,
     ];
 
     /**
@@ -85,6 +98,12 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        Config::set('scramble.api_path', 'api/v1');
+        Config::set('scramble.ui.theme', 'dark');
+        Config::set('scramble.ui.hide_try_it', true);
+        Config::set('scramble.info.version', '');
+        Config::set('scramble.middleware', ['auth', 'web']);
+
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
     }
@@ -158,9 +177,15 @@ class AuthServiceProvider extends ServiceProvider
     protected function registerCommands(): void
     {
         $this->commands([
-            new CreateUserCommand,
-            new UpdateUserCommand,
-            new DeleteUserCommand,
+            CreateUserAction::class,
+            UpdateUserAction::class,
+            DeleteUserAction::class,
+            CreateGroupAction::class,
+            UpdateGroupAction::class,
+            DeleteGroupAction::class,
+            CreatePermissionAction::class,
+            UpdatePermissionAction::class,
+            DeletePermissionAction::class,
         ]);
     }
 

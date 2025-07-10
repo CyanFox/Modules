@@ -6,7 +6,7 @@ return [
     'tabs' => [
         'overview' => 'Übersicht',
         'sessions' => 'Sitzungen',
-        'apiKeys' => 'API-Schlüssel',
+        'api_keys' => 'API-Schlüssel',
         'password' => 'Passwort',
         'passkeys' => 'Passkeys',
         'activity' => 'Aktivitäten',
@@ -116,6 +116,48 @@ return [
             'title' => 'Aktivitätsdetails',
             'old_values' => 'Alte Werte',
             'new_values' => 'Neue Werte',
+        ],
+    ],
+
+    'api_keys' => [
+        'title' => 'API-Schlüssel',
+        'name' => 'Name',
+        'permissions' => 'Berechtigungen',
+        'last_used' => 'Zuletzt verwendet',
+        'never_used' => 'Nie verwendet',
+
+        'buttons' => [
+            'create_api_key' => 'API-Schlüssel erstellen',
+            'api_docs' => 'API Dokumentation',
+        ],
+
+        'modals' => [
+            'create_api_key' => [
+                'title' => 'API-Schlüssel erstellen',
+
+                'generated_key' => 'API-Schlüssel',
+                'generated_key_description' => 'Dieser Schlüssel wurde generiert. Bitte speichere ihn an einem sicheren Ort, da er nach dem Schließen dieses Fensters nicht mehr angezeigt wird.',
+
+                'buttons' => [
+                    'create_api_key' => 'API-Schlüssel erstellen',
+                ],
+
+                'notifications' => [
+                    'api_key_created' => 'API-Schlüssel erfolgreich erstellt.',
+                ],
+            ],
+            'delete_api_key' => [
+                'title' => 'API-Schlüssel löschen',
+                'description' => 'Bist du sicher, dass du diesen API-Schlüssel löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.',
+
+                'buttons' => [
+                    'delete_api_key' => 'API-Schlüssel löschen',
+                ],
+
+                'notifications' => [
+                    'api_key_deleted' => 'API-Schlüssel erfolgreich gelöscht.',
+                ],
+            ],
         ],
     ],
 

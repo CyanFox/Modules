@@ -5,7 +5,7 @@ namespace Modules\Admin\Livewire\Groups;
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
-use Spatie\Permission\Models\Role;
+use Modules\Auth\Actions\Groups\CreateGroupAction;
 
 class CreateGroup extends CFComponent
 {
@@ -25,7 +25,7 @@ class CreateGroup extends CFComponent
             'permissions' => 'nullable|array',
         ]);
 
-        $group = Role::create([
+        $group = CreateGroupAction::run([
             'name' => $this->name,
             'guard_name' => $this->guardName,
         ]);

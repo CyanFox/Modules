@@ -10,7 +10,7 @@ return [
     'version' => 'Version',
     'status' => 'Status',
     'authors' => 'Autoren',
-    'update_available' => 'Update verfügbar',
+    'update_available' => 'Update verfügbar (:remoteVersion)',
 
     'disabled' => 'Deaktiviert',
     'enabled' => 'Aktiviert',

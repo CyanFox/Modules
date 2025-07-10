@@ -4,6 +4,7 @@ namespace Modules\Announcements\tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Artisan;
+use Modules\Announcements\Database\Seeders\DatabaseSeeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
@@ -16,7 +17,7 @@ abstract class TestCase extends BaseTestCase
 
         $this->app->make(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        Artisan::call('module:seed', ['module' => 'Announcements']);
+        $this->seed(DatabaseSeeder::class);
 
         $group = Role::findOrCreate('Super Admin', 'web');
         $group->givePermissionTo(Permission::all());

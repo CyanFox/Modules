@@ -37,6 +37,7 @@
         "laravel/socialite": "^5.0",
         "laravel/prompts": "^0.3",
         "spatie/laravel-passkeys": "^1.0",
-        "spatie/laravel-activitylog": "^4.10"
+        "spatie/laravel-activitylog": "^4.10",
+        "dedoc/scramble": "^0.12"
     }
 }

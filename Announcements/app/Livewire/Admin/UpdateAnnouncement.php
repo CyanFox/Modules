@@ -7,6 +7,7 @@ use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithFileUploads;
+use Modules\Announcements\app\Actions\UpdateAnnouncementAction;
 use Modules\Announcements\Models\Announcement;
 use Modules\Auth\Traits\WithConfirmation;
 
@@ -55,7 +56,7 @@ class UpdateAnnouncement extends CFComponent
             'users' => 'array|exists:users,id',
         ]);
 
-        $this->announcement->update([
+        UpdateAnnouncementAction::run($this->announcement, [
             'title' => $this->title,
             'icon' => $this->icon,
             'color' => $this->color,

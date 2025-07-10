@@ -5,13 +5,15 @@ namespace Modules\Admin\Livewire\Components\Tables;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
+use Modules\Auth\Actions\Permissions\DeletePermissionAction;
+use Modules\Auth\Actions\Permissions\UpdatePermissionAction;
+use Modules\Auth\Models\Permission;
 use Modules\Auth\Traits\WithConfirmation;
 use RealZone22\PenguTables\Livewire\PenguTable;
 use RealZone22\PenguTables\Table\Action;
 use RealZone22\PenguTables\Table\Column;
 use RealZone22\PenguTables\Table\Header;
 use RealZone22\PenguTables\Traits\WithExport;
-use Spatie\Permission\Models\Permission;
 
 final class PermissionsTable extends PenguTable
 {
@@ -81,11 +83,18 @@ final class PermissionsTable extends PenguTable
         if ($confirmed) {
             $permission = Permission::find($permissionId);
 
-            $permission->update([
+            UpdatePermissionAction::run($permission, [
                 'guard_name' => 'web',
             ]);
 
-            $permission->delete();
+            if (! DeletePermissionAction::run($permission)) {
+                Notification::make()
+                    ->title(__('messages.notifications.something_went_wrong'))
+                    ->danger()
+                    ->send();
+
+                return;
+            }
 
             Notification::make()
                 ->title(__('admin::permissions.delete_permission.notifications.permission_deleted'))

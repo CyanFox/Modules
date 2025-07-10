@@ -5,6 +5,9 @@ namespace Modules\Admin\Livewire\Components\Tables;
 use App\Traits\WithCustomLivewireException;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
+use Modules\Auth\Actions\Users\DeleteUserAction;
+use Modules\Auth\Models\Session;
 use Modules\Auth\Models\User;
 use Modules\Auth\Traits\WithConfirmation;
 use RealZone22\PenguTables\Livewire\PenguTable;
@@ -80,6 +83,23 @@ final class UsersTable extends PenguTable
                 ->html()
                 ->sortable(),
 
+            Column::make(__('admin::users.last_seen'), 'id')
+                ->format(function ($col) {
+                    $session = Session::where('user_id', $col)
+                        ->orderBy('last_activity', 'desc')
+                        ->first();
+
+                    if ($session) {
+                        return $session->last_activity
+                            ? Carbon::parse($session->last_activity)->diffForHumans()
+                            : __('admin::users.never');
+                    }
+
+                    return __('admin::users.never');
+                })
+                ->searchable()
+                ->sortable(),
+
             Column::make(__('messages.tables.created_at'), 'created_at')
                 ->searchable()
                 ->sortable(),
@@ -116,7 +136,14 @@ final class UsersTable extends PenguTable
         if ($confirmed) {
             $user = User::findOrFail($userId);
 
-            $user->delete();
+            if (! DeleteUserAction::run($user)) {
+                Notification::make()
+                    ->title(__('messages.notifications.something_went_wrong'))
+                    ->danger()
+                    ->send();
+
+                return;
+            }
 
             Notification::make()
                 ->title(__('admin::users.delete_user.notifications.user_deleted'))

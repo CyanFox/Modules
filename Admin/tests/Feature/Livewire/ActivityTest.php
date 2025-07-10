@@ -3,14 +3,9 @@
 namespace Feature\Livewire;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Livewire\Livewire;
-use Modules\Admin\Livewire\Components\Tables\PermissionsTable;
-use Modules\Admin\Livewire\Permissions\CreatePermission;
-use Modules\Admin\Livewire\Permissions\UpdatePermission;
 use Modules\Admin\tests\TestCase;
 use Modules\Auth\Models\User;
 use PHPUnit\Framework\Attributes\Test;
-use Spatie\Permission\Models\Permission;
 
 class ActivityTest extends TestCase
 {

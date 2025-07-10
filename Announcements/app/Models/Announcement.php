@@ -53,7 +53,7 @@ class Announcement extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logUnguarded()
+            ->logAll()
             ->setDescriptionForEvent(function ($eventName) {
                 return 'announcement_'.$eventName;
             });

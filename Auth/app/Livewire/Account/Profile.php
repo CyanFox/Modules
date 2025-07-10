@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
+use Modules\Auth\Actions\Users\DeleteUserAction;
+use Modules\Auth\Actions\Users\UpdateUserAction;
 use Modules\Auth\Models\User;
 use Modules\Auth\Rules\Password;
 use Modules\Auth\Traits\WithConfirmation;
@@ -50,7 +52,7 @@ class Profile extends CFComponent
             'theme' => 'nullable|string|in:light,dark',
         ]);
 
-        auth()->user()->update([
+        UpdateUserAction::run(auth()->user(), [
             'language' => $this->language ?? 'en',
             'theme' => $this->theme ?? 'light',
         ]);
@@ -74,7 +76,7 @@ class Profile extends CFComponent
             'email' => 'required|email',
         ]);
 
-        auth()->user()->update([
+        UpdateUserAction::run(auth()->user(), [
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
             'username' => $this->username,
@@ -103,15 +105,15 @@ class Profile extends CFComponent
                 'confirmPassword' => 'required|same:newPassword',
             ]);
 
-            if (! Hash::check($this->currentPassword, auth()->user()->password)) {
+            if (!Hash::check($this->currentPassword, auth()->user()->password)) {
                 $this->addError('currentPassword', __('validation.current_password'));
 
                 return;
             }
         }
 
-        auth()->user()->update([
-            'password' => Hash::make($this->newPassword),
+        UpdateUserAction::run(auth()->user(), [
+            'password' => $this->newPassword,
         ]);
 
         Notification::make()
@@ -124,7 +126,7 @@ class Profile extends CFComponent
 
     public function disableTwoFA($confirmed = false)
     {
-        if (! $confirmed) {
+        if (!$confirmed) {
             $this->dialog()
                 ->question(__('auth::profile.modals.disable_two_fa.title'),
                     __('auth::profile.modals.disable_two_fa.description'))
@@ -137,7 +139,7 @@ class Profile extends CFComponent
             return;
         }
 
-        auth()->user()->update([
+        UpdateUserAction::run(auth()->user(), [
             'two_factor_secret' => null,
             'two_factor_enabled' => false,
         ]);
@@ -155,11 +157,11 @@ class Profile extends CFComponent
 
     public function deleteAccount($confirmed = false)
     {
-        if (! settings('auth.profile.enable.delete_account')) {
+        if (!settings('auth.profile.enable.delete_account')) {
             return;
         }
 
-        if (! $confirmed) {
+        if (!$confirmed) {
             $this->dialog()
                 ->question(__('auth::profile.modals.delete_account.title'),
                     __('auth::profile.modals.delete_account.description'))
@@ -172,7 +174,14 @@ class Profile extends CFComponent
             return;
         }
 
-        auth()->user()->delete();
+        if (!DeleteUserAction::run(auth()->user())) {
+            Notification::make()
+                ->title(__('messages.notifications.something_went_wrong'))
+                ->danger()
+                ->send();
+
+            return;
+        }
 
         Notification::make()
             ->title(__('auth::profile.modals.delete_account.notifications.account_deleted'))
@@ -184,7 +193,7 @@ class Profile extends CFComponent
 
     public function logoutSession($sessionId)
     {
-        if (! $this->checkPasswordConfirmation()->passwordFunction('logoutSession', $sessionId)->checkPassword()) {
+        if (!$this->checkPasswordConfirmation()->passwordFunction('logoutSession', $sessionId)->checkPassword()) {
             return;
         }
 
@@ -200,7 +209,7 @@ class Profile extends CFComponent
 
     public function logoutAllSessions($confirmed = false)
     {
-        if (! $confirmed) {
+        if (!$confirmed) {
             $this->dialog()
                 ->question(__('auth::profile.sessions.modals.logout_all.title'),
                     __('auth::profile.sessions.modals.logout_all.description'))
@@ -229,6 +238,32 @@ class Profile extends CFComponent
             'subject_id' => auth()->id(),
             'subject_type' => User::class,
         ])->orderByDesc('id')->paginate(10);
+    }
+
+    public function deleteApiKey($apiKeyId, $confirmed = true)
+    {
+        if (!$confirmed) {
+            $this->dialog()
+                ->question(__('auth::profile.api_keys.modals.delete_api_key.title'),
+                    __('auth::profile.api_keys.modals.delete_api_key.description'))
+                ->icon('icon-triangle-alert')
+                ->confirm(__('messages.buttons.delete'), 'danger')
+                ->method('deleteApiKey', $apiKeyId)
+                ->send();
+
+            return;
+        }
+
+        $apiKey = auth()->user()->apiKeys()->find($apiKeyId);
+
+        $apiKey->delete();
+
+        Notification::make()
+            ->title(__('auth::profile.api_keys.modals.delete_api_key.notifications.api_key_deleted'))
+            ->success()
+            ->send();
+
+        $this->redirect(route('account.profile', ['tab' => 'apiKeys']), true);
     }
 
     public function mount()

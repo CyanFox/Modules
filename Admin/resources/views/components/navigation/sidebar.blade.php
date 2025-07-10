@@ -46,9 +46,9 @@
          x-on:mouseleave="sidebarHovered = false"
          class="fixed left-0 z-30 flex h-svh shrink-0 flex-col border-r border-neutral-300 bg-neutral-50 transition-all duration-300 ease-in-out dark:border-neutral-700 dark:bg-neutral-900 overflow-hidden"
          :class="[
-       sidebarIsOpen ? 'translate-x-0' : '-translate-x-60 md:translate-x-0',
-       sidebarPinned ? 'md:w-64' : 'md:w-16'
-     ]"
+              sidebarIsOpen ? 'translate-x-0' : '-translate-x-64 md:translate-x-0',
+              sidebarPinned ? 'md:w-64' : 'md:w-16'
+            ]"
          aria-label="sidebar navigation">
 
         <div class="flex h-16 px-2 justify-center">

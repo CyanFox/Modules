@@ -1,9 +1,10 @@
 <?php
 
-namespace Modules\Auth\Console\Users;
+namespace Modules\Auth\Actions\Users;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
+use Lorisleiva\Actions\Concerns\AsAction;
 use Modules\Auth\Models\Permission;
 use Modules\Auth\Models\Role;
 use Modules\Auth\Models\User;
@@ -12,30 +13,33 @@ use function Laravel\Prompts\multiselect;
 use function Laravel\Prompts\password;
 use function Laravel\Prompts\text;
 
-class CreateUserCommand extends Command
+class CreateUserAction
 {
-    /**
-     * The name and signature of the console command.
-     */
-    protected $signature = 'auth:users.create';
+    use AsAction;
 
-    /**
-     * The console command description.
-     */
-    protected $description = 'Create a new user.';
+    public string $commandSignature = 'auth:users.create';
 
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
+    public string $commandDescription = 'Create a new user';
+
+    public function handle($data)
     {
-        parent::__construct();
+        $user = User::create($data);
+        $user->generateTwoFASecret();
+
+        return $user;
     }
 
-    /**
-     * Execute the console command.
-     */
-    public function handle()
+    public function asJob($data)
+    {
+        $this->handle($data);
+    }
+
+    public function asListener($data)
+    {
+        $this->handle($data);
+    }
+
+    public function asCommand(Command $command)
     {
         $firstName = text('First Name', required: true);
         $lastName = text('Last Name', required: true);
@@ -51,7 +55,7 @@ class CreateUserCommand extends Command
             Permission::all()->pluck('name')->toArray(),
         );
 
-        $user = User::create([
+        $user = $this->handle([
             'first_name' => $firstName,
             'last_name' => $lastName,
             'username' => $username,
@@ -63,6 +67,6 @@ class CreateUserCommand extends Command
         $user->givePermissionTo($permissions);
         $user->generateTwoFASecret();
 
-        $this->info('User created successfully');
+        $command->info('User created successfully');
     }
 }
