@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Admin\tests;
+namespace Modules\Auth\Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Artisan;
-use Modules\Admin\Database\Seeders\DatabaseSeeder;
+use Modules\Auth\Database\Seeders\DatabaseSeeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;

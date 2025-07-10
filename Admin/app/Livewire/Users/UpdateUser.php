@@ -56,7 +56,7 @@ class UpdateUser extends CFComponent
             'disabled' => 'nullable|boolean',
         ]);
 
-        $this->user = UpdateUserAction::run($this->user, [
+        UpdateUserAction::run($this->user, [
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
             'username' => $this->username,
@@ -67,7 +67,7 @@ class UpdateUser extends CFComponent
         ]);
 
         if ($this->password) {
-            $this->user = UpdateUserAction::run($this->user, [
+            UpdateUserAction::run($this->user, [
                 'password' => Hash::make($this->password),
             ]);
         }
