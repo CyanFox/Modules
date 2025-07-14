@@ -41,7 +41,7 @@ class SettingsTest extends TestCase
             ->set('appUrl', 'http://127.0.0.1')
             ->set('appLanguage', 'en')
             ->set('appTimezone', 'UTC')
-            ->set('baseVersionUrl', 'https://raw.githubusercontent.com/CyanFox-Labs/CyanFox-Base/v4/version.json')
+            ->set('baseVersionUrl', 'https://raw.githubusercontent.com/CyanFox/CyanFox-Base/v4/version.json')
             ->call('updateGeneralSettings');
 
         $this->assertDatabaseHas('settings', [
