@@ -2,10 +2,10 @@ name: Create Module Releases
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: ["Test"]
-    types:
-      - completed
+  push:
+    branches:
+      - v4
+      - workflow-testing
 
 jobs:
   release-modules:
@@ -16,26 +16,6 @@ jobs:
 
       - name: Install jq and zip
         run: sudo apt-get update && sudo apt-get install -y jq zip
-
-      - name: Find modules
-        id: find_modules
-        run: |
-          modules=$(find . -maxdepth 2 -name module.json -exec dirname {} \;)
-          echo "modules<<EOF" >> $GITHUB_OUTPUT
-          echo "$modules" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Release each module
-        run: |
-          while read -r module; do
-            name=$(jq -r .name "$module/module.json")
-            version=$(jq -r .version "$module/module.json")
-            zipfile="${name}-${version}.zip"
-            zip -r "$zipfile" "$module"
-            gh release create "${name}-${version}" "$zipfile" --title "${name} ${version}" --notes "Release for $name version $version"
-          done <<< "${{ steps.find_modules.outputs.modules }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get changed modules (since last release)
         id: changed_modules
