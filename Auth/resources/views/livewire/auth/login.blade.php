@@ -131,7 +131,7 @@
                 @if(settings('auth.oauth.enable') && !$twoFactorEnabled)
                     <x-divider/>
 
-                    <x-button class="w-full" href="{{ route('oauth.redirect', ['provider' => 'custom']) }}"
+                    <x-button class="w-full" link="{{ route('oauth.redirect', ['provider' => 'custom']) }}"
                               :color="settings('auth.oauth.login_color')">
                         {{ settings('auth.oauth.login_text') }}
                     </x-button>

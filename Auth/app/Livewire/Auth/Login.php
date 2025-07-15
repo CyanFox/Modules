@@ -8,9 +8,12 @@ use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Modules\Auth\Emails\NewSessionMail;
 use Modules\Auth\Facades\UnsplashManager;
+use Modules\Auth\Models\Session;
 use Modules\Auth\Models\User;
 
 class Login extends CFComponent
@@ -85,6 +88,14 @@ class Login extends CFComponent
             return;
         }
 
+        if (!Session::where('user_id', $this->user->id)
+            ->where('ip_address', request()->ip())
+            ->exists()) {
+            $mail = new NewSessionMail($this->user->email, $this->user->username, $this->user->first_name, $this->user->last_name);
+
+            Mail::send($mail);
+        }
+
         Auth::login($this->user, $this->remember);
 
         activity()
@@ -115,6 +126,14 @@ class Login extends CFComponent
             foreach ($this->user->recoveryCodes as $recoveryCode) {
                 if (Hash::check($this->twoFactorCode, $recoveryCode->code)) {
                     $recoveryCode->delete();
+                    if (!Session::where('user_id', $this->user->id)
+                        ->where('ip_address', request()->ip())
+                        ->exists()) {
+                        $mail = new NewSessionMail($this->user->email, $this->user->username, $this->user->first_name, $this->user->last_name);
+
+                        Mail::send($mail);
+                    }
+
                     Auth::login($this->user, $this->remember);
 
                     activity()
@@ -141,6 +160,13 @@ class Login extends CFComponent
         }
 
         if ($this->user->checkTwoFACode($this->twoFactorCode)) {
+            if (!Session::where('user_id', $this->user->id)
+                ->where('ip_address', request()->ip())
+                ->exists()) {
+                $mail = new NewSessionMail($this->user->email, $this->user->username, $this->user->first_name, $this->user->last_name);
+
+                Mail::send($mail);
+            }
 
             Auth::login($this->user, $this->remember);
 
@@ -184,6 +210,12 @@ class Login extends CFComponent
         ]);
 
         $this->user = User::where('username', $username)->first();
+        if ($this->user->oauth_id) {
+            $this->user = null;
+            $this->addError('username', __('auth::login.user_not_found'));
+            return;
+        }
+
         $this->resetErrorBag('username');
     }
 

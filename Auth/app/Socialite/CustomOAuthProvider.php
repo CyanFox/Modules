@@ -3,29 +3,43 @@
 namespace Modules\Auth\Socialite;
 
 use GuzzleHttp\RequestOptions;
+use Illuminate\Http\Request;
 use Laravel\Socialite\Two\AbstractProvider;
 use Laravel\Socialite\Two\User;
 
 class CustomOAuthProvider extends AbstractProvider
 {
+    protected $openidConfig = null;
+
+    protected function getOpenIdConfig()
+    {
+        if ($this->openidConfig === null) {
+            $response = $this->getHttpClient()->get(settings('auth.oauth.well_known_url'));
+            $this->openidConfig = json_decode((string) $response->getBody(), true);
+        }
+        return $this->openidConfig;
+    }
+
     protected function getAuthUrl($state)
     {
-        return $this->buildAuthUrlFromBase(settings('auth.oauth.auth_url'), $state);
+        $config = $this->getOpenIdConfig();
+        return $this->buildAuthUrlFromBase($config['authorization_endpoint'], $state);
     }
 
     protected function getTokenUrl()
     {
-        return settings('auth.oauth.token_url');
+        $config = $this->getOpenIdConfig();
+        return $config['token_endpoint'];
     }
 
     protected function getUserByToken($token)
     {
-        $response = $this->getHttpClient()->get(settings('auth.oauth.user_url'), [
+        $config = $this->getOpenIdConfig();
+        $response = $this->getHttpClient()->get($config['userinfo_endpoint'], [
             RequestOptions::HEADERS => [
                 'Authorization' => 'Bearer '.$token,
             ],
         ]);
-
         return json_decode((string) $response->getBody(), true);
     }
 

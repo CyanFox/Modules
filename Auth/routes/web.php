@@ -5,10 +5,12 @@ use Laravel\Socialite\Facades\Socialite;
 use Modules\Auth\Livewire\Account\ForceActivateTwoFactor;
 use Modules\Auth\Livewire\Account\ForceChangePassword;
 use Modules\Auth\Livewire\Account\Profile;
+use Modules\Auth\Livewire\Admin;
 use Modules\Auth\Livewire\Auth\ForgotPassword;
 use Modules\Auth\Livewire\Auth\Login;
 use Modules\Auth\Livewire\Auth\Register;
 use Modules\Auth\Models\User;
+use Nwidart\Modules\Facades\Module;
 
 /*
 |--------------------------------------------------------------------------
@@ -91,5 +93,9 @@ Route::group(['prefix' => 'oauth', 'as' => 'oauth.'], function () {
         return redirect('/');
     })->name('callback');
 });
+
+if (Module::isEnabled('Admin')) {
+    Route::get('admin/settings/auth', Admin::class)->name('admin.settings.auth')->can('admin.settings.modules');
+}
 
 Route::passkeys();
