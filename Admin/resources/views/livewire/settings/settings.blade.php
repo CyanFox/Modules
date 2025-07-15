@@ -117,7 +117,7 @@
 
             <x-view-integration name="admin.settings.editor.header"/>
 
-            <form wire:submit="cryptEditorSetting('encrypt')" class="flex flex-row gap-3 my-4">
+            <form wire:submit="cryptEditorSetting('encrypt')" class="flex flex-row gap-3 my-4 px-1">
                 <div class="w-full">
                     <x-input wire:model="editorEncryption" label="{{ __('admin::settings.encrypt') }}"/>
                 </div>
@@ -131,7 +131,7 @@
                 <x-view-integration name="admin.settings.editor.encrypt"/>
             </form>
 
-            <form wire:submit="cryptEditorSetting('decrypt')" class="flex flex-row gap-3 my-4">
+            <form wire:submit="cryptEditorSetting('decrypt')" class="flex flex-row gap-3 my-4 px-1">
                 <div class="w-full">
                     <x-input wire:model="editorDecryption" label="{{ __('admin::settings.decrypt') }}"/>
                 </div>
@@ -146,7 +146,7 @@
 
             <x-divider/>
 
-            <form wire:submit="createSetting" class="flex flex-row gap-3 my-4">
+            <form wire:submit="createSetting" class="flex flex-row gap-3 my-4 px-1">
                 <div class="w-full">
                     <x-input wire:model="newSettingKey" label="{{ __('admin::settings.key') }}"/>
                 </div>
@@ -166,41 +166,74 @@
             <x-divider/>
 
             <form wire:submit="updateEditorSettings">
-                <div class="space-y-3 my-4 overflow-x-auto">
+                <div class="space-y-3 my-4 px-1 overflow-x-auto">
                     @foreach($originalEditorSettings as $key => $value)
                         <div class="flex flex-row gap-3 my-4">
                             <div class="w-full">
                                 @php $formKey = 'setting_' . md5($key); @endphp
-                                @if ($value['is_locked'])
-                                    <x-input
-                                        label="{{ $key }}"
-                                        wire:model="editorSettings.{{ $formKey }}"
-                                        disabled>
-                                    </x-input>
+                                @if($value['is_textarea'])
+                                    @if ($value['is_locked'])
+                                        <x-textarea
+                                            label="{{ $key }}"
+                                            wire:model="editorSettings.{{ $formKey }}"
+                                            disabled>
+                                        </x-textarea>
+                                    @else
+                                        <x-textarea
+                                            label="{{ $key }}"
+                                            wire:model="editorSettings.{{ $formKey }}">
+                                        </x-textarea>
+                                    @endif
                                 @else
-                                    <x-input
-                                        label="{{ $key }}"
-                                        wire:model="editorSettings.{{ $formKey }}">
-                                    </x-input>
+                                    @if ($value['is_locked'])
+                                        <x-input
+                                            label="{{ $key }}"
+                                            wire:model="editorSettings.{{ $formKey }}"
+                                            disabled>
+                                        </x-input>
+                                    @else
+                                        <x-input
+                                            label="{{ $key }}"
+                                            wire:model="editorSettings.{{ $formKey }}">
+                                        </x-input>
+                                    @endif
                                 @endif
                             </div>
 
                             @can('admin.settings.update')
                                 <div class="mt-auto flex gap-3">
                                     @if($value['is_locked'])
-                                        <x-button :hideTextWhileLoading="true" color="danger" variant="outline" type="button" class="mt-0.5"
+                                        <x-button :hideTextWhileLoading="true" color="danger" variant="outline"
+                                                  type="button" class="mt-0.5"
                                                   wire:click="setLockState('{{ $key }}', false)"
                                                   loading="setLockState">
                                             <i class="icon-lock"></i>
                                         </x-button>
                                     @else
-                                        <x-button :hideTextWhileLoading="true" color="success" variant="outline" type="button" class="mt-0.5"
+                                        <x-button :hideTextWhileLoading="true" color="success" variant="outline"
+                                                  type="button" class="mt-0.5"
                                                   wire:click="setLockState('{{ $key }}', true)"
                                                   loading="setLockState">
                                             <i class="icon-lock-open"></i>
                                         </x-button>
                                     @endif
-                                    <x-button :hideTextWhileLoading="true" color="danger" variant="outline" type="button" class="mt-0.5"
+                                    @if($value['is_textarea'])
+                                        <x-button :hideTextWhileLoading="true" variant="outline"
+                                                  type="button" class="mt-0.5"
+                                                  wire:click="setIsTextarea('{{ $key }}', false)"
+                                                  loading="setIsTextarea">
+                                            <i class="icon-text-cursor-input"></i>
+                                        </x-button>
+                                    @else
+                                        <x-button :hideTextWhileLoading="true" variant="outline"
+                                                  type="button" class="mt-0.5"
+                                                  wire:click="setIsTextarea('{{ $key }}', true)"
+                                                  loading="setIsTextarea">
+                                            <i class="icon-type"></i>
+                                        </x-button>
+                                    @endif
+                                    <x-button :hideTextWhileLoading="true" color="danger" variant="outline"
+                                              type="button" class="mt-0.5"
                                               wire:click="deleteSetting('{{ $key }}', false)"
                                               loading="deleteSetting">
                                         <i class="icon-trash"></i>

@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ForgotPasswordMail extends Mailable
+class NewSessionMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -17,16 +17,19 @@ class ForgotPasswordMail extends Mailable
     public $firstName;
 
     public $lastName;
+    public $ipAddress;
+    public $userAgent;
+    public $loginTime;
 
-    public $resetLink;
-
-    public function __construct($email, $username, $firstName, $lastName, $resetLink)
+    public function __construct($email, $username, $firstName, $lastName)
     {
         $this->email = $email;
         $this->username = $username;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
-        $this->resetLink = $resetLink;
+        $this->ipAddress = request()->ip();
+        $this->userAgent = request()->userAgent();
+        $this->loginTime = now()->format('Y-m-d H:i:s');
     }
 
     /**
@@ -34,16 +37,18 @@ class ForgotPasswordMail extends Mailable
      */
     public function build(): self
     {
-        $emailTitle = $this->replacePlaceholders(settings('auth.emails.forgot_password.title', config('auth.emails.forgot_password.title')));
-        $emailSubject = $this->replacePlaceholders(settings('auth.emails.forgot_password.subject', config('auth.emails.forgot_password.subject')));
+        $emailTitle = $this->replacePlaceholders(settings('auth.emails.new_session.title', config('auth.emails.new_session.title')));
+        $emailSubject = $this->replacePlaceholders(settings('auth.emails.new_session.subject', config('auth.emails.new_session.subject')));
 
         return $this->to($this->email, $emailTitle)
             ->subject($emailSubject)
-            ->view('auth::emails.forgot-password', [
+            ->view('auth::emails.new-session', [
                 'username' => $this->username,
                 'firstName' => $this->firstName,
                 'lastName' => $this->lastName,
-                'resetLink' => $this->resetLink,
+                'ipAddress' => $this->ipAddress,
+                'userAgent' => $this->userAgent,
+                'loginTime' => $this->loginTime,
             ]);
     }
 
@@ -53,7 +58,9 @@ class ForgotPasswordMail extends Mailable
             '{username}' => $this->username,
             '{first_name}' => $this->firstName,
             '{last_name}' => $this->lastName,
-            '{reset_link}' => $this->resetLink,
+            '{ip_address}' => $this->ipAddress,
+            '{user_agent}' => $this->userAgent,
+            '{login_time}' => $this->loginTime,
         ];
 
         return str_replace(array_keys($replacementArray), array_values($replacementArray), $string);

@@ -1,9 +1,9 @@
 {!! Str::markdown(str_replace(
     [
         '{username}',
-        '{firstName}',
-        '{lastName}',
-        '{resetLink}'
+        '{first_name}',
+        '{last_name}',
+        '{reset_link}'
     ], [
         $username,
         $firstName,

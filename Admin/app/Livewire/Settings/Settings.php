@@ -267,7 +267,26 @@ class Settings extends CFComponent
             ->log('settings_lock_'.($state ? 'enabled' : 'disabled'));
 
         $this->originalEditorSettings = Setting::all()->mapWithKeys(function ($setting) {
-            return [$setting->key => ['value' => $setting->value, 'is_locked' => $setting->is_locked]];
+            return [$setting->key => ['value' => $setting->value, 'is_locked' => $setting->is_locked, 'is_textarea' => $setting->is_textarea]];
+        });
+    }
+
+    public function setIsTextarea($key, $state)
+    {
+        if (auth()->user()->cannot('admin.settings.update')) {
+            return;
+        }
+
+        $setting = Setting::where('key', $key)->first();
+        $setting->is_textarea = $state;
+        $setting->save();
+
+        activity()
+            ->causedBy(auth()->user())
+            ->log('settings_textarea_' . ($state ? 'enabled' : 'disabled'));
+
+        $this->originalEditorSettings = Setting::all()->mapWithKeys(function ($setting) {
+            return [$setting->key => ['value' => $setting->value, 'is_locked' => $setting->is_locked, 'is_textarea' => $setting->is_textarea]];
         });
     }
 
@@ -327,6 +346,7 @@ class Settings extends CFComponent
 
             $this->originalEditorSettings[$key] = [
                 'value' => $value,
+                'is_textarea' => $setting->is_textarea,
                 'is_locked' => $setting->is_locked,
             ];
 
