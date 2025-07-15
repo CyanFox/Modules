@@ -64,7 +64,7 @@ class Profile extends CFComponent
             ->success()
             ->send();
 
-        $this->redirect(route('account.profile1'));
+        $this->redirect(route('account.profile'));
     }
 
     public function updateProfile()
