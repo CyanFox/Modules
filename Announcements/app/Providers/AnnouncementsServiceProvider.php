@@ -50,17 +50,19 @@ class AnnouncementsServiceProvider extends ServiceProvider
             });
         }
 
-        app()->booted(function () {
-            app('spotlight')->addItem([
-                'title' => 'announcements::spotlight.title',
-                'url' => route('admin.announcements'),
-                'icon' => 'icon-megaphone',
-                'permissions' => 'admin.announcements',
-                'module' => 'announcements::spotlight.module_name',
-            ]);
-        });
+        if (!app()->runningInConsole()) {
+            app()->booted(function () {
+                app('spotlight')->addItem([
+                    'title' => 'announcements::spotlight.title',
+                    'url' => route('admin.announcements'),
+                    'icon' => 'icon-megaphone',
+                    'permissions' => 'admin.announcements',
+                    'module' => 'announcements::spotlight.module_name',
+                ]);
+            });
 
-        app('spotlight')->registerModel(Announcement::class);
+            app('spotlight')->registerModel(Announcement::class);
+        }
     }
 
     /**

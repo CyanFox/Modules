@@ -49,93 +49,95 @@ class AdminServiceProvider extends ServiceProvider
         }
 
 
-        app()->booted(function () {
-            $spotlight = app('spotlight');
+        if (!app()->runningInConsole()) {
+            app()->booted(function () {
+                $spotlight = app('spotlight');
 
-            $spotlight->addItem([
-                'title' => 'admin::spotlight.users',
-                'icon' => 'icon-users',
-                'url' => route('admin.users'),
-                'permissions' => 'admin.users',
-                'module' => 'admin::spotlight.module.admin'
-            ]);
+                $spotlight->addItem([
+                    'title' => 'admin::spotlight.users',
+                    'icon' => 'icon-users',
+                    'url' => route('admin.users'),
+                    'permissions' => 'admin.users',
+                    'module' => 'admin::spotlight.module.admin'
+                ]);
 
-            $spotlight->addItem([
-                'title' => 'admin::spotlight.groups',
-                'icon' => 'icon-shield',
-                'url' => route('admin.groups'),
-                'permissions' => 'admin.groups',
-                'module' => 'admin::spotlight.module.admin'
-            ]);
+                $spotlight->addItem([
+                    'title' => 'admin::spotlight.groups',
+                    'icon' => 'icon-shield',
+                    'url' => route('admin.groups'),
+                    'permissions' => 'admin.groups',
+                    'module' => 'admin::spotlight.module.admin'
+                ]);
 
-            $spotlight->addItem([
-                'title' => 'admin::spotlight.permissions',
-                'icon' => 'icon-key-round',
-                'url' => route('admin.permissions'),
-                'permissions' => 'admin.permissions',
-                'module' => 'admin::spotlight.module.admin'
-            ]);
+                $spotlight->addItem([
+                    'title' => 'admin::spotlight.permissions',
+                    'icon' => 'icon-key-round',
+                    'url' => route('admin.permissions'),
+                    'permissions' => 'admin.permissions',
+                    'module' => 'admin::spotlight.module.admin'
+                ]);
 
-            $spotlight->addItem([
-                'title' => 'admin::spotlight.settings',
-                'icon' => 'icon-settings',
-                'url' => route('admin.settings'),
-                'permissions' => 'admin.settings',
-                'module' => 'admin::spotlight.module.admin'
-            ]);
+                $spotlight->addItem([
+                    'title' => 'admin::spotlight.settings',
+                    'icon' => 'icon-settings',
+                    'url' => route('admin.settings'),
+                    'permissions' => 'admin.settings',
+                    'module' => 'admin::spotlight.module.admin'
+                ]);
 
-            $spotlight->addItem([
-                'title' => 'admin::spotlight.modules',
-                'url' => route('admin.modules'),
-                'icon' => 'icon-package',
-                'permissions' => 'admin.modules',
-                'module' => 'admin::spotlight.module.admin'
-            ]);
+                $spotlight->addItem([
+                    'title' => 'admin::spotlight.modules',
+                    'url' => route('admin.modules'),
+                    'icon' => 'icon-package',
+                    'permissions' => 'admin.modules',
+                    'module' => 'admin::spotlight.module.admin'
+                ]);
 
-            $spotlight->addItem([
-                'title' => 'admin::spotlight.logs',
-                'url' => route('admin.activity'),
-                'icon' => 'icon-eye',
-                'permissions' => 'admin.activity',
-                'module' => 'admin::spotlight.module.admin'
-            ]);
+                $spotlight->addItem([
+                    'title' => 'admin::spotlight.logs',
+                    'url' => route('admin.activity'),
+                    'icon' => 'icon-eye',
+                    'permissions' => 'admin.activity',
+                    'module' => 'admin::spotlight.module.admin'
+                ]);
 
-            if (settings('admin.spotlight.show_each')) {
-                foreach (Cache::remember('admin.spotlight.users', 120, function () {
-                    return User::all();
-                }) as $user) {
-                    $spotlight->addItem([
-                        'title' => $user->username,
-                        'description' => $user->first_name . ' ' . $user->last_name,
-                        'icon' => 'icon-user',
-                        'url' => route('admin.users.update', $user->id),
-                        'permissions' => 'admin.users.update',
-                        'module' => 'admin::spotlight.module.users'
-                    ]);
+                if (settings('admin.spotlight.show_each')) {
+                    foreach (Cache::remember('admin.spotlight.users', 120, function () {
+                        return User::all();
+                    }) as $user) {
+                        $spotlight->addItem([
+                            'title' => $user->username,
+                            'description' => $user->first_name . ' ' . $user->last_name,
+                            'icon' => 'icon-user',
+                            'url' => route('admin.users.update', $user->id),
+                            'permissions' => 'admin.users.update',
+                            'module' => 'admin::spotlight.module.users'
+                        ]);
+                    }
+
+                    foreach (Cache::remember('admin.spotlight.groups', 120, function () {
+                        return Role::all();
+                    }) as $group) {
+                        $spotlight->addItem([
+                            'title' => $group->name,
+                            'description' => $group->guard_name,
+                            'icon' => 'icon-shield',
+                            'url' => route('admin.groups.update', $group->id),
+                            'permissions' => 'admin.groups.update',
+                            'module' => 'admin::spotlight.module.groups'
+                        ]);
+                    }
                 }
 
-                foreach (Cache::remember('admin.spotlight.groups', 120, function () {
-                    return Role::all();
-                }) as $group) {
-                    $spotlight->addItem([
-                        'title' => $group->name,
-                        'description' => $group->guard_name,
-                        'icon' => 'icon-shield',
-                        'url' => route('admin.groups.update', $group->id),
-                        'permissions' => 'admin.groups.update',
-                        'module' => 'admin::spotlight.module.groups'
-                    ]);
-                }
-            }
-
-            $spotlight->addStaticItem([
-                'title' => 'admin::spotlight.dashboard',
-                'icon' => 'icon-settings',
-                'url' => route('admin.dashboard'),
-                'permissions' => 'admin.dashboard',
-                'module' => 'admin::spotlight.module.admin'
-            ]);
-        });
+                $spotlight->addStaticItem([
+                    'title' => 'admin::spotlight.dashboard',
+                    'icon' => 'icon-settings',
+                    'url' => route('admin.dashboard'),
+                    'permissions' => 'admin.dashboard',
+                    'module' => 'admin::spotlight.module.admin'
+                ]);
+            });
+        }
     }
 
     /**

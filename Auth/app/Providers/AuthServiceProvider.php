@@ -95,21 +95,23 @@ class AuthServiceProvider extends ServiceProvider
         }
 
 
-        app()->booted(function () {
-            app('spotlight')->addItem([
-                'title' => 'auth::spotlight.profile',
-                'icon' => 'icon-user',
-                'url' => route('account.profile'),
-                'module' => 'auth::spotlight.module_name',
-            ]);
+        if (!app()->runningInConsole()) {
+            app()->booted(function () {
+                app('spotlight')->addItem([
+                    'title' => 'auth::spotlight.profile',
+                    'icon' => 'icon-user',
+                    'url' => route('account.profile'),
+                    'module' => 'auth::spotlight.module_name',
+                ]);
 
-            app('spotlight')->addStaticItem([
-                'title' => 'auth::spotlight.profile',
-                'icon' => 'icon-user',
-                'url' => route('account.profile'),
-                'module' => 'auth::spotlight.module_name',
-            ]);
-        });
+                app('spotlight')->addStaticItem([
+                    'title' => 'auth::spotlight.profile',
+                    'icon' => 'icon-user',
+                    'url' => route('account.profile'),
+                    'module' => 'auth::spotlight.module_name',
+                ]);
+            });
+        }
     }
 
     /**
