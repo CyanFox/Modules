@@ -1,5 +1,7 @@
 <?php
 
 return [
-    'name' => 'Admin',
+    'spotlight' => [
+        'show_each' => true,
+    ]
 ];

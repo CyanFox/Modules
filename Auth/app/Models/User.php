@@ -87,8 +87,9 @@ class User extends Authenticatable implements HasPasskeys
 
     public function fullName()
     {
-        return $this->first_name.' '.$this->last_name;
+        return $this->first_name . ' ' . $this->last_name;
     }
+
 
     public function avatar()
     {
@@ -96,7 +97,7 @@ class User extends Authenticatable implements HasPasskeys
             return e($this->custom_avatar_url);
         }
 
-        $filePath = 'avatars/'.$this->id.'.png';
+        $filePath = 'avatars/' . $this->id . '.png';
         if (Storage::disk('public')->exists($filePath)) {
             return Storage::disk('public')->url($filePath);
         }
@@ -141,14 +142,14 @@ class User extends Authenticatable implements HasPasskeys
                 unset($changes['updated_at']);
 
                 if (array_keys($changes) === ['password']) {
-                    return 'auth.user.password_'.$eventName;
+                    return 'auth.user.password_' . $eventName;
                 }
 
                 if (array_keys($changes) === ['password', 'password_reset_token', 'password_reset_expiration']) {
                     return 'auth.user.forgot_password.reset';
                 }
 
-                return 'auth.user_'.$eventName;
+                return 'auth.user_' . $eventName;
             });
     }
 

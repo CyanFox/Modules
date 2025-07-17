@@ -24,6 +24,7 @@
 </head>
 <body>
 @livewire('notifications')
+@livewire('spotlight-search')
 
 <x-admin::navigation.sidebar>
     {{ $slot }}

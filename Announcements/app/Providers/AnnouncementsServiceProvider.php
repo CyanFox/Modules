@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use Modules\Admin\Facades\SidebarManager;
 use Modules\Announcements\app\Actions\CreateAnnouncementAction;
 use Modules\Announcements\app\Actions\UpdateAnnouncementAction;
+use Modules\Announcements\Models\Announcement;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -48,6 +49,18 @@ class AnnouncementsServiceProvider extends ServiceProvider
                 }
             });
         }
+
+        app()->booted(function () {
+            app('spotlight')->addItem([
+                'title' => 'announcements::spotlight.title',
+                'url' => route('admin.announcements'),
+                'icon' => 'icon-megaphone',
+                'permissions' => 'admin.announcements',
+                'module' => 'announcements::spotlight.module_name',
+            ]);
+        });
+
+        app('spotlight')->registerModel(Announcement::class);
     }
 
     /**
