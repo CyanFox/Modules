@@ -2,10 +2,10 @@ name: Create Module Releases
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - v4
-      - workflow-testing
+  workflow_run:
+    workflows: ["Test"]
+    types:
+      - completed
 
 jobs:
   release-modules:
@@ -17,6 +17,26 @@ jobs:
       - name: Install jq and zip
         run: sudo apt-get update && sudo apt-get install -y jq zip
 
+      - name: Find modules
+        id: find_modules
+        run: |
+          modules=$(find . -maxdepth 2 -name module.json -exec dirname {} \;)
+          echo "modules<<EOF" >> $GITHUB_OUTPUT
+          echo "$modules" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Release each module
+        run: |
+          while read -r module; do
+            name=$(jq -r .name "$module/module.json")
+            version=$(jq -r .version "$module/module.json")
+            zipfile="${name}-${version}.zip"
+            zip -r "$zipfile" "$module"
+            gh release create "${name}-${version}" "$zipfile" --title "${name} ${version}" --notes "Release for $name version $version"
+          done <<< "${{ steps.find_modules.outputs.modules }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Get changed modules (since last release)
         id: changed_modules
         run: |
@@ -25,21 +45,3 @@ jobs:
           echo "changed_modules<<EOF" >> $GITHUB_OUTPUT
           echo "$changed" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Create combined release for changed modules
-        if: steps.changed_modules.outputs.changed_modules != ''
-        run: |
-          files=""
-          notes="Includes modules:\n"
-          while read -r module; do
-            name=$(jq -r .name "$module/module.json")
-            version=$(jq -r .version "$module/module.json")
-            zipfile="${name}-${version}.zip"
-            zip -r "$zipfile" "$module"
-            files="$files $zipfile"
-            notes="$notes- $name $version\n"
-          done <<< "${{ steps.changed_modules.outputs.changed_modules }}"
-          tag="combined-$(date +'%Y-%m-%d')-${GITHUB_SHA:0:7}"
-          gh release create "$tag" $files --title "Combined Release" --notes "$notes"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
