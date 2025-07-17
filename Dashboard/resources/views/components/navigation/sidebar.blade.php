@@ -106,43 +106,47 @@
                 <span class="sr-only">sidebar toggle</span>
             </button>
 
-            <div x-data="{ userDropdownIsOpen: false }" class="relative ml-auto"
-                 x-on:keydown.esc.window="userDropdownIsOpen = false">
-                <button type="button"
-                        class="flex w-full cursor-pointer items-center rounded-md gap-2 p-2 text-left text-neutral-600 hover:bg-black/5 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:outline-white"
-                        x-bind:class="userDropdownIsOpen ? 'bg-black/10 dark:bg-white/10' : ''" aria-haspopup="true"
-                        x-on:click="userDropdownIsOpen = ! userDropdownIsOpen"
-                        x-bind:aria-expanded="userDropdownIsOpen">
-                    <img src="{{ auth()->user()->avatar() }}" class="size-8 object-cover rounded-md" alt="avatar"/>
-                    <div class="hidden md:flex flex-col">
+
+            <div class="relative flex items-center ml-auto">
+                <x-view-integration name="dashboard.navbar.items.start"/>
+
+                <div class="ml-2">
+                    <x-button.floating variant="outline" size="sm" @click="$dispatch('open-spotlight')">
+                        <i class="icon-search"></i>
+                    </x-button.floating>
+                </div>
+                <div class="ml-2">
+                    <x-dropdown>
+                        <x-dropdown.trigger>
+                            <button type="button"
+                                    class="flex w-full cursor-pointer items-center rounded-md gap-2 p-2 text-left text-neutral-600 hover:bg-black/5 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:text-neutral-300 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:outline-white"
+                                    aria-haspopup="true">
+                                <img src="{{ auth()->user()->avatar() }}" class="size-8 object-cover rounded-md"
+                                     alt="avatar"/>
+                                <div class="hidden md:flex flex-col">
                         <span
                             class="text-sm font-bold text-neutral-900 dark:text-white">{{ auth()->user()->fullName() }}</span>
-                        <span class="text-xs">{{ auth()->user()->username }}</span>
-                        <span class="sr-only">profile settings</span>
-                    </div>
-                </button>
+                                    <span class="text-xs">{{ auth()->user()->username }}</span>
+                                    <span class="sr-only">profile settings</span>
+                                </div>
+                            </button>
+                        </x-dropdown.trigger>
 
-                <div x-cloak x-show="userDropdownIsOpen"
-                     class="absolute top-14 right-0 z-20 h-fit w-48 px-1 border divide-y divide-neutral-300 border-neutral-300 bg-white dark:divide-neutral-700 dark:border-neutral-700 dark:bg-neutral-950 rounded-md"
-                     role="menu" x-on:click.outside="userDropdownIsOpen = false"
-                     x-on:keydown.down.prevent="$focus.wrap().next()" x-on:keydown.up.prevent="$focus.wrap().previous()"
-                     x-transition="" x-trap="userDropdownIsOpen">
+                        <x-dropdown.items>
+                            <x-dashboard::profile-item icon="icon-user" :label="__('dashboard::navigation.profile')"
+                                                       route="account.profile"/>
 
-                    <div class="flex flex-col py-1.5">
-                        <x-dashboard::profile-item icon="icon-user" :label="__('dashboard::navigation.profile')"
-                                                   route="account.profile"/>
+                            <x-view-integration name="dashboard.profile.items"/>
+                            <x-divider class="my-0"/>
 
-                        <x-view-integration name="dashboard.profile.items"/>
-                    </div>
-
-                    <x-view-integration name="dashboard.profile.items.end"/>
-
-                    <div class="flex flex-col py-1.5">
-                        <x-dashboard::profile-item icon="icon-log-out" :label="__('dashboard::navigation.logout')"
-                                                   route="auth.logout"
-                                                   external/>
-                    </div>
+                            <x-view-integration name="dashboard.profile.items.end"/>
+                            <x-dashboard::profile-item icon="icon-log-out" :label="__('dashboard::navigation.logout')"
+                                                       route="auth.logout"
+                                                       external/>
+                        </x-dropdown.items>
+                    </x-dropdown>
                 </div>
+                <x-view-integration name="dashboard.navbar.items.end"/>
             </div>
         </nav>
 

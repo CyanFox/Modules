@@ -2,10 +2,18 @@
 
 namespace Modules\Auth\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
-// use Modules\Auth\Database\Factories\SessionFactory;
-
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $ip_address
+ * @property string $user_agent
+ * @property string $payload
+ * @property int $last_activity
+ */
 class Session extends Model
 {
     public $table = 'sessions';

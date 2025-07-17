@@ -6,7 +6,9 @@ use App\Facades\ModuleManager;
 use Dedoc\Scramble\Scramble;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -65,7 +67,7 @@ class AuthServiceProvider extends ServiceProvider
         Config::set('passkeys.models.authenticatable', User::class);
         Config::set('passkeys.redirect_to_after_login', '/');
 
-        if (! app()->runningInConsole()) {
+        if (!app()->runningInConsole()) {
             $group = Role::findOrCreate('Super Admin');
             $group->givePermissionTo(Permission::all());
         }
@@ -80,7 +82,7 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->app['router']->pushMiddlewareToGroup('web', 'language');
 
-        if (! app()->runningInConsole()) {
+        if (!app()->runningInConsole()) {
             $socialite = $this->app->make(Factory::class);
 
             $socialite->extend('custom', function () use ($socialite) {
@@ -88,6 +90,25 @@ class AuthServiceProvider extends ServiceProvider
                     'client_id' => settings('auth.oauth.client_id'),
                     'client_secret' => settings('auth.oauth.client_secret'),
                     'redirect' => settings('auth.oauth.redirect'),
+                ]);
+            });
+        }
+
+
+        if (!app()->runningInConsole()) {
+            app()->booted(function () {
+                app('spotlight')->addItem([
+                    'title' => 'auth::spotlight.profile',
+                    'icon' => 'icon-user',
+                    'url' => route('account.profile'),
+                    'module' => 'auth::spotlight.module_name',
+                ]);
+
+                app('spotlight')->addStaticItem([
+                    'title' => 'auth::spotlight.profile',
+                    'icon' => 'icon-user',
+                    'url' => route('account.profile'),
+                    'module' => 'auth::spotlight.module_name',
                 ]);
             });
         }
@@ -130,7 +151,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function registerTranslations(): void
     {
-        $langPath = resource_path('lang/modules/'.$this->nameLower);
+        $langPath = resource_path('lang/modules/' . $this->nameLower);
 
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->nameLower);
@@ -152,10 +173,10 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function registerViews(): void
     {
-        $viewPath = resource_path('views/modules/'.$this->nameLower);
+        $viewPath = resource_path('views/modules/' . $this->nameLower);
         $sourcePath = module_path($this->name, 'resources/views');
 
-        $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower.'-module-views']);
+        $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower . '-module-views']);
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->nameLower);
 
@@ -213,8 +234,8 @@ class AuthServiceProvider extends ServiceProvider
 
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
-                    $relativePath = str_replace($configPath.DIRECTORY_SEPARATOR, '', $file->getPathname());
-                    $configKey = $this->nameLower.'.'.str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
+                    $relativePath = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
+                    $configKey = $this->nameLower . '.' . str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
                     $key = ($relativePath === 'auth.php') ? $this->nameLower : $configKey;
 
                     $this->publishes([$file->getPathname() => config_path($relativePath)], 'config');
@@ -228,8 +249,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $paths = [];
         foreach (config('view.paths') as $path) {
-            if (is_dir($path.'/modules/'.$this->nameLower)) {
-                $paths[] = $path.'/modules/'.$this->nameLower;
+            if (is_dir($path . '/modules/' . $this->nameLower)) {
+                $paths[] = $path . '/modules/' . $this->nameLower;
             }
         }
 

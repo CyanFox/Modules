@@ -36,6 +36,5 @@ class CheckLanguage
         }
 
         return $response;
-
     }
 }

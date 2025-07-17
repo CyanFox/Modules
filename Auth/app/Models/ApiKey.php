@@ -2,12 +2,22 @@
 
 namespace Modules\Auth\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $key
+ * @property Carbon|null $last_used
+ * @property-read User $user
+ * @property-read Collection|ApiKeyPermission[] $permissions
+ */
 class ApiKey extends Model
 {
     use LogsActivity;
@@ -52,6 +62,6 @@ class ApiKey extends Model
 
     public function displayName()
     {
-        return $this->name;
+        return $this->key;
     }
 }
