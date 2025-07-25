@@ -110,10 +110,8 @@
             <div class="relative flex items-center ml-auto">
                 <x-view-integration name="dashboard.navbar.items.start"/>
 
-                <div class="ml-2">
-                    <x-button.floating variant="outline" size="sm" @click="$dispatch('open-spotlight')">
-                        <i class="icon-search"></i>
-                    </x-button.floating>
+                <div class="mr-2">
+                    <i class="icon-search cursor-pointer text-neutral-900 dark:text-white" @click="$dispatch('open-spotlight')"></i>
                 </div>
                 <div class="ml-2">
                     <x-dropdown>

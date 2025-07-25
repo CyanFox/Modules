@@ -5,8 +5,8 @@
     "keywords": ["auth", "cyanfox", "base"],
     "authors": ["CyanFox"],
     "license": "MIT",
-    "version": "25.07-2.0",
-    "remote_version_url": "https://raw.githubusercontent.com/CyanFox-Projects/CyanFox-Base-Modules/v4/Auth/module.json",
+    "version": "25.07-2.1",
+    "remote_version_url": "https://raw.githubusercontent.com/CyanFox/Modules/v4/Auth/module.json",
     "priority": 100,
     "settings_page": "admin.settings.auth",
     "providers": [

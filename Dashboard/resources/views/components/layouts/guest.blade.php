@@ -12,6 +12,8 @@
         }
     </style>
 
+    <link rel="icon" href="{{ settings('internal.app.logo', config('settings.logo_path')) }}" type="image/x-icon">
+
     @filamentStyles
     @vite('resources/css/app.css')
     @livewireStyles
