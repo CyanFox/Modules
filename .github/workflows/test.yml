@@ -32,7 +32,7 @@ jobs:
           coverage: none
 
       - name: Clone CyanFox-Base
-        run: git clone --branch v4 https://github.com/CyanFox/Base
+        run: git clone --branch v4 https://github.com/CyanFox/Base CyanFox-Base
 
       - name: Setup problem matchers
         run: |
