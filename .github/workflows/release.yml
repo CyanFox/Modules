@@ -36,12 +36,3 @@ jobs:
           done <<< "${{ steps.find_modules.outputs.modules }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Get changed modules (since last release)
-        id: changed_modules
-        run: |
-          last_tag=$(git describe --tags --abbrev=0)
-          changed=$(git diff --name-only $last_tag HEAD | grep 'module.json' | xargs -n1 dirname | sort -u)
-          echo "changed_modules<<EOF" >> $GITHUB_OUTPUT
-          echo "$changed" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT

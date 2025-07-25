@@ -19,7 +19,7 @@
         <x-view-integration name="admin.dashboard.versions.update"/>
     @endif
 
-    <div class="grid md:grid-cols-2 gap-4 mb-4">
+    <div class="flex flex-col md:flex-row gap-4 mb-4">
         <x-alert class="flex justify-center" type="info">
             {{ __('admin::dashboard.current_base_version', ['version' => $currentBaseVersion]) }}
         </x-alert>
@@ -31,5 +31,5 @@
     </div>
 
 
-    <x-view-integration name="admin.dashboard.dashboard"/>
+    <x-view-integration name="admin.dashboard"/>
 </div>

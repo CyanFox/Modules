@@ -6,7 +6,7 @@
     "authors": ["CyanFox"],
     "license": "MIT",
     "version": "25.07-2.0",
-    "remote_version_url": "https://raw.githubusercontent.com/CyanFox-Projects/CyanFox-Base-Modules/v4/Admin/module.json",
+    "remote_version_url": "https://raw.githubusercontent.com/CyanFox/Modules/v4/Admin/module.json",
     "priority": 200,
     "providers": [
         "Modules\\Admin\\Providers\\AdminServiceProvider"
