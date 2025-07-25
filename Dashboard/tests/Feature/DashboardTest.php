@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature;
+namespace Modules\Dashboard\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Auth\Models\User;

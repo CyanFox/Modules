@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature;
+namespace Modules\Announcements\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
