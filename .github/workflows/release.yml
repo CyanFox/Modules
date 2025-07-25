@@ -27,12 +27,14 @@ jobs:
 
       - name: Release each module
         run: |
+          commit_hash=${GITHUB_SHA}
           while read -r module; do
             name=$(jq -r .name "$module/module.json")
             version=$(jq -r .version "$module/module.json")
             zipfile="${name}-${version}.zip"
+            tag="${name}-${version}-${commit_hash}"
             zip -r "$zipfile" "$module"
-            gh release create "${name}-${version}" "$zipfile" --title "${name} ${version}" --notes "Release for $name version $version"
+            gh release create "$tag" "$zipfile" --title "${name} ${version}" --notes "Release for $name version $version"
           done <<< "${{ steps.find_modules.outputs.modules }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
