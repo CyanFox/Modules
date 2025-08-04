@@ -30,6 +30,7 @@ class Admin extends CFComponent
     public $forgotPasswordMailTitle;
     public $forgotPasswordMailSubject;
     public $forgotPasswordMailContent;
+    public $newSessionMailEnabled;
     public $newSessionMailTitle;
     public $newSessionMailSubject;
     public $newSessionMailContent;
@@ -104,6 +105,7 @@ class Admin extends CFComponent
             'forgotPasswordMailTitle' => 'required',
             'forgotPasswordMailSubject' => 'required',
             'forgotPasswordMailContent' => 'required',
+            'newSessionMailEnabled' => 'nullable|boolean',
             'newSessionMailTitle' => 'required',
             'newSessionMailSubject' => 'required',
             'newSessionMailContent' => 'required',
@@ -113,6 +115,7 @@ class Admin extends CFComponent
             'auth.emails.forgot_password.title' => $this->forgotPasswordMailTitle,
             'auth.emails.forgot_password.subject' => $this->forgotPasswordMailSubject,
             'auth.emails.forgot_password.content' => $this->forgotPasswordMailContent,
+            'auth.emails.new_session.enabled' => $this->newSessionMailEnabled,
             'auth.emails.new_session.title' => $this->newSessionMailTitle,
             'auth.emails.new_session.subject' => $this->newSessionMailSubject,
             'auth.emails.new_session.content' => $this->newSessionMailContent,
@@ -232,6 +235,7 @@ class Admin extends CFComponent
         $this->forgotPasswordMailTitle = settings('auth.emails.forgot_password.title');
         $this->forgotPasswordMailSubject = settings('auth.emails.forgot_password.subject');
         $this->forgotPasswordMailContent = settings('auth.emails.forgot_password.content');
+        $this->newSessionMailEnabled = (bool)settings('auth.emails.new_session.enabled');
         $this->newSessionMailTitle = settings('auth.emails.new_session.title');
         $this->newSessionMailSubject = settings('auth.emails.new_session.subject');
         $this->newSessionMailContent = settings('auth.emails.new_session.content');

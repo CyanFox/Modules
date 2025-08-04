@@ -90,7 +90,7 @@ class Login extends CFComponent
 
         if (!Session::where('user_id', $this->user->id)
             ->where('ip_address', request()->ip())
-            ->exists()) {
+            ->exists() && settings('auth.emails.new_session.enabled', config('auth.emails.new_session.enabled'))) {
             $mail = new NewSessionMail($this->user->email, $this->user->username, $this->user->first_name, $this->user->last_name);
 
             Mail::send($mail);
@@ -162,7 +162,7 @@ class Login extends CFComponent
         if ($this->user->checkTwoFACode($this->twoFactorCode)) {
             if (!Session::where('user_id', $this->user->id)
                 ->where('ip_address', request()->ip())
-                ->exists()) {
+                ->exists() && settings('auth.emails.new_session.enabled', config('auth.emails.new_session.enabled'))) {
                 $mail = new NewSessionMail($this->user->email, $this->user->username, $this->user->first_name, $this->user->last_name);
 
                 Mail::send($mail);

@@ -57,6 +57,7 @@ return [
         'hint' => 'You can use the following placeholders: {username}, {firstName}, {lastName}, {resetLink}',
     ],
 
+    'new_session_mail_enabled' => 'Enable New Session Notification',
     'new_session_mail_title' => 'New Session Notification',
     'new_session_mail' => [
         'title' => 'Title',

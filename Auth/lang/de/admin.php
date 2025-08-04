@@ -57,6 +57,7 @@ return [
         'hint' => 'Es stehen folgende Platzhalter zur Verfügung: {username}, {firstName}, {lastName}, {resetLink}',
     ],
 
+    'new_session_mail_enabled' => 'Neue Sitzungsbenachrichtigung aktivieren',
     'new_session_mail_title' => 'Neue Sitzungsbenachrichtigung',
     'new_session_mail' => [
         'title' => 'Titel',

@@ -101,6 +101,10 @@
                         {{ __('auth::admin.new_session_mail_title') }}
                     </span>
                     <x-divider/>
+
+                    <x-checkbox wire:model="newSessionMailEnabled"
+                                label="{{ __('auth::admin.new_session_mail_enabled') }}"/>
+
                     <div class="grid md:grid-cols-2 gap-4">
                         <x-input wire:model="newSessionMailTitle"
                                  label="{{ __('auth::admin.new_session_mail.title') }}"
