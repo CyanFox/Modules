@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Auth\Http\Controllers\AccountController;
-use Modules\Auth\Http\Controllers\AuthController;
 
 /*
  *--------------------------------------------------------------------------
@@ -16,7 +15,7 @@ use Modules\Auth\Http\Controllers\AuthController;
 */
 
 Route::middleware(['api_key'])->prefix('v1')->group(function () {
-    Route::get('/', fn() => response()->json(['message' => 'Welcome to the API! Docs can be found under /docs/api']));
+    Route::get('/', fn () => response()->json(['message' => 'Welcome to the API! Docs can be found under /docs/api']));
 
     Route::group(['prefix' => 'account'], function () {
         Route::get('/', [AccountController::class, 'getUser'])->name('Get User');

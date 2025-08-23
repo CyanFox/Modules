@@ -4,9 +4,9 @@ namespace Modules\Auth\Livewire\Account;
 
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Actions\Users\UpdateUserAction;
 use Modules\Auth\Facades\UnsplashManager;
 
@@ -60,10 +60,7 @@ class ForceActivateTwoFactor extends CFComponent
         auth()->user()->update(['force_activate_two_factor' => false]);
         auth()->logout();
 
-        Notification::make()
-            ->title(__('auth::force.activate_two_factor.notifications.two_fa_enabled'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::force.activate_two_factor.notifications.two_fa_enabled'));
 
         return redirect()->route('auth.login');
     }

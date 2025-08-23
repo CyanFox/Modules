@@ -5,8 +5,8 @@ namespace Modules\Admin\Livewire\Users;
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
 use Exception;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Actions\Users\UpdateUserAction;
 use Modules\Auth\Models\User;
 
@@ -76,10 +76,7 @@ class UpdateUser extends CFComponent
 
         $this->user->permissions()->sync($this->permissions);
 
-        Notification::make()
-            ->title(__('admin::users.update_user.notifications.user_updated'))
-            ->success()
-            ->send();
+        Toaster::success(__('admin::users.update_user.notifications.user_updated'));
 
         $this->redirect(route('admin.users.update', ['userId' => $this->userId]));
     }

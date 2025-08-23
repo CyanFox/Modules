@@ -26,7 +26,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  */
 class Announcement extends Model
 {
-    use SpotlightSearchable, LogsActivity;
+    use LogsActivity, SpotlightSearchable;
 
     protected $fillable = [
         'title',
@@ -69,7 +69,7 @@ class Announcement extends Model
 
     public function spotlightIcon()
     {
-        return ($this->icon ? 'icon-' . $this->icon : 'icon-megaphone');
+        return $this->icon ? 'icon-'.$this->icon : 'icon-megaphone';
     }
 
     public function spotlightPermissions(): ?array
@@ -92,7 +92,7 @@ class Announcement extends Model
         return LogOptions::defaults()
             ->logAll()
             ->setDescriptionForEvent(function ($eventName) {
-                return 'announcement_' . $eventName;
+                return 'announcement_'.$eventName;
             });
     }
 }

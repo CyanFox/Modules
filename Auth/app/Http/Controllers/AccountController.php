@@ -23,11 +23,11 @@ class AccountController
             'user' => array_merge(
                 $user->toArray(),
                 [
-                    'roles' => $user->roles->map(fn($role) => [
+                    'roles' => $user->roles->map(fn ($role) => [
                         'id' => $role->id,
                         'name' => $role->name,
                     ]),
-                    'permissions' => $user->permissions->map(fn($perm) => [
+                    'permissions' => $user->permissions->map(fn ($perm) => [
                         'id' => $perm->id,
                         'name' => $perm->name,
                     ]),
@@ -42,7 +42,7 @@ class AccountController
         $request->validate([
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
-            'username' => 'nullable|string|max:255|unique:users,username,' . $user->id,
+            'username' => 'nullable|string|max:255|unique:users,username,'.$user->id,
             'theme' => 'nullable|string|in:light,dark',
             'language' => 'nullable|string|in:en,de',
             'custom_avatar_url' => 'nullable|url|max:2048',

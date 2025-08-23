@@ -17,13 +17,13 @@ class AdminSettingsController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.settings.editor') || !$request->attributes->get('api_key')->can('admin.settings.editor')) {
+        if (! $user->can('admin.settings.editor') || ! $request->attributes->get('api_key')->can('admin.settings.editor')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         return response()->json([
             'message' => 'Settings retrieved successfully',
-            'settings' => Setting::all()
+            'settings' => Setting::all(),
         ]);
     }
 
@@ -34,20 +34,20 @@ class AdminSettingsController
         $user = $request->attributes->get('api_key')->user;
         $isEncrypted = $request->query('encrypted', false);
 
-        if (!$user->can('admin.settings.editor') || !$request->attributes->get('api_key')->can('admin.settings.editor')) {
+        if (! $user->can('admin.settings.editor') || ! $request->attributes->get('api_key')->can('admin.settings.editor')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $setting = SettingsManager::getSetting($settingsKey, isEncrypted: $isEncrypted);
 
-        if (!$setting) {
+        if (! $setting) {
             return response()->json(['error' => 'Setting not found'], 404);
         }
 
         return response()->json([
             'message' => 'Setting retrieved successfully',
             'key' => $settingsKey,
-            'value' => $setting
+            'value' => $setting,
         ]);
     }
 
@@ -56,7 +56,7 @@ class AdminSettingsController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.settings.editor') || !$request->attributes->get('api_key')->can('admin.settings.editor')) {
+        if (! $user->can('admin.settings.editor') || ! $request->attributes->get('api_key')->can('admin.settings.editor')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -69,7 +69,7 @@ class AdminSettingsController
         return response()->json([
             'message' => 'Setting updated successfully',
             'key' => $settingsKey,
-            'value' => $value
+            'value' => $value,
         ]);
     }
 
@@ -78,7 +78,7 @@ class AdminSettingsController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.settings.editor') || !$request->attributes->get('api_key')->can('admin.settings.editor')) {
+        if (! $user->can('admin.settings.editor') || ! $request->attributes->get('api_key')->can('admin.settings.editor')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -86,7 +86,7 @@ class AdminSettingsController
 
         return response()->json([
             'message' => 'Setting deleted successfully',
-            'key' => $settingsKey
+            'key' => $settingsKey,
         ]);
     }
 
@@ -94,14 +94,14 @@ class AdminSettingsController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.settings.editor') || !$request->attributes->get('api_key')->can('admin.settings.editor')) {
+        if (! $user->can('admin.settings.editor') || ! $request->attributes->get('api_key')->can('admin.settings.editor')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $request->validate([
             'key' => 'required|string|unique:settings,key',
             'value' => 'required',
-            'encrypted' => 'nullable|boolean'
+            'encrypted' => 'nullable|boolean',
         ]);
 
         $setting = SettingsManager::setSetting(
@@ -113,16 +113,15 @@ class AdminSettingsController
 
         return response()->json([
             'message' => 'Setting created successfully',
-            'setting' => $setting
+            'setting' => $setting,
         ]);
     }
-
 
     public function encryptValue(Request $request)
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.settings.editor') || !$request->attributes->get('api_key')->can('admin.settings.editor')) {
+        if (! $user->can('admin.settings.editor') || ! $request->attributes->get('api_key')->can('admin.settings.editor')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -134,7 +133,7 @@ class AdminSettingsController
 
         return response()->json([
             'message' => 'Value encrypted successfully',
-            'value' => encrypt($value)
+            'value' => encrypt($value),
         ]);
     }
 
@@ -142,7 +141,7 @@ class AdminSettingsController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.settings.editor') || !$request->attributes->get('api_key')->can('admin.settings.editor')) {
+        if (! $user->can('admin.settings.editor') || ! $request->attributes->get('api_key')->can('admin.settings.editor')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -155,12 +154,12 @@ class AdminSettingsController
         try {
             $decryptedValue = decrypt($value);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Decryption failed: ' . $e->getMessage()], 400);
+            return response()->json(['error' => 'Decryption failed: '.$e->getMessage()], 400);
         }
 
         return response()->json([
             'message' => 'Value decrypted successfully',
-            'value' => $decryptedValue
+            'value' => $decryptedValue,
         ]);
     }
 }

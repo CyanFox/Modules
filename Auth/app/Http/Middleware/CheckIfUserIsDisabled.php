@@ -3,8 +3,8 @@
 namespace Modules\Auth\Http\Middleware;
 
 use Closure;
-use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
+use Masmerise\Toaster\Toaster;
 
 class CheckIfUserIsDisabled
 {
@@ -16,10 +16,7 @@ class CheckIfUserIsDisabled
         if (auth()->check() && auth()->user()->disabled) {
             auth()->logout();
 
-            Notification::make()
-                ->title(__('auth::login.user_disabled'))
-                ->danger()
-                ->send();
+            Toaster::error(__('auth::login.user_disabled'));
 
             return redirect()->route('auth.login');
         }

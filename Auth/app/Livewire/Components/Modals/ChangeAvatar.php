@@ -4,9 +4,9 @@ namespace Modules\Auth\Livewire\Components\Modals;
 
 use App\Livewire\CFModalComponent;
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithFileUploads;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Actions\Users\UpdateUserAction;
 
 class ChangeAvatar extends CFModalComponent
@@ -30,10 +30,7 @@ class ChangeAvatar extends CFModalComponent
 
             $this->avatar->storeAs('avatars', auth()->id().'.png', 'public');
 
-            Notification::make()
-                ->title(__('auth::profile.modals.change_avatar.notifications.avatar_changed'))
-                ->success()
-                ->send();
+            Toaster::success(__('auth::profile.modals.change_avatar.notifications.avatar_changed'));
 
             $this->redirect(route('account.profile'), true);
 
@@ -46,10 +43,7 @@ class ChangeAvatar extends CFModalComponent
                 'custom_avatar_url' => htmlspecialchars($this->avatarUrl),
             ]);
 
-            Notification::make()
-                ->title(__('auth::profile.modals.change_avatar.notifications.avatar_changed'))
-                ->success()
-                ->send();
+            Toaster::success(__('auth::profile.modals.change_avatar.notifications.avatar_changed'));
 
             $this->redirect(route('account.profile'), true);
         }
@@ -68,10 +62,7 @@ class ChangeAvatar extends CFModalComponent
             'custom_avatar_url' => null,
         ]);
 
-        Notification::make()
-            ->title(__('auth::profile.modals.change_avatar.notifications.avatar_reset'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::profile.modals.change_avatar.notifications.avatar_reset'));
 
         $this->redirect(route('account.profile'), true);
     }

@@ -25,12 +25,15 @@
     <title>{{ ($title ?? '') . ' · ' . settings('internal.app.name', config('app.name')) }}</title>
 </head>
 <body>
-@livewire('notifications')
 @livewire('spotlight-search')
 
 <x-admin::navigation.sidebar>
     {{ $slot }}
 </x-admin::navigation.sidebar>
+
+@persist('notifications')
+<x-toaster-hub/>
+@endpersist
 
 @livewireScripts
 @filamentScripts

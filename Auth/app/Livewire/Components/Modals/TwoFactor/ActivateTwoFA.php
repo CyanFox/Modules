@@ -4,8 +4,8 @@ namespace Modules\Auth\Livewire\Components\Modals\TwoFactor;
 
 use App\Livewire\CFModalComponent;
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
 use Illuminate\Validation\ValidationException;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Actions\Users\UpdateUserAction;
 use Modules\Auth\Livewire\Account\Profile;
 use Modules\Auth\Traits\WithPasswordConfirmation;
@@ -40,10 +40,7 @@ class ActivateTwoFA extends CFModalComponent
 
         auth()->user()->revokeOtherSessions();
 
-        Notification::make()
-            ->title(__('auth::profile.modals.activate_two_fa.notifications.two_fa_enabled'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::profile.modals.activate_two_fa.notifications.two_fa_enabled'));
 
         $this->dispatch('refreshProfile')->to(Profile::class);
     }

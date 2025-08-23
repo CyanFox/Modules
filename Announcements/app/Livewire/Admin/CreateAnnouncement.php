@@ -4,8 +4,8 @@ namespace Modules\Announcements\Livewire\Admin;
 
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
 use Livewire\WithFileUploads;
+use Masmerise\Toaster\Toaster;
 use Modules\Announcements\app\Actions\CreateAnnouncementAction;
 
 class CreateAnnouncement extends CFComponent
@@ -81,10 +81,7 @@ class CreateAnnouncement extends CFComponent
             ]);
         }
 
-        Notification::make()
-            ->title(__('announcements::announcements.create_announcement.notifications.announcement_created'))
-            ->success()
-            ->send();
+        Toaster::success(__('announcements::announcements.create_announcement.notifications.announcement_created'));
 
         $this->redirect(route('admin.announcements'), true);
     }

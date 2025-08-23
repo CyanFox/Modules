@@ -5,8 +5,8 @@ namespace Modules\Auth\Tests\Feature\Livewire\Auth;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Modules\Auth\Livewire\Auth\Register;
-use PHPUnit\Framework\Attributes\Test;
 use Modules\Auth\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class RegisterTest extends TestCase
 {

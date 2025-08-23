@@ -68,7 +68,7 @@ class AnnouncementsController
         $user = $request->attributes->get('api_key')->user;
 
         $announcement = Announcement::find($announcementId);
-        if (!$announcement) {
+        if (! $announcement) {
             return response()->json(['error' => 'Announcement not found'], 404);
         }
 
@@ -76,7 +76,7 @@ class AnnouncementsController
             return response()->json(['error' => 'Announcement already dismissed'], 400);
         }
 
-        if (!$announcement->dismissible) {
+        if (! $announcement->dismissible) {
             return response()->json(['error' => 'Announcement is not dismissible'], 400);
         }
 
@@ -90,20 +90,18 @@ class AnnouncementsController
         ]);
     }
 
-
-
     #[QueryParameter('per_page', description: 'Number of announcements per page', type: 'integer', default: 20, example: 10)]
     public function getAnnouncements(Request $request)
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.announcements') || !$request->attributes->get('api_key')->can('admin.announcements')) {
+        if (! $user->can('admin.announcements') || ! $request->attributes->get('api_key')->can('admin.announcements')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         return response()->json([
             'message' => 'Announcements retrieved successfully',
-            'announcements' => Announcement::orderBy('created_at')->with('access')->paginate($request->query('per_page', 20))
+            'announcements' => Announcement::orderBy('created_at')->with('access')->paginate($request->query('per_page', 20)),
         ]);
     }
 
@@ -112,7 +110,7 @@ class AnnouncementsController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.announcements') || !$request->attributes->get('api_key')->can('admin.announcements')) {
+        if (! $user->can('admin.announcements') || ! $request->attributes->get('api_key')->can('admin.announcements')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -128,7 +126,7 @@ class AnnouncementsController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.announcements.create') || !$request->attributes->get('api_key')->can('admin.announcements.create')) {
+        if (! $user->can('admin.announcements.create') || ! $request->attributes->get('api_key')->can('admin.announcements.create')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -145,7 +143,7 @@ class AnnouncementsController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.announcements.update') || !$request->attributes->get('api_key')->can('admin.announcements.update')) {
+        if (! $user->can('admin.announcements.update') || ! $request->attributes->get('api_key')->can('admin.announcements.update')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -160,7 +158,7 @@ class AnnouncementsController
         ]);
 
         $announcement = Announcement::find($announcementId);
-        if (!$announcement) {
+        if (! $announcement) {
             return response()->json(['error' => 'Announcement not found'], 404);
         }
 
@@ -177,12 +175,12 @@ class AnnouncementsController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.announcements.delete') || !$request->attributes->get('api_key')->can('admin.announcements.delete')) {
+        if (! $user->can('admin.announcements.delete') || ! $request->attributes->get('api_key')->can('admin.announcements.delete')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $announcement = Announcement::find($announcementId);
-        if (!$announcement) {
+        if (! $announcement) {
             return response()->json(['error' => 'Announcement not found'], 404);
         }
 

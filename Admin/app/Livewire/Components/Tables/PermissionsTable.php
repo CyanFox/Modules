@@ -3,8 +3,8 @@
 namespace Modules\Admin\Livewire\Components\Tables;
 
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Actions\Permissions\DeletePermissionAction;
 use Modules\Auth\Actions\Permissions\UpdatePermissionAction;
 use Modules\Auth\Models\Permission;
@@ -88,18 +88,12 @@ final class PermissionsTable extends PenguTable
             ]);
 
             if (! DeletePermissionAction::run($permission)) {
-                Notification::make()
-                    ->title(__('messages.notifications.something_went_wrong'))
-                    ->danger()
-                    ->send();
+                Toaster::error(__('messages.notifications.something_went_wrong'));
 
                 return;
             }
 
-            Notification::make()
-                ->title(__('admin::permissions.delete_permission.notifications.permission_deleted'))
-                ->success()
-                ->send();
+            Toaster::success(__('admin::permissions.delete_permission.notifications.permission_deleted'));
 
             $this->redirect(url()->previous(), true);
 

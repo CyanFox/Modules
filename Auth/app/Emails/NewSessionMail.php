@@ -17,8 +17,11 @@ class NewSessionMail extends Mailable
     public $firstName;
 
     public $lastName;
+
     public $ipAddress;
+
     public $userAgent;
+
     public $loginTime;
 
     public function __construct($email, $username, $firstName, $lastName)

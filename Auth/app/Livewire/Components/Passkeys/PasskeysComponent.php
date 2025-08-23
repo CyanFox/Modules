@@ -2,13 +2,13 @@
 
 namespace Modules\Auth\Livewire\Components\Passkeys;
 
-use Filament\Notifications\Notification;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Traits\WithPasswordConfirmation;
 use Spatie\LaravelPasskeys\Actions\GeneratePasskeyRegisterOptionsAction;
 use Spatie\LaravelPasskeys\Actions\StorePasskeyAction;
@@ -63,10 +63,7 @@ class PasskeysComponent extends Component
 
         $this->clearForm();
 
-        Notification::make()
-            ->title(__('auth::profile.passkeys.notifications.passkey_created'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::profile.passkeys.notifications.passkey_created'));
 
         $this->redirect(route('account.profile', ['passTab' => 'passkeys']));
     }
@@ -80,10 +77,7 @@ class PasskeysComponent extends Component
 
         $this->currentUser()->passkeys()->where('id', $passkeyId)->delete();
 
-        Notification::make()
-            ->title(__('auth::profile.passkeys.notifications.passkey_deleted'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::profile.passkeys.notifications.passkey_deleted'));
 
         $this->redirect(route('account.profile', ['passTab' => 'passkeys']));
     }

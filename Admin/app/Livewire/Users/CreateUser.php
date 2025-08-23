@@ -4,8 +4,8 @@ namespace Modules\Admin\Livewire\Users;
 
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Actions\Users\CreateUserAction;
 use Modules\Auth\Rules\Password;
 
@@ -66,10 +66,7 @@ class CreateUser extends CFComponent
 
         $user->permissions()->sync($this->permissions);
 
-        Notification::make()
-            ->title(__('admin::users.create_user.notifications.user_created'))
-            ->success()
-            ->send();
+        Toaster::success(__('admin::users.create_user.notifications.user_created'));
 
         $this->redirect(route('admin.users'), true);
     }

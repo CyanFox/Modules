@@ -3,8 +3,8 @@
 namespace Modules\Auth\Livewire;
 
 use App\Livewire\CFComponent;
-use Filament\Notifications\Notification;
 use Livewire\Attributes\Url;
+use Masmerise\Toaster\Toaster;
 
 class Admin extends CFComponent
 {
@@ -12,45 +12,79 @@ class Admin extends CFComponent
     public $tab;
 
     public $defaultAvatarUrl;
+
     public $loginRateLimit;
+
     public $registerRateLimit;
+
     public $unsplashApiKey;
+
     public $unsplashUtm;
+
     public $unsplashFallbackCss;
+
     public $unsplashQuery;
+
     public $enableDeleteAccount;
+
     public $enableChangeAvatar;
+
     public $enableRegister;
+
     public $enableLogin;
+
     public $enableForgotPassword;
+
     public $enableLoginCaptcha;
+
     public $enableRegisterCaptcha;
+
     public $enableForgotPasswordCaptcha;
 
     public $forgotPasswordMailTitle;
+
     public $forgotPasswordMailSubject;
+
     public $forgotPasswordMailContent;
+
     public $newSessionMailEnabled;
+
     public $newSessionMailTitle;
+
     public $newSessionMailSubject;
+
     public $newSessionMailContent;
 
     public $oauthLoginEnabled;
+
     public $oauthWellKnownUrl;
+
     public $oauthLoginColor;
+
     public $oauthLoginText;
+
     public $oauthIdField;
+
     public $oauthUsernameField;
+
     public $oauthEmailField;
+
     public $oauthClientId;
+
     public $oauthClientSecret;
+
     public $oauthRedirectUri;
 
     public $passwordMinLength;
+
     public $passwordRequireUppercase;
+
     public $passwordRequireLowercase;
+
     public $passwordRequireNumbers;
+
     public $passwordRequireSpecialCharacters;
+
     public $passwordBlacklist;
 
     public function updateGeneralSettings()
@@ -91,10 +125,7 @@ class Admin extends CFComponent
             ->causedBy(auth()->user())
             ->log('auth.settings.general.updated');
 
-        Notification::make()
-            ->title(__('auth::admin.notifications.settings_updated'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::admin.notifications.settings_updated'));
 
         $this->redirect(route('admin.settings.auth', ['tab' => 'general']), true);
     }
@@ -125,10 +156,7 @@ class Admin extends CFComponent
             ->causedBy(auth()->user())
             ->log('auth.settings.mail.updated');
 
-        Notification::make()
-            ->title(__('auth::admin.notifications.settings_updated'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::admin.notifications.settings_updated'));
 
         $this->redirect(route('admin.settings.auth', ['tab' => 'mail']), true);
 
@@ -166,10 +194,7 @@ class Admin extends CFComponent
             ->causedBy(auth()->user())
             ->log('auth.settings.oauth.updated');
 
-        Notification::make()
-            ->title(__('auth::admin.notifications.settings_updated'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::admin.notifications.settings_updated'));
 
         $this->redirect(route('admin.settings.auth', ['tab' => 'oauth']), true);
     }
@@ -198,10 +223,7 @@ class Admin extends CFComponent
             ->causedBy(auth()->user())
             ->log('auth.settings.password.updated');
 
-        Notification::make()
-            ->title(__('auth::admin.notifications.settings_updated'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::admin.notifications.settings_updated'));
 
         $this->redirect(route('admin.settings.auth', ['tab' => 'password']), true);
 
@@ -209,7 +231,7 @@ class Admin extends CFComponent
 
     public function mount()
     {
-        if (!in_array($this->tab, ['general', 'mail', 'oauth', 'password'])) {
+        if (! in_array($this->tab, ['general', 'mail', 'oauth', 'password'])) {
             $this->tab = 'general';
         }
 
@@ -222,20 +244,20 @@ class Admin extends CFComponent
         $this->unsplashFallbackCss = settings('auth.unsplash.fallback_css');
         $this->unsplashQuery = settings('auth.unsplash.query');
 
-        $this->enableDeleteAccount = (bool)settings('auth.profile.enable.delete_account');
-        $this->enableChangeAvatar = (bool)settings('auth.profile.enable.change_avatar');
-        $this->enableRegister = (bool)settings('auth.register.enable');
-        $this->enableLogin = (bool)settings('auth.login.enable');
-        $this->enableForgotPassword = (bool)settings('auth.forgot_password.enable');
-        $this->enableLoginCaptcha = (bool)settings('auth.login.enable.captcha');
-        $this->enableRegisterCaptcha = (bool)settings('auth.register.enable.captcha');
-        $this->enableForgotPasswordCaptcha = (bool)settings('auth.forgot_password.enable.captcha');
+        $this->enableDeleteAccount = (bool) settings('auth.profile.enable.delete_account');
+        $this->enableChangeAvatar = (bool) settings('auth.profile.enable.change_avatar');
+        $this->enableRegister = (bool) settings('auth.register.enable');
+        $this->enableLogin = (bool) settings('auth.login.enable');
+        $this->enableForgotPassword = (bool) settings('auth.forgot_password.enable');
+        $this->enableLoginCaptcha = (bool) settings('auth.login.enable.captcha');
+        $this->enableRegisterCaptcha = (bool) settings('auth.register.enable.captcha');
+        $this->enableForgotPasswordCaptcha = (bool) settings('auth.forgot_password.enable.captcha');
 
         // Mails
         $this->forgotPasswordMailTitle = settings('auth.emails.forgot_password.title');
         $this->forgotPasswordMailSubject = settings('auth.emails.forgot_password.subject');
         $this->forgotPasswordMailContent = settings('auth.emails.forgot_password.content');
-        $this->newSessionMailEnabled = (bool)settings('auth.emails.new_session.enabled');
+        $this->newSessionMailEnabled = (bool) settings('auth.emails.new_session.enabled');
         $this->newSessionMailTitle = settings('auth.emails.new_session.title');
         $this->newSessionMailSubject = settings('auth.emails.new_session.subject');
         $this->newSessionMailContent = settings('auth.emails.new_session.content');
@@ -254,10 +276,10 @@ class Admin extends CFComponent
 
         // Password
         $this->passwordMinLength = settings('auth.password.minimum_length');
-        $this->passwordRequireUppercase = (bool)settings('auth.password.require.uppercase');
-        $this->passwordRequireLowercase = (bool)settings('auth.password.require.lowercase');
-        $this->passwordRequireNumbers = (bool)settings('auth.password.require.numbers');
-        $this->passwordRequireSpecialCharacters = (bool)settings('auth.password.require.special_characters');
+        $this->passwordRequireUppercase = (bool) settings('auth.password.require.uppercase');
+        $this->passwordRequireLowercase = (bool) settings('auth.password.require.lowercase');
+        $this->passwordRequireNumbers = (bool) settings('auth.password.require.numbers');
+        $this->passwordRequireSpecialCharacters = (bool) settings('auth.password.require.special_characters');
         $this->passwordBlacklist = settings('auth.password.blacklist');
     }
 

@@ -8,8 +8,8 @@ use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Modules\Auth\Livewire\Auth\ForgotPassword;
 use Modules\Auth\Models\User;
-use PHPUnit\Framework\Attributes\Test;
 use Modules\Auth\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ForgotPasswordTest extends TestCase
 {

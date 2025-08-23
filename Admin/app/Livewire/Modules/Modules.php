@@ -6,8 +6,8 @@ use App\Facades\ModuleManager;
 use App\Livewire\CFComponent;
 use App\Models\Setting;
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Artisan;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Traits\WithConfirmation;
 use Nwidart\Modules\Facades\Module;
 use Symfony\Component\Process\Process;
@@ -27,10 +27,7 @@ class Modules extends CFComponent
         }
 
         if (! (ModuleManager::checkRequirements($moduleName) && ModuleManager::checkBaseVersion($moduleName))) {
-            Notification::make()
-                ->title(__('admin::modules.notifications.module_requirements_not_met'))
-                ->danger()
-                ->send();
+            Toaster::error(__('admin::modules.notifications.module_requirements_not_met'));
 
             $this->redirect(route('admin.modules'), navigate: true);
 
@@ -57,10 +54,7 @@ class Modules extends CFComponent
             ->causedBy(auth()->user())
             ->log('module.'.mb_strtolower($moduleName).'.enabled');
 
-        Notification::make()
-            ->title(__('admin::modules.notifications.module_enabled'))
-            ->success()
-            ->send();
+        Toaster::success(__('admin::modules.notifications.module_enabled'));
 
         $this->redirect(route('admin.modules'), navigate: true);
     }
@@ -73,10 +67,7 @@ class Modules extends CFComponent
 
         foreach (Module::all() as $module) {
             if (in_array($moduleName, ModuleManager::getRequirements($module->getName()))) {
-                Notification::make()
-                    ->title(__('admin::modules.notifications.module_required_by_other_module'))
-                    ->danger()
-                    ->send();
+                Toaster::error(__('admin::modules.notifications.module_required_by_other_module'));
 
                 $this->redirect(route('admin.modules'), navigate: true);
 
@@ -100,10 +91,7 @@ class Modules extends CFComponent
             ->causedBy(auth()->user())
             ->log('module.'.mb_strtolower($moduleName).'.disabled');
 
-        Notification::make()
-            ->title(__('admin::modules.notifications.module_disabled'))
-            ->success()
-            ->send();
+        Toaster::success(__('admin::modules.notifications.module_disabled'));
 
         $this->redirect(route('admin.modules'), navigate: true);
     }
@@ -116,10 +104,7 @@ class Modules extends CFComponent
 
         foreach (Module::all() as $module) {
             if (in_array($moduleName, ModuleManager::getRequirements($module->getName()))) {
-                Notification::make()
-                    ->title(__('admin::modules.notifications.module_required_by_other_module'))
-                    ->danger()
-                    ->send();
+                Toaster::error(__('admin::modules.notifications.module_required_by_other_module'));
 
                 $this->redirect(route('admin.modules'), navigate: true);
 
@@ -148,10 +133,7 @@ class Modules extends CFComponent
                 ->causedBy(auth()->user())
                 ->log('module.'.mb_strtolower($moduleName).'.deleted');
 
-            Notification::make()
-                ->title(__('admin::modules.delete_module.notifications.module_deleted'))
-                ->success()
-                ->send();
+            Toaster::success(__('admin::modules.delete_module.notifications.module_deleted'));
 
             $this->redirect(route('admin.modules'), navigate: true);
 

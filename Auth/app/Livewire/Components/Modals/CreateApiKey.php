@@ -4,10 +4,9 @@ namespace Modules\Auth\Livewire\Components\Modals;
 
 use App\Livewire\CFModalComponent;
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Modules\Auth\Livewire\Account\Profile;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Traits\WithPasswordConfirmation;
 
 class CreateApiKey extends CFModalComponent
@@ -15,12 +14,14 @@ class CreateApiKey extends CFModalComponent
     use WithCustomLivewireException, WithPasswordConfirmation;
 
     public $name;
+
     public $permissions = [];
+
     public $key;
 
     public function createApiKey()
     {
-        if (!$this->hasPasswordConfirmedSession()) {
+        if (! $this->hasPasswordConfirmedSession()) {
             return;
         }
 
@@ -38,16 +39,13 @@ class CreateApiKey extends CFModalComponent
 
         foreach ($this->permissions as $permission) {
             $apiKey->permissions()->create([
-                'permission_id' => $permission
+                'permission_id' => $permission,
             ]);
         }
 
-        $this->key = $apiKey->id . '-' . $key;
+        $this->key = $apiKey->id.'-'.$key;
 
-        Notification::make()
-            ->title(__('auth::profile.api_keys.modals.create_api_key.notifications.api_key_created'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::profile.api_keys.modals.create_api_key.notifications.api_key_created'));
     }
 
     public function closeModal(): void
@@ -57,7 +55,7 @@ class CreateApiKey extends CFModalComponent
 
     public function mount()
     {
-        if (!$this->checkPasswordConfirmation()->passwordFunction('render')->checkPassword()) {
+        if (! $this->checkPasswordConfirmation()->passwordFunction('render')->checkPassword()) {
             return;
         }
     }
