@@ -13,5 +13,5 @@ return [
         'admin' => 'Admin',
         'users' => 'Admin Benutzer',
         'groups' => 'Admin Gruppen',
-    ]
+    ],
 ];

@@ -2,5 +2,5 @@
 
 return [
     'title' => 'Announcements',
-    'module_name' => 'Announcements'
+    'module_name' => 'Announcements',
 ];

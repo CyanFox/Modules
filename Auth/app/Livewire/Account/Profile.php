@@ -4,11 +4,11 @@ namespace Modules\Auth\Livewire\Account;
 
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Actions\Users\DeleteUserAction;
 use Modules\Auth\Actions\Users\UpdateUserAction;
 use Modules\Auth\Models\User;
@@ -59,10 +59,7 @@ class Profile extends CFComponent
 
         App::setLocale($this->language ?? 'en');
 
-        Notification::make()
-            ->title(__('auth::profile.notifications.profile_updated'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::profile.notifications.profile_updated'));
 
         $this->redirect(route('account.profile'));
     }
@@ -83,10 +80,7 @@ class Profile extends CFComponent
             'email' => $this->email,
         ]);
 
-        Notification::make()
-            ->title(__('auth::profile.notifications.profile_updated'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::profile.notifications.profile_updated'));
 
         $this->redirect(route('account.profile'), true);
     }
@@ -105,7 +99,7 @@ class Profile extends CFComponent
                 'confirmPassword' => 'required|same:newPassword',
             ]);
 
-            if (!Hash::check($this->currentPassword, auth()->user()->password)) {
+            if (! Hash::check($this->currentPassword, auth()->user()->password)) {
                 $this->addError('currentPassword', __('validation.current_password'));
 
                 return;
@@ -116,17 +110,14 @@ class Profile extends CFComponent
             'password' => $this->newPassword,
         ]);
 
-        Notification::make()
-            ->title(__('auth::profile.notifications.password_updated'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::profile.notifications.password_updated'));
 
         $this->redirect(route('account.profile'), true);
     }
 
     public function disableTwoFA($confirmed = false)
     {
-        if (!$confirmed) {
+        if (! $confirmed) {
             $this->dialog()
                 ->question(__('auth::profile.modals.disable_two_fa.title'),
                     __('auth::profile.modals.disable_two_fa.description'))
@@ -147,21 +138,18 @@ class Profile extends CFComponent
         auth()->user()->generateTwoFASecret();
         auth()->user()->recoveryCodes()->delete();
 
-        Notification::make()
-            ->title(__('auth::profile.modals.disable_two_fa.notifications.two_fa_disabled'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::profile.modals.disable_two_fa.notifications.two_fa_disabled'));
 
         $this->redirect(route('account.profile'), true);
     }
 
     public function deleteAccount($confirmed = false)
     {
-        if (!settings('auth.profile.enable.delete_account')) {
+        if (! settings('auth.profile.enable.delete_account')) {
             return;
         }
 
-        if (!$confirmed) {
+        if (! $confirmed) {
             $this->dialog()
                 ->question(__('auth::profile.modals.delete_account.title'),
                     __('auth::profile.modals.delete_account.description'))
@@ -174,42 +162,33 @@ class Profile extends CFComponent
             return;
         }
 
-        if (!DeleteUserAction::run(auth()->user())) {
-            Notification::make()
-                ->title(__('messages.notifications.something_went_wrong'))
-                ->danger()
-                ->send();
+        if (! DeleteUserAction::run(auth()->user())) {
+            Toaster::error(__('messages.notifications.something_went_wrong'));
 
             return;
         }
 
-        Notification::make()
-            ->title(__('auth::profile.modals.delete_account.notifications.account_deleted'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::profile.modals.delete_account.notifications.account_deleted'));
 
         $this->redirect(route('auth.logout'));
     }
 
     public function logoutSession($sessionId)
     {
-        if (!$this->checkPasswordConfirmation()->passwordFunction('logoutSession', $sessionId)->checkPassword()) {
+        if (! $this->checkPasswordConfirmation()->passwordFunction('logoutSession', $sessionId)->checkPassword()) {
             return;
         }
 
         auth()->user()->deleteSession($sessionId);
 
-        Notification::make()
-            ->title(__('auth::profile.sessions.notifications.logged_out'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::profile.sessions.notifications.logged_out'));
 
         $this->redirect(route('account.profile', ['tab' => 'sessions']), true);
     }
 
     public function logoutAllSessions($confirmed = false)
     {
-        if (!$confirmed) {
+        if (! $confirmed) {
             $this->dialog()
                 ->question(__('auth::profile.sessions.modals.logout_all.title'),
                     __('auth::profile.sessions.modals.logout_all.description'))
@@ -224,10 +203,7 @@ class Profile extends CFComponent
 
         auth()->user()->revokeOtherSessions();
 
-        Notification::make()
-            ->title(__('auth::profile.sessions.notifications.logged_out_all'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::profile.sessions.notifications.logged_out_all'));
 
         $this->redirect(route('account.profile', ['tab' => 'sessions']), true);
     }
@@ -242,7 +218,7 @@ class Profile extends CFComponent
 
     public function deleteApiKey($apiKeyId, $confirmed = true)
     {
-        if (!$confirmed) {
+        if (! $confirmed) {
             $this->dialog()
                 ->question(__('auth::profile.api_keys.modals.delete_api_key.title'),
                     __('auth::profile.api_keys.modals.delete_api_key.description'))
@@ -258,10 +234,7 @@ class Profile extends CFComponent
 
         $apiKey->delete();
 
-        Notification::make()
-            ->title(__('auth::profile.api_keys.modals.delete_api_key.notifications.api_key_deleted'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::profile.api_keys.modals.delete_api_key.notifications.api_key_deleted'));
 
         $this->redirect(route('account.profile', ['tab' => 'apiKeys']), true);
     }

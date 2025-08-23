@@ -4,8 +4,8 @@ namespace Modules\Auth\Livewire\Account;
 
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Actions\Users\UpdateUserAction;
 use Modules\Auth\Facades\UnsplashManager;
 use Modules\Auth\Rules\Password;
@@ -47,10 +47,7 @@ class ForceChangePassword extends CFComponent
 
         auth()->user()->revokeOtherSessions();
 
-        Notification::make()
-            ->title(__('auth::force.change_password.notifications.password_changed'))
-            ->success()
-            ->send();
+        Toaster::success(__('auth::force.change_password.notifications.password_changed'));
 
         auth()->logout();
 

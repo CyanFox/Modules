@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Hash;
 use Livewire\Livewire;
 use Modules\Auth\Livewire\Account\Profile;
 use Modules\Auth\Models\User;
-use PHPUnit\Framework\Attributes\Test;
 use Modules\Auth\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ProfileTest extends TestCase
 {

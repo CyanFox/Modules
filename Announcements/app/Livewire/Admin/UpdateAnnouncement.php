@@ -4,9 +4,9 @@ namespace Modules\Announcements\Livewire\Admin;
 
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithFileUploads;
+use Masmerise\Toaster\Toaster;
 use Modules\Announcements\app\Actions\UpdateAnnouncementAction;
 use Modules\Announcements\Models\Announcement;
 use Modules\Auth\Traits\WithConfirmation;
@@ -91,10 +91,7 @@ class UpdateAnnouncement extends CFComponent
             ]);
         }
 
-        Notification::make()
-            ->title(__('announcements::announcements.update_announcement.notifications.announcement_updated'))
-            ->success()
-            ->send();
+        Toaster::success(__('announcements::announcements.update_announcement.notifications.announcement_updated'));
 
         return redirect()->route('admin.announcements.update', ['announcementId' => $this->announcementId]);
     }
@@ -109,10 +106,7 @@ class UpdateAnnouncement extends CFComponent
             if (Storage::disk('local')->exists('announcements/'.$this->announcementId.'/'.$file)) {
                 Storage::disk('local')->delete('announcements/'.$this->announcementId.'/'.$file);
 
-                Notification::make()
-                    ->title(__('announcements::announcements.update_announcement.notifications.file_deleted'))
-                    ->success()
-                    ->send();
+                Toaster::success(__('announcements::announcements.update_announcement.notifications.file_deleted'));
             }
 
             $this->redirect(route('admin.announcements.update', ['announcementId' => $this->announcementId]), true);

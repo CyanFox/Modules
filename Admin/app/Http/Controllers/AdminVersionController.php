@@ -14,14 +14,14 @@ class AdminVersionController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.dashboard') || !$request->attributes->get('api_key')->can('admin.dashboard')) {
+        if (! $user->can('admin.dashboard') || ! $request->attributes->get('api_key')->can('admin.dashboard')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         return response()->json([
             'message' => 'Current base version retrieved successfully',
             'version' => VersionManager::getCurrentBaseVersion(),
-            'dev' => VersionManager::isDevVersion()
+            'dev' => VersionManager::isDevVersion(),
         ]);
     }
 
@@ -29,13 +29,13 @@ class AdminVersionController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.dashboard') || !$request->attributes->get('api_key')->can('admin.dashboard')) {
+        if (! $user->can('admin.dashboard') || ! $request->attributes->get('api_key')->can('admin.dashboard')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         return response()->json([
             'message' => 'Remote base version retrieved successfully',
-            'version' => VersionManager::getRemoteBaseVersion()
+            'version' => VersionManager::getRemoteBaseVersion(),
         ]);
     }
 
@@ -43,7 +43,7 @@ class AdminVersionController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.dashboard') || !$request->attributes->get('api_key')->can('admin.dashboard')) {
+        if (! $user->can('admin.dashboard') || ! $request->attributes->get('api_key')->can('admin.dashboard')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -51,7 +51,7 @@ class AdminVersionController
             'message' => 'Base version status retrieved successfully',
             'up_to_date' => VersionManager::isBaseUpToDate(),
             'current_version' => VersionManager::getCurrentBaseVersion(),
-            'remote_version' => VersionManager::getRemoteBaseVersion()
+            'remote_version' => VersionManager::getRemoteBaseVersion(),
         ]);
     }
 
@@ -59,7 +59,7 @@ class AdminVersionController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.dashboard') || !$request->attributes->get('api_key')->can('admin.dashboard')) {
+        if (! $user->can('admin.dashboard') || ! $request->attributes->get('api_key')->can('admin.dashboard')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -73,7 +73,7 @@ class AdminVersionController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.dashboard') || !$request->attributes->get('api_key')->can('admin.dashboard')) {
+        if (! $user->can('admin.dashboard') || ! $request->attributes->get('api_key')->can('admin.dashboard')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -87,7 +87,7 @@ class AdminVersionController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.dashboard') || !$request->attributes->get('api_key')->can('admin.dashboard')) {
+        if (! $user->can('admin.dashboard') || ! $request->attributes->get('api_key')->can('admin.dashboard')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -95,7 +95,7 @@ class AdminVersionController
             'message' => 'Module version status retrieved successfully',
             'version' => ModuleManager::getVersion('Admin') === ModuleManager::getRemoteVersion('Admin'),
             'current_version' => ModuleManager::getVersion('Admin'),
-            'remote_version' => ModuleManager::getRemoteVersion('Admin')
+            'remote_version' => ModuleManager::getRemoteVersion('Admin'),
         ]);
     }
 }

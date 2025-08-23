@@ -8,5 +8,5 @@ return [
         'numbers' => true,
         'special_characters' => true,
     ],
-    'blacklist' => 'password,password1234'
+    'blacklist' => 'password,password1234',
 ];

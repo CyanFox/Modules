@@ -14,20 +14,19 @@ use Modules\Auth\Models\Permission;
 #[Group('Admin Permissions')]
 class AdminPermissionsController
 {
-
     #[QueryParameter('per_page', description: 'Number of permissions per page', type: 'integer', default: 20, example: 10)]
     public function getPermissions(Request $request)
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.permissions') || !$request->attributes->get('api_key')->can('admin.permissions')) {
+        if (! $user->can('admin.permissions') || ! $request->attributes->get('api_key')->can('admin.permissions')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         return response()->json([
             'message' => 'Permissions retrieved successfully',
             'permissions' => Permission::orderBy('created_at')
-                ->paginate($request->query('per_page', 20))
+                ->paginate($request->query('per_page', 20)),
         ]);
     }
 
@@ -36,19 +35,19 @@ class AdminPermissionsController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.permissions') || !$request->attributes->get('api_key')->can('admin.permissions')) {
+        if (! $user->can('admin.permissions') || ! $request->attributes->get('api_key')->can('admin.permissions')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $permission = Permission::find($permissionId);
 
-        if (!$permission) {
+        if (! $permission) {
             return response()->json(['error' => 'Permission not found'], 404);
         }
 
         return response()->json([
             'message' => 'Permission retrieved successfully',
-            'permission' => $permission
+            'permission' => $permission,
         ]);
     }
 
@@ -56,7 +55,7 @@ class AdminPermissionsController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.permissions.create') || !$request->attributes->get('api_key')->can('admin.permissions.create')) {
+        if (! $user->can('admin.permissions.create') || ! $request->attributes->get('api_key')->can('admin.permissions.create')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -69,7 +68,7 @@ class AdminPermissionsController
 
         return response()->json([
             'message' => 'Permission created successfully',
-            'permission' => $permission
+            'permission' => $permission,
         ]);
     }
 
@@ -78,18 +77,18 @@ class AdminPermissionsController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.permissions.update') || !$request->attributes->get('api_key')->can('admin.permissions.update')) {
+        if (! $user->can('admin.permissions.update') || ! $request->attributes->get('api_key')->can('admin.permissions.update')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $permission = Permission::find($permissionId);
 
-        if (!$permission) {
+        if (! $permission) {
             return response()->json(['error' => 'Permission not found'], 404);
         }
 
         $request->validate([
-            'name' => 'required|string|unique:permissions,name,' . $permissionId,
+            'name' => 'required|string|unique:permissions,name,'.$permissionId,
             'guard_name' => 'required|string',
         ]);
 
@@ -97,7 +96,7 @@ class AdminPermissionsController
 
         return response()->json([
             'message' => 'Permission updated successfully',
-            'permission' => $permission->fresh()
+            'permission' => $permission->fresh(),
         ]);
     }
 
@@ -106,20 +105,20 @@ class AdminPermissionsController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.permissions.delete') || !$request->attributes->get('api_key')->can('admin.permissions.delete')) {
+        if (! $user->can('admin.permissions.delete') || ! $request->attributes->get('api_key')->can('admin.permissions.delete')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $permission = Permission::find($permissionId);
 
-        if (!$permission) {
+        if (! $permission) {
             return response()->json(['error' => 'Permission not found'], 404);
         }
 
         DeletePermissionAction::run($permission);
 
         return response()->json([
-            'message' => 'Permission deleted successfully'
+            'message' => 'Permission deleted successfully',
         ]);
     }
 }

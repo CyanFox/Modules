@@ -4,7 +4,7 @@ namespace Modules\Admin\Livewire\Groups;
 
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Actions\Groups\CreateGroupAction;
 
 class CreateGroup extends CFComponent
@@ -34,10 +34,7 @@ class CreateGroup extends CFComponent
             $group->syncPermissions($this->permissions);
         }
 
-        Notification::make()
-            ->title(__('admin::groups.create_group.notifications.group_created'))
-            ->success()
-            ->send();
+        Toaster::success(__('admin::groups.create_group.notifications.group_created'));
 
         $this->redirect(route('admin.groups'), true);
     }

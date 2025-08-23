@@ -18,22 +18,23 @@
 
     <link rel="icon" href="{{ settings('internal.app.logo', config('settings.logo_path')) }}" type="image/x-icon">
 
-    @filamentStyles
     @vite('resources/css/app.css')
     @livewireStyles
 
     <title>{{ ($title ?? '') . ' · ' . settings('internal.app.name', config('app.name')) }}</title>
 </head>
 <body>
-@livewire('notifications')
 @livewire('spotlight-search')
 
 <x-dashboard::navigation.sidebar>
     {{ $slot }}
 </x-dashboard::navigation.sidebar>
 
+@persist('notifications')
+<x-toaster-hub/>
+@endpersist
+
 @livewireScripts
-@filamentScripts
 @livewire('wire-elements-modal')
 @vite('resources/js/app.js')
 <script src="{{ asset('js/logger.js') }}"></script>

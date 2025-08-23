@@ -17,19 +17,18 @@ use Modules\Auth\Rules\Password;
 #[Group('Admin Users')]
 class AdminUsersController
 {
-
     #[QueryParameter('per_page', description: 'Number of users per page', type: 'integer', default: 20, example: 10)]
     public function getUsers(Request $request)
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.users') || !$request->attributes->get('api_key')->can('admin.users')) {
+        if (! $user->can('admin.users') || ! $request->attributes->get('api_key')->can('admin.users')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         return response()->json([
             'message' => 'Users retrieved successfully',
-            'users' => User::orderBy('created_at')->paginate($request->query('per_page', 20))
+            'users' => User::orderBy('created_at')->paginate($request->query('per_page', 20)),
         ]);
     }
 
@@ -38,19 +37,19 @@ class AdminUsersController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.users') || !$request->attributes->get('api_key')->can('admin.users')) {
+        if (! $user->can('admin.users') || ! $request->attributes->get('api_key')->can('admin.users')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $user = User::find($userId);
 
-        if (!$user) {
+        if (! $user) {
             return response()->json(['error' => 'User not found'], 404);
         }
 
         return response()->json([
             'message' => 'User retrieved successfully',
-            'user' => $user->load(['roles', 'permissions'])
+            'user' => $user->load(['roles', 'permissions']),
         ]);
     }
 
@@ -58,7 +57,7 @@ class AdminUsersController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.users.create') || !$request->attributes->get('api_key')->can('admin.users.create')) {
+        if (! $user->can('admin.users.create') || ! $request->attributes->get('api_key')->can('admin.users.create')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -87,7 +86,7 @@ class AdminUsersController
 
         return response()->json([
             'message' => 'User created successfully',
-            'user' => $user->load(['roles', 'permissions'])
+            'user' => $user->load(['roles', 'permissions']),
         ]);
     }
 
@@ -96,15 +95,15 @@ class AdminUsersController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.users.update') || !$request->attributes->get('api_key')->can('admin.users.update')) {
+        if (! $user->can('admin.users.update') || ! $request->attributes->get('api_key')->can('admin.users.update')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $data = $request->validate([
             'first_name' => 'nullable|string',
             'last_name' => 'nullable|string',
-            'email' => 'nullable|email|unique:users,email,' . $request->route('userId'),
-            'username' => 'nullable|string|unique:users,username,' . $request->route('userId'),
+            'email' => 'nullable|email|unique:users,email,'.$request->route('userId'),
+            'username' => 'nullable|string|unique:users,username,'.$request->route('userId'),
             'password' => ['nullable', 'string', new Password],
             'theme' => 'nullable|string',
             'language' => 'nullable|string|max:255',
@@ -117,7 +116,7 @@ class AdminUsersController
 
         $user = User::find($userId);
 
-        if (!$user) {
+        if (! $user) {
             return response()->json(['error' => 'User not found'], 404);
         }
 
@@ -131,7 +130,7 @@ class AdminUsersController
 
         return response()->json([
             'message' => 'User updated successfully',
-            'user' => $user->fresh()->load(['roles', 'permissions'])
+            'user' => $user->fresh()->load(['roles', 'permissions']),
         ]);
     }
 
@@ -140,13 +139,13 @@ class AdminUsersController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.users.delete') || !$request->attributes->get('api_key')->can('admin.users.delete')) {
+        if (! $user->can('admin.users.delete') || ! $request->attributes->get('api_key')->can('admin.users.delete')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $user = User::find($userId);
 
-        if (!$user) {
+        if (! $user) {
             return response()->json(['error' => 'User not found'], 404);
         }
 

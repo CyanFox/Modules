@@ -13,7 +13,7 @@ class AdminActivityController
     {
         $user = $request->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.activity') || !$request->attributes->get('api_key')->can('admin.activity')) {
+        if (! $user->can('admin.activity') || ! $request->attributes->get('api_key')->can('admin.activity')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 

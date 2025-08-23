@@ -7,11 +7,11 @@ use App\Livewire\CFComponent;
 use App\Models\Setting;
 use App\Traits\WithCustomLivewireException;
 use Exception;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Url;
 use Livewire\WithFileUploads;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Traits\WithConfirmation;
 use Nwidart\Modules\Facades\Module;
 
@@ -91,10 +91,7 @@ class Settings extends CFComponent
             ->causedBy(auth()->user())
             ->log('settings.general.updated');
 
-        Notification::make()
-            ->title(__('admin::settings.notifications.settings_updated'))
-            ->success()
-            ->send();
+        Toaster::success(__('admin::settings.notifications.settings_updated'));
 
         $this->redirect(route('admin.settings', ['tab' => 'general']), true);
     }
@@ -156,10 +153,7 @@ class Settings extends CFComponent
             ->causedBy(auth()->user())
             ->log('settings.editor.updated');
 
-        Notification::make()
-            ->title(__('admin::settings.notifications.settings_updated'))
-            ->success()
-            ->send();
+        Toaster::success(__('admin::settings.notifications.settings_updated'));
 
         $this->redirect(route('admin.settings', ['tab' => 'editor']), navigate: true);
     }
@@ -184,10 +178,7 @@ class Settings extends CFComponent
             ->causedBy(auth()->user())
             ->log('setting_created');
 
-        Notification::make()
-            ->title(__('admin::settings.notifications.setting_created'))
-            ->success()
-            ->send();
+        Toaster::success(__('admin::settings.notifications.setting_created'));
 
         $this->redirect(route('admin.settings', ['tab' => 'editor']), true);
     }
@@ -216,10 +207,7 @@ class Settings extends CFComponent
             ->causedBy(auth()->user())
             ->log('setting_deleted');
 
-        Notification::make()
-            ->title(__('admin::settings.delete_setting.notifications.setting_deleted'))
-            ->success()
-            ->send();
+        Toaster::success(__('admin::settings.delete_setting.notifications.setting_deleted'));
 
         $this->redirect(route('admin.settings', ['tab' => 'editor']), true);
     }
@@ -283,7 +271,7 @@ class Settings extends CFComponent
 
         activity()
             ->causedBy(auth()->user())
-            ->log('settings_textarea_' . ($state ? 'enabled' : 'disabled'));
+            ->log('settings_textarea_'.($state ? 'enabled' : 'disabled'));
 
         $this->originalEditorSettings = Setting::all()->mapWithKeys(function ($setting) {
             return [$setting->key => ['value' => $setting->value, 'is_locked' => $setting->is_locked, 'is_textarea' => $setting->is_textarea]];

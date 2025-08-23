@@ -4,7 +4,7 @@ namespace Modules\Admin\Livewire\Permissions;
 
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Actions\Permissions\UpdatePermissionAction;
 use Modules\Auth\Models\Permission;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
@@ -33,10 +33,7 @@ class UpdatePermission extends CFComponent
             'guard_name' => $this->guardName,
         ]);
 
-        Notification::make()
-            ->title(__('admin::permissions.update_permission.notifications.permission_updated'))
-            ->success()
-            ->send();
+        Toaster::success(__('admin::permissions.update_permission.notifications.permission_updated'));
 
         $this->redirect(route('admin.permissions.update', ['permissionId' => $this->permissionId]), true);
     }

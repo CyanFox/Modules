@@ -4,8 +4,8 @@ namespace Modules\Admin\Livewire\Components\Modals;
 
 use App\Facades\ModuleManager;
 use App\Livewire\CFModalComponent;
-use Filament\Notifications\Notification;
 use Livewire\WithFileUploads;
+use Masmerise\Toaster\Toaster;
 
 class InstallModule extends CFModalComponent
 {
@@ -27,17 +27,11 @@ class InstallModule extends CFModalComponent
             ]);
 
             if (! ModuleManager::installModuleFromURL($this->moduleUrl)) {
-                Notification::make()
-                    ->title(__('messages.notifications.something_went_wrong'))
-                    ->danger()
-                    ->send();
+                Toaster::error(__('messages.notifications.something_went_wrong'));
 
                 $this->log('Could not install module. Try again with a different module.', 'error');
             } else {
-                Notification::make()
-                    ->title(__('admin::modules.install_module.notifications.module_installed'))
-                    ->success()
-                    ->send();
+                Toaster::success(__('admin::modules.install_module.notifications.module_installed'));
 
                 $this->redirect(route('admin.modules'), true);
             }
@@ -51,17 +45,11 @@ class InstallModule extends CFModalComponent
 
         $path = $this->moduleFile->store('temp');
         if (! ModuleManager::installModule('app/private/'.$path)) {
-            Notification::make()
-                ->title(__('messages.notifications.something_went_wrong'))
-                ->danger()
-                ->send();
+            Toaster::error(__('messages.notifications.something_went_wrong'));
 
             $this->log('Could not install module. Try again with a different module.', 'error');
         } else {
-            Notification::make()
-                ->title(__('admin::modules.install_module.notifications.module_installed'))
-                ->success()
-                ->send();
+            Toaster::success(__('admin::modules.install_module.notifications.module_installed'));
 
             $this->redirect(route('admin.modules'), true);
         }

@@ -2,5 +2,5 @@
 
 return [
     'title' => 'Ankündigungen',
-    'module_name' => 'Ankündigungen'
+    'module_name' => 'Ankündigungen',
 ];

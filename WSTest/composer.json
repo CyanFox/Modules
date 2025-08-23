@@ -1,0 +1,30 @@
+{
+    "name": "cyanfox/wstest",
+    "description": "",
+    "authors": [
+        {
+            "name": "CyanFox Labs",
+            "email": "opensouce@cyanfox.de"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\WSTest\\": "app/",
+            "Modules\\WSTest\\Database\\Factories\\": "database/factories/",
+            "Modules\\WSTest\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\WSTest\\Tests\\": "tests/"
+        }
+    }
+}

@@ -3,11 +3,11 @@
 namespace Modules\Announcements\Livewire\Components\Tables;
 
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Masmerise\Toaster\Toaster;
 use Modules\Announcements\app\Actions\DeleteAnnouncementAction;
 use Modules\Announcements\Models\Announcement;
 use Modules\Auth\Traits\WithConfirmation;
@@ -109,18 +109,12 @@ final class AnnouncementsTable extends PenguTable
             Storage::disk('local')->deleteDirectory('announcements/'.$announcement->id);
 
             if (! DeleteAnnouncementAction::run($announcement)) {
-                Notification::make()
-                    ->title(__('messages.notifications.something_went_wrong'))
-                    ->danger()
-                    ->send();
+                Toaster::error(__('messages.notifications.something_went_wrong'));
 
                 return;
             }
 
-            Notification::make()
-                ->title(__('announcements::announcements.delete_announcement.notifications.announcement_deleted'))
-                ->success()
-                ->send();
+            Toaster::success(__('announcements::announcements.delete_announcement.notifications.announcement_deleted'));
 
             $this->redirect(route('admin.announcements'), true);
 

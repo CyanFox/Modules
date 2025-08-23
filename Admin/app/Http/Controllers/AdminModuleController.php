@@ -12,13 +12,12 @@ use Nwidart\Modules\Facades\Module;
 #[Group('Admin Modules')]
 class AdminModuleController
 {
-
     #[QueryParameter('show_disabled', description: 'Include disabled modules', type: 'boolean', default: true, example: false)]
     public function getModules(Request $request)
     {
         $user = request()->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.modules') || !$request->attributes->get('api_key')->can('admin.modules')) {
+        if (! $user->can('admin.modules') || ! $request->attributes->get('api_key')->can('admin.modules')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -48,13 +47,13 @@ class AdminModuleController
     {
         $user = request()->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.modules') || !$request->attributes->get('api_key')->can('admin.modules')) {
+        if (! $user->can('admin.modules') || ! $request->attributes->get('api_key')->can('admin.modules')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $module = Module::find($moduleName);
 
-        if (!$module) {
+        if (! $module) {
             return response()->json(['error' => 'Module not found'], 404);
         }
 
@@ -65,7 +64,7 @@ class AdminModuleController
                 'enabled' => $module->isEnabled(),
                 'version' => ModuleManager::getVersion($module->getName()),
                 'remote_version' => ModuleManager::getRemoteVersion($module->getName()),
-            ]
+            ],
         ]);
     }
 
@@ -74,13 +73,13 @@ class AdminModuleController
     {
         $user = request()->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.modules.enable') || !$request->attributes->get('api_key')->can('admin.modules.enable')) {
+        if (! $user->can('admin.modules.enable') || ! $request->attributes->get('api_key')->can('admin.modules.enable')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $module = Module::find($moduleName);
 
-        if (!$module) {
+        if (! $module) {
             return response()->json(['error' => 'Module not found'], 404);
         }
 
@@ -88,7 +87,7 @@ class AdminModuleController
 
         return response()->json([
             'message' => 'Module enabled successfully',
-            'module' => $module->getName()
+            'module' => $module->getName(),
         ]);
     }
 
@@ -97,13 +96,13 @@ class AdminModuleController
     {
         $user = request()->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.modules.disable') || !$request->attributes->get('api_key')->can('admin.modules.disable')) {
+        if (! $user->can('admin.modules.disable') || ! $request->attributes->get('api_key')->can('admin.modules.disable')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $module = Module::find($moduleName);
 
-        if (!$module) {
+        if (! $module) {
             return response()->json(['error' => 'Module not found'], 404);
         }
 
@@ -111,7 +110,7 @@ class AdminModuleController
 
         return response()->json([
             'message' => 'Module disabled successfully',
-            'module' => $module->getName()
+            'module' => $module->getName(),
         ]);
     }
 
@@ -120,13 +119,13 @@ class AdminModuleController
     {
         $user = request()->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.modules.delete') || !$request->attributes->get('api_key')->can('admin.modules.delete')) {
+        if (! $user->can('admin.modules.delete') || ! $request->attributes->get('api_key')->can('admin.modules.delete')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $module = Module::find($moduleName);
 
-        if (!$module) {
+        if (! $module) {
             return response()->json(['error' => 'Module not found'], 404);
         }
 
@@ -134,7 +133,7 @@ class AdminModuleController
 
         return response()->json([
             'message' => 'Module deleted successfully',
-            'module' => $module->getName()
+            'module' => $module->getName(),
         ]);
     }
 
@@ -143,19 +142,19 @@ class AdminModuleController
     {
         $user = request()->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.modules') || !$request->attributes->get('api_key')->can('admin.modules')) {
+        if (! $user->can('admin.modules') || ! $request->attributes->get('api_key')->can('admin.modules')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $module = Module::find($moduleName);
 
-        if (!$module) {
+        if (! $module) {
             return response()->json(['error' => 'Module not found'], 404);
         }
 
         return response()->json([
             'message' => 'Module version retrieved successfully',
-            'version' => ModuleManager::getVersion($moduleName)
+            'version' => ModuleManager::getVersion($moduleName),
         ]);
     }
 
@@ -164,19 +163,19 @@ class AdminModuleController
     {
         $user = request()->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.modules') || !$request->attributes->get('api_key')->can('admin.modules')) {
+        if (! $user->can('admin.modules') || ! $request->attributes->get('api_key')->can('admin.modules')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $module = Module::find($moduleName);
 
-        if (!$module) {
+        if (! $module) {
             return response()->json(['error' => 'Module not found'], 404);
         }
 
         return response()->json([
             'message' => 'Remote module version retrieved successfully',
-            'version' => ModuleManager::getRemoteVersion($moduleName)
+            'version' => ModuleManager::getRemoteVersion($moduleName),
         ]);
     }
 
@@ -185,13 +184,13 @@ class AdminModuleController
     {
         $user = request()->attributes->get('api_key')->user;
 
-        if (!$user->can('admin.modules') || !$request->attributes->get('api_key')->can('admin.modules')) {
+        if (! $user->can('admin.modules') || ! $request->attributes->get('api_key')->can('admin.modules')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $module = Module::find($moduleName);
 
-        if (!$module) {
+        if (! $module) {
             return response()->json(['error' => 'Module not found'], 404);
         }
 
@@ -199,8 +198,7 @@ class AdminModuleController
             'message' => 'Module version status retrieved successfully',
             'up_to_date' => ModuleManager::getVersion($moduleName) === ModuleManager::getRemoteVersion($moduleName),
             'current_version' => ModuleManager::getVersion($moduleName),
-            'remote_version' => ModuleManager::getRemoteVersion($moduleName)
+            'remote_version' => ModuleManager::getRemoteVersion($moduleName),
         ]);
     }
-
 }

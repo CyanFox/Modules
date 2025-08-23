@@ -88,7 +88,7 @@ class Login extends CFComponent
             return;
         }
 
-        if (!Session::where('user_id', $this->user->id)
+        if (! Session::where('user_id', $this->user->id)
             ->where('ip_address', request()->ip())
             ->exists() && settings('auth.emails.new_session.enabled', config('auth.emails.new_session.enabled'))) {
             $mail = new NewSessionMail($this->user->email, $this->user->username, $this->user->first_name, $this->user->last_name);
@@ -126,7 +126,7 @@ class Login extends CFComponent
             foreach ($this->user->recoveryCodes as $recoveryCode) {
                 if (Hash::check($this->twoFactorCode, $recoveryCode->code)) {
                     $recoveryCode->delete();
-                    if (!Session::where('user_id', $this->user->id)
+                    if (! Session::where('user_id', $this->user->id)
                         ->where('ip_address', request()->ip())
                         ->exists()) {
                         $mail = new NewSessionMail($this->user->email, $this->user->username, $this->user->first_name, $this->user->last_name);
@@ -160,7 +160,7 @@ class Login extends CFComponent
         }
 
         if ($this->user->checkTwoFACode($this->twoFactorCode)) {
-            if (!Session::where('user_id', $this->user->id)
+            if (! Session::where('user_id', $this->user->id)
                 ->where('ip_address', request()->ip())
                 ->exists() && settings('auth.emails.new_session.enabled', config('auth.emails.new_session.enabled'))) {
                 $mail = new NewSessionMail($this->user->email, $this->user->username, $this->user->first_name, $this->user->last_name);
@@ -213,6 +213,7 @@ class Login extends CFComponent
         if ($this->user->oauth_id) {
             $this->user = null;
             $this->addError('username', __('auth::login.user_not_found'));
+
             return;
         }
 

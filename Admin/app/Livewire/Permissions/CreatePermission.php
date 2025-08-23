@@ -4,7 +4,7 @@ namespace Modules\Admin\Livewire\Permissions;
 
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Actions\Permissions\CreatePermissionAction;
 
 class CreatePermission extends CFComponent
@@ -27,10 +27,7 @@ class CreatePermission extends CFComponent
             'guard_name' => $this->guardName,
         ]);
 
-        Notification::make()
-            ->title(__('admin::permissions.create_permission.notifications.permission_created'))
-            ->success()
-            ->send();
+        Toaster::success(__('admin::permissions.create_permission.notifications.permission_created'));
 
         $this->redirect(route('admin.permissions'), true);
     }

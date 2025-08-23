@@ -50,7 +50,7 @@ class AnnouncementsServiceProvider extends ServiceProvider
             });
         }
 
-        if (!app()->runningInConsole()) {
+        if (! app()->runningInConsole()) {
             app()->booted(function () {
                 app('spotlight')->addItem([
                     'title' => 'announcements::spotlight.title',

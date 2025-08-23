@@ -3,8 +3,8 @@
 namespace Modules\Admin\Livewire\Components\Tables;
 
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Actions\Groups\DeleteGroupAction;
 use Modules\Auth\Actions\Groups\UpdateGroupAction;
 use Modules\Auth\Models\Role;
@@ -91,18 +91,12 @@ final class GroupsTable extends PenguTable
             ]);
 
             if (! DeleteGroupAction::run($group)) {
-                Notification::make()
-                    ->title(__('messages.notifications.something_went_wrong'))
-                    ->danger()
-                    ->send();
+                Toaster::error(__('messages.notifications.something_went_wrong'));
 
                 return;
             }
 
-            Notification::make()
-                ->title(__('admin::groups.delete_group.notifications.group_deleted'))
-                ->success()
-                ->send();
+            Toaster::success(__('admin::groups.delete_group.notifications.group_deleted'));
 
             $this->redirect(url()->previous(), true);
 

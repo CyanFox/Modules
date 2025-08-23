@@ -3,9 +3,9 @@
 namespace Modules\Admin\Livewire\Components\Tables;
 
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Actions\Users\DeleteUserAction;
 use Modules\Auth\Models\Session;
 use Modules\Auth\Models\User;
@@ -137,18 +137,12 @@ final class UsersTable extends PenguTable
             $user = User::findOrFail($userId);
 
             if (! DeleteUserAction::run($user)) {
-                Notification::make()
-                    ->title(__('messages.notifications.something_went_wrong'))
-                    ->danger()
-                    ->send();
+                Toaster::error(__('messages.notifications.something_went_wrong'));
 
                 return;
             }
 
-            Notification::make()
-                ->title(__('admin::users.delete_user.notifications.user_deleted'))
-                ->success()
-                ->send();
+            Toaster::success(__('admin::users.delete_user.notifications.user_deleted'));
 
             $this->redirect(route('admin.users'), true);
 

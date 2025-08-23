@@ -4,7 +4,7 @@ namespace Modules\Admin\Livewire\Groups;
 
 use App\Livewire\CFComponent;
 use App\Traits\WithCustomLivewireException;
-use Filament\Notifications\Notification;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Actions\Groups\UpdateGroupAction;
 use Modules\Auth\Models\Role;
 use Spatie\Permission\Exceptions\RoleDoesNotExist;
@@ -40,10 +40,7 @@ class UpdateGroup extends CFComponent
             $this->group->syncPermissions($this->permissions);
         }
 
-        Notification::make()
-            ->title(__('admin::groups.update_group.notifications.group_updated'))
-            ->success()
-            ->send();
+        Toaster::success(__('admin::groups.update_group.notifications.group_updated'));
 
         $this->redirect(route('admin.groups.update', ['groupId' => $this->groupId]), true);
     }

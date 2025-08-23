@@ -1,0 +1,17 @@
+{
+    "name": "WSTest",
+    "alias": "wstest",
+    "description": "WebSocket Testing module for CyanFox-Base v4",
+    "keywords": ["ws", "cyanfox", "base"],
+    "authors": ["CyanFox"],
+    "license": "MIT",
+    "version": "25.08",
+    "remote_version_url": "https://raw.githubusercontent.com/CyanFox/Modules/v4/WSTest/module.json",
+    "priority": 200,
+    "providers": [
+        "Modules\\WSTest\\Providers\\WSTestServiceProvider"
+    ],
+    "require": [
+        "Auth"
+    ]
+}

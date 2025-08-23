@@ -7,11 +7,11 @@ use App\Traits\WithCustomLivewireException;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use Exception;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Url;
+use Masmerise\Toaster\Toaster;
 use Modules\Auth\Actions\Users\UpdateUserAction;
 use Modules\Auth\Emails\ForgotPasswordMail;
 use Modules\Auth\Facades\UnsplashManager;
@@ -53,10 +53,7 @@ class ForgotPassword extends CFComponent
             'password_reset_expiration' => null,
         ]);
 
-        Notification::make()
-            ->title(__('passwords.reset'))
-            ->success()
-            ->send();
+        Toaster::success(__('passwords.reset'));
 
         $this->redirect(route('auth.login'));
     }
@@ -91,10 +88,7 @@ class ForgotPassword extends CFComponent
 
         Mail::send($mail);
 
-        Notification::make()
-            ->title(__('passwords.sent'))
-            ->success()
-            ->send();
+        Toaster::success(__('passwords.sent'));
     }
 
     public function checkIfUserExists($email)
@@ -160,18 +154,12 @@ class ForgotPassword extends CFComponent
                 $this->user = User::findOrFail($userId);
 
                 if (! Hash::check($this->passwordResetToken, $this->user->password_reset_token) || $this->user->password_reset_expiration < now()) {
-                    Notification::make()
-                        ->title(__('auth::forgot-password.notifications.invalid_reset_token'))
-                        ->danger()
-                        ->send();
+                    Toaster::error(__('auth::forgot-password.notifications.invalid_reset_token'));
 
                     $this->redirect(route('auth.forgot-password'));
                 }
             } catch (Exception) {
-                Notification::make()
-                    ->title(__('auth::forgot-password.notifications.invalid_reset_token'))
-                    ->danger()
-                    ->send();
+                Toaster::error(__('auth::forgot-password.notifications.invalid_reset_token'));
 
                 $this->redirect(route('auth.forgot-password'));
             }

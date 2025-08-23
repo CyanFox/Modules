@@ -10,8 +10,6 @@ use Modules\Admin\Livewire\Users\UpdateUser;
 use Modules\Admin\tests\TestCase;
 use Modules\Auth\Models\User;
 use PHPUnit\Framework\Attributes\Test;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class UsersTest extends TestCase
 {
