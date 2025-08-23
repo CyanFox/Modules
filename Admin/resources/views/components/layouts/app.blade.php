@@ -18,7 +18,6 @@
 
     <link rel="icon" href="{{ settings('internal.app.logo', config('settings.logo_path')) }}" type="image/x-icon">
 
-    @filamentStyles
     @vite('resources/css/app.css')
     @livewireStyles
 
@@ -36,7 +35,6 @@
 @endpersist
 
 @livewireScripts
-@filamentScripts
 @livewire('wire-elements-modal')
 @vite('resources/js/app.js')
 <script src="{{ asset('js/logger.js') }}"></script>

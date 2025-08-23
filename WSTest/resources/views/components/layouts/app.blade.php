@@ -12,7 +12,6 @@
         }
     </style>
 
-    @filamentStyles
     @vite('resources/css/app.css')
     @livewireStyles
 
@@ -24,7 +23,6 @@
 {{ $slot }}
 
 @livewireScripts
-@filamentScripts
 @livewire('wire-elements-modal')
 @vite('resources/js/app.js')
 <script src="{{ asset('js/logger.js') }}"></script>
