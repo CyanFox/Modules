@@ -41,7 +41,7 @@ class ActivityLogTable extends PenguTable
                 ->sortable(),
 
             Column::make(__('admin::activity.performed_at'), 'created_at')
-                ->format(fn ($col) => $col->format('d.m.Y H:i:s'))
+                ->format(fn ($col) => formatDateTime($col))
                 ->searchable()
                 ->sortable(),
 

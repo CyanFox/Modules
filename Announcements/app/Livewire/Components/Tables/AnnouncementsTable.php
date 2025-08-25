@@ -74,10 +74,12 @@ final class AnnouncementsTable extends PenguTable
                 ->sortable(),
 
             Column::make(__('messages.tables.created_at'), 'created_at')
+                ->format(fn ($col) => formatDateTime($col))
                 ->searchable()
                 ->sortable(),
 
             Column::make(__('messages.tables.updated_at'), 'updated_at')
+                ->format(fn ($col) => formatDateTime($col))
                 ->searchable()
                 ->sortable(),
 

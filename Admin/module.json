@@ -5,7 +5,7 @@
     "keywords": ["admin", "cyanfox", "base"],
     "authors": ["CyanFox"],
     "license": "MIT",
-    "version": "25.08.1",
+    "version": "25.08.2",
     "remote_version_url": "https://raw.githubusercontent.com/CyanFox/Modules/v4/Admin/module.json",
     "priority": 200,
     "providers": [
