@@ -249,7 +249,10 @@
                                 </span>
                             </x-table.body.item>
                             <x-table.body.item>
-                                {{ \Illuminate\Support\Carbon::parse($session->last_activity ?? 0)->diffForHumans() }}
+                                <span
+                                    x-tooltip.raw="{{ formatDateTime($session->last_activity) }}">
+                                    {{ carbon()->parse($session->last_activity ?? 0)->diffForHumans() }}
+                                </span>
                             </x-table.body.item>
                             <x-table.body.item>
                                 @if($session->id != session()->getId())
@@ -302,8 +305,8 @@
                             </x-table.body.item>
                             <x-table.body.item>
                                 <span
-                                    x-tooltip.raw="{{ $activity->created_at ? date('d.m.Y H:i', strtotime($activity->created_at)) : '' }}">
-                                    {{ \Illuminate\Support\Carbon::parse($activity->created_at ?? 0)->diffForHumans() }}
+                                    x-tooltip.raw="{{ formatDateTime($activity->created_at) }}">
+                                    {{ carbon()->parse($activity->created_at ?? 0)->diffForHumans() }}
                                 </span>
                             </x-table.body.item>
                             <x-table.body.item>
@@ -437,15 +440,19 @@
                                 {{ $apiKey->name }}
                             </x-table.body.item>
                             <x-table.body.item>
-                                <span x-data x-tooltip.raw="{{ $apiKey->permissions->pluck('permission.name')->implode(', ') }}">
+                                <span x-data
+                                      x-tooltip.raw="{{ $apiKey->permissions->pluck('permission.name')->implode(', ') }}">
                                     {{ str()->limit($apiKey->permissions->pluck('permission.name')->implode(', '), 100, preserveWords: true) }}
                                 </span>
                             </x-table.body.item>
                             <x-table.body.item>
-                                {{ $apiKey->last_used ? \Illuminate\Support\Carbon::parse($apiKey->last_used)->diffForHumans() : __('auth::profile.api_keys.never_used') }}
+                                <span
+                                    x-tooltip.raw="{{ formatDateTime($apiKey->last_used) }}">
+                                    {{ $apiKey->last_used ? carbon()->parse($apiKey->last_used)->diffForHumans() : __('auth::profile.api_keys.never_used') }}
+                                </span>
                             </x-table.body.item>
                             <x-table.body.item>
-                                {{ date('d.m.Y H:i', strtotime($apiKey->created_at)) }}
+                                {{ formatDateTime($apiKey->created_at) }}
                             </x-table.body.item>
                             <x-table.body.item>
                                 <x-button.floating wire:click="deleteApiKey('{{ $apiKey->id }}', false)"
