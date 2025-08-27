@@ -1,0 +1,23 @@
+{
+    "name": "Redirects",
+    "alias": "redirects",
+    "description": "Make and manage URL redirects.",
+    "keywords": ["redirects", "cyanfox", "base"],
+    "authors": ["CyanFox"],
+    "license": "MIT",
+    "version": "25.08",
+    "remote_version_url": "https://raw.githubusercontent.com/CyanFox/Modules/v4/Redirects/module.json",
+    "priority": -1,
+    "providers": [
+        "Modules\\Redirects\\Providers\\RedirectsServiceProvider"
+    ],
+    "require": [
+        "Auth",
+        "Dashboard"
+    ],
+    "migration": {
+        "seeds": [
+            "Modules\\Redirects\\Database\\Seeders\\DatabaseSeeder"
+        ]
+    }
+}
