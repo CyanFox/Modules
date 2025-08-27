@@ -42,15 +42,15 @@ class RedirectsTest extends TestCase
 
         Livewire::actingAs($user)
             ->test(CreateRedirect::class)
-            ->set('from', '/old-url')
-            ->set('to', '/new-url')
+            ->set('from', 'https://example.com/old-url')
+            ->set('to', 'https://example.com/new-url')
             ->set('statusCode', 301)
             ->set('active', true)
             ->call('createRedirect');
 
         $this->assertDatabaseHas('redirects', [
-            'from' => '/old-url',
-            'to' => '/new-url',
+            'from' => 'https://example.com/old-url',
+            'to' => 'https://example.com/new-url',
             'status_code' => 301,
             'created_by' => $user->id,
             'active' => true,
@@ -65,8 +65,8 @@ class RedirectsTest extends TestCase
         $user->assignRole('Super Admin');
 
         $redirect = Redirect::create([
-            'from' => '/old-url',
-            'to' => '/new-url',
+            'from' => 'https://example.com/old-url',
+            'to' => 'https://example.com/new-url',
             'status_code' => 301,
             'created_by' => $user->id,
             'active' => true,
@@ -75,16 +75,18 @@ class RedirectsTest extends TestCase
 
         Livewire::actingAs($user)
             ->test(UpdateRedirect::class, ['redirectId' => $redirect->id])
-            ->set('from', '/updated-old-url')
-            ->set('to', '/updated-new-url')
+            ->set('redirectId', $redirect->id)
+            ->set('redirect', $redirect)
+            ->set('from', 'https://example.com/updated-old-url')
+            ->set('to', 'https://example.com/updated-new-url')
             ->set('statusCode', 302)
             ->set('active', false)
             ->call('updateRedirect');
 
         $this->assertDatabaseHas('redirects', [
             'id' => $redirect->id,
-            'from' => '/updated-old-url',
-            'to' => '/updated-new-url',
+            'from' => 'https://example.com/updated-old-url',
+            'to' => 'https://example.com/updated-new-url',
             'status_code' => 302,
             'created_by' => $user->id,
             'active' => false,
