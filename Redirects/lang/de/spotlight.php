@@ -2,5 +2,5 @@
 
 return [
     'module_name' => 'Redirects',
-    'title' => 'Weitleitungen',
+    'title' => 'Weiterleitung',
 ];

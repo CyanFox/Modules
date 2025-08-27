@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'tab_title' => 'Weitleitungen',
+    'tab_title' => 'Weiterleitungen',
     'user' => 'Benutzer',
     'from' => 'Von',
     'to' => 'Nach',
@@ -26,43 +26,43 @@ return [
     ],
 
     'buttons' => [
-        'create_redirect' => 'Weitleitung erstellen',
+        'create_redirect' => 'Weiterleitung erstellen',
     ],
 
     'create_redirect' => [
-        'tab_title' => 'Weitleitung erstellen',
+        'tab_title' => 'Weiterleitung erstellen',
 
         'buttons' => [
-            'create_redirect' => 'Weitleitung erstellen',
+            'create_redirect' => 'Weiterleitung erstellen',
         ],
 
         'notifications' => [
-            'redirect_created' => 'Weitleitung erfolgreich erstellt.',
+            'redirect_created' => 'Weiterleitung erfolgreich erstellt.',
         ],
     ],
 
     'update_redirect' => [
-        'tab_title' => 'Weitleitung aktualisieren',
+        'tab_title' => 'Weiterleitung aktualisieren',
 
         'buttons' => [
-            'update_redirect' => 'Weitleitung aktualisieren',
+            'update_redirect' => 'Weiterleitung aktualisieren',
         ],
 
         'notifications' => [
-            'redirect_updated' => 'Weitleitung erfolgreich aktualisiert.',
+            'redirect_updated' => 'Weiterleitung erfolgreich aktualisiert.',
         ],
     ],
 
     'delete_redirect' => [
-        'title' => 'Weitleitung löschen',
-        'description' => 'Bist du sicher, dass du diese Weitleitung löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.',
+        'title' => 'Weiterleitung löschen',
+        'description' => 'Bist du sicher, dass du diese Weiterleitung löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.',
 
         'buttons' => [
-            'delete_redirect' => 'Weitleitung löschen',
+            'delete_redirect' => 'Weiterleitung löschen',
         ],
 
         'notifications' => [
-            'redirect_deleted' => 'Weitleitung erfolgreich gelöscht.',
+            'redirect_deleted' => 'Weiterleitung erfolgreich gelöscht.',
         ],
     ],
 ];

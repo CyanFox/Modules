@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'redirects' => 'Weitleitungen',
+    'redirects' => 'Weiterleitungen',
 ];
