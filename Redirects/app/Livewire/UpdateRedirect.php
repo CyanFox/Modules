@@ -105,9 +105,9 @@ class UpdateRedirect extends CFComponent
         $this->from = $this->redirect->from;
         $this->to = $this->redirect->to;
         $this->statusCode = $this->redirect->status_code;
-        $this->active = $this->redirect->active;
-        $this->includeQueryString = $this->redirect->include_query_string;
-        $this->internal = $this->redirect->internal;
+        $this->active = (bool)$this->redirect->active;
+        $this->includeQueryString = (bool)$this->redirect->include_query_string;
+        $this->internal = (bool)$this->redirect->internal;
         $this->accessGroups = $this->redirect->access()->whereNot('can_update', true)->whereNotNull('role_id')->pluck('role_id')->toArray();
         $this->accessPermissions = $this->redirect->access()->whereNot('can_update', true)->whereNotNull('permission_id')->pluck('permission_id')->toArray();
         $this->accessUsers = $this->redirect->access()->whereNot('can_update', true)->whereNotNull('user_id')->pluck('user_id')->toArray();

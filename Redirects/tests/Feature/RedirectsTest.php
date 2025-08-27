@@ -44,7 +44,7 @@ class RedirectsTest extends TestCase
             ->test(CreateRedirect::class)
             ->set('from', '/old-url')
             ->set('to', '/new-url')
-            ->set('status_code', 301)
+            ->set('statusCode', 301)
             ->set('active', true)
             ->call('createRedirect');
 
@@ -59,7 +59,7 @@ class RedirectsTest extends TestCase
     }
 
     #[Test]
-    public function can_update_announcement()
+    public function can_update_redirect()
     {
         $user = User::factory()->create();
         $user->assignRole('Super Admin');
@@ -77,7 +77,7 @@ class RedirectsTest extends TestCase
             ->test(UpdateRedirect::class, ['redirectId' => $redirect->id])
             ->set('from', '/updated-old-url')
             ->set('to', '/updated-new-url')
-            ->set('status_code', 302)
+            ->set('statusCode', 302)
             ->set('active', false)
             ->call('updateRedirect');
 
@@ -93,7 +93,7 @@ class RedirectsTest extends TestCase
     }
 
     #[Test]
-    public function can_delete_announcement()
+    public function can_delete_redirect()
     {
         $user = User::factory()->create();
         $user->assignRole('Super Admin');
@@ -120,7 +120,7 @@ class RedirectsTest extends TestCase
     public function redirect_can_redirect(): void
     {
         $user = User::factory()->create();
-        $user->assignRole('User');
+        $user->assignRole('Super Admin');
 
         Redirect::create([
             'from' => '/old-url',
