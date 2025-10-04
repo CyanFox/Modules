@@ -56,10 +56,7 @@ class AnnouncementsController
                 ->paginate($request->query('per_page', 20));
         }
 
-        return response()->json([
-            'message' => 'User announcements retrieved successfully',
-            'announcements' => $announcements,
-        ]);
+        return apiResponse('User announcements retrieved successfully', $announcements);
     }
 
     #[PathParameter('announcementId', description: 'ID of the announcement to dismiss', type: 'integer')]
@@ -68,83 +65,71 @@ class AnnouncementsController
         $user = $request->attributes->get('api_key')->user;
 
         $announcement = Announcement::find($announcementId);
-        if (! $announcement) {
-            return response()->json(['error' => 'Announcement not found'], 404);
+        if (!$announcement) {
+            return apiResponse('Announcement not found', null, false, 404);
         }
 
         if ($announcement->dismissed()->where('user_id', $user->id)->exists()) {
-            return response()->json(['error' => 'Announcement already dismissed'], 400);
+            return apiResponse('Announcement already dismissed', null, false, 422);
         }
 
-        if (! $announcement->dismissible) {
-            return response()->json(['error' => 'Announcement is not dismissible'], 400);
+        if (!$announcement->dismissible) {
+            return apiResponse('Announcement is not dismissible', null, false, 422);
         }
 
         $announcement->dismissed()->create([
             'user_id' => $user->id,
         ]);
 
-        return response()->json([
-            'message' => 'Announcement dismissed successfully',
-            'announcement' => $announcement,
-        ]);
+        return apiResponse('Announcement dismissed successfully', $announcement);
     }
 
     #[QueryParameter('per_page', description: 'Number of announcements per page', type: 'integer', default: 20, example: 10)]
     public function getAnnouncements(Request $request)
     {
-        $user = $request->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.announcements') || ! $request->attributes->get('api_key')->can('admin.announcements')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.announcements')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
-        return response()->json([
-            'message' => 'Announcements retrieved successfully',
-            'announcements' => Announcement::orderBy('created_at')->with('access')->paginate($request->query('per_page', 20)),
-        ]);
+        return apiResponse('Announcements retrieved successfully', Announcement::orderBy('created_at')->with('access')->paginate($request->query('per_page', 20)));
     }
 
     #[PathParameter('announcementId', description: 'ID of the announcement to view', type: 'integer')]
     public function getAnnouncement(Request $request, $announcementId)
     {
-        $user = $request->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.announcements') || ! $request->attributes->get('api_key')->can('admin.announcements')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.announcements')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $announcement = Announcement::findOrFail($announcementId);
 
-        return response()->json([
-            'message' => 'Announcement retrieved successfully',
-            'announcement' => $announcement,
-        ]);
+        return apiResponse('Announcement retrieved successfully', $announcement);
     }
 
     public function createAnnouncement(Request $request)
     {
-        $user = $request->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.announcements.create') || ! $request->attributes->get('api_key')->can('admin.announcements.create')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.announcements.create')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $announcement = CreateAnnouncementAction::run($request->all());
 
-        return response()->json([
-            'message' => 'Announcement created successfully',
-            'announcement' => $announcement,
-        ]);
+        return apiResponse('Announcement created successfully', $announcement);
     }
 
     #[PathParameter('announcementId', description: 'ID of the announcement to update', type: 'integer')]
     public function updateAnnouncement(Request $request, $announcementId)
     {
-        $user = $request->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.announcements.update') || ! $request->attributes->get('api_key')->can('admin.announcements.update')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.announcements.update')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $request->validate([
@@ -158,36 +143,31 @@ class AnnouncementsController
         ]);
 
         $announcement = Announcement::find($announcementId);
-        if (! $announcement) {
+        if (!$announcement) {
             return response()->json(['error' => 'Announcement not found'], 404);
         }
 
         UpdateAnnouncementAction::run($announcement, $request->all());
 
-        return response()->json([
-            'message' => 'Announcement updated successfully',
-            'announcement' => $announcement->fresh(),
-        ]);
+        return apiResponse('Announcement updated successfully', $announcement->fresh());
     }
 
     #[PathParameter('announcementId', description: 'ID of the announcement to delete', type: 'integer')]
     public function deleteAnnouncement(Request $request, $announcementId)
     {
-        $user = $request->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.announcements.delete') || ! $request->attributes->get('api_key')->can('admin.announcements.delete')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.announcements.delete')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $announcement = Announcement::find($announcementId);
-        if (! $announcement) {
-            return response()->json(['error' => 'Announcement not found'], 404);
+        if (!$announcement) {
+            return apiResponse('Announcement not found', null, false, 404);
         }
 
         DeleteAnnouncementAction::run($announcement);
 
-        return response()->json([
-            'message' => 'Announcement deleted successfully',
-        ]);
+        return apiResponse('Announcement deleted successfully');
     }
 }

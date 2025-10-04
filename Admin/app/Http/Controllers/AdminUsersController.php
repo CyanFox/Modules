@@ -20,45 +20,39 @@ class AdminUsersController
     #[QueryParameter('per_page', description: 'Number of users per page', type: 'integer', default: 20, example: 10)]
     public function getUsers(Request $request)
     {
-        $user = $request->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.users') || ! $request->attributes->get('api_key')->can('admin.users')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.users')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
-        return response()->json([
-            'message' => 'Users retrieved successfully',
-            'users' => User::orderBy('created_at')->paginate($request->query('per_page', 20)),
-        ]);
+        return apiResponse('Users retrieved successfully', User::orderBy('created_at')->paginate($request->query('per_page', 20)));
     }
 
     #[PathParameter('userId', description: 'ID of the user to retrieve', type: 'integer', example: 1)]
     public function getUser(Request $request, $userId)
     {
-        $user = $request->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.users') || ! $request->attributes->get('api_key')->can('admin.users')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.users')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $user = User::find($userId);
 
-        if (! $user) {
-            return response()->json(['error' => 'User not found'], 404);
+        if (!$user) {
+            return apiResponse('User not found', null, false, 404);
         }
 
-        return response()->json([
-            'message' => 'User retrieved successfully',
-            'user' => $user->load(['roles', 'permissions']),
-        ]);
+        return apiResponse('User retrieved successfully', $user->load(['roles', 'permissions']));
     }
 
     public function createUser(Request $request)
     {
-        $user = $request->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.users.create') || ! $request->attributes->get('api_key')->can('admin.users.create')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.users.create')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $data = $request->validate([
@@ -84,26 +78,23 @@ class AdminUsersController
         $permissionIds = Permission::whereIn('name', $request->input('permissions', []))->pluck('id')->toArray();
         $user->permissions()->sync($permissionIds);
 
-        return response()->json([
-            'message' => 'User created successfully',
-            'user' => $user->load(['roles', 'permissions']),
-        ]);
+        return apiResponse('User created successfully', $user->load(['roles', 'permissions']));
     }
 
     #[PathParameter('userId', description: 'ID of the user to update', type: 'integer', example: 1)]
     public function updateUser(Request $request, $userId)
     {
-        $user = $request->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.users.update') || ! $request->attributes->get('api_key')->can('admin.users.update')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.users.update')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $data = $request->validate([
             'first_name' => 'nullable|string',
             'last_name' => 'nullable|string',
-            'email' => 'nullable|email|unique:users,email,'.$request->route('userId'),
-            'username' => 'nullable|string|unique:users,username,'.$request->route('userId'),
+            'email' => 'nullable|email|unique:users,email,' . $request->route('userId'),
+            'username' => 'nullable|string|unique:users,username,' . $request->route('userId'),
             'password' => ['nullable', 'string', new Password],
             'theme' => 'nullable|string',
             'language' => 'nullable|string|max:255',
@@ -116,8 +107,8 @@ class AdminUsersController
 
         $user = User::find($userId);
 
-        if (! $user) {
-            return response()->json(['error' => 'User not found'], 404);
+        if (!$user) {
+            return apiResponse('User not found', null, false, 404);
         }
 
         UpdateUserAction::run($user, $data);
@@ -128,31 +119,26 @@ class AdminUsersController
         $permissionIds = Permission::whereIn('name', $request->input('permissions', []))->pluck('id')->toArray();
         $user->permissions()->sync($permissionIds);
 
-        return response()->json([
-            'message' => 'User updated successfully',
-            'user' => $user->fresh()->load(['roles', 'permissions']),
-        ]);
+        return apiResponse('User updated successfully', $user->fresh()->load(['roles', 'permissions']));
     }
 
     #[PathParameter('userId', description: 'ID of the user to delete', type: 'integer', example: 1)]
     public function deleteUser(Request $request, $userId)
     {
-        $user = $request->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.users.delete') || ! $request->attributes->get('api_key')->can('admin.users.delete')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.users.delete')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $user = User::find($userId);
 
-        if (! $user) {
-            return response()->json(['error' => 'User not found'], 404);
+        if (!$user) {
+            return apiResponse('User not found', null, false, 404);
         }
 
         DeleteUserAction::run($user);
 
-        return response()->json([
-            'message' => 'User deleted successfully',
-        ]);
+        return apiResponse('User deleted successfully');
     }
 }

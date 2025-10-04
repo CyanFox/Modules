@@ -51,6 +51,19 @@ class ApiKey extends Model
             ->exists();
     }
 
+    public function hasPermission($permission)
+    {
+        if (!$this->user->can($permission) || !$this->can($permission)) {
+            return false;
+        }
+        return true;
+    }
+
+    public function sendNoPermissionResponse()
+    {
+        return apiResponse('Unauthorized', null, false, 403);
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

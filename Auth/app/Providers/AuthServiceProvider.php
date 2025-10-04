@@ -112,12 +112,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        Config::set('scramble.api_path', 'api/v1');
-        Config::set('scramble.ui.theme', 'dark');
-        Config::set('scramble.ui.hide_try_it', true);
-        Config::set('scramble.info.version', '');
-        Config::set('scramble.middleware', ['auth', 'web']);
-
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
     }
