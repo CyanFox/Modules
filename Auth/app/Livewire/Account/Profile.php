@@ -239,6 +239,29 @@ class Profile extends CFComponent
         $this->redirect(route('account.profile', ['tab' => 'apiKeys']), true);
     }
 
+    public function revokeConnectedDevice($connectedDeviceId, $confirmed = true)
+    {
+        if (! $confirmed) {
+            $this->dialog()
+                ->question(__('auth::profile.connected_devices.modals.revoke_device.title'),
+                    __('auth::profile.connected_devices.modals.revoke_device.description'))
+                ->icon('icon-triangle-alert')
+                ->confirm(__('messages.buttons.delete'), 'danger')
+                ->method('revokeConnectedDevice', $connectedDeviceId)
+                ->send();
+
+            return;
+        }
+
+        $apiKey = auth()->user()->apiKeys()->find($connectedDeviceId);
+
+        $apiKey->delete();
+
+        Toaster::success(__('auth::profile.connected_devices.modals.revoke_device.notifications.device_revoked'));
+
+        $this->redirect(route('account.profile', ['tab' => 'connectedDevices']), true);
+    }
+
     public function mount()
     {
         if (empty($this->tab)) {

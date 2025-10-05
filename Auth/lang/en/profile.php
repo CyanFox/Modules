@@ -10,6 +10,7 @@ return [
         'password' => 'Password',
         'passkeys' => 'Passkeys',
         'activity' => 'Activity',
+        'connected_devices' => 'Connected Devices',
     ],
 
     'notifications' => [
@@ -155,6 +156,37 @@ return [
 
                 'notifications' => [
                     'api_key_deleted' => 'API Key deleted successfully.',
+                ],
+            ],
+        ],
+    ],
+
+    'connected_devices' => [
+        'title' => 'Connected Devices',
+        'name' => 'Name',
+        'last_used' => 'Last Used',
+        'never_used' => 'Never Used',
+
+        'buttons' => [
+            'connect_device' => 'Connect Device',
+        ],
+
+        'modals' => [
+            'connect_device' => [
+                'title' => 'Connect device',
+                'description' => 'Scan the QR code or use the code below to connect your device.',
+                'key' => 'Key',
+            ],
+            'revoke_device' => [
+                'title' => 'Revoke Device',
+                'description' => 'Are you sure you want to revoke this device? This action cannot be undone.',
+
+                'buttons' => [
+                    'revoke_device' => 'Revoke Device',
+                ],
+
+                'notifications' => [
+                    'device_revoked' => 'Device revoked successfully.',
                 ],
             ],
         ],

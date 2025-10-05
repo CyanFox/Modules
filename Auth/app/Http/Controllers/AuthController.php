@@ -166,7 +166,7 @@ class AuthController
         $apiKey = $user->apiKeys()->create([
             'name' => $keyName ?? 'API Key ' . formatDateTime(now()),
             'key' => Hash::make($key),
-            'native' => true,
+            'connected_device' => true,
         ]);
 
         return apiResponse($message, [

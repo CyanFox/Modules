@@ -16,6 +16,11 @@
             <i class="icon-eye"></i>
             <span class="ml-2">{{ __('auth::profile.tabs.activity') }}</span>
         </x-tab.item>
+        <x-tab.item class="flex-1 flex items-center justify-center" uuid="connectedDevices"
+                    wire:click="$set('tab', 'connectedDevices')">
+            <i class="icon-unplug"></i>
+            <span class="ml-2">{{ __('auth::profile.tabs.connected_devices') }}</span>
+        </x-tab.item>
         <x-tab.item class="flex-1 flex items-center justify-center" uuid="apiKeys"
                     wire:click="$set('tab', 'apiKeys')">
             <i class="icon-key"></i>
@@ -397,6 +402,59 @@
                 </div>
             @endif
         </x-card>
+    @elseif($tab === 'connectedDevices')
+        <x-card class="mt-4">
+            <x-card.title>
+                <div class="flex items-center justify-between">
+                    <p>{{ __('auth::profile.connected_devices.title') }}</p>
+                    <x-button
+                        wire:click="$dispatch('openModal', {component: 'auth::components.modals.connect-device'})">
+                        {{ __('auth::profile.connected_devices.buttons.connect_device') }}
+                    </x-button>
+                </div>
+            </x-card.title>
+
+            <x-table>
+                <x-table.header>
+                    <x-table.header.item>
+                        {{ __('auth::profile.connected_devices.name') }}
+                    </x-table.header.item>
+                    <x-table.header.item>
+                        {{ __('auth::profile.connected_devices.last_used') }}
+                    </x-table.header.item>
+                    <x-table.header.item>
+                        {{ __('messages.tables.created_at') }}
+                    </x-table.header.item>
+                    <x-table.header.item>
+                        {{ __('messages.tables.actions') }}
+                    </x-table.header.item>
+                </x-table.header>
+                <x-table.body>
+                    @foreach(auth()->user()->apiKeys()->where('connected_device', true)->get() as $connectedDevice)
+                        <tr>
+                            <x-table.body.item>
+                                {{ $connectedDevice->name }}
+                            </x-table.body.item>
+                            <x-table.body.item>
+                                <span
+                                    x-tooltip.raw="{{ formatDateTime($connectedDevice->last_used) }}">
+                                    {{ $connectedDevice->last_used ? carbon()->parse($connectedDevice->last_used)->diffForHumans() : __('auth::profile.connected_devices.never_used') }}
+                                </span>
+                            </x-table.body.item>
+                            <x-table.body.item>
+                                {{ formatDateTime($connectedDevice->created_at) }}
+                            </x-table.body.item>
+                            <x-table.body.item>
+                                <x-button.floating wire:click="revokeConnectedDevice('{{ $connectedDevice->id }}', false)"
+                                                   loading="revokeConnectedDevice" size="sm" color="danger">
+                                    <i class="icon-trash"></i>
+                                </x-button.floating>
+                            </x-table.body.item>
+                        </tr>
+                    @endforeach
+                </x-table.body>
+            </x-table>
+        </x-card>
     @elseif($tab === 'apiKeys')
         <x-card class="mt-4">
             <x-card.title>
@@ -434,7 +492,7 @@
                     </x-table.header.item>
                 </x-table.header>
                 <x-table.body>
-                    @foreach(auth()->user()->apiKeys()->with('permissions.permission')->get() as $apiKey)
+                    @foreach(auth()->user()->apiKeys()->with('permissions.permission')->where('connected_device', false)->get() as $apiKey)
                         <tr>
                             <x-table.body.item>
                                 {{ $apiKey->name }}

@@ -26,6 +26,7 @@ class ApiKey extends Model
         'user_id',
         'key',
         'last_used',
+        'connected_device'
     ];
 
     protected $hidden = [
@@ -42,21 +43,29 @@ class ApiKey extends Model
         return $this->hasMany(ApiKeyPermission::class);
     }
 
+    public function hasPermission($permission)
+    {
+        if ($this->connected_device && $this->user->can($permission)) {
+            return true;
+        }
+
+        if (!$this->user->can($permission) || !$this->can($permission)) {
+            return false;
+        }
+        return true;
+    }
+
     public function can($permission)
     {
+        if ($this->connected_device) {
+            return true;
+        }
+
         return ApiKeyPermission::where('api_key_id', $this->id)
             ->whereHas('permission', function ($query) use ($permission) {
                 $query->where('name', $permission);
             })
             ->exists();
-    }
-
-    public function hasPermission($permission)
-    {
-        if (!$this->user->can($permission) || !$this->can($permission)) {
-            return false;
-        }
-        return true;
     }
 
     public function sendNoPermissionResponse()
@@ -69,7 +78,7 @@ class ApiKey extends Model
         return LogOptions::defaults()
             ->logExcept($this->hidden)
             ->setDescriptionForEvent(function ($eventName) {
-                return 'auth.user.api_keys.'.$eventName;
+                return 'auth.user.api_keys.' . $eventName;
             });
     }
 

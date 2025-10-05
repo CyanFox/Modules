@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('api_keys', function (Blueprint $table) {
-            $table->boolean('native')->default(false)->after('key');
+            $table->boolean('connected_device')->default(false)->after('key');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('api_keys', function (Blueprint $table) {
-
+            $table->dropColumn('connected_device');
         });
     }
 };

@@ -10,6 +10,7 @@ return [
         'password' => 'Passwort',
         'passkeys' => 'Passkeys',
         'activity' => 'Aktivitäten',
+        'connected_devices' => 'Verknüpfte Geräte'
     ],
 
     'notifications' => [
@@ -156,6 +157,37 @@ return [
 
                 'notifications' => [
                     'api_key_deleted' => 'API-Schlüssel erfolgreich gelöscht.',
+                ],
+            ],
+        ],
+    ],
+
+    'connected_devices' => [
+        'title' => 'Verknüpfte Geräte',
+        'name' => 'Name',
+        'last_used' => 'Zuletzt verwendet',
+        'never_used' => 'Nie verwendet',
+
+        'buttons' => [
+            'connect_device' => 'Gerät verbinden',
+        ],
+
+        'modals' => [
+            'connect_device' => [
+                'title' => 'Gerät verbinden',
+                'description' => 'Scanne den QR-Code oder verwende den unten stehenden Schlüssel, um dein Gerät zu verbinden.',
+                'key' => 'Verbindungsschlüssel',
+            ],
+            'revoke_device' => [
+                'title' => 'Gerät widerrufen',
+                'description' => 'Bist du sicher, dass du dieses Gerät widerrufen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.',
+
+                'buttons' => [
+                    'revoke_device' => 'Gerät widerrufen',
+                ],
+
+                'notifications' => [
+                    'device_revoked' => 'Gerät erfolgreich widerrufen.',
                 ],
             ],
         ],
