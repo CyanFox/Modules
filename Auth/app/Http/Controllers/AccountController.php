@@ -80,7 +80,7 @@ class AccountController
             'avatar' => 'required|image:allow_svg|max:10000',
         ]);
 
-        $request->file('avatar')->storeAs('avatars', auth()->id().'.png', 'public');
+        $request->file('avatar')->storeAs('avatars', $user->id.'.png', 'public');
 
         return apiResponse('Avatar uploaded successfully', $user);
     }
@@ -236,6 +236,10 @@ class AccountController
     public function deleteAccount(Request $request)
     {
         $user = $request->attributes->get('api_key')->user;
+
+        if (!settings('auth.profile.enable.delete_account')) {
+            return apiResponse('Account deletion is disabled', null, false, 403);
+        }
 
         $user->delete();
 

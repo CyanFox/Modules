@@ -26,7 +26,6 @@ class ApiKey extends Model
         'user_id',
         'key',
         'last_used',
-        'connected_device'
     ];
 
     protected $hidden = [
@@ -45,10 +44,6 @@ class ApiKey extends Model
 
     public function hasPermission($permission)
     {
-        if ($this->connected_device && $this->user->can($permission)) {
-            return true;
-        }
-
         if (!$this->user->can($permission) || !$this->can($permission)) {
             return false;
         }
@@ -57,10 +52,6 @@ class ApiKey extends Model
 
     public function can($permission)
     {
-        if ($this->connected_device) {
-            return true;
-        }
-
         return ApiKeyPermission::where('api_key_id', $this->id)
             ->whereHas('permission', function ($query) use ($permission) {
                 $query->where('name', $permission);

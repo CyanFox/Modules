@@ -22,8 +22,8 @@ Route::group(['middleware' => ['api_key'], 'prefix' => 'v1', 'name' => 'api.'], 
     Route::group(['prefix' => 'account'], function () {
         Route::get('/', [AccountController::class, 'getUser'])->name('account.user');
         Route::delete('/', [AccountController::class, 'deleteAccount'])->name('account.delete');
+        Route::put('/', [AccountController::class, 'updateAccount'])->name('account.update');
         Route::get('permission', [AccountController::class, 'hasPermission'])->name('account.user.permission');
-        Route::put('update', [AccountController::class, 'updateAccount'])->name('account.update');
         Route::get('activity', [AccountController::class, 'getActivity'])->name('account.activity');
         Route::get('sessions', [AccountController::class, 'getSessions'])->name('account.sessions');
         Route::post('avatar', [AccountController::class, 'uploadAvatar'])->name('account.avatar.upload');
@@ -32,7 +32,7 @@ Route::group(['middleware' => ['api_key'], 'prefix' => 'v1', 'name' => 'api.'], 
             Route::post('enable', [AccountController::class, 'activateTwoFactor'])->name('account.two-fa.enable');
             Route::post('disable', [AccountController::class, 'disableTwoFactor'])->name('account.two-fa.disable');
             Route::post('verify', [AccountController::class, 'verifyTwoFactorCode'])->name('account.two-fa.verify');
-            Route::get('regenerate', [AccountController::class, 'regenerateRecoveryCodes'])->name('account.two-fa.regenerate');
+            Route::post('regenerate', [AccountController::class, 'regenerateRecoveryCodes'])->name('account.two-fa.regenerate');
         });
     });
 
