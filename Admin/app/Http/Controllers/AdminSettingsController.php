@@ -15,37 +15,33 @@ class AdminSettingsController
 {
     public function getSettings(Request $request)
     {
-        $user = $request->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.settings.editor') || ! $request->attributes->get('api_key')->can('admin.settings.editor')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.settings.editor')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
-        return response()->json([
-            'message' => 'Settings retrieved successfully',
-            'settings' => Setting::all(),
-        ]);
+        return apiResponse('Settings retrieved successfully', Setting::all());
     }
 
     #[QueryParameter('encrypted', description: 'Whether to return decrypted settings', type: 'boolean', default: false, example: true)]
     #[PathParameter('settingsKey', description: 'Key of the setting to retrieve', type: 'string', example: 'internal.app.name')]
     public function getSetting(Request $request, $settingsKey)
     {
-        $user = $request->attributes->get('api_key')->user;
         $isEncrypted = $request->query('encrypted', false);
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.settings.editor') || ! $request->attributes->get('api_key')->can('admin.settings.editor')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.settings.editor')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $setting = SettingsManager::getSetting($settingsKey, isEncrypted: $isEncrypted);
 
         if (! $setting) {
-            return response()->json(['error' => 'Setting not found'], 404);
+            return apiResponse('Setting not found', null, false, 404);
         }
 
-        return response()->json([
-            'message' => 'Setting retrieved successfully',
+        return apiResponse('Setting retrieved successfully', [
             'key' => $settingsKey,
             'value' => $setting,
         ]);
@@ -54,10 +50,10 @@ class AdminSettingsController
     #[PathParameter('settingsKey', description: 'Key of the setting to update', type: 'string', example: 'internal.app.name')]
     public function updateSetting(Request $request, $settingsKey)
     {
-        $user = $request->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.settings.editor') || ! $request->attributes->get('api_key')->can('admin.settings.editor')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.settings.editor')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $value = $request->input('value');
@@ -66,8 +62,7 @@ class AdminSettingsController
 
         SettingsManager::updateSetting($settingsKey, $value, isLocked: $locked, isEncrypted: $isEncrypted);
 
-        return response()->json([
-            'message' => 'Setting updated successfully',
+        return apiResponse('Setting updated successfully', [
             'key' => $settingsKey,
             'value' => $value,
         ]);
@@ -76,26 +71,23 @@ class AdminSettingsController
     #[PathParameter('settingsKey', description: 'Key of the setting to delete', type: 'string', example: 'internal.app.name')]
     public function deleteSetting(Request $request, $settingsKey)
     {
-        $user = $request->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.settings.editor') || ! $request->attributes->get('api_key')->can('admin.settings.editor')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.settings.editor')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         SettingsManager::deleteSetting($settingsKey);
 
-        return response()->json([
-            'message' => 'Setting deleted successfully',
-            'key' => $settingsKey,
-        ]);
+        return apiResponse('Setting deleted successfully', $settingsKey);
     }
 
     public function createSetting(Request $request)
     {
-        $user = $request->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.settings.editor') || ! $request->attributes->get('api_key')->can('admin.settings.editor')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.settings.editor')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $request->validate([
@@ -111,55 +103,46 @@ class AdminSettingsController
             isEncrypted: $request->input('encrypted', false),
         );
 
-        return response()->json([
-            'message' => 'Setting created successfully',
-            'setting' => $setting,
-        ]);
+        return apiResponse('Setting created successfully', $setting);
     }
 
     public function encryptValue(Request $request)
     {
-        $user = $request->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.settings.editor') || ! $request->attributes->get('api_key')->can('admin.settings.editor')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.settings.editor')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $value = $request->input('value');
 
         if (blank($value)) {
-            return response()->json(['error' => 'Value is required'], 400);
+            return apiResponse('Value is required', null, false, 400);
         }
 
-        return response()->json([
-            'message' => 'Value encrypted successfully',
-            'value' => encrypt($value),
-        ]);
+        return apiResponse('Value encrypted successfully', encrypt($value));
     }
 
     public function decryptValue(Request $request)
     {
-        $user = $request->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.settings.editor') || ! $request->attributes->get('api_key')->can('admin.settings.editor')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.settings.editor')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $value = $request->input('value');
 
         if (blank($value)) {
-            return response()->json(['error' => 'Value is required'], 400);
+            return apiResponse('Value is required', null, false, 400);
         }
 
         try {
             $decryptedValue = decrypt($value);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Decryption failed: '.$e->getMessage()], 400);
+            return apiResponse('Decryption failed', $e->getMessage(), false, 500);
         }
 
-        return response()->json([
-            'message' => 'Value decrypted successfully',
-            'value' => $decryptedValue,
-        ]);
+        return apiResponse('Value decrypted successfully', $decryptedValue);
     }
 }

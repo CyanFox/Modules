@@ -15,10 +15,10 @@ class AdminModuleController
     #[QueryParameter('show_disabled', description: 'Include disabled modules', type: 'boolean', default: true, example: false)]
     public function getModules(Request $request)
     {
-        $user = request()->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.modules') || ! $request->attributes->get('api_key')->can('admin.modules')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.modules')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $showDisabled = $request->query('show_disabled', true);
@@ -29,57 +29,29 @@ class AdminModuleController
             $modules = Module::allEnabled();
         }
 
-        return response()->json([
-            'message' => 'Modules retrieved successfully',
-            'modules' => collect($modules)->map(function ($module) {
+        return apiResponse('Modules retrieved successfully',
+            collect($modules)->map(function ($module) {
                 return [
                     'name' => $module->getName(),
                     'enabled' => $module->isEnabled(),
                     'version' => ModuleManager::getVersion($module->getName()),
                     'remote_version' => ModuleManager::getRemoteVersion($module->getName()),
                 ];
-            })->values()->toArray(),
-        ]);
-    }
-
-    #[PathParameter('moduleName', description: 'Name of the module to retrieve', type: 'string', example: 'Admin')]
-    public function getModule(Request $request, $moduleName)
-    {
-        $user = request()->attributes->get('api_key')->user;
-
-        if (! $user->can('admin.modules') || ! $request->attributes->get('api_key')->can('admin.modules')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
-
-        $module = Module::find($moduleName);
-
-        if (! $module) {
-            return response()->json(['error' => 'Module not found'], 404);
-        }
-
-        return response()->json([
-            'message' => 'Module retrieved successfully',
-            'module' => [
-                'name' => $module->getName(),
-                'enabled' => $module->isEnabled(),
-                'version' => ModuleManager::getVersion($module->getName()),
-                'remote_version' => ModuleManager::getRemoteVersion($module->getName()),
-            ],
-        ]);
+            })->values()->toArray());
     }
 
     #[PathParameter('moduleName', description: 'Name of the module to enable', type: 'string', example: 'Admin')]
     public function enableModule(Request $request, $moduleName)
     {
-        $user = request()->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.modules.enable') || ! $request->attributes->get('api_key')->can('admin.modules.enable')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.modules.enable')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $module = Module::find($moduleName);
 
-        if (! $module) {
+        if (!$module) {
             return response()->json(['error' => 'Module not found'], 404);
         }
 
@@ -91,111 +63,125 @@ class AdminModuleController
         ]);
     }
 
-    #[PathParameter('moduleName', description: 'Name of the module to disable', type: 'string', example: 'Admin')]
-    public function disableModule(Request $request, $moduleName)
+    #[PathParameter('moduleName', description: 'Name of the module to retrieve', type: 'string', example: 'Admin')]
+    public function getModule(Request $request, $moduleName)
     {
-        $user = request()->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.modules.disable') || ! $request->attributes->get('api_key')->can('admin.modules.disable')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.modules')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $module = Module::find($moduleName);
 
-        if (! $module) {
-            return response()->json(['error' => 'Module not found'], 404);
+        if (!$module) {
+            return apiResponse('Module not found', null, false, 404);
+        }
+
+        return apiResponse('Module retrieved successfully', [
+            'name' => $module->getName(),
+            'enabled' => $module->isEnabled(),
+            'version' => ModuleManager::getVersion($module->getName()),
+            'remote_version' => ModuleManager::getRemoteVersion($module->getName()),
+        ]);
+    }
+
+    #[PathParameter('moduleName', description: 'Name of the module to disable', type: 'string', example: 'Admin')]
+    public function disableModule(Request $request, $moduleName)
+    {
+        $apiKey = $request->attributes->get('api_key');
+
+        if (!$apiKey->hasPermission('admin.modules.disable')) {
+            return $apiKey->sendNoPermissionResponse();
+        }
+
+        $module = Module::find($moduleName);
+
+        if (!$module) {
+            return apiResponse('Module not found', null, false, 404);
         }
 
         ModuleManager::getModule($moduleName)->disable();
 
-        return response()->json([
-            'message' => 'Module disabled successfully',
-            'module' => $module->getName(),
-        ]);
+        return apiResponse('Module disabled successfully',
+            $module->getName());
     }
 
     #[PathParameter('moduleName', description: 'Name of the module to delete', type: 'string', example: 'Admin')]
     public function deleteModule(Request $request, $moduleName)
     {
-        $user = request()->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.modules.delete') || ! $request->attributes->get('api_key')->can('admin.modules.delete')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.modules.delete')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $module = Module::find($moduleName);
 
-        if (! $module) {
-            return response()->json(['error' => 'Module not found'], 404);
+        if (!$module) {
+            return apiResponse('Module not found', null, false, 404);
         }
 
         ModuleManager::getModule($moduleName)->delete();
 
-        return response()->json([
-            'message' => 'Module deleted successfully',
-            'module' => $module->getName(),
-        ]);
+        return apiResponse('Module deleted successfully',
+            $module->getName());
     }
 
     #[PathParameter('moduleName', description: 'Name of the module to retrieve', type: 'string', example: 'Admin')]
     public function getModuleVersion(Request $request, $moduleName)
     {
-        $user = request()->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.modules') || ! $request->attributes->get('api_key')->can('admin.modules')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.modules')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $module = Module::find($moduleName);
 
-        if (! $module) {
-            return response()->json(['error' => 'Module not found'], 404);
+        if (!$module) {
+            return apiResponse('Module not found', null, false, 404);
         }
 
-        return response()->json([
-            'message' => 'Module version retrieved successfully',
-            'version' => ModuleManager::getVersion($moduleName),
-        ]);
+        return apiResponse('Module version retrieved successfully',
+            ModuleManager::getVersion($moduleName));
     }
 
     #[PathParameter('moduleName', description: 'Name of the module to retrieve', type: 'string', example: 'Admin')]
     public function getRemoteModuleVersion(Request $request, $moduleName)
     {
-        $user = request()->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.modules') || ! $request->attributes->get('api_key')->can('admin.modules')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.modules')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $module = Module::find($moduleName);
 
-        if (! $module) {
-            return response()->json(['error' => 'Module not found'], 404);
+        if (!$module) {
+            return apiResponse('Module not found', null, false, 404);
         }
 
-        return response()->json([
-            'message' => 'Remote module version retrieved successfully',
-            'version' => ModuleManager::getRemoteVersion($moduleName),
-        ]);
+        return apiResponse('Remote module version retrieved successfully',
+            ModuleManager::getRemoteVersion($moduleName));
     }
 
     #[PathParameter('moduleName', description: 'Name of the module to retrieve', type: 'string', example: 'Admin')]
     public function isModuleUpToDate(Request $request, $moduleName)
     {
-        $user = request()->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.modules') || ! $request->attributes->get('api_key')->can('admin.modules')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.modules')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $module = Module::find($moduleName);
 
-        if (! $module) {
-            return response()->json(['error' => 'Module not found'], 404);
+        if (!$module) {
+            return apiResponse('Module not found', null, false, 404);
         }
 
-        return response()->json([
-            'message' => 'Module version status retrieved successfully',
+        return apiResponse('Module version status retrieved successfully', [
             'up_to_date' => ModuleManager::getVersion($moduleName) === ModuleManager::getRemoteVersion($moduleName),
             'current_version' => ModuleManager::getVersion($moduleName),
             'remote_version' => ModuleManager::getRemoteVersion($moduleName),

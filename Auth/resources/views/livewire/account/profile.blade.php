@@ -434,7 +434,7 @@
                     </x-table.header.item>
                 </x-table.header>
                 <x-table.body>
-                    @foreach(auth()->user()->apiKeys()->with('permissions.permission')->get() as $apiKey)
+                    @foreach(auth()->user()->apiKeys()->with('permissions.permission')->where('connected_device', false)->get() as $apiKey)
                         <tr>
                             <x-table.body.item>
                                 {{ $apiKey->name }}

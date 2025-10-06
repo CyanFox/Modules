@@ -56,7 +56,18 @@ trait WithConfirmation
 
     public function method(string $callable, ...$args): static
     {
-        $this->confirmationData['event'] = $callable.'('.implode(', ', $args).')';
+        $this->confirmationData['event'] = $callable . '(' . implode(', ', $args) . ')';
+
+        return $this;
+    }
+
+    public function dispatchEvent(string $to, string $event, ...$args): static
+    {
+        $this->confirmationData['event'] = [
+            'to' => $to,
+            'event' => $event,
+            'args' => $args,
+        ];
 
         return $this;
     }
@@ -80,10 +91,24 @@ trait WithConfirmation
     #[On('internal.confirmation.confirmed')]
     public function handleConfirmation($event): void
     {
-        if (preg_match('/^(\w+)\((.*)\)$/', $event, $matches)) {
-            $methodName = $matches[1];
-            $arguments = array_map('trim', explode(',', $matches[2]));
-            call_user_func_array([$this, $methodName], $arguments);
+        if (is_array($event)) {
+            if (isset($event['to'], $event['event'])) {
+                $to = $event['to'];
+                $eventName = $event['event'];
+                $arguments = $event['args'] ?? [];
+                $this->dispatch($eventName, ...$arguments)->to($to);
+            } elseif (isset($event['class'], $event['method'])) {
+                $class = $event['class'];
+                $method = $event['method'];
+                $arguments = $event['args'] ?? [];
+                call_user_func_array([app($class), $method], $arguments);
+            }
+        } elseif (is_string($event)) {
+            if (preg_match('/^([a-zA-Z0-9_]+)\((.*)\)$/', $event, $matches)) {
+                $method = $matches[1];
+                $args = array_map('trim', explode(',', $matches[2]));
+                call_user_func_array([$this, $method], $args);
+            }
         }
     }
 }

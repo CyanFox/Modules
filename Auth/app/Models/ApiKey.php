@@ -42,6 +42,14 @@ class ApiKey extends Model
         return $this->hasMany(ApiKeyPermission::class);
     }
 
+    public function hasPermission($permission)
+    {
+        if (!$this->user->can($permission) || !$this->can($permission)) {
+            return false;
+        }
+        return true;
+    }
+
     public function can($permission)
     {
         return ApiKeyPermission::where('api_key_id', $this->id)
@@ -51,12 +59,17 @@ class ApiKey extends Model
             ->exists();
     }
 
+    public function sendNoPermissionResponse()
+    {
+        return apiResponse('Unauthorized', null, false, 403);
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logExcept($this->hidden)
             ->setDescriptionForEvent(function ($eventName) {
-                return 'auth.user.api_keys.'.$eventName;
+                return 'auth.user.api_keys.' . $eventName;
             });
     }
 

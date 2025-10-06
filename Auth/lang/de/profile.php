@@ -10,6 +10,7 @@ return [
         'password' => 'Passwort',
         'passkeys' => 'Passkeys',
         'activity' => 'Aktivitäten',
+        'connected_devices' => 'Verknüpfte Geräte'
     ],
 
     'notifications' => [

@@ -2,27 +2,28 @@
 
 namespace Modules\Admin\Http\Controllers;
 
+use Dedoc\Scramble\Attributes\Group;
 use Dedoc\Scramble\Attributes\QueryParameter;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
 
+#[Group('Admin Activity')]
 class AdminActivityController
 {
     #[QueryParameter('per_page', description: 'Number of activity entries per page', type: 'integer', default: 20, example: 10)]
     public function getActivity(Request $request)
     {
-        $user = $request->attributes->get('api_key')->user;
+        $apiKey = $request->attributes->get('api_key');
 
-        if (! $user->can('admin.activity') || ! $request->attributes->get('api_key')->can('admin.activity')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if (!$apiKey->hasPermission('admin.activity')) {
+            return $apiKey->sendNoPermissionResponse();
         }
 
         $activityLog = Activity::orderBy('created_at', 'desc')
             ->paginate($request->query('per_page', 20));
 
-        return response()->json([
-            'message' => 'Activity retrieved successfully',
-            'activity_log' => $activityLog->map(function (Activity $activity) {
+        return apiResponse('Activity retrieved successfully',
+            $activityLog->map(function (Activity $activity) {
                 $properties = json_decode($activity->properties, true) ?? [];
 
                 return [
@@ -34,7 +35,6 @@ class AdminActivityController
                     'old_values' => $properties['old'] ?? [],
                     'new_values' => $properties['attributes'] ?? [],
                 ];
-            }),
-        ]);
+            }));
     }
 }

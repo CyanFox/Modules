@@ -1,5 +1,6 @@
 <?php
 
+use Dedoc\Scramble\Scramble;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 use Modules\Auth\Livewire\Account\ForceActivateTwoFactor;

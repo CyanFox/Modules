@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
   pull_request:
     branches:
-      - v4
+      - main
   push:
     branches:
-      - v4
+      - main
 
 jobs:
   test:
@@ -32,7 +32,7 @@ jobs:
           coverage: none
 
       - name: Clone CyanFox-Base
-        run: git clone --branch v4 https://github.com/CyanFox/Base CyanFox-Base
+        run: git clone https://github.com/CyanFox/Base CyanFox-Base
 
       - name: Setup problem matchers
         run: |
