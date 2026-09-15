@@ -1,0 +1,34 @@
+{
+    "name": "cyanfox/core",
+    "description": "Core Module",
+    "authors": [
+        {
+            "name": "CyanFox",
+            "email": "opensource@cyanfox.de"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Core\\": "app/",
+            "Modules\\Core\\Database\\Factories\\": "database/factories/",
+            "Modules\\Core\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Core\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "spatie/laravel-permission": "^8.3.0",
+        "spatie/laravel-passkeys": "^1.8.0"
+    }
+}
