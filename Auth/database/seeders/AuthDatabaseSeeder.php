@@ -2,17 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Modules\Core\Database\Seeders;
+namespace Modules\Auth\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\Core\Exceptions\SettingNotFoundException;
 
-class CoreDatabaseSeeder extends Seeder
+class AuthDatabaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @throws SettingNotFoundException
      */
     public function run(): void
     {

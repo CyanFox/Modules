@@ -2,24 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Modules\Core\Providers;
+namespace Modules\Auth\Providers;
 
 use Illuminate\Support\Facades\Config;
 use Nwidart\Modules\Support\ModuleServiceProvider;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
-class CoreServiceProvider extends ModuleServiceProvider
+class AuthServiceProvider extends ModuleServiceProvider
 {
     /**
      * The name of the module.
      */
-    protected string $name = 'Core';
+    protected string $name = 'Auth';
 
     /**
      * The lowercase version of the module name.
      */
-    protected string $nameLower = 'core';
+    protected string $nameLower = 'auth';
 
     /**
      * Command classes to register.
@@ -50,15 +48,9 @@ class CoreServiceProvider extends ModuleServiceProvider
 
     public function boot(): void
     {
-        Config::set('auth.providers.users.driver', 'eloquent');
-        Config::set('auth.providers.users.model', '\Modules\Core\Models\User');
-        Config::set('passkeys.relying_party.name', settings('app.name', config('app.name')));
-        Config::set('passkeys.relying_party.id', parse_url(settings('app.url', config('app.url')), PHP_URL_HOST));
 
-        if (!app()->runningInConsole()) {
-            $group = Role::findOrCreate('Super Admin');
-            $group->givePermissionTo(Permission::all());
-        }
+        Config::set('auth.providers.users.driver', 'eloquent');
+        //   Config::set('auth.providers.users.model', '\Modules\Auth\Models\User');
 
         parent::boot();
     }

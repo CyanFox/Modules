@@ -11,4 +11,5 @@ enum SettingsProperty: string
     case MODULE = 'module';
     case ENCRYPTED = 'encrypted';
     case INTERNAL = 'internal';
+    case AUTH = 'auth';
 }

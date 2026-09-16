@@ -44,7 +44,7 @@ class UserSetting extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(userModel());
     }
 
     public function hasProperty(string $property): bool
@@ -56,4 +56,6 @@ class UserSetting extends Model
     {
         return $this->properties[$property] ?? $default;
     }
+
+    // TODO: Activity Log
 }
