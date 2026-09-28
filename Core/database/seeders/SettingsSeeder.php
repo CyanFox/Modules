@@ -23,6 +23,8 @@ class SettingsSeeder extends Seeder
             ['key' => 'app.url', 'value' => config('app.url'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
             ['key' => 'app.date_format', 'value' => 'Y-m-d', 'properties' => [SettingsProperty::INTERNAL->value => false]],
             ['key' => 'app.time_format', 'value' => 'H:i', 'properties' => [SettingsProperty::INTERNAL->value => false]],
+            ['key' => 'app.logo', 'value' => 'img/Logo.svg', 'properties' => [SettingsProperty::INTERNAL->value => false]],
+            ['key' => 'app.logo.css', 'value' => 'width: 70px', 'properties' => [SettingsProperty::INTERNAL->value => false]],
         ];
 
         foreach ($settings as $setting) {

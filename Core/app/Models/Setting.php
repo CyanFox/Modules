@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 /**
  * @property int $id
@@ -35,12 +38,18 @@ use Illuminate\Support\Carbon;
  */
 class Setting extends Model
 {
+    use LogsActivity;
+
     protected $table = 'settings';
 
     protected $fillable = [
         'key',
         'value',
         'properties',
+    ];
+
+    protected $casts = [
+        'properties' => 'array',
     ];
 
     public function access(): MorphMany
@@ -58,5 +67,47 @@ class Setting extends Model
         return $this->properties[$property] ?? $default;
     }
 
-    // TODO: Activity Log
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::retrieved(function ($model) {
+            Cache::remember("settings_$model->id", now()->addDay(), function () use ($model) {
+                return $model;
+            });
+        });
+
+        static::creating(function ($model) {
+            Cache::remember("settings_$model->id", now()->addDay(), function () use ($model) {
+                return $model;
+            });
+
+            return true;
+        });
+
+        static::updating(function ($model) {
+            Cache::forget("settings_$model->id");
+
+            return true;
+        });
+
+        static::deleting(function ($model) {
+            Cache::forget("settings_$model->id");
+
+            return true;
+        });
+    }
+
+    public function getDisplayName(): string
+    {
+        return $this->key;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logExcept($this->hidden)
+            ->logOnlyDirty();
+    }
 }

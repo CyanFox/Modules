@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 use Spatie\LaravelPasskeys\Models\Concerns\HasPasskeys;
 use Spatie\LaravelPasskeys\Models\Concerns\InteractsWithPasskeys;
 use Spatie\LaravelPasskeys\Models\Passkey;
@@ -92,5 +93,29 @@ class User extends Model implements HasPasskeys
         'password' => 'hashed',
     ];
 
-    // TODO: Activity Log
+    protected $hidden = [
+        'password',
+    ];
+
+    public function getPasskeyDisplayName(): string
+    {
+        return $this->getDisplayName();
+    }
+
+    public function getDisplayName(): string
+    {
+        if ($this->first_name || $this->last_name) {
+            return $this->first_name . ' ' . $this->last_name;
+        }
+
+        return $this->username;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logExcept($this->hidden)
+            ->logOnlyDirty();
+    }
 }
