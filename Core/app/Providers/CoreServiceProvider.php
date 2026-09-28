@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Core\Providers;
 
 use Illuminate\Support\Facades\Config;
+use Modules\Core\Models\User;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -51,7 +52,8 @@ class CoreServiceProvider extends ModuleServiceProvider
     public function boot(): void
     {
         Config::set('auth.providers.users.driver', 'eloquent');
-        Config::set('auth.providers.users.model', '\Modules\Core\Models\User');
+        Config::set('auth.providers.users.model', User::class);
+        Config::set('passkeys.models.authenticatable', User::class);
         Config::set('passkeys.relying_party.name', settings('app.name', config('app.name')));
         Config::set('passkeys.relying_party.id', parse_url(settings('app.url', config('app.url')), PHP_URL_HOST));
 

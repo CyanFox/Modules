@@ -12,6 +12,7 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\LaravelPasskeys\Models\Concerns\HasPasskeys;
@@ -73,7 +74,7 @@ use Spatie\Permission\Traits\HasRoles;
  */
 class User extends Model implements HasPasskeys
 {
-    use HasRoles, InteractsWithPasskeys, LogsActivity, Notifiable;
+    use HasRoles, InteractsWithPasskeys, LogsActivity, Notifiable, HasApiTokens;
 
     protected $fillable = [
         'first_name',
