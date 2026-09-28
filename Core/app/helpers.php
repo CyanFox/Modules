@@ -32,6 +32,13 @@ if (!function_exists('userSettings')) {
     }
 }
 
+if (!function_exists('userModel')) {
+    function userModel(): mixed
+    {
+        return config('auth.providers.users.model');
+    }
+}
+
 if (!function_exists('formatDateTime')) {
     function formatDateTime($date, $format = null): string
     {
