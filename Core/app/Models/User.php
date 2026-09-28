@@ -75,15 +75,21 @@ class User extends Model implements HasPasskeys
 {
     use HasRoles, InteractsWithPasskeys, LogsActivity, Notifiable;
 
-    protected $guarded = [];
-
-    protected $hidden = [
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'username',
+        'email',
         'password',
-        'remember_token',
+        'theme',
+        'language',
+        'disabled',
     ];
 
     protected $casts = [
         'disabled' => 'boolean',
         'password' => 'hashed',
     ];
+
+    // TODO: Activity Log
 }

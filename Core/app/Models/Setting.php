@@ -57,4 +57,6 @@ class Setting extends Model
     {
         return $this->properties[$property] ?? $default;
     }
+
+    // TODO: Activity Log
 }

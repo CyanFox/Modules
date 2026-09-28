@@ -1,0 +1,23 @@
+{
+    "name": "Auth",
+    "alias": "auth",
+    "description": "Base Template",
+    "keywords": [
+        "cyanfox",
+        "base"
+    ],
+    "authors": [
+        "CyanFox"
+    ],
+    "license": "MIT",
+    "version": "2026.9.0",
+    "priority": 200,
+    "providers": [
+        "Modules\\Auth\\Providers\\AuthServiceProvider"
+    ],
+    "migration": {
+        "seeds": [
+            "Modules\\Auth\\Database\\Seeders\\AuthDatabaseSeeder"
+        ]
+    }
+}
