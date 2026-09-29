@@ -8,11 +8,11 @@ return [
 
     'login' => [
         'enabled' => true,
-        'captcha' => true,
+        'captcha' => false,
         'rate_limit' => 10,
     ],
     'register' => [
-        'enabled' => true,
+        'enabled' => false,
         'captcha' => false,
         'rate_limit' => 5,
     ],

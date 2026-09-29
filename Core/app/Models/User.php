@@ -19,6 +19,8 @@ use Spatie\Activitylog\Support\LogOptions;
 use Spatie\LaravelPasskeys\Models\Concerns\HasPasskeys;
 use Spatie\LaravelPasskeys\Models\Concerns\InteractsWithPasskeys;
 use Spatie\LaravelPasskeys\Models\Passkey;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -73,9 +75,9 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * @mixin Eloquent
  */
-class User extends Model implements HasPasskeys
+class User extends Model implements HasPasskeys, HasMedia
 {
-    use HasRoles, InteractsWithPasskeys, LogsActivity, Notifiable, HasApiTokens;
+    use HasRoles, InteractsWithPasskeys, LogsActivity, Notifiable, HasApiTokens, InteractsWithMedia;
 
     protected $fillable = [
         'first_name',
@@ -109,6 +111,27 @@ class User extends Model implements HasPasskeys
         }
 
         return $this->username;
+    }
+
+    public function avatar()
+    {
+        if ($this->custom_avatar_url) {
+            return e($this->custom_avatar_url);
+        }
+
+        if ($this->hasMedia('avatar')) {
+            return $this->getFirstMediaUrl('avatar', 'avatar');
+        }
+
+        $placeholders = [
+            '{email}' => $this->email,
+            '{email_md5}' => md5($this->email),
+            '{username}' => $this->username,
+            '{first_name}' => $this->first_name,
+            '{last_name}' => $this->last_name,
+        ];
+
+        return str_replace(array_keys($placeholders), array_values($placeholders), settings('core.default_avatar_url'));
     }
 
     public function getActivitylogOptions(): LogOptions

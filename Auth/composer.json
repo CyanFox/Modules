@@ -25,5 +25,9 @@
         "psr-4": {
             "Modules\\Auth\\Tests\\": "tests/"
         }
+    },
+    "require": {
+        "danharrin/livewire-rate-limiting": "^v2.3.0",
+        "mews/captcha": "^3.0"
     }
 }

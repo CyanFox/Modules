@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Modules\Auth\Providers;
 
 use Illuminate\Support\Facades\Config;
+use Modules\Auth\Http\Middleware\Authenticate;
+use Modules\Auth\Http\Middleware\CheckLanguage;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
 class AuthServiceProvider extends ModuleServiceProvider

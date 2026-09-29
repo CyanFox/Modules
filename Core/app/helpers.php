@@ -35,7 +35,7 @@ if (!function_exists('userSettings')) {
 if (!function_exists('userModel')) {
     function userModel(): mixed
     {
-        return config('auth.providers.users.model');
+        return app(config('auth.providers.users.model'));
     }
 }
 
