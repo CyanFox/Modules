@@ -7,7 +7,7 @@ namespace Modules\Core\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
@@ -75,7 +75,7 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * @mixin Eloquent
  */
-class User extends Model implements HasPasskeys, HasMedia
+class User extends Authenticatable implements HasPasskeys, HasMedia
 {
     use HasRoles, InteractsWithPasskeys, LogsActivity, Notifiable, HasApiTokens, InteractsWithMedia;
 
@@ -115,8 +115,8 @@ class User extends Model implements HasPasskeys, HasMedia
 
     public function avatar()
     {
-        if ($this->custom_avatar_url) {
-            return e($this->custom_avatar_url);
+        if (userSettings('core.custom_avatar_url', $this->id)) {
+            return e(userSettings('core.custom_avatar_url', $this->id));
         }
 
         if ($this->hasMedia('avatar')) {

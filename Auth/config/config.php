@@ -9,6 +9,7 @@ return [
     'login' => [
         'enabled' => true,
         'captcha' => false,
+        'redirect' => null,
         'rate_limit' => 10,
     ],
     'register' => [

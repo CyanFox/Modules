@@ -27,7 +27,8 @@
                     @endif
 
                     @if($username)
-                        <div class="rounded-2xl border border-gray-500">
+                            <div class="rounded-2xl border border-on-surface dark:border-on-surface-dark/50"
+                                 wire:transition>
                             <div class="flex p-1 relative">
                                 <img
                                     src="{{ $user ? $user->avatar() : str_replace(['{email}','{email_md5}','{username}','{first_name}','{last_name}'], [$username,md5($username),$username,$username, $username], settings('core.default_avatar_url')) }}"
@@ -40,6 +41,16 @@
                         @shook('s.auth.login.user')
                     @endif
 
+                        @if ($rateLimitTime > 1)
+                            @hook('auth.login.rate_limit')
+                            <div wire:poll.1s="setRateLimit" wire:transition>
+                                <x-alert type="error">
+                                    {{ __('auth.throttle', ['seconds' => $rateLimitTime]) }}
+                                </x-alert>
+                            </div>
+                            @endhook
+                        @endif
+
                     <form wire:submit="attemptLogin" class="space-y-4">
                         <x-input wire:model="username" :label="__('auth::login.username')"
                                  wire:blur="checkIfUserExists($event.target.value)"
@@ -49,7 +60,7 @@
                                     required>
                             @if(settings('auth.forgot_password.enabled'))
                                 <x-slot:hint>
-                                    <x-link>
+                                    <x-link href="{{ route('auth.forgot-password') }}" wire:navigate>
                                         {{ __('auth::login.forgot_password') }}
                                     </x-link>
                                 </x-slot:hint>

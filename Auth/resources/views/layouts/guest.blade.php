@@ -9,11 +9,16 @@
     <title>{{ ($title ?? '') . ' · ' . settings('app.name', config('app.name')) }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(\Nwidart\Modules\Module::getAssets())
 
     @livewireStyles
 </head>
 <body>
 {{ $slot }}
+
+@persist('notifications')
+<x-toaster-hub view="core::vendor.toaster.hub"/>
+@endpersist
 
 @livewireScripts
 </body>

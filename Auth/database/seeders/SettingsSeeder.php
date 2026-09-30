@@ -24,6 +24,7 @@ class SettingsSeeder extends Seeder
             ['key' => 'auth.login.enabled', 'value' => config('auth.login.enabled'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
             ['key' => 'auth.login.captcha', 'value' => config('auth.login.captcha'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
             ['key' => 'auth.login.rate_limit', 'value' => config('auth.login.rate_limit'), 'properties' => [SettingsProperty::INTERNAL->value => true]],
+            ['key' => 'auth.login.redirect', 'value' => config('auth.login.redirect'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
 
             ['key' => 'auth.register.enabled', 'value' => config('auth.register.enabled'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
             ['key' => 'auth.register.captcha', 'value' => config('auth.register.captcha'), 'properties' => [SettingsProperty::INTERNAL->value => false]],

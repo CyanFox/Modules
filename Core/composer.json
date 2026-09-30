@@ -32,6 +32,7 @@
         "spatie/laravel-passkeys": "^1.8.0",
         "spatie/laravel-activitylog": "^5.1",
         "laravel/sanctum": "^4.0",
-        "spatie/laravel-query-builder": "^7.3"
+        "spatie/laravel-query-builder": "^7.3",
+        "masmerise/livewire-toaster": "^2.10.0"
     }
 }

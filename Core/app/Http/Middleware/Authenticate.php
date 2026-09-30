@@ -2,8 +2,8 @@
 
 namespace Modules\Core\Http\Middleware;
 
+use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\Middleware;
 
 class Authenticate extends Middleware
 {
