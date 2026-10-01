@@ -12,4 +12,5 @@ enum SettingsProperty: string
     case ENCRYPTED = 'encrypted';
     case INTERNAL = 'internal';
     case AUTH = 'auth';
+    case HIDDEN = 'hidden';
 }

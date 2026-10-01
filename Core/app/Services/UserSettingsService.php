@@ -39,11 +39,7 @@ class UserSettingsService
             $properties = array_merge($properties, ['type' => $this->detectType($value)]);
         }
 
-        if ($updateIfExists) {
-            if (!$setting) {
-                throw new SettingNotFoundException($key);
-            }
-
+        if ($updateIfExists && $setting) {
             $setting->update([
                 'user_id' => $userId,
                 'value' => $this->getProperty($properties, SettingsProperty::ENCRYPTED->value) ? encrypt($value) : $value,
@@ -86,12 +82,12 @@ class UserSettingsService
         return $setting;
     }
 
-    public function delete(int $userId, string $key): bool
+    public function delete(int $userId, string $key): bool|null|int
     {
         return UserSetting::where(['user_id' => $userId, 'key' => $key])->delete();
     }
 
-    public function detectType(mixed $value): mixed
+    public function detectType(mixed $value): string
     {
         return match (true) {
             is_int($value) => 'int',

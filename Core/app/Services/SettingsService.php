@@ -39,11 +39,7 @@ class SettingsService
             $properties = array_merge($properties, ['type' => $this->detectType($value)]);
         }
 
-        if ($updateIfExists) {
-            if (!$setting) {
-                throw new SettingNotFoundException($key);
-            }
-
+        if ($updateIfExists && $setting) {
             $setting->update([
                 'value' => $this->getProperty($properties, SettingsProperty::ENCRYPTED->value) ? encrypt($value) : $value,
                 'properties' => json_encode($properties),
@@ -61,7 +57,7 @@ class SettingsService
         return $setting;
     }
 
-    public function detectType(mixed $value): mixed
+    public function detectType(mixed $value): string
     {
         return match (true) {
             is_int($value) => 'int',
@@ -94,7 +90,7 @@ class SettingsService
         return $setting;
     }
 
-    public function delete(string $key): bool
+    public function delete(string $key): bool|null|int
     {
         return Setting::where('key', $key)->delete();
     }

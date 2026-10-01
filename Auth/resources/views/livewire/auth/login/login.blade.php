@@ -51,6 +51,7 @@
                             @endhook
                         @endif
 
+                        @hook('auth.login.form')
                     <form wire:submit="attemptLogin" class="space-y-4">
                         <x-input wire:model="username" :label="__('auth::login.username')"
                                  wire:blur="checkIfUserExists($event.target.value)"
@@ -81,6 +82,7 @@
                         </x-button>
                         @shook('s.auth.login.buttons')
                     </form>
+                        @endhook
                 @endif
             </x-card>
             @endhook

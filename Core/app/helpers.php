@@ -7,7 +7,7 @@ use Modules\Core\Services\SettingsService;
 use Modules\Core\Services\UserSettingsService;
 
 if (!function_exists('settings')) {
-    function settings(?string $key, mixed $default = null): mixed
+    function settings(?string $key = null, mixed $default = null): mixed
     {
         if (!$key) {
             return app(SettingsService::class);
@@ -18,7 +18,7 @@ if (!function_exists('settings')) {
 }
 
 if (!function_exists('userSettings')) {
-    function userSettings(?string $key, ?int $userId, mixed $default = null): mixed
+    function userSettings(?string $key = null, ?int $userId = null, mixed $default = null): mixed
     {
         if (!$key) {
             return app(UserSettingsService::class);
