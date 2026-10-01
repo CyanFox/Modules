@@ -74,6 +74,23 @@ class CoreServiceProvider extends ModuleServiceProvider
         $this->registerToasterConfig();
     }
 
+    private function registerToasterConfig(): void
+    {
+        $path = module_path($this->name, 'config/toaster.php');
+
+        if (!is_file($path)) {
+            return;
+        }
+
+        $config = array_replace_recursive(
+            config('toaster', []),
+            require $path,
+        );
+
+        Config::set('toaster', $config);
+        $this->app->instance(ToasterConfig::class, ToasterConfig::fromArray($config));
+    }
+
     public function boot(): void
     {
         Config::set('auth.providers.users.driver', 'eloquent');
@@ -105,23 +122,6 @@ class CoreServiceProvider extends ModuleServiceProvider
         }
 
         parent::boot();
-    }
-
-    private function registerToasterConfig(): void
-    {
-        $path = module_path($this->name, 'config/toaster.php');
-
-        if (!is_file($path)) {
-            return;
-        }
-
-        $config = array_replace_recursive(
-            config('toaster', []),
-            require $path,
-        );
-
-        Config::set('toaster', $config);
-        $this->app->instance(ToasterConfig::class, ToasterConfig::fromArray($config));
     }
 
     public function registerMiddleware(Router $router)

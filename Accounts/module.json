@@ -1,0 +1,28 @@
+{
+    "name": "Accounts",
+    "alias": "accounts",
+    "description": "Base Template",
+    "keywords": [
+        "cyanfox",
+        "base"
+    ],
+    "authors": [
+        "CyanFox"
+    ],
+    "license": "MIT",
+    "version": "2026.9.0",
+    "remote_version_url": "https://raw.githubusercontent.com/CyanFox/Modules/main/Admin/module.json",
+    "priority": 300,
+    "providers": [
+        "Modules\\Accounts\\Providers\\AccountsServiceProvider"
+    ],
+    "migration": {
+        "seeds": [
+            "Modules\\Accounts\\Database\\Seeders\\DatabaseSeeder"
+        ]
+    },
+    "require": [
+        "Auth",
+        "Core"
+    ]
+}

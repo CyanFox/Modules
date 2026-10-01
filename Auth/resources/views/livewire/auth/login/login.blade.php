@@ -1,4 +1,4 @@
-<div wire:transition>
+<div>
     <div class="flex relative min-h-screen">
         @hook('auth.login.unsplash.css')
         <div class="absolute inset-0 z-[-1]" style="{{ $unsplash['css'] }}"></div>

@@ -19,5 +19,8 @@
         "seeds": [
             "Modules\\Auth\\Database\\Seeders\\AuthDatabaseSeeder"
         ]
-    }
+    },
+    "require": [
+        "Core"
+    ]
 }
