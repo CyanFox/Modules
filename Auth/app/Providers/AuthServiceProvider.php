@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Auth\Providers;
 
-use Illuminate\Support\Facades\Config;
+use Illuminate\Validation\Rules\Password;
 use Modules\Auth\Http\Middleware\Authenticate;
 use Modules\Auth\Http\Middleware\CheckLanguage;
 use Nwidart\Modules\Support\ModuleServiceProvider;
@@ -50,9 +50,33 @@ class AuthServiceProvider extends ModuleServiceProvider
 
     public function boot(): void
     {
+        if (!app()->runningInConsole()) {
+            Password::defaults(function () {
+                $password = Password::min(settings('auth.password.minimum_length'));
 
-        Config::set('auth.providers.users.driver', 'eloquent');
-        //   Config::set('auth.providers.users.model', '\Modules\Auth\Models\User');
+                if (settings('auth.password.require.numbers')) {
+                    $password = $password->numbers();
+                }
+
+                if (settings('auth.password.require.special_characters')) {
+                    $password = $password->symbols();
+                }
+
+                if (settings('auth.password.require.uppercase_letters')) {
+                    $password = $password->mixedCase();
+                }
+
+                if (settings('auth.password.require.lowercase_letters')) {
+                    $password = $password->letters();
+                }
+
+                if (settings('auth.password.require.uncompromised')) {
+                    $password = $password->uncompromised();
+                }
+
+                return $password;
+            });
+        }
 
         parent::boot();
     }

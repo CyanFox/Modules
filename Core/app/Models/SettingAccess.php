@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -26,6 +28,8 @@ use Spatie\Permission\Models\Role;
  */
 class SettingAccess extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'setting_id',
         'role_id',
@@ -53,5 +57,18 @@ class SettingAccess extends Model
         return $this->belongsTo(userModel());
     }
 
-    // TODO: Activity Log
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logExcept($this->hidden)
+            ->logOnlyDirty()
+            ->setDescriptionForEvent(function ($eventName) {
+                $changes = $this->getChanges();
+                unset($changes['updated_at']);
+
+                return 'settings.access.' . $eventName;
+            });
+    }
 }

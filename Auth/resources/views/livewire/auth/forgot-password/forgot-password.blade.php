@@ -3,7 +3,7 @@
         @hook('auth.forgot_password.unsplash.css')
         <div class="absolute inset-0 z-[-1]" style="{{ $unsplash['css'] }}"></div>
         @endhook
-        <div class="justify-center m-auto">
+        <div class="justify-center m-auto" wire:transition.navigate>
             <div class="mb-4">
                 @hook('auth.forgot_password.logo')
                 <img src="{{ settings('app.logo') }}" alt="Logo"
@@ -87,7 +87,7 @@
                             @hook('auth.forgot_password.captcha')
                             <x-divider/>
                             <img src="{{ captcha_src() }}" class="rounded-radius" alt="Captcha"/>
-                            <x-input :label="__('auth::forgot-password.captcha')" required/>
+                            <x-input wire:model="captcha" :label="__('auth::forgot-password.captcha')" required/>
                             @endhook
                         @endif
 
@@ -106,7 +106,7 @@
             @hook('auth.forgot_password.unsplash.utm')
             <div class="absolute bottom-0 left-0 p-4 text-white">
                 <span class="text-sm" wire:ignore>
-                    <a href="{{ $unsplash['photo'] }}">{{ __('auth::login.photo') }}</a>,
+                    <a href="{{ $unsplash['photo'] }}">{{ __('auth::forgot-password.photo') }}</a>,
                     <a href="{{ $unsplash['authorURL'] }}">{{ $unsplash['author'] }}</a>,
                     <a href="{{ $unsplash['utm'] }}">Unsplash</a>
                 </span>

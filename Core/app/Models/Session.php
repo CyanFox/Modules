@@ -8,6 +8,8 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 /**
  * @property string $id
@@ -33,6 +35,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Session extends Model
 {
+    use LogsActivity;
+
     public $timestamps = false;
 
     public $incrementing = false;
@@ -54,5 +58,17 @@ class Session extends Model
         return $this->belongsTo(userModel());
     }
 
-    // TODO: Activity Log
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logExcept($this->hidden)
+            ->logOnlyDirty()
+            ->setDescriptionForEvent(function ($eventName) {
+                $changes = $this->getChanges();
+                unset($changes['updated_at']);
+
+                return 'user.sessions.' . $eventName;
+            });
+    }
 }

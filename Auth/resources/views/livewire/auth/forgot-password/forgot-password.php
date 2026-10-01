@@ -3,6 +3,7 @@
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -19,6 +20,7 @@ new class extends Component {
 
     public $username;
     public $rateLimitTime;
+    public $captcha;
 
     #[Url]
     public $token;
@@ -31,7 +33,7 @@ new class extends Component {
     public function resetPassword()
     {
         $this->validate([
-            'password' => 'required|string',
+            'password' => ['required', 'string', Password::defaults()],
             'passwordConfirmation' => 'required|string|same:password',
         ]);
 
@@ -104,7 +106,7 @@ new class extends Component {
         cookie()->queue(cookie()->forget('language'));
         cookie()->queue(cookie()->forever('language', $language));
 
-        $this->redirect(route('auth.login'));
+        $this->redirect(url()->previous());
     }
 
     public function setRateLimit(): bool

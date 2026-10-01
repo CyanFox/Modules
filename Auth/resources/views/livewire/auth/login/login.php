@@ -58,7 +58,7 @@ new class extends Component {
             activity()
                 ->performedOn($this->user)
                 ->causedByAnonymous()
-                ->log('auth.login_failed');
+                ->log('auth.login.failed');
 
             throw ValidationException::withMessages([
                 'username' => __('auth.failed'),
@@ -110,7 +110,7 @@ new class extends Component {
         cookie()->queue(cookie()->forget('language'));
         cookie()->queue(cookie()->forever('language', $language));
 
-        $this->redirect(route('auth.login'));
+        $this->redirect(url()->previous());
     }
 
     public function setRateLimit(): bool

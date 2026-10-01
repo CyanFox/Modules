@@ -21,6 +21,12 @@ class Permission extends \Spatie\Permission\Models\Permission
         return LogOptions::defaults()
             ->logUnguarded()
             ->logExcept($this->hidden)
-            ->logOnlyDirty();
+            ->logOnlyDirty()
+            ->setDescriptionForEvent(function ($eventName) {
+                $changes = $this->getChanges();
+                unset($changes['updated_at']);
+
+                return 'permissions.' . $eventName;
+            });
     }
 }

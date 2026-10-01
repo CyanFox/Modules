@@ -21,6 +21,12 @@ class Role extends \Spatie\Permission\Models\Role
         return LogOptions::defaults()
             ->logUnguarded()
             ->logExcept($this->hidden)
-            ->logOnlyDirty();
+            ->logOnlyDirty()
+            ->setDescriptionForEvent(function ($eventName) {
+                $changes = $this->getChanges();
+                unset($changes['updated_at']);
+
+                return 'roles.' . $eventName;
+            });
     }
 }

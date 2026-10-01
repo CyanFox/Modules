@@ -1,9 +1,9 @@
-<div>
+<div wire:transition>
     <div class="flex relative min-h-screen">
         @hook('auth.login.unsplash.css')
         <div class="absolute inset-0 z-[-1]" style="{{ $unsplash['css'] }}"></div>
         @endhook
-        <div class="justify-center m-auto">
+        <div class="justify-center m-auto" wire:transition.navigate>
             <div class="mb-4">
                 @hook('auth.login.logo')
                 <img src="{{ settings('app.logo') }}" alt="Logo"
@@ -19,7 +19,7 @@
                             <x-tab.item uuid="login" class="w-1/2">
                                 {{ __('auth::login.tabs.login') }}
                             </x-tab.item>
-                            <x-tab.item href="#" class="w-1/2" wire:navigate>
+                            <x-tab.item href="{{ route('auth.register') }}" class="w-1/2" wire:navigate>
                                 {{ __('auth::login.tabs.register') }}
                             </x-tab.item>
                             @shook('s.auth.login.tabs')
@@ -27,8 +27,8 @@
                     @endif
 
                     @if($username)
-                            <div class="rounded-2xl border border-on-surface dark:border-on-surface-dark/50"
-                                 wire:transition>
+                        <div class="rounded-2xl border border-on-surface dark:border-on-surface-dark/50"
+                             wire:transition>
                             <div class="flex p-1 relative">
                                 <img
                                     src="{{ $user ? $user->avatar() : str_replace(['{email}','{email_md5}','{username}','{first_name}','{last_name}'], [$username,md5($username),$username,$username, $username], settings('core.default_avatar_url')) }}"
@@ -41,17 +41,17 @@
                         @shook('s.auth.login.user')
                     @endif
 
-                        @if ($rateLimitTime > 1)
-                            @hook('auth.login.rate_limit')
-                            <div wire:poll.1s="setRateLimit" wire:transition>
-                                <x-alert type="error">
-                                    {{ __('auth.throttle', ['seconds' => $rateLimitTime]) }}
-                                </x-alert>
-                            </div>
-                            @endhook
-                        @endif
+                    @if ($rateLimitTime > 1)
+                        @hook('auth.login.rate_limit')
+                        <div wire:poll.1s="setRateLimit" wire:transition>
+                            <x-alert type="error">
+                                {{ __('auth.throttle', ['seconds' => $rateLimitTime]) }}
+                            </x-alert>
+                        </div>
+                        @endhook
+                    @endif
 
-                        @hook('auth.login.form')
+                    @hook('auth.login.form')
                     <form wire:submit="attemptLogin" class="space-y-4">
                         <x-input wire:model="username" :label="__('auth::login.username')"
                                  wire:blur="checkIfUserExists($event.target.value)"
@@ -73,7 +73,7 @@
                             @hook('auth.login.captcha')
                             <x-divider/>
                             <img src="{{ captcha_src() }}" class="rounded-radius" alt="Captcha"/>
-                            <x-input :label="__('auth::login.captcha')" required/>
+                            <x-input wire:model="captcha" :label="__('auth::login.captcha')" required/>
                             @endhook
                         @endif
 
@@ -82,7 +82,7 @@
                         </x-button>
                         @shook('s.auth.login.buttons')
                     </form>
-                        @endhook
+                    @endhook
                 @endif
             </x-card>
             @endhook

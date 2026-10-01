@@ -37,6 +37,13 @@ class SettingsSeeder extends Seeder
             ['key' => 'auth.profile.layout', 'value' => config('auth.profile.layout'), 'properties' => [SettingsProperty::INTERNAL->value => false, SettingsProperty::AUTH->value => true]],
             ['key' => 'auth.profile.enable.change_avatar', 'value' => config('auth.profile.enable.change_avatar'), 'properties' => [SettingsProperty::INTERNAL->value => false, SettingsProperty::AUTH->value => true]],
             ['key' => 'auth.profile.enable.delete_account', 'value' => config('auth.profile.enable.delete_account'), 'properties' => [SettingsProperty::INTERNAL->value => false, SettingsProperty::AUTH->value => true]],
+
+            ['key' => 'auth.password.minimum_length', 'value' => config('auth.password.minimum_length'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
+            ['key' => 'auth.password.require.numbers', 'value' => config('auth.password.require.numbers'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
+            ['key' => 'auth.password.require.special_characters', 'value' => config('auth.password.require.special_characters'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
+            ['key' => 'auth.password.require.uppercase_letters', 'value' => config('auth.password.require.uppercase_letters'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
+            ['key' => 'auth.password.require.lowercase_letters', 'value' => config('auth.password.require.lowercase_letters'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
+            ['key' => 'auth.password.require.uncompromised', 'value' => config('auth.password.require.uncompromised'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
         ];
 
         foreach ($settings as $setting) {

@@ -139,6 +139,16 @@ class User extends Authenticatable implements HasPasskeys, HasMedia
         return LogOptions::defaults()
             ->logUnguarded()
             ->logExcept($this->hidden)
-            ->logOnlyDirty();
+            ->logOnlyDirty()
+            ->setDescriptionForEvent(function ($eventName) {
+                $changes = $this->getChanges();
+                unset($changes['updated_at']);
+
+                if (array_keys($changes) === ['password']) {
+                    return 'user.password.' . $eventName;
+                }
+
+                return 'user.' . $eventName;
+            });
     }
 }

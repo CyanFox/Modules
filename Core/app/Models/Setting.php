@@ -59,12 +59,24 @@ class Setting extends Model
 
     public function hasProperty(string $property): bool
     {
-        return isset($this->properties[$property]);
+        $properties = $this->properties;
+
+        if (is_string($properties)) {
+            $properties = json_decode($properties, true) ?? [];
+        }
+
+        return isset($properties[$property]);
     }
 
-    public function getProperty(string $property, mixed $default = null): mixed
+    public function getProperty(string $property): mixed
     {
-        return $this->properties[$property] ?? $default;
+        $properties = $this->properties;
+
+        if (is_string($properties)) {
+            $properties = json_decode($properties, true) ?? [];
+        }
+
+        return $properties[$property] ?? null;
     }
 
     protected static function boot()
@@ -108,6 +120,12 @@ class Setting extends Model
         return LogOptions::defaults()
             ->logUnguarded()
             ->logExcept($this->hidden)
-            ->logOnlyDirty();
+            ->logOnlyDirty()
+            ->setDescriptionForEvent(function ($eventName) {
+                $changes = $this->getChanges();
+                unset($changes['updated_at']);
+
+                return 'settings.' . $eventName;
+            });
     }
 }

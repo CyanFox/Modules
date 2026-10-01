@@ -2,6 +2,8 @@
 
 return [
     'tab_title' => 'Forgot Password',
+    'photo' => 'Photo',
+
     'username' => 'Username',
     'captcha' => 'Captcha',
     'invalid_captcha' => 'Invalid captcha',
