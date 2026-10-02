@@ -7,7 +7,7 @@
             <div class="mb-4">
                 @hook('auth.forgot_password.logo')
                 <img src="{{ settings('app.logo') }}" alt="Logo"
-                     class="mx-auto" style="{{ settings('app.logo.css') }}">
+                     class="mx-auto" style="{{ settings('auth.logo.css') }}">
                 @endhook
             </div>
 
@@ -18,7 +18,7 @@
                          wire:transition>
                         <div class="flex p-1 relative">
                             <img
-                                src="{{ $user->avatar() }}"
+                                src="{{ $user->getAvatar() }}"
                                 alt="Avatar"
                                 class="rounded-full w-8 h-8 m-1">
                             <p class="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]">{{ $user->username }}</p>

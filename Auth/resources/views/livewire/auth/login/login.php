@@ -83,7 +83,7 @@ new class extends Component {
             $this->redirect(settings('auth.login.redirect'));
         }
 
-        redirect()->intended();
+        $this->redirectIntended(navigate: true);
     }
 
     public function checkIfUserExists($username)
@@ -110,7 +110,7 @@ new class extends Component {
         cookie()->queue(cookie()->forget('language'));
         cookie()->queue(cookie()->forever('language', $language));
 
-        $this->redirect(url()->previous());
+        $this->redirect(url()->previous(), true);
     }
 
     public function setRateLimit(): bool

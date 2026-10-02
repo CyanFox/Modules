@@ -1,7 +1,7 @@
 {
     "name": "Auth",
     "alias": "auth",
-    "description": "Base Template",
+    "description": "Auth Module",
     "keywords": [
         "cyanfox",
         "base"

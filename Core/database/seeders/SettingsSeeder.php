@@ -25,7 +25,6 @@ class SettingsSeeder extends Seeder
             ['key' => 'app.date_format', 'value' => 'Y-m-d', 'properties' => [SettingsProperty::INTERNAL->value => false]],
             ['key' => 'app.time_format', 'value' => 'H:i', 'properties' => [SettingsProperty::INTERNAL->value => false]],
             ['key' => 'app.logo', 'value' => '/img/Logo.svg', 'properties' => [SettingsProperty::INTERNAL->value => false]],
-            ['key' => 'app.logo.css', 'value' => 'width: 70px', 'properties' => [SettingsProperty::INTERNAL->value => false]],
             ['key' => 'app.force_https', 'value' => false, 'properties' => [SettingsProperty::INTERNAL->value => false]],
 
             ['key' => 'core.default_avatar_url', 'value' => 'https://avatars.cyanfox.de/beam/100/{email_hash}', 'properties' => [SettingsProperty::INTERNAL->value => false]],

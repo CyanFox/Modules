@@ -66,7 +66,7 @@ new class extends Component {
         cookie()->queue(cookie()->forget('language'));
         cookie()->queue(cookie()->forever('language', $language));
 
-        $this->redirect(url()->previous());
+        $this->redirect(url()->previous(), true);
     }
 
     public function setRateLimit(): bool

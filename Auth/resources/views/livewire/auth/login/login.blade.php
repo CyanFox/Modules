@@ -7,7 +7,7 @@
             <div class="mb-4">
                 @hook('auth.login.logo')
                 <img src="{{ settings('app.logo') }}" alt="Logo"
-                     class="mx-auto" style="{{ settings('app.logo.css') }}">
+                     class="mx-auto" style="{{ settings('auth.logo.css') }}">
                 @endhook
             </div>
 
@@ -31,7 +31,7 @@
                              wire:transition>
                             <div class="flex p-1 relative">
                                 <img
-                                    src="{{ $user ? $user->avatar() : str_replace(['{email}','{email_md5}','{username}','{first_name}','{last_name}'], [$username,md5($username),$username,$username, $username], settings('core.default_avatar_url')) }}"
+                                    src="{{ $user ? $user->getAvatar() : str_replace(['{email}','{email_md5}','{username}','{first_name}','{last_name}'], [$username,md5($username),$username,$username, $username], settings('core.default_avatar_url')) }}"
                                     alt="Avatar"
                                     class="rounded-full w-8 h-8 m-1">
                                 <p class="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]">{{ $user ? $user->username : $username }}</p>

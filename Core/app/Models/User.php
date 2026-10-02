@@ -113,7 +113,7 @@ class User extends Authenticatable implements HasPasskeys, HasMedia
         return $this->username;
     }
 
-    public function avatar()
+    public function getAvatar()
     {
         if (userSettings('core.custom_avatar_url', $this->id)) {
             return e(userSettings('core.custom_avatar_url', $this->id));

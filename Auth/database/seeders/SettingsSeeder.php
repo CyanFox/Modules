@@ -44,6 +44,8 @@ class SettingsSeeder extends Seeder
             ['key' => 'auth.password.require.uppercase_letters', 'value' => config('auth.password.require.uppercase_letters'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
             ['key' => 'auth.password.require.lowercase_letters', 'value' => config('auth.password.require.lowercase_letters'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
             ['key' => 'auth.password.require.uncompromised', 'value' => config('auth.password.require.uncompromised'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
+
+            ['key' => 'auth.logo.css', 'value' => 'width: 70px', 'properties' => [SettingsProperty::INTERNAL->value => false]],
         ];
 
         foreach ($settings as $setting) {

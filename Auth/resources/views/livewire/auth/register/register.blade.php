@@ -7,7 +7,7 @@
             <div class="mb-4">
                 @hook('auth.register.logo')
                 <img src="{{ settings('app.logo') }}" alt="Logo"
-                     class="mx-auto" style="{{ settings('app.logo.css') }}">
+                     class="mx-auto" style="{{ settings('auth.logo.css') }}">
                 @endhook
             </div>
 
