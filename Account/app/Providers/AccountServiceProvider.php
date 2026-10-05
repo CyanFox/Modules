@@ -2,7 +2,9 @@
 
 namespace Modules\Account\Providers;
 
+use Illuminate\Support\Facades\Blade;
 use Nwidart\Modules\Support\ModuleServiceProvider;
+use RealZone22\LaraHooks\Facades\LaraHooks;
 
 class AccountServiceProvider extends ModuleServiceProvider
 {
@@ -42,4 +44,15 @@ class AccountServiceProvider extends ModuleServiceProvider
     // {
     //     $schedule->command('inspire')->hourly();
     // }
+
+    public function boot(): void
+    {
+        if (!app()->runningInConsole()) {
+            LaraHooks::listen('s.dashboard.profile.items', function () {
+                return Blade::render('<x-dashboard::profile.item icon="icon-user" route="account.profile">' . __('account::profile.tab_title') . '</x-dashboard::profile.item>');
+            }, 10);
+        }
+
+        parent::boot();
+    }
 }

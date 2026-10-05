@@ -1,11 +1,11 @@
-<div x-data="{ sidebarIsOpen: false }" class="relative flex w-full flex-col md:flex-row" wire:transition.navigate>
+<div x-data="{ sidebarIsOpen: false }" class="relative flex w-full flex-col lg:flex-row" wire:transition.navigate>
     <a class="sr-only" href="#main-content">skip to the main content</a>
 
-    <div x-cloak x-show="sidebarIsOpen" class="fixed inset-0 z-20 bg-surface-dark/10 backdrop-blur-xs md:hidden"
+    <div x-cloak x-show="sidebarIsOpen" class="fixed inset-0 z-20 bg-surface-dark/10 backdrop-blur-xs lg:hidden"
          aria-hidden="true" x-on:click="sidebarIsOpen = false" x-transition.opacity></div>
 
     <nav x-cloak
-         class="fixed left-0 z-30 flex h-svh w-60 shrink-0 flex-col border-r border-outline bg-surface-alt p-4 transition-transform duration-300 md:w-64 md:translate-x-0 md:relative dark:border-outline-dark dark:bg-surface-dark-alt"
+         class="fixed left-0 z-30 flex h-svh w-60 shrink-0 flex-col border-r border-outline bg-surface-alt p-4 transition-transform duration-300 lg:w-64 lg:translate-x-0 lg:relative dark:border-outline-dark dark:bg-surface-dark-alt"
          x-bind:class="sidebarIsOpen ? 'translate-x-0' : '-translate-x-60'" aria-label="sidebar navigation">
         <a href="{{ route('dashboard') }}"
            class="text-2xl font-bold text-on-surface-strong dark:text-on-surface-dark-strong mb-4 flex justify-center items-center gap-2">
@@ -23,15 +23,13 @@
         </a>
 
         <div class="flex flex-col gap-2 overflow-y-auto pb-6 mt-3">
+            @hook('dashboard.sidebar.items')
             <x-dashboard::sidebar.item icon="icon-layout-dashboard" route="dashboard">
-                Dashboard
+                {{ __('dashboard::dashboard.tab_title') }}
             </x-dashboard::sidebar.item>
 
-            <x-dashboard::sidebar.dropdown icon="icon-user" label="Users">
-                <x-dashboard::sidebar.dropdown.item route="account.profile" icon="icon-layout-dashboard">
-                    Test
-                </x-dashboard::sidebar.dropdown.item>
-            </x-dashboard::sidebar.dropdown>
+            @shook('s.dashboard.sidebar.items')
+            @endhook
         </div>
     </nav>
 
@@ -41,15 +39,15 @@
             aria-label="top navibation bar">
 
             <button type="button"
-                    class="md:hidden cursor-pointer inline-block text-on-surface dark:text-on-surface-dark text-lg"
+                    class="lg:hidden cursor-pointer inline-block text-on-surface dark:text-on-surface-dark text-lg"
                     x-on:click="sidebarIsOpen = true">
                 <i class="icon-sidebar-open"></i>
                 <span class="sr-only">sidebar toggle</span>
             </button>
 
-            <x-breadcrumb class="hidden md:inline-block">
+            <x-breadcrumb class="hidden lg:inline-block">
                 @foreach($breadcrumbs as $breadcrumb)
-                    @if(data_get($breadcrumb, 'noWireNavigate'))
+                    @if(data_get($breadcrumb, 'noWireNavigate') || data_get($breadcrumb, 'last'))
                         <x-breadcrumb.item href="{{ data_get($breadcrumb, 'url') }}"
                                            :last="data_get($breadcrumb, 'last')">
                             {{ data_get($breadcrumb, 'label') }}
@@ -71,7 +69,7 @@
                             class="flex cursor-pointer w-full items-center rounded-radius gap-2 p-2 text-left text-on-surface hover:bg-primary/5 hover:text-on-surface-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:text-on-surface-dark dark:hover:bg-primary-dark/5 dark:hover:text-on-surface-dark-strong dark:focus-visible:outline-primary-dark">
                         <img src="{{ auth()->user()->getAvatar() }}"
                              class="size-8 object-cover rounded-radius" alt="avatar" aria-hidden="true"/>
-                        <div class="hidden md:flex flex-col">
+                        <div class="hidden lg:flex flex-col">
                             <span
                                 class="text-sm font-bold text-on-surface-strong dark:text-on-surface-dark-strong">{{ auth()->user()->getDisplayName() }}</span>
                             <span class="text-xs" aria-hidden="true">{{ auth()->user()->username }}</span>
@@ -80,9 +78,14 @@
                     </button>
                 </x-dropdown.trigger>
                 <x-dropdown.items>
-                    <x-dashboard::sidebar.profile.item icon="icon-log-out" route="auth.logout">
-                        Logout
-                    </x-dashboard::sidebar.profile.item>
+                    @hook('dashboard.profile.items')
+                    @shook('s.dashboard.profile.items')
+
+                    <x-divider class="my-0"/>
+                    <x-dashboard::profile.item icon="icon-log-out" route="auth.logout">
+                        {{ __('dashboard::dashboard.logout') }}
+                    </x-dashboard::profile.item>
+                    @endhook
                 </x-dropdown.items>
             </x-dropdown>
         </nav>

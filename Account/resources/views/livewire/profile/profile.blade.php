@@ -1,13 +1,89 @@
-<div>
-    <div class="grid md:grid-cols-3">
-        <x-card>
-            Test 1
-        </x-card>
-        <x-card>
-            Test 2
-        </x-card>
-        <x-card>
-            Test 3
-        </x-card>
+<div class="space-y-4">
+    @persist('account.tabs.profile')
+    <x-account::profile-tabs selected-tab="profile"/>
+    @endpersist
+    <div class="space-y-4" wire:transition>
+        <div class="grid md:grid-cols-3 gap-4">
+            <div class="space-y-4">
+                <x-card>
+                    <div class="flex gap-4">
+                        <img src="{{ auth()->user()->getAvatar() }}" alt="Avatar" class="size-12">
+                        <div class="flex flex-col">
+                            <span>{{ auth()->user()->getDisplayName() }}</span>
+                            <span>{{ auth()->user()->username }}</span>
+                        </div>
+                    </div>
+                </x-card>
+
+                <x-card>
+                    @hook('account.profile.lang_theme')
+                    <div class="space-y-4">
+                        <x-select wire:model="language" wire:change="updateLanguage"
+                                  :label="__('account::account.language')">
+                            <option value="en">{{ __('account::account.languages.en') }}</option>
+                            <option value="de">{{ __('account::account.languages.de') }}</option>
+
+                            @shook('s.global.languages')
+                        </x-select>
+
+                        <x-select wire:model="theme" wire:change="updateTheme" :label="__('account::account.theme')">
+                            <option value="light">{{ __('account::account.themes.light') }}</option>
+                            <option value="dark">{{ __('account::account.themes.dark') }}</option>
+
+                            @shook('s.account.profile.lang_theme.themes')
+                        </x-select>
+                    </div>
+                    @endhook
+                </x-card>
+
+                <x-card>
+                    <div class="flex flex-wrap gap-2">
+                        <div class="flex-1">
+                            <x-button color="danger" class="w-full">
+                                Delete Account
+                            </x-button>
+                        </div>
+                    </div>
+                </x-card>
+            </div>
+            <div class="md:col-span-2 space-y-4">
+                <x-card>
+                    <form wire:submit="updateProfile">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <x-input wire:model="firstName" :label="__('account::account.first_name')"/>
+                            <x-input wire:model="lastName" :label="__('account::account.last_name')"/>
+
+                            <x-input wire:model="username" :label="__('account::account.username')" required/>
+                            <x-input wire:model="email" type="email" :label="__('account::account.email')" required/>
+                        </div>
+
+                        <x-divider/>
+
+                        <x-button type="submit" loading="updateProfile">
+                            {{ __('account::account.buttons.update_profile') }}
+                        </x-button>
+                    </form>
+                </x-card>
+
+                <x-card>
+                    <form wire:submit="changePassword" class="space-y-4">
+                        <x-password wire:model="currentPassword" :label="__('account::account.current_password')"
+                                    required/>
+
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <x-password wire:model="newPassword" :label="__('account::account.new_password')" required/>
+                            <x-password wire:model="confirmNewPassword"
+                                        :label="__('account::account.confirm_new_password')" required/>
+                        </div>
+
+                        <x-divider/>
+
+                        <x-button type="submit" loading="changePassword">
+                            {{ __('account::account.buttons.change_password') }}
+                        </x-button>
+                    </form>
+                </x-card>
+            </div>
+        </div>
     </div>
 </div>
