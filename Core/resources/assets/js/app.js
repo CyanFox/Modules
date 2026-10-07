@@ -24,7 +24,7 @@ if (import.meta.env.VITE_REVERB_ENABLED === 'true') {
             detail: {
                 message: message,
                 type: 'error',
-                duration: Infinity
+                duration: 1000 * 60 * 60 * 24 // 1 day
             }
         }));
         wasDisconnected = true;

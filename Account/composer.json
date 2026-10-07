@@ -26,5 +26,8 @@
         "psr-4": {
             "Modules\\Account\\Tests\\": "tests/"
         }
+    },
+    "require": {
+        "jenssegers/agent": "^v2.6.0"
     }
 }

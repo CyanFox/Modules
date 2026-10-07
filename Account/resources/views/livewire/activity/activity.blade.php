@@ -3,8 +3,8 @@
     <x-account::profile-tabs selected-tab="activity"/>
     @endpersist
     <div class="space-y-4" wire:transition>
-        <x-card>
-
-        </x-card>
+        <x-cf.card :title="__('account::account.activity')" hook="account.activity">
+            <x-pengutable :configuration="$this"/>
+        </x-cf.card>
     </div>
 </div>

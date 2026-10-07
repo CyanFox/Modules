@@ -3,6 +3,12 @@
 use Livewire\Component;
 
 new class extends Component {
+
+    public function logoutSession($sessionId)
+    {
+        auth()->user()->sessions()->where('id', $sessionId)->delete();
+    }
+
     public function render()
     {
         return $this->view()

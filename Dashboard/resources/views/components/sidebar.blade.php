@@ -1,4 +1,4 @@
-<div x-data="{ sidebarIsOpen: false }" class="relative flex w-full flex-col lg:flex-row" wire:transition.navigate>
+<div x-data="{ sidebarIsOpen: false }" class="relative flex w-full flex-col lg:flex-row">
     <a class="sr-only" href="#main-content">skip to the main content</a>
 
     <div x-cloak x-show="sidebarIsOpen" class="fixed inset-0 z-20 bg-surface-dark/10 backdrop-blur-xs lg:hidden"
@@ -7,7 +7,7 @@
     <nav x-cloak
          class="fixed left-0 z-30 flex h-svh w-60 shrink-0 flex-col border-r border-outline bg-surface-alt p-4 transition-transform duration-300 lg:w-64 lg:translate-x-0 lg:relative dark:border-outline-dark dark:bg-surface-dark-alt"
          x-bind:class="sidebarIsOpen ? 'translate-x-0' : '-translate-x-60'" aria-label="sidebar navigation">
-        <a href="{{ route('dashboard') }}"
+        <a href="{{ route('dashboard') }}" wire:navigate
            class="text-2xl font-bold text-on-surface-strong dark:text-on-surface-dark-strong mb-4 flex justify-center items-center gap-2">
             <span class="sr-only">homepage</span>
             @hook('dashboard.sidebar.logo')
@@ -90,7 +90,7 @@
             </x-dropdown>
         </nav>
         <!-- main content  -->
-        <div id="main-content" class="p-4" wire:transition.navigate>
+        <div id="main-content" class="p-4">
             <div class="overflow-y-auto">
                 {{ $slot }}
             </div>

@@ -61,7 +61,7 @@ class Session extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logUnguarded()
+            ->logFillable()
             ->logExcept($this->hidden)
             ->logOnlyDirty()
             ->setDescriptionForEvent(function ($eventName) {

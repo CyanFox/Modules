@@ -19,7 +19,7 @@ class Role extends \Spatie\Permission\Models\Role
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logUnguarded()
+            ->logFillable()
             ->logExcept($this->hidden)
             ->logOnlyDirty()
             ->setDescriptionForEvent(function ($eventName) {

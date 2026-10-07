@@ -15,7 +15,8 @@
         <i class="icon-eye"></i>
         <span class="ml-2">{{ __('account::account.activity') }}</span>
     </x-tab.item>
-    <x-tab.item class="flex-1 flex items-center justify-center" uuid="api" :href="route('account.api')" wire:navigate>
+    <x-tab.item class="flex-1 flex items-center justify-center min-w-fit" uuid="api" :href="route('account.api')"
+                wire:navigate>
         <i class="icon-key"></i>
         <span class="ml-2">{{ __('account::account.api') }}</span>
     </x-tab.item>

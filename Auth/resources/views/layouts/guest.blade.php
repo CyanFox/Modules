@@ -20,6 +20,8 @@
 <x-toaster-hub view="core::vendor.toaster.hub"/>
 @endpersist
 
+@livewire('pengublade-modal')
+
 @livewireScripts
 </body>
 </html>

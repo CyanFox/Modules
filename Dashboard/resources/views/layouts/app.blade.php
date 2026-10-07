@@ -14,7 +14,7 @@
 
     @livewireStyles
 </head>
-<body>
+<body wire:transition.navigate>
 
 <x-dashboard::sidebar :breadcrumbs="$breadcrumbs ?? []">
     {{ $slot }}
@@ -23,6 +23,8 @@
 @persist('notifications')
 <x-toaster-hub view="core::vendor.toaster.hub"/>
 @endpersist
+
+@livewire('pengublade-modal')
 
 @livewireScripts
 </body>

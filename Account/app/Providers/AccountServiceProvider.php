@@ -49,7 +49,7 @@ class AccountServiceProvider extends ModuleServiceProvider
     {
         if (!app()->runningInConsole()) {
             LaraHooks::listen('s.dashboard.profile.items', function () {
-                return Blade::render('<x-dashboard::profile.item icon="icon-user" route="account.profile">' . __('account::profile.tab_title') . '</x-dashboard::profile.item>');
+                return Blade::render('<x-dashboard::profile.item icon="icon-user" route="account.profile">' . __('account::account.profile') . '</x-dashboard::profile.item>');
             }, 10);
         }
 

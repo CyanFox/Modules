@@ -7,7 +7,14 @@
             <div class="space-y-4">
                 <x-card>
                     <div class="flex gap-4">
-                        <img src="{{ auth()->user()->getAvatar() }}" alt="Avatar" class="size-12">
+                        <div class="size-12 relative group">
+                            <img src="{{ auth()->user()->getAvatar() }}" alt="Avatar"
+                                 class="absolute inset-0 bg-cover bg-center z-0 rounded-3xl group-hover:opacity-70 transition-opacity duration-300">
+                            <div
+                                wire:click="$dispatch('openModal', {component: 'auth::components.modals.change-avatar'})"
+                                class="opacity-0 group-hover:opacity-100 hover:cursor-pointer duration-300 absolute inset-0 z-10 flex justify-center items-center text-xl text-white font-semibold">
+                                <i class="icon-upload"></i></div>
+                        </div>
                         <div class="flex flex-col">
                             <span>{{ auth()->user()->getDisplayName() }}</span>
                             <span>{{ auth()->user()->username }}</span>

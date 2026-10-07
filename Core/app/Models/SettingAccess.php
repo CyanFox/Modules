@@ -57,11 +57,10 @@ class SettingAccess extends Model
         return $this->belongsTo(userModel());
     }
 
-
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logUnguarded()
+            ->logFillable()
             ->logExcept($this->hidden)
             ->logOnlyDirty()
             ->setDescriptionForEvent(function ($eventName) {

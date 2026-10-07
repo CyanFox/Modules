@@ -4,6 +4,7 @@ use Illuminate\Validation\Rules\Password;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Masmerise\Toaster\Toaster;
+use Modules\Core\Models\Session;
 
 new class extends Component {
 
@@ -25,6 +26,8 @@ new class extends Component {
     public function updateProfile()
     {
         $this->validate([
+            'firstName' => 'nullable|string|max:255',
+            'lastName' => 'nullable|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,' . auth()->id(),
             'email' => 'required|email|max:255',
         ]);
@@ -53,7 +56,7 @@ new class extends Component {
             'password' => $this->newPassword,
         ]);
 
-        auth()->logoutOtherDevices($this->newPassword);
+        Session::where('user_id', auth()->id())->whereNot('id', session()->getId())->delete();
 
         Toaster::success(__('account::account.notifications.password_changed'));
 

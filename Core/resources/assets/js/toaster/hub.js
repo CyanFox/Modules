@@ -1,5 +1,5 @@
 import {Config} from '../../../../../../vendor/masmerise/livewire-toaster/resources/js/config';
-import {Toast} from '../../../../../../vendor/masmerise/livewire-toaster/resources/js/toast';
+import {Toast} from './toast';
 
 export function Hub(Alpine) {
     Alpine.data('toasterHub', (initialToasts, config) => {
@@ -50,6 +50,7 @@ export function Hub(Alpine) {
 
             show(toast) {
                 toast = Alpine.reactive(toast);
+                toast._startTime = Date.now();
                 toast.runAfterDuration(toast => toast.dispose());
 
                 if (config.alignment.isTop()) {
@@ -57,6 +58,10 @@ export function Hub(Alpine) {
                 } else {
                     this._toasts.push(toast);
                 }
+            },
+
+            removeToast(toast) {
+                this._toasts = this._toasts.filter(item => item.id !== toast.id);
             },
         }
     });

@@ -7,6 +7,7 @@ namespace Modules\Core\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
@@ -99,6 +100,16 @@ class User extends Authenticatable implements HasPasskeys, HasMedia
         'password',
     ];
 
+    public function sessions(): HasMany
+    {
+        return $this->hasMany(Session::class);
+    }
+
+    public function userSettings(): HasMany
+    {
+        return $this->hasMany(UserSetting::class);
+    }
+
     public function getPasskeyDisplayName(): string
     {
         return $this->getDisplayName();
@@ -137,7 +148,7 @@ class User extends Authenticatable implements HasPasskeys, HasMedia
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logUnguarded()
+            ->logFillable()
             ->logExcept($this->hidden)
             ->logOnlyDirty()
             ->setDescriptionForEvent(function ($eventName) {
