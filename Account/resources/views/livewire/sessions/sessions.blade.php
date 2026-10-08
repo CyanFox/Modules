@@ -77,7 +77,7 @@
                 <div class="flex justify-between">
                     <span>{{ __('account::sessions.app_sessions') }}</span>
                     <x-button.floating size="sm" :tooltip="__('account::sessions.tooltips.qrcode')"
-                                       wire:click="$dispatch('openModal', { modalComponent: 'account::components.modals.show-login-qr-code' })">
+                                       wire:click="showLoginQrCode" loading="showLoginQrCode">
                         <i class="icon-qr-code"></i>
                     </x-button.floating>
                 </div>
@@ -130,6 +130,8 @@
                             </x-table.body.item>
                             <x-table.body.item>
                                 <x-button.floating size="sm" color="danger"
+                                                   wire:click="logoutAppSession('{{ $token->id }}')"
+                                                   loading="logoutAppSession('{{ $token->id }}')"
                                                    :tooltip="__('account::sessions.tooltips.logout')">
                                     <i class="icon-log-out"></i>
                                 </x-button.floating>

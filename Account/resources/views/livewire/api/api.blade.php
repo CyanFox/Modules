@@ -7,9 +7,17 @@
             <x-slot:title>
                 <div class="flex justify-between items-center">
                     <span>{{ __('account::account.api') }}</span>
-                    <x-button.floating size="sm" :tooltip="__('account::api.tooltips.create')">
-                        <i class="icon-plus"></i>
-                    </x-button.floating>
+                    <div class="flex space-x-2">
+                        <x-button.floating size="sm" :tooltip="__('account::api.tooltips.create')"
+                                           wire:click="showCreateAPIKey" loading="showCreateAPIKey">
+                            <i class="icon-plus"></i>
+                        </x-button.floating>
+                        <x-button.floating size="sm" :tooltip="__('account::api.tooltips.docs')" color="info"
+                                           target="_blank"
+                                           :link="url('/api/docs')">
+                            <i class="icon-book-open-text"></i>
+                        </x-button.floating>
+                    </div>
                 </div>
             </x-slot:title>
             <x-table>
@@ -56,7 +64,9 @@
                                 <x-core::human-date :date="$token->created_at"/>
                             </x-table.body.item>
                             <x-table.body.item>
-                                <x-button.floating size="sm" color="danger">
+                                <x-button.floating size="sm" color="danger"
+                                                   wire:click="deleteApiKey('{{ $token->id }}')"
+                                                   loading="deleteApiKey('{{ $token->id }}')">
                                     <i class="icon-trash"></i>
                                 </x-button.floating>
                             </x-table.body.item>

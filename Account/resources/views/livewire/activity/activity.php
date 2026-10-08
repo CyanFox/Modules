@@ -20,6 +20,9 @@ new class extends PenguTable {
         return Activity::query()->where([
             'subject_id' => auth()->id(),
             'subject_type' => userModel()::class,
+        ])->orWhere([
+            'causer_id' => auth()->id(),
+            'causer_type' => userModel()::class,
         ])->orderByDesc('created_at');
     }
 

@@ -17,7 +17,8 @@ return [
     'platform_types' => [
         'desktop' => 'Desktop',
         'tablet' => 'Tablet',
-        'mobile' => 'Mobile',
+        'phone' => 'Phone',
+        'unknown' => 'Unknown',
     ],
 
     'device_types' => [
@@ -33,5 +34,9 @@ return [
     'tooltips' => [
         'logout' => 'Logout Session',
         'qrcode' => 'Show login QR Code'
-    ]
+    ],
+
+    'notifications' => [
+        'logged_out' => 'Session logged out successfully',
+    ],
 ];

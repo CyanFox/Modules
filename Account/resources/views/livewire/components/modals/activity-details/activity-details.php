@@ -12,6 +12,11 @@ new class extends ModalComponent {
 
     public $oldValues;
 
+    public static function modalMaxWidth(): string
+    {
+        return '5xl';
+    }
+
     public function mount()
     {
         $activityLog = Activity::where('id', $this->activityId)

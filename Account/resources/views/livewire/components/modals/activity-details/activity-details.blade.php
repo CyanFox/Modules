@@ -3,7 +3,7 @@
         {{ __('account::modals.activity_details.title') }}
     </x-modal.header>
 
-    <div class="grid md:grid-cols-2 gap-4 p-6">
+    <div class="grid md:grid-cols-2 gap-4 p-4">
         <div class="flex flex-col overflow-x-auto">
             <span class="text-2xl">{{ __('account::modals.activity_details.old_values') }}</span>
             <x-divider/>

@@ -1,12 +1,39 @@
 <?php
 
 use Livewire\Component;
+use Masmerise\Toaster\Toaster;
+use Modules\Core\Traits\WithPasswordConfirmation;
 
 new class extends Component {
+    use WithPasswordConfirmation;
 
     public function logoutSession($sessionId)
     {
-        auth()->user()->sessions()->where('id', $sessionId)->delete();
+        $this->checkPasswordConfirmation()
+            ->passwordCallback(function () use ($sessionId) {
+                auth()->user()->sessions()->where('id', $sessionId)->first()?->delete();
+
+                Toaster::success(__('account::sessions.notifications.logged_out'));
+            })
+            ->checkPassword();
+    }
+
+    public function logoutAppSession($tokenId)
+    {
+        $this->checkPasswordConfirmation()
+            ->passwordCallback(function () use ($tokenId) {
+                auth()->user()->tokens()->where('id', $tokenId)->first()?->delete();
+
+                Toaster::success(__('account::sessions.notifications.logged_out'));
+            })
+            ->checkPassword();
+    }
+
+    public function showLoginQrCode(): void
+    {
+        $this->checkPasswordConfirmation()
+            ->passwordModal('account::components.modals.login-qr-code')
+            ->checkPassword();
     }
 
     public function render()

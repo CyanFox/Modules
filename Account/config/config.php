@@ -3,5 +3,8 @@
 declare(strict_types=1);
 
 return [
-    'name' => 'Account',
+    'enable' => [
+        'delete_account' => true,
+        'change_avatar' => true,
+    ]
 ];

@@ -8,9 +8,11 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
+use Laravel\Sanctum\Sanctum;
 use Masmerise\Toaster\ToasterConfig;
 use Modules\Core\Http\Middleware\Authenticate;
 use Modules\Core\Http\Middleware\CheckLanguage;
+use Modules\Core\Models\PersonalAccessToken;
 use Modules\Core\Models\User;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 use RecursiveDirectoryIterator;
@@ -120,6 +122,8 @@ class CoreServiceProvider extends ModuleServiceProvider
                 URL::forceScheme('https');
             }
         }
+
+        Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
 
         parent::boot();
     }

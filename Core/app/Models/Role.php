@@ -21,7 +21,6 @@ class Role extends \Spatie\Permission\Models\Role
         return LogOptions::defaults()
             ->logFillable()
             ->logExcept($this->hidden)
-            ->logOnlyDirty()
             ->setDescriptionForEvent(function ($eventName) {
                 $changes = $this->getChanges();
                 unset($changes['updated_at']);

@@ -4,9 +4,13 @@ use Illuminate\Validation\Rules\Password;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Masmerise\Toaster\Toaster;
+use Modules\Core\Facades\UserSettings;
 use Modules\Core\Models\Session;
+use Modules\Core\Traits\WithConfirmation;
+use Modules\Core\Traits\WithPasswordConfirmation;
 
 new class extends Component {
+    use WithPasswordConfirmation, WithConfirmation;
 
     #[Url]
     public string $tab = 'profile';
@@ -22,6 +26,47 @@ new class extends Component {
     public string $currentPassword;
     public string $newPassword;
     public string $confirmNewPassword;
+
+    public function enableMfa()
+    {
+        $this->checkPasswordConfirmation()
+            ->passwordModal('account::components.modals.enable-mfa')
+            ->checkPassword();
+    }
+
+    public function regenerateRecoveryCodes()
+    {
+        $this->checkPasswordConfirmation()
+            ->passwordModal('account::components.modals.regenerate-recovery-codes')
+            ->checkPassword();
+    }
+
+    public function disableMfa($confirmed = false)
+    {
+        if ($confirmed) {
+            if (!$this->hasPasswordConfirmedSession()) {
+                return;
+            }
+
+            UserSettings::delete(auth()->id(), 'auth.mfa.recovery_codes');
+            UserSettings::delete(auth()->id(), 'auth.mfa.secret');
+            UserSettings::delete(auth()->id(), 'auth.mfa.enabled');
+
+            Toaster::success(__('account::account.disable_mfa.notifications.disabled'));
+
+            $this->redirect(url()->previous(), true);
+            return;
+        }
+
+        $this->dialog()
+            ->question(__('account::account.disable_mfa.title'),
+                __('account::account.disable_mfa.description'))
+            ->confirm(__('account::account.disable_mfa.buttons.disable'), 'warning')
+            ->icon('icon-triangle-alert')
+            ->needsPasswordConfirmation()
+            ->method('disableMfa', true)
+            ->send();
+    }
 
     public function updateProfile()
     {

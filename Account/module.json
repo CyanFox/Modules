@@ -17,7 +17,7 @@
     ],
     "migration": {
         "seeds": [
-            "Modules\\Account\\Database\\Seeders\\DatabaseSeeder"
+            "Modules\\Account\\Database\\Seeders\\AccountDatabaseSeeder"
         ]
     },
     "require": [

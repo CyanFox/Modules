@@ -45,11 +45,23 @@
 
                 <x-card>
                     <div class="flex flex-wrap gap-2">
-                        <div class="flex-1">
+                        @if(settings('account.enable.delete_account'))
                             <x-button color="danger" class="w-full">
-                                Delete Account
+                                {{ __('account::account.buttons.delete_account') }}
                             </x-button>
-                        </div>
+                        @endif
+                        @if(userSettings('auth.mfa.enabled'))
+                            <x-button color="warning" class="w-full" wire:click="disableMfa">
+                                {{ __('account::account.buttons.disable_mfa') }}
+                            </x-button>
+                            <x-button class="w-full" wire:click="regenerateRecoveryCodes">
+                                {{ __('account::account.buttons.regenerate_recovery_codes') }}
+                            </x-button>
+                        @else
+                            <x-button color="success" class="w-full" wire:click="enableMfa">
+                                {{ __('account::account.buttons.enable_mfa') }}
+                            </x-button>
+                        @endif
                     </div>
                 </x-card>
             </div>
@@ -66,7 +78,7 @@
 
                         <x-divider/>
 
-                        <x-button type="submit" loading="updateProfile">
+                        <x-button type="submit" loading="updateProfile" class="w-fit">
                             {{ __('account::account.buttons.update_profile') }}
                         </x-button>
                     </form>
@@ -85,7 +97,7 @@
 
                         <x-divider/>
 
-                        <x-button type="submit" loading="changePassword">
+                        <x-button type="submit" loading="changePassword" class="w-fit">
                             {{ __('account::account.buttons.change_password') }}
                         </x-button>
                     </form>

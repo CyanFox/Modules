@@ -150,7 +150,6 @@ class User extends Authenticatable implements HasPasskeys, HasMedia
         return LogOptions::defaults()
             ->logFillable()
             ->logExcept($this->hidden)
-            ->logOnlyDirty()
             ->setDescriptionForEvent(function ($eventName) {
                 $changes = $this->getChanges();
                 unset($changes['updated_at']);

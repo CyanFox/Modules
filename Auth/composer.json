@@ -28,6 +28,7 @@
     },
     "require": {
         "danharrin/livewire-rate-limiting": "^v2.3.0",
-        "mews/captcha": "^3.0"
+        "mews/captcha": "^3.0",
+        "pragmarx/google2fa-laravel": "^3.0"
     }
 }

@@ -19,6 +19,19 @@ return [
     'theme' => 'Theme',
     'language' => 'Language',
 
+    'disable_mfa' => [
+        'title' => 'Disable MFA',
+        'description' => 'Are you sure you want to disable MFA? This will make your account more vulnerable',
+
+        'buttons' => [
+            'disable' => 'Disable MFA'
+        ],
+
+        'notifications' => [
+            'disabled' => 'MFA disabled successfully'
+        ],
+    ],
+
     'themes' => [
         'light' => 'Light',
         'dark' => 'Dark',
@@ -39,5 +52,9 @@ return [
     'buttons' => [
         'update_profile' => 'Update Profile',
         'change_password' => 'Change Password',
+        'delete_account' => 'Delete Account',
+        'enable_mfa' => 'Enable MFA',
+        'disable_mfa' => 'Disable MFA',
+        'regenerate_recovery_codes' => 'Regenerate Recovery Codes',
     ],
 ];
