@@ -16,40 +16,40 @@ class SettingsSeeder extends Seeder
     public function run(): void
     {
         $settings = [
-            ['key' => 'auth.unsplash.api_key', 'value' => config('auth.unsplash.api_key'), 'properties' => [SettingsProperty::INTERNAL->value => true, SettingsProperty::ENCRYPTED->value => true]],
-            ['key' => 'auth.unsplash.query', 'value' => config('auth.unsplash.query'), 'properties' => [SettingsProperty::INTERNAL->value => true]],
-            ['key' => 'auth.unsplash.utm', 'value' => config('auth.unsplash.utm'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
-            ['key' => 'auth.unsplash.fallback_css', 'value' => config('auth.unsplash.fallback_css'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
+            ['key' => 'auth.unsplash.api_key', 'value' => config('auth.unsplash.api_key'), 'properties' => [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true]],
+            ['key' => 'auth.unsplash.query', 'value' => config('auth.unsplash.query'), 'properties' => [SettingsProperty::INTERNAL => true]],
+            ['key' => 'auth.unsplash.utm', 'value' => config('auth.unsplash.utm'), 'properties' => [SettingsProperty::INTERNAL => false]],
+            ['key' => 'auth.unsplash.fallback_css', 'value' => config('auth.unsplash.fallback_css'), 'properties' => [SettingsProperty::INTERNAL => false]],
 
-            ['key' => 'auth.login.enabled', 'value' => config('auth.login.enabled'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
-            ['key' => 'auth.login.captcha', 'value' => config('auth.login.captcha'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
-            ['key' => 'auth.login.rate_limit', 'value' => config('auth.login.rate_limit'), 'properties' => [SettingsProperty::INTERNAL->value => true]],
-            ['key' => 'auth.login.redirect', 'value' => config('auth.login.redirect'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
+            ['key' => 'auth.login.enabled', 'value' => config('auth.login.enabled'), 'properties' => [SettingsProperty::INTERNAL => false]],
+            ['key' => 'auth.login.captcha', 'value' => config('auth.login.captcha'), 'properties' => [SettingsProperty::INTERNAL => false]],
+            ['key' => 'auth.login.rate_limit', 'value' => config('auth.login.rate_limit'), 'properties' => [SettingsProperty::INTERNAL => true]],
+            ['key' => 'auth.login.redirect', 'value' => config('auth.login.redirect'), 'properties' => [SettingsProperty::INTERNAL => false]],
 
-            ['key' => 'auth.register.enabled', 'value' => config('auth.register.enabled'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
-            ['key' => 'auth.register.captcha', 'value' => config('auth.register.captcha'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
-            ['key' => 'auth.register.rate_limit', 'value' => config('auth.register.rate_limit'), 'properties' => [SettingsProperty::INTERNAL->value => true]],
+            ['key' => 'auth.register.enabled', 'value' => config('auth.register.enabled'), 'properties' => [SettingsProperty::INTERNAL => false]],
+            ['key' => 'auth.register.captcha', 'value' => config('auth.register.captcha'), 'properties' => [SettingsProperty::INTERNAL => false]],
+            ['key' => 'auth.register.rate_limit', 'value' => config('auth.register.rate_limit'), 'properties' => [SettingsProperty::INTERNAL => true]],
 
-            ['key' => 'auth.forgot_password.enabled', 'value' => config('auth.forgot_password.enabled'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
-            ['key' => 'auth.forgot_password.captcha', 'value' => config('auth.forgot_password.captcha'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
-            ['key' => 'auth.forgot_password.rate_limit', 'value' => config('auth.forgot_password.rate_limit'), 'properties' => [SettingsProperty::INTERNAL->value => true]],
+            ['key' => 'auth.forgot_password.enabled', 'value' => config('auth.forgot_password.enabled'), 'properties' => [SettingsProperty::INTERNAL => false]],
+            ['key' => 'auth.forgot_password.captcha', 'value' => config('auth.forgot_password.captcha'), 'properties' => [SettingsProperty::INTERNAL => false]],
+            ['key' => 'auth.forgot_password.rate_limit', 'value' => config('auth.forgot_password.rate_limit'), 'properties' => [SettingsProperty::INTERNAL => true]],
 
-            ['key' => 'auth.profile.layout', 'value' => config('auth.profile.layout'), 'properties' => [SettingsProperty::INTERNAL->value => false, SettingsProperty::AUTH->value => true]],
-            ['key' => 'auth.profile.enable.change_avatar', 'value' => config('auth.profile.enable.change_avatar'), 'properties' => [SettingsProperty::INTERNAL->value => false, SettingsProperty::AUTH->value => true]],
-            ['key' => 'auth.profile.enable.delete_account', 'value' => config('auth.profile.enable.delete_account'), 'properties' => [SettingsProperty::INTERNAL->value => false, SettingsProperty::AUTH->value => true]],
+            ['key' => 'auth.profile.layout', 'value' => config('auth.profile.layout'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::AUTH => true]],
+            ['key' => 'auth.profile.enable.change_avatar', 'value' => config('auth.profile.enable.change_avatar'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::AUTH => true]],
+            ['key' => 'auth.profile.enable.delete_account', 'value' => config('auth.profile.enable.delete_account'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::AUTH => true]],
 
-            ['key' => 'auth.password.minimum_length', 'value' => config('auth.password.minimum_length'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
-            ['key' => 'auth.password.require.numbers', 'value' => config('auth.password.require.numbers'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
-            ['key' => 'auth.password.require.special_characters', 'value' => config('auth.password.require.special_characters'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
-            ['key' => 'auth.password.require.uppercase_letters', 'value' => config('auth.password.require.uppercase_letters'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
-            ['key' => 'auth.password.require.lowercase_letters', 'value' => config('auth.password.require.lowercase_letters'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
-            ['key' => 'auth.password.require.uncompromised', 'value' => config('auth.password.require.uncompromised'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
+            ['key' => 'auth.password.minimum_length', 'value' => config('auth.password.minimum_length'), 'properties' => [SettingsProperty::INTERNAL => false]],
+            ['key' => 'auth.password.require.numbers', 'value' => config('auth.password.require.numbers'), 'properties' => [SettingsProperty::INTERNAL => false]],
+            ['key' => 'auth.password.require.special_characters', 'value' => config('auth.password.require.special_characters'), 'properties' => [SettingsProperty::INTERNAL => false]],
+            ['key' => 'auth.password.require.uppercase_letters', 'value' => config('auth.password.require.uppercase_letters'), 'properties' => [SettingsProperty::INTERNAL => false]],
+            ['key' => 'auth.password.require.lowercase_letters', 'value' => config('auth.password.require.lowercase_letters'), 'properties' => [SettingsProperty::INTERNAL => false]],
+            ['key' => 'auth.password.require.uncompromised', 'value' => config('auth.password.require.uncompromised'), 'properties' => [SettingsProperty::INTERNAL => false]],
 
-            ['key' => 'auth.logo.css', 'value' => 'width: 70px', 'properties' => [SettingsProperty::INTERNAL->value => false]],
+            ['key' => 'auth.logo.css', 'value' => 'width: 70px', 'properties' => [SettingsProperty::INTERNAL => false]],
         ];
 
         foreach ($settings as $setting) {
-            Settings::set($setting['key'], $setting['value'], properties: array_merge($setting['properties'], [SettingsProperty::MODULE->value => 'Auth']));
+            Settings::set($setting['key'], $setting['value'], properties: array_merge($setting['properties'], [SettingsProperty::MODULE => 'Auth']));
         }
     }
 }

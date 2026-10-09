@@ -22,7 +22,7 @@ new class extends ModalComponent {
             $recoveryCodes[] = str()->random();
         }
 
-        UserSettings::set(auth()->id(), 'auth.mfa.recovery_codes', $recoveryCodes, true, [SettingsProperty::INTERNAL->value => true, SettingsProperty::ENCRYPTED->value => true]);
+        UserSettings::set(auth()->id(), 'auth.mfa.recovery_codes', $recoveryCodes, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true]);
 
         $this->recoveryCodes = $recoveryCodes;
     }
@@ -68,6 +68,6 @@ new class extends ModalComponent {
         $google2FA = new Google2FA();
         $this->mfaSecret = $google2FA->generateSecretKey();
 
-        UserSettings::set(auth()->id(), 'auth.mfa.secret', $this->mfaSecret, true, [SettingsProperty::INTERNAL->value => true, SettingsProperty::ENCRYPTED->value => true]);
+        UserSettings::set(auth()->id(), 'auth.mfa.secret', $this->mfaSecret, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true]);
     }
 };

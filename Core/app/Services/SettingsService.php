@@ -17,7 +17,7 @@ class SettingsService
             return $default;
         }
 
-        $encrypted = $setting->hasProperty(SettingsProperty::ENCRYPTED->value);
+        $encrypted = $setting->hasProperty(SettingsProperty::ENCRYPTED);
 
         if ($encrypted) {
             $value = decrypt($setting->value);
@@ -25,23 +25,23 @@ class SettingsService
             $value = $setting->value;
         }
 
-        return $this->convertTypes($value, $setting->getProperty(SettingsProperty::TYPE->value));
+        return $this->convertTypes($value, $setting->getProperty(SettingsProperty::TYPE));
     }
 
     /**
      * @throws SettingNotFoundException
      */
-    public function set(string $key, mixed $value = null, bool $updateIfExists = false, array $properties = [SettingsProperty::INTERNAL->value => true]): Setting
+    public function set(string $key, mixed $value = null, bool $updateIfExists = false, array $properties = [SettingsProperty::INTERNAL => true]): Setting
     {
         $setting = Setting::where('key', $key)->first();
 
-        if (!$this->getProperty($properties, SettingsProperty::TYPE->value)) {
+        if (!$this->getProperty($properties, SettingsProperty::TYPE)) {
             $properties = array_merge($properties, ['type' => $this->detectType($value)]);
         }
 
         if ($updateIfExists && $setting) {
             $setting->update([
-                'value' => $this->getProperty($properties, SettingsProperty::ENCRYPTED->value) ? encrypt($value) : $value,
+                'value' => $this->getProperty($properties, SettingsProperty::ENCRYPTED) ? encrypt($value) : $value,
                 'properties' => json_encode($properties),
             ]);
         }
@@ -49,7 +49,7 @@ class SettingsService
         if (!$setting) {
             $setting = Setting::create([
                 'key' => $key,
-                'value' => $this->getProperty($properties, SettingsProperty::ENCRYPTED->value) ? encrypt($value) : $value,
+                'value' => $this->getProperty($properties, SettingsProperty::ENCRYPTED) ? encrypt($value) : $value,
                 'properties' => json_encode($properties),
             ]);
         }
@@ -71,19 +71,19 @@ class SettingsService
     /**
      * @throws SettingNotFoundException
      */
-    public function update(string $key, mixed $value = null, array $properties = [SettingsProperty::INTERNAL->value => true]): Setting
+    public function update(string $key, mixed $value = null, array $properties = [SettingsProperty::INTERNAL => true]): Setting
     {
         $setting = Setting::where('key', $key)->first();
         if (!$setting) {
             throw new SettingNotFoundException($key);
         }
 
-        if (!$this->getProperty($properties, SettingsProperty::TYPE->value)) {
+        if (!$this->getProperty($properties, SettingsProperty::TYPE)) {
             $properties = array_merge($properties, ['type' => $this->detectType($value)]);
         }
 
         $setting->update([
-            'value' => $this->getProperty($properties, SettingsProperty::ENCRYPTED->value) ? encrypt($value) : $value,
+            'value' => $this->getProperty($properties, SettingsProperty::ENCRYPTED) ? encrypt($value) : $value,
             'properties' => json_encode($properties),
         ]);
 

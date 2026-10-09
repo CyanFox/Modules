@@ -82,8 +82,8 @@ new class extends Component {
         if ($user) {
             $token = Str::random(64);
             $expiration = now()->addHour();
-            userSettings()->set($user->id, 'auth.forgot_password.token', $token, true, [SettingsProperty::INTERNAL->value => true, SettingsProperty::HIDDEN->value => true]);
-            userSettings()->set($user->id, 'auth.forgot_password.expiration', $expiration, true, [SettingsProperty::INTERNAL->value => true, SettingsProperty::HIDDEN->value => true]);
+            userSettings()->set($user->id, 'auth.forgot_password.token', $token, true, [SettingsProperty::INTERNAL => true, SettingsProperty::HIDDEN => true]);
+            userSettings()->set($user->id, 'auth.forgot_password.expiration', $expiration, true, [SettingsProperty::INTERNAL => true, SettingsProperty::HIDDEN => true]);
 
             Mail::to($user->email)->queue(new ForgotPasswordMail($user, $token, $expiration));
 

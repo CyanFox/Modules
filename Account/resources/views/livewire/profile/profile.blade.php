@@ -6,6 +6,7 @@
         <div class="grid md:grid-cols-3 gap-4">
             <div class="space-y-4">
                 <x-card>
+                    @hook('account.profile.avatar')
                     <div class="flex items-center gap-4">
                         @if(settings('account.enable.change_avatar'))
                             <div class="size-14 relative group">
@@ -25,6 +26,7 @@
                             <span>{{ auth()->user()->username }}</span>
                         </div>
                     </div>
+                    @endhook
                 </x-card>
 
                 <x-card>
@@ -50,6 +52,7 @@
 
                 <x-card>
                     <div class="flex flex-wrap gap-2">
+                        @hook('account.profile.actions')
                         @if(settings('account.enable.delete_account'))
                             <x-button color="danger" class="w-full" wire:click="deleteAccount" loading="deleteAccount">
                                 {{ __('account::account.buttons.delete_account') }}
@@ -68,11 +71,15 @@
                                 {{ __('account::account.buttons.enable_mfa') }}
                             </x-button>
                         @endif
+
+                        @shook('s.account.profile.actions')
+                        @endhook
                     </div>
                 </x-card>
             </div>
             <div class="md:col-span-2 space-y-4">
                 <x-card>
+                    @hook('account.profile.form')
                     <form wire:submit="updateProfile">
                         <div class="grid md:grid-cols-2 gap-4">
                             <x-input wire:model="firstName" :label="__('account::account.first_name')"/>
@@ -88,6 +95,7 @@
                             {{ __('account::account.buttons.update_profile') }}
                         </x-button>
                     </form>
+                    @endhook
                 </x-card>
 
                 <x-card>
@@ -110,6 +118,7 @@
 
 
                     @if($tab == 'password')
+                        @hook('account.profile.password')
                         <form wire:submit="changePassword" class="space-y-4 mt-4">
                             <x-password wire:model="currentPassword" :label="__('account::account.current_password')"
                                         required/>
@@ -127,8 +136,11 @@
                                 {{ __('account::account.buttons.change_password') }}
                             </x-button>
                         </form>
+                        @endhook
                     @elseif($tab == 'passkeys')
+                        @hook('account.profile.passkeys')
                         @livewire('account::components.passkeys')
+                        @endhook
                     @endif
                 </x-card>
             </div>

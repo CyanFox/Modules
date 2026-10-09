@@ -5,9 +5,11 @@
     <div class="space-y-4" wire:transition>
         <x-cf.card hook="account.api">
             <x-slot:title>
+                @hook('account.api.title')
                 <div class="flex justify-between items-center">
                     <span>{{ __('account::account.api') }}</span>
                     <div class="flex space-x-2">
+                        @hook('account.api.title.buttons')
                         <x-button.floating size="sm" :tooltip="__('account::api.tooltips.create')"
                                            wire:click="showCreateAPIKey" loading="showCreateAPIKey">
                             <i class="icon-plus"></i>
@@ -17,11 +19,16 @@
                                            :link="url('/api/docs')">
                             <i class="icon-book-open-text"></i>
                         </x-button.floating>
+
+                        @shook('s.account.api.title.buttons')
+                        @endhook
                     </div>
                 </div>
+                @endhook
             </x-slot:title>
             <x-table>
                 <x-table.header>
+                    @hook('account.api.header')
                     <x-table.header.item>
                         {{ __('account::api.name') }}
                     </x-table.header.item>
@@ -37,6 +44,7 @@
                     <x-table.header.item>
                         {{ __('messages.tables.actions') }}
                     </x-table.header.item>
+                    @endhook
                 </x-table.header>
                 <x-table.body>
                     @foreach(auth()->user()->tokens as $token)
@@ -47,6 +55,7 @@
                                 continue;
                             }
                         @endphp
+                        @hook('account.api.body')
                         <x-table.body.row>
                             <x-table.body.item>
                                 {{ data_get($properties, 'name') }}
@@ -64,13 +73,18 @@
                                 <x-core::human-date :date="$token->created_at"/>
                             </x-table.body.item>
                             <x-table.body.item>
+                                @hook('account.api.actions')
                                 <x-button.floating size="sm" color="danger"
                                                    wire:click="deleteApiKey('{{ $token->id }}')"
                                                    loading="deleteApiKey('{{ $token->id }}')">
                                     <i class="icon-trash"></i>
                                 </x-button.floating>
+
+                                @hook('s.account.api.actions')
+                                @endhook
                             </x-table.body.item>
                         </x-table.body.row>
+                        @endhook
                     @endforeach
                 </x-table.body>
             </x-table>

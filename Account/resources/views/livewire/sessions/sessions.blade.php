@@ -6,6 +6,7 @@
         <x-cf.card :title="__('account::sessions.web_sessions')" hook="account.sessions.web_sessions">
             <x-table>
                 <x-table.header>
+                    @hook('account.sessions.web.header')
                     <x-table.header.item>
                         {{ __('account::sessions.ip_address') }}
                     </x-table.header.item>
@@ -21,6 +22,7 @@
                     <x-table.header.item>
                         {{ __('messages.tables.actions') }}
                     </x-table.header.item>
+                    @endhook
                 </x-table.header>
                 <x-table.body>
                     @foreach(auth()->user()->sessions()->get() as $session)
@@ -36,6 +38,7 @@
                                     '<i class="icon-tablet"></i> ' . __('account::sessions.platform_types.tablet');
                             }
                         @endphp
+                        @hook('account.sessions.web.body')
                         <x-table.body.row>
                             <x-table.body.item>
                                 {{ $session->ip_address }}
@@ -55,6 +58,7 @@
                                 </span>
                             </x-table.body.item>
                             <x-table.body.item>
+                                @hook('account.sessions.web.actions')
                                 @if($session->id != session()->getId())
                                     <x-button.floating wire:click="logoutSession('{{ $session->id }}')"
                                                        :tooltip="__('account::sessions.tooltips.logout')"
@@ -66,14 +70,18 @@
                                         {{ __('account::sessions.your_session') }}
                                     </x-badge>
                                 @endif
+                                @shook('s.account.sessions.web.actions')
+                                @endhook
                             </x-table.body.item>
                         </x-table.body.row>
+                        @endhook
                     @endforeach
                 </x-table.body>
             </x-table>
         </x-cf.card>
         <x-cf.card hook="account.sessions.app_sessions">
             <x-slot:title>
+                @hook('account.sessions.app.title')
                 <div class="flex justify-between">
                     <span>{{ __('account::sessions.app_sessions') }}</span>
                     <x-button.floating size="sm" :tooltip="__('account::sessions.tooltips.qrcode')"
@@ -81,10 +89,12 @@
                         <i class="icon-qr-code"></i>
                     </x-button.floating>
                 </div>
+                @endhook
             </x-slot:title>
 
             <x-table>
                 <x-table.header>
+                    @hook('account.sessions.app.header')
                     <x-table.header.item>
                         {{ __('account::sessions.device') }}
                     </x-table.header.item>
@@ -100,6 +110,7 @@
                     <x-table.header.item>
                         {{ __('messages.tables.actions') }}
                     </x-table.header.item>
+                    @endhook
                 </x-table.header>
                 <x-table.body>
                     @foreach(auth()->user()->tokens as $token)
@@ -110,6 +121,7 @@
                                 continue;
                             }
                         @endphp
+                        @hook('account.sessions.app.body')
                         <x-table.body.row>
                             <x-table.body.item>
                                 <span x-data x-tooltip.raw="{{ data_get($properties, 'uuid') }}">
@@ -129,14 +141,18 @@
                                 <x-core::human-date :date="$token->created_at"/>
                             </x-table.body.item>
                             <x-table.body.item>
+                                @hook('account.sessions.app.actions')
                                 <x-button.floating size="sm" color="danger"
                                                    wire:click="logoutAppSession('{{ $token->id }}')"
                                                    loading="logoutAppSession('{{ $token->id }}')"
                                                    :tooltip="__('account::sessions.tooltips.logout')">
                                     <i class="icon-log-out"></i>
                                 </x-button.floating>
+                                @shook('s.account.sesions.app.actions')
+                                @endhook
                             </x-table.body.item>
                         </x-table.body.row>
+                        @endhook
                     @endforeach
                 </x-table.body>
             </x-table>
