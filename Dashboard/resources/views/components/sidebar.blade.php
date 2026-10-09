@@ -68,7 +68,7 @@
                     <button type="button"
                             class="flex cursor-pointer w-full items-center rounded-radius gap-2 p-2 text-left text-on-surface hover:bg-primary/5 hover:text-on-surface-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:text-on-surface-dark dark:hover:bg-primary-dark/5 dark:hover:text-on-surface-dark-strong dark:focus-visible:outline-primary-dark">
                         <img src="{{ auth()->user()->getAvatar() }}"
-                             class="size-8 object-cover rounded-radius" alt="avatar" aria-hidden="true"/>
+                             class="size-8 object-cover rounded-full" alt="avatar" aria-hidden="true"/>
                         <div class="hidden lg:flex flex-col">
                             <span
                                 class="text-sm font-bold text-on-surface-strong dark:text-on-surface-dark-strong">{{ auth()->user()->getDisplayName() }}</span>

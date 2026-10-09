@@ -5,6 +5,9 @@ use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use Modules\Auth\Facades\Unsplash;
+use Modules\Core\Enums\SettingsProperty;
+use Modules\Core\Facades\UserSettings;
+use PragmaRX\Google2FA\Google2FA;
 
 new class extends Component {
     use WithRateLimiting;
@@ -23,11 +26,11 @@ new class extends Component {
 
     public $captcha;
 
-    public $twoFactorEnabled = false;
+    public $mfaEnabled = false;
 
     public $useRecoveryCode = false;
 
-    public $twoFactorCode;
+    public $mfaCode;
 
     public function attemptLogin()
     {
@@ -72,12 +75,58 @@ new class extends Component {
             ]);
         }
 
+        if (userSettings('auth.mfa.enabled', $this->user->id)) {
+            $this->mfaEnabled = true;
+            return;
+        }
+
         Auth::login($this->user, $this->rememberMe);
 
         activity()
             ->performedOn($this->user)
             ->causedByAnonymous()
             ->log('auth.login');
+
+        if (settings('auth.login.redirect')) {
+            $this->redirect(settings('auth.login.redirect'));
+        }
+
+        $this->redirectIntended(navigate: true);
+    }
+
+    public function checkMfaCode()
+    {
+        $this->validate([
+            'mfaCode' => 'required',
+        ]);
+
+        if ($this->setRateLimit() || !$this->user) {
+            return;
+        }
+
+        $google2FA = new Google2FA();
+
+        $secret = userSettings('auth.mfa.secret', $this->user->id);
+
+        if (!$google2FA->verifyKey($secret, $this->mfaCode)) {
+            $recoveryCodes = userSettings('auth.mfa.recovery_codes', $this->user->id);
+            if (!in_array($this->mfaCode, $recoveryCodes)) {
+                throw ValidationException::withMessages([
+                    'mfaCode' => __('auth::login.invalid_mfa_code'),
+                ]);
+            }
+
+            unset($recoveryCodes[array_search($this->mfaCode, $recoveryCodes)]);
+
+            UserSettings::set($this->user->id, 'auth.mfa.recovery_codes', $recoveryCodes, true, [SettingsProperty::INTERNAL->value => true, SettingsProperty::ENCRYPTED->value => true]);
+        }
+
+        Auth::login($this->user, $this->rememberMe);
+
+        activity()
+            ->performedOn($this->user)
+            ->causedByAnonymous()
+            ->log('auth.login.mfa');
 
         if (settings('auth.login.redirect')) {
             $this->redirect(settings('auth.login.redirect'));

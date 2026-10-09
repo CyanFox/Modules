@@ -57,5 +57,22 @@ return [
             'regenerate' => 'Regenerate Codes',
             'download' => 'Download Codes'
         ],
+    ],
+
+    'change_avatar' => [
+        'title' => 'Change Avatar',
+
+        'avatar' => 'Avatar',
+        'custom_avatar_url' => 'Custom Avatar Url',
+
+        'buttons' => [
+            'change' => 'Change Avatar',
+            'reset' => 'Reset Avatar',
+        ],
+
+        'notifications' => [
+            'changed' => 'Avatar changed successfully.',
+            'reset' => 'Avatar reset successfully.',
+        ],
     ]
 ];

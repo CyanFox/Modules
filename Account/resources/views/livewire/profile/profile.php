@@ -13,19 +13,49 @@ new class extends Component {
     use WithPasswordConfirmation, WithConfirmation;
 
     #[Url]
-    public string $tab = 'profile';
+    public string $tab = 'password';
 
-    public string $theme;
-    public string $language;
+    public ?string $theme;
+    public ?string $language;
 
-    public string $firstName;
-    public string $lastName;
+    public ?string $firstName;
+    public ?string $lastName;
     public string $username;
     public string $email;
 
-    public string $currentPassword;
-    public string $newPassword;
-    public string $confirmNewPassword;
+    public ?string $currentPassword;
+    public ?string $newPassword;
+    public ?string $confirmNewPassword;
+
+    public function deleteAccount($confirmed = false)
+    {
+        if (!settings('account.enable.delete_account')) {
+            return;
+        }
+
+        if ($confirmed) {
+            if (!$this->hasPasswordConfirmedSession()) {
+                return;
+            }
+
+            auth()->user()->delete();
+            auth()->logout();
+
+            Toaster::success(__('account::account.delete_account.notifications.deleted'));
+
+            $this->redirect(route('auth.login'), true);
+            return;
+        }
+
+        $this->dialog()
+            ->question(__('account::account.delete_account.title'),
+                __('account::account.delete_account.description'))
+            ->confirm(__('account::account.delete_account.buttons.delete'), 'danger')
+            ->icon('icon-triangle-alert')
+            ->needsPasswordConfirmation()
+            ->method('deleteAccount', true)
+            ->send();
+    }
 
     public function enableMfa()
     {

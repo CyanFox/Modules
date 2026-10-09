@@ -6,10 +6,12 @@ namespace Modules\Core\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 
@@ -22,7 +24,6 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User $user
- *
  * @method static Builder<static>|UserSetting newModelQuery()
  * @method static Builder<static>|UserSetting newQuery()
  * @method static Builder<static>|UserSetting query()
@@ -33,8 +34,10 @@ use Spatie\Activitylog\Support\LogOptions;
  * @method static Builder<static>|UserSetting whereUpdatedAt($value)
  * @method static Builder<static>|UserSetting whereUserId($value)
  * @method static Builder<static>|UserSetting whereValue($value)
- *
+ * @property-read Collection<int, Activity> $activitiesAsSubject
+ * @property-read int|null $activities_as_subject_count
  * @mixin Eloquent
+ * @mixin IdeHelperUserSetting
  */
 class UserSetting extends Model
 {

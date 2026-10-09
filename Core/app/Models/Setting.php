@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 
@@ -23,7 +24,6 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property Carbon|null $updated_at
  * @property-read Collection<int, SettingAccess> $access
  * @property-read int|null $access_count
- *
  * @method static Builder<static>|Setting newModelQuery()
  * @method static Builder<static>|Setting newQuery()
  * @method static Builder<static>|Setting query()
@@ -33,8 +33,10 @@ use Spatie\Activitylog\Support\LogOptions;
  * @method static Builder<static>|Setting whereProperties($value)
  * @method static Builder<static>|Setting whereUpdatedAt($value)
  * @method static Builder<static>|Setting whereValue($value)
- *
+ * @property-read Collection<int, Activity> $activitiesAsSubject
+ * @property-read int|null $activities_as_subject_count
  * @mixin Eloquent
+ * @mixin IdeHelperSetting
  */
 class Setting extends Model
 {

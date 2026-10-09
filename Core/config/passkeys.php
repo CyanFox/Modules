@@ -14,7 +14,7 @@ return [
      * After a successful authentication attempt using a passkey
      * we'll redirect to this URL.
      */
-    'redirect_to_after_login' => '/dashboard',
+    'redirect_to_after_login' => '/',
 
     /*
      * These class are responsible for performing core tasks regarding passkeys.

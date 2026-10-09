@@ -22,6 +22,8 @@ use Spatie\LaravelPasskeys\Models\Concerns\InteractsWithPasskeys;
 use Spatie\LaravelPasskeys\Models\Passkey;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -51,7 +53,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $roles_count
  * @property-read Collection<int, Permission> $teams
  * @property-read int|null $teams_count
- *
  * @method static Builder<static>|User newModelQuery()
  * @method static Builder<static>|User newQuery()
  * @method static Builder<static>|User permission($permissions, bool $without = false)
@@ -73,8 +74,16 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder<static>|User withoutPermission($permissions)
  * @method static Builder<static>|User withoutRole($roles, ?string $guard = null)
  * @method static Builder<static>|User withoutTeam($teams)
- *
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
+ * @property-read Collection<int, Session> $sessions
+ * @property-read int|null $sessions_count
+ * @property-read Collection<int, PersonalAccessToken> $tokens
+ * @property-read int|null $tokens_count
+ * @property-read Collection<int, UserSetting> $userSettings
+ * @property-read int|null $user_settings_count
  * @mixin Eloquent
+ * @mixin IdeHelperUser
  */
 class User extends Authenticatable implements HasPasskeys, HasMedia
 {

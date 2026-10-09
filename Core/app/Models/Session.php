@@ -6,8 +6,10 @@ namespace Modules\Core\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 
@@ -18,7 +20,6 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property string|null $user_agent
  * @property string $payload
  * @property int $last_activity
- *
  * @method static Builder<static>|Session newModelQuery()
  * @method static Builder<static>|Session newQuery()
  * @method static Builder<static>|Session query()
@@ -28,10 +29,11 @@ use Spatie\Activitylog\Support\LogOptions;
  * @method static Builder<static>|Session wherePayload($value)
  * @method static Builder<static>|Session whereUserAgent($value)
  * @method static Builder<static>|Session whereUserId($value)
- *
  * @property-read User|null $user
- *
+ * @property-read Collection<int, Activity> $activitiesAsSubject
+ * @property-read int|null $activities_as_subject_count
  * @mixin Eloquent
+ * @mixin IdeHelperSession
  */
 class Session extends Model
 {
@@ -56,6 +58,11 @@ class Session extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(userModel());
+    }
+
+    public function getDisplayName(): string
+    {
+        return $this->ip_address ?? '';
     }
 
     public function getActivitylogOptions(): LogOptions

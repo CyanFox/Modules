@@ -1,5 +1,11 @@
 import './toaster';
 
+import {browserSupportsWebAuthn, startAuthentication, startRegistration,} from '@simplewebauthn/browser'
+
+window.browserSupportsWebAuthn = browserSupportsWebAuthn;
+window.startAuthentication = startAuthentication;
+window.startRegistration = startRegistration;
+
 if (import.meta.env.VITE_REVERB_ENABLED === 'true') {
     let wasDisconnected = false;
 

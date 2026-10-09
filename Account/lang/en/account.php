@@ -19,6 +19,9 @@ return [
     'theme' => 'Theme',
     'language' => 'Language',
 
+    'name' => 'Name',
+    'last_used' => 'Last Used',
+
     'disable_mfa' => [
         'title' => 'Disable MFA',
         'description' => 'Are you sure you want to disable MFA? This will make your account more vulnerable',
@@ -30,6 +33,37 @@ return [
         'notifications' => [
             'disabled' => 'MFA disabled successfully'
         ],
+    ],
+
+    'delete_account' => [
+        'title' => 'Delete Account',
+        'description' => 'Are you sure you want to delete your account? This action cannot be undone.',
+
+        'buttons' => [
+            'delete' => 'Delete Account'
+        ],
+
+        'notifications' => [
+            'deleted' => 'Account deleted successfully.'
+        ],
+    ],
+
+    'delete_passkey' => [
+        'title' => 'Delete Passkey',
+        'description' => 'Are you sure you want to delete this passkey? This action cannot be undone.',
+
+        'buttons' => [
+            'delete' => 'Delete Passkey'
+        ],
+
+        'notifications' => [
+            'deleted' => 'Passkey deleted successfully.'
+        ],
+    ],
+
+    'tabs' => [
+        'password' => 'Password',
+        'passkeys' => 'Passkeys',
     ],
 
     'themes' => [
@@ -47,6 +81,7 @@ return [
         'theme_updated' => 'Theme updated successfully',
         'profile_updated' => 'Profile updated successfully',
         'password_changed' => 'Password changed successfully',
+        'passkey_created' => 'Passkey created successfully',
     ],
 
     'buttons' => [
@@ -56,5 +91,6 @@ return [
         'enable_mfa' => 'Enable MFA',
         'disable_mfa' => 'Disable MFA',
         'regenerate_recovery_codes' => 'Regenerate Recovery Codes',
+        'create_passkey' => 'Create Passkey',
     ],
 ];

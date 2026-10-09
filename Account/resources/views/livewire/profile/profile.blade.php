@@ -6,15 +6,20 @@
         <div class="grid md:grid-cols-3 gap-4">
             <div class="space-y-4">
                 <x-card>
-                    <div class="flex gap-4">
-                        <div class="size-12 relative group">
+                    <div class="flex items-center gap-4">
+                        @if(settings('account.enable.change_avatar'))
+                            <div class="size-14 relative group">
+                                <img src="{{ auth()->user()->getAvatar() }}" alt="Avatar"
+                                     class="absolute inset-0 bg-cover bg-center z-0 rounded-full group-hover:opacity-70 transition-opacity duration-300 size-14">
+                                <div
+                                    wire:click="$dispatch('openModal', {modalComponent: 'account::components.modals.change-avatar'})"
+                                    class="opacity-0 group-hover:opacity-100 hover:cursor-pointer duration-300 absolute inset-0 z-10 flex justify-center items-center text-xl text-white font-semibold">
+                                    <i class="icon-upload"></i></div>
+                            </div>
+                        @else
                             <img src="{{ auth()->user()->getAvatar() }}" alt="Avatar"
-                                 class="absolute inset-0 bg-cover bg-center z-0 rounded-3xl group-hover:opacity-70 transition-opacity duration-300">
-                            <div
-                                wire:click="$dispatch('openModal', {component: 'auth::components.modals.change-avatar'})"
-                                class="opacity-0 group-hover:opacity-100 hover:cursor-pointer duration-300 absolute inset-0 z-10 flex justify-center items-center text-xl text-white font-semibold">
-                                <i class="icon-upload"></i></div>
-                        </div>
+                                 class="rounded-full size-14">
+                        @endif
                         <div class="flex flex-col">
                             <span>{{ auth()->user()->getDisplayName() }}</span>
                             <span>{{ auth()->user()->username }}</span>
@@ -46,19 +51,20 @@
                 <x-card>
                     <div class="flex flex-wrap gap-2">
                         @if(settings('account.enable.delete_account'))
-                            <x-button color="danger" class="w-full">
+                            <x-button color="danger" class="w-full" wire:click="deleteAccount" loading="deleteAccount">
                                 {{ __('account::account.buttons.delete_account') }}
                             </x-button>
                         @endif
                         @if(userSettings('auth.mfa.enabled'))
-                            <x-button color="warning" class="w-full" wire:click="disableMfa">
+                            <x-button color="warning" class="w-full" wire:click="disableMfa" loading="disableMfa">
                                 {{ __('account::account.buttons.disable_mfa') }}
                             </x-button>
-                            <x-button class="w-full" wire:click="regenerateRecoveryCodes">
+                            <x-button class="w-full" wire:click="regenerateRecoveryCodes"
+                                      loading="regenerateRecoveryCodes">
                                 {{ __('account::account.buttons.regenerate_recovery_codes') }}
                             </x-button>
                         @else
-                            <x-button color="success" class="w-full" wire:click="enableMfa">
+                            <x-button color="success" class="w-full" wire:click="enableMfa" loading="enableMfa">
                                 {{ __('account::account.buttons.enable_mfa') }}
                             </x-button>
                         @endif
@@ -78,29 +84,52 @@
 
                         <x-divider/>
 
-                        <x-button type="submit" loading="updateProfile" class="w-fit">
+                        <x-button type="submit" loading="updateProfile" class="md:w-fit">
                             {{ __('account::account.buttons.update_profile') }}
                         </x-button>
                     </form>
                 </x-card>
 
                 <x-card>
-                    <form wire:submit="changePassword" class="space-y-4">
-                        <x-password wire:model="currentPassword" :label="__('account::account.current_password')"
-                                    required/>
+                    <x-tab wire:model="tab">
+                        @hook('account.password.tabs')
+                        <x-tab.item class="flex-1 flex items-center justify-center" uuid="password"
+                                    wire:click="$set('tab', 'password')">
+                            <i class="icon-square-asterisk"></i>
+                            <span class="ml-2">{{ __('account::account.tabs.password') }}</span>
+                        </x-tab.item>
+                        <x-tab.item class="flex-1 flex items-center justify-center" uuid="passkeys"
+                                    wire:click="$set('tab', 'passkeys')">
+                            <i class="icon-key-round"></i>
+                            <span class="ml-2">{{ __('account::account.tabs.passkeys') }}</span>
+                        </x-tab.item>
 
-                        <div class="grid md:grid-cols-2 gap-4">
-                            <x-password wire:model="newPassword" :label="__('account::account.new_password')" required/>
-                            <x-password wire:model="confirmNewPassword"
-                                        :label="__('account::account.confirm_new_password')" required/>
-                        </div>
+                        @shook('s.account.password.tabs')
+                        @endhook
+                    </x-tab>
 
-                        <x-divider/>
 
-                        <x-button type="submit" loading="changePassword" class="w-fit">
-                            {{ __('account::account.buttons.change_password') }}
-                        </x-button>
-                    </form>
+                    @if($tab == 'password')
+                        <form wire:submit="changePassword" class="space-y-4 mt-4">
+                            <x-password wire:model="currentPassword" :label="__('account::account.current_password')"
+                                        required/>
+
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <x-password wire:model="newPassword" :label="__('account::account.new_password')"
+                                            required/>
+                                <x-password wire:model="confirmNewPassword"
+                                            :label="__('account::account.confirm_new_password')" required/>
+                            </div>
+
+                            <x-divider/>
+
+                            <x-button type="submit" loading="changePassword" class="md:w-fit">
+                                {{ __('account::account.buttons.change_password') }}
+                            </x-button>
+                        </form>
+                    @elseif($tab == 'passkeys')
+                        @livewire('account::components.passkeys')
+                    @endif
                 </x-card>
             </div>
         </div>

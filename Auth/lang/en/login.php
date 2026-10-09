@@ -14,6 +14,9 @@ return [
     'remember_me' => 'Remember me',
     'captcha' => 'Captcha',
 
+    'mfa_recovery_code' => 'MFA or recovery code',
+    'invalid_mfa_code' => 'Invalid MFA or recovery code',
+
     'tabs' => [
         'login' => 'Login',
         'register' => 'Register',

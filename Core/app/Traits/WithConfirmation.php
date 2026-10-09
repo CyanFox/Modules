@@ -85,10 +85,9 @@ trait WithConfirmation
         return $this;
     }
 
-    public function dispatchEvent(string $to, string $event, ...$args): static
+    public function dispatchEvent(string $event, ...$args): static
     {
         $this->confirmationData['event'] = [
-            'to' => $to,
             'event' => $event,
             'args' => $args,
         ];
@@ -101,7 +100,7 @@ trait WithConfirmation
         $this->dispatch('openModal', 'core::components.modals.confirmation', [
             'title' => $this->confirmationData['title'],
             'description' => $this->confirmationData['description'],
-            'cancel' => $this->confirmationData['cancel'] ?? __('messages.buttons.cancel'),
+            'cancel' => $this->confirmationData['cancel'] ?? '',
             'cancelColor' => $this->confirmationData['cancelColor'] ?? 'primary',
             'confirm' => $this->confirmationData['confirm'] ?? __('messages.buttons.confirm'),
             'confirmColor' => $this->confirmationData['confirmColor'] ?? 'success',
@@ -120,11 +119,10 @@ trait WithConfirmation
             if (($event['type'] ?? null) === 'callback') {
                 $callback = unserialize($event['payload'])->getClosure();
                 $callback();
-            } elseif (isset($event['to'], $event['event'])) {
-                $to = $event['to'];
+            } elseif (isset($event['event'])) {
                 $eventName = $event['event'];
                 $arguments = $event['args'] ?? [];
-                $this->dispatch($eventName, ...$arguments)->to($to);
+                $this->dispatch($eventName, ...$arguments);
             } elseif (isset($event['class'], $event['method'])) {
                 $class = $event['class'];
                 $method = $event['method'];
