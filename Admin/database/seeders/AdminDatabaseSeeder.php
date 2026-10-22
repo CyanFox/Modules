@@ -13,6 +13,7 @@ class AdminDatabaseSeeder extends Seeder
     {
         $this->call([
             PermissionsSeeder::class,
+            SettingsSeeder::class,
         ]);
     }
 }

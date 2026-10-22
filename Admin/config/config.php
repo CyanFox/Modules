@@ -3,5 +3,9 @@
 declare(strict_types=1);
 
 return [
-    'name' => 'Admin',
+    'logo' => [
+        'css' => 'height: 50px',
+        'show_app_name' => true,
+        'show_logo' => true,
+    ],
 ];

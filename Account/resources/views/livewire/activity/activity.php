@@ -29,14 +29,17 @@ new class extends PenguTable {
     public function columns(): array
     {
         return [
-            Column::make(__('messages.tables.id'), 'id'),
-            Column::make(__('account::activity.description'), 'description'),
+            Column::make(__('messages.tables.id'), 'id')
+                ->sortable(),
+            Column::make(__('account::activity.description'), 'description')
+                ->searchable(),
             Column::make(__('account::activity.caused_by'), 'causer_id')
                 ->format(fn($col, $row) => $row->causer ? $row->causer->getDisplayName() : __('account::activity.unknown')),
             Column::make(__('account::activity.subject'), 'subject_id')
                 ->format(fn($col, $row) => $row->subject ? $row->subject->getDisplayName() : __('account::activity.unknown')),
             Column::make(__('account::activity.performed_at'), 'created_at')
                 ->format(fn($value) => Blade::render('<x-core::human-date date="' . $value . '"/>'))
+                ->sortable()
                 ->html(),
             Column::actions(__('messages.tables.actions'), function ($row) {
                 return [

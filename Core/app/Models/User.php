@@ -14,6 +14,7 @@ use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\Core\Events\Users\UserCreatedEvent;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
@@ -169,5 +170,14 @@ class User extends Authenticatable implements HasPasskeys, HasMedia
 
                 return 'user.' . $eventName;
             });
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function (User $user): void {
+            UserCreatedEvent::dispatch($user);
+        });
     }
 }

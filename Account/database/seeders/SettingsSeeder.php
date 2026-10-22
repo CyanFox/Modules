@@ -14,8 +14,8 @@ class SettingsSeeder extends Seeder
     public function run(): void
     {
         $settings = [
-            ['key' => 'account.enable.delete_account', 'value' => config('account.enable.delete_account'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::AUTH => true]],
-            ['key' => 'account.enable.change_avatar', 'value' => config('account.enable.change_avatar'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::AUTH => true]],
+            ['key' => 'account.enable.delete_account', 'value' => config('account.enable.delete_account'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::AUTH => true, SettingsProperty::LANG_KEY => 'account::settings.keys.enable.delete_account']],
+            ['key' => 'account.enable.change_avatar', 'value' => config('account.enable.change_avatar'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::AUTH => true, SettingsProperty::LANG_KEY => 'account::settings.keys.enable.change_avatar']],
         ];
 
         foreach ($settings as $setting) {

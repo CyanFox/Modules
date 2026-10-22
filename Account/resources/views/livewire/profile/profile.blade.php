@@ -34,8 +34,8 @@
                     <div class="space-y-4">
                         <x-select wire:model="language" wire:change="updateLanguage"
                                   :label="__('account::account.language')">
-                            <option value="en">{{ __('account::account.languages.en') }}</option>
-                            <option value="de">{{ __('account::account.languages.de') }}</option>
+                            <option value="en">{{ __('messages.languages.en') }}</option>
+                            <option value="de">{{ __('messages.languages.de') }}</option>
 
                             @shook('s.global.languages')
                         </x-select>

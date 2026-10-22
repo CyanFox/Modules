@@ -1,7 +1,7 @@
 {
     "name": "Dashboard",
     "alias": "dashboard",
-    "description": "Base Template",
+    "description": "Dashboard Module",
     "keywords": [
         "cyanfox",
         "base"
@@ -11,7 +11,7 @@
     ],
     "license": "MIT",
     "version": "2026.9.0",
-    "remote_version_url": "https://raw.githubusercontent.com/CyanFox/Modules/main/Admin/module.json",
+    "remote_version_url": "https://git.cyanfox.de/CyanFox/Modules/raw/branch/main/Dashboard/module.json",
     "priority": 300,
     "providers": [
         "Modules\\Dashboard\\Providers\\DashboardServiceProvider"
@@ -20,5 +20,9 @@
         "seeds": [
             "Modules\\Dashboard\\Database\\Seeders\\DashboardDatabaseSeeder"
         ]
-    }
+    },
+    "require": [
+        "Core",
+        "Auth"
+    ]
 }

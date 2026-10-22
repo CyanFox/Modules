@@ -51,6 +51,9 @@ class AccountServiceProvider extends ModuleServiceProvider
             LaraHooks::listen('s.dashboard.profile.items', function () {
                 return Blade::render('<x-dashboard::profile.item icon="icon-user" route="account.profile">' . __('account::account.profile') . '</x-dashboard::profile.item>');
             }, 10);
+            LaraHooks::listen('s.admin.profile.items', function () {
+                return Blade::render('<x-admin::profile.item icon="icon-user" route="account.profile">' . __('account::account.profile') . '</x-admin::profile.item>');
+            }, 10);
         }
 
         parent::boot();

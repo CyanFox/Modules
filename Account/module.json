@@ -11,6 +11,7 @@
     ],
     "license": "MIT",
     "version": "2026.9.0",
+    "remote_version_url": "https://git.cyanfox.de/CyanFox/Modules/raw/branch/main/Account/module.json",
     "priority": 300,
     "providers": [
         "Modules\\Account\\Providers\\AccountServiceProvider"

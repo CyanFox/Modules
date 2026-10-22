@@ -71,11 +71,6 @@ return [
         'dark' => 'Dark',
     ],
 
-    'languages' => [
-        'en' => 'English',
-        'de' => 'German',
-    ],
-
     'notifications' => [
         'language_updated' => 'Language updated successfully',
         'theme_updated' => 'Theme updated successfully',

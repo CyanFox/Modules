@@ -2,7 +2,9 @@
 
 namespace Modules\Admin\Providers;
 
+use Illuminate\Support\Facades\Blade;
 use Nwidart\Modules\Support\ModuleServiceProvider;
+use RealZone22\LaraHooks\Facades\LaraHooks;
 
 class AdminServiceProvider extends ModuleServiceProvider
 {
@@ -42,4 +44,18 @@ class AdminServiceProvider extends ModuleServiceProvider
     // {
     //     $schedule->command('inspire')->hourly();
     // }
+
+    public function boot(): void
+    {
+        if (!app()->runningInConsole()) {
+            LaraHooks::listen('s.dashboard.profile.items', function () {
+                if (auth()->check() && auth()->user()->can('admin.dashboard')) {
+                    return Blade::render('<x-dashboard::profile.item icon="icon-wrench" route="admin.dashboard">' . __('admin::admin.admin') . '</x-dashboard::profile.item>');
+                }
+                return null;
+            }, 15);
+        }
+
+        parent::boot();
+    }
 }

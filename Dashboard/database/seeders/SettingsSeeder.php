@@ -16,9 +16,9 @@ class SettingsSeeder extends Seeder
     public function run(): void
     {
         $settings = [
-            ['key' => 'dashboard.logo.css', 'value' => config('dashboard.logo.css'), 'properties' => [SettingsProperty::INTERNAL => false]],
-            ['key' => 'dashboard.logo.show_app_name', 'value' => config('dashboard.logo.show_app_name'), 'properties' => [SettingsProperty::INTERNAL => false]],
-            ['key' => 'dashboard.logo.show_logo', 'value' => config('dashboard.logo.show_logo'), 'properties' => [SettingsProperty::INTERNAL => false]],
+            ['key' => 'dashboard.logo.css', 'value' => config('dashboard.logo.css'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'dashboard::settings.logo.css']],
+            ['key' => 'dashboard.logo.show_app_name', 'value' => config('dashboard.logo.show_app_name'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'dashboard::settings.logo.show_app_name']],
+            ['key' => 'dashboard.logo.show_logo', 'value' => config('dashboard.logo.show_logo'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'dashboard::settings.logo.show_logo']],
         ];
 
         foreach ($settings as $setting) {

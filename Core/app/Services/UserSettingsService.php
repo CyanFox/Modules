@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Core\Services;
 
+use Exception;
 use Modules\Core\Enums\SettingsProperty;
 use Modules\Core\Exceptions\SettingNotFoundException;
 use Modules\Core\Models\UserSetting;
@@ -20,82 +21,16 @@ class UserSettingsService
         $encrypted = $setting->hasProperty(SettingsProperty::ENCRYPTED);
 
         if ($encrypted) {
-            $value = decrypt($setting->value);
+            try {
+                $value = decrypt($setting->value);
+            } catch (Exception) {
+                $value = $setting->value;
+            }
         } else {
             $value = $setting->value;
         }
 
         return $this->convertTypes($value, $setting->getProperty(SettingsProperty::TYPE));
-    }
-
-    /**
-     * @throws SettingNotFoundException
-     */
-    public function set(int $userId, string $key, mixed $value = null, bool $updateIfExists = false, array $properties = [SettingsProperty::INTERNAL => false]): UserSetting
-    {
-        $setting = UserSetting::where(['user_id' => $userId, 'key' => $key])->first();
-
-        if (!$this->getProperty($properties, SettingsProperty::TYPE)) {
-            $properties = array_merge($properties, ['type' => $this->detectType($value)]);
-        }
-
-        if ($updateIfExists && $setting) {
-            $setting->update([
-                'user_id' => $userId,
-                'value' => $this->getProperty($properties, SettingsProperty::ENCRYPTED) ? encrypt($value) : $value,
-                'properties' => json_encode($properties),
-            ]);
-        }
-
-        if (!$setting) {
-            $setting = UserSetting::create([
-                'user_id' => $userId,
-                'key' => $key,
-                'value' => $this->getProperty($properties, SettingsProperty::ENCRYPTED) ? encrypt($value) : $value,
-                'properties' => json_encode($properties),
-            ]);
-        }
-
-        return $setting;
-    }
-
-    /**
-     * @throws SettingNotFoundException
-     */
-    public function update(int $userId, string $key, mixed $value = null, array $properties = [SettingsProperty::INTERNAL => false]): UserSetting
-    {
-        $setting = UserSetting::where(['user_id' => $userId, 'key' => $key])->first();
-        if (!$setting) {
-            throw new SettingNotFoundException($key);
-        }
-
-        if (!$this->getProperty($properties, SettingsProperty::TYPE)) {
-            $properties = array_merge($properties, ['type' => $this->detectType($value)]);
-        }
-
-        $setting->update([
-            'user_id' => $userId,
-            'value' => $this->getProperty($properties, SettingsProperty::ENCRYPTED) ? encrypt($value) : $value,
-            'properties' => json_encode($properties),
-        ]);
-
-        return $setting;
-    }
-
-    public function delete(int $userId, string $key): bool|null|int
-    {
-        return UserSetting::where(['user_id' => $userId, 'key' => $key])->delete();
-    }
-
-    public function detectType(mixed $value): string
-    {
-        return match (true) {
-            is_int($value) => 'int',
-            is_float($value) => 'float',
-            is_bool($value) => 'bool',
-            is_array($value) => 'array',
-            default => 'string',
-        };
     }
 
     private function convertTypes(mixed $value, ?string $type): mixed
@@ -114,5 +49,95 @@ class UserSettingsService
     private function getProperty(array $properties, string $property): mixed
     {
         return $properties[$property] ?? null;
+    }
+
+    /**
+     * @throws SettingNotFoundException
+     */
+    public function set(int $userId, string $key, mixed $value = null, bool $updateIfExists = false, ?array $properties = null): UserSetting
+    {
+        $setting = UserSetting::where(['user_id' => $userId, 'key' => $key])->first();
+
+        if ($updateIfExists && $setting) {
+            $properties = $this->mergeProperties($setting, $properties);
+            if (!$this->getProperty($properties, SettingsProperty::TYPE)) {
+                $properties['type'] = $this->detectType($value);
+            }
+
+            $setting->update([
+                'user_id' => $userId,
+                'value' => $this->getProperty($properties, SettingsProperty::ENCRYPTED) ? encrypt($value) : $value,
+                'properties' => json_encode($properties),
+            ]);
+        }
+
+        if (!$setting) {
+            $properties ??= [SettingsProperty::INTERNAL => false];
+            if (!$this->getProperty($properties, SettingsProperty::TYPE)) {
+                $properties['type'] = $this->detectType($value);
+            }
+
+            $setting = UserSetting::create([
+                'user_id' => $userId,
+                'key' => $key,
+                'value' => $this->getProperty($properties, SettingsProperty::ENCRYPTED) ? encrypt($value) : $value,
+                'properties' => json_encode($properties),
+            ]);
+        }
+
+        return $setting;
+    }
+
+    public function detectType(mixed $value): string
+    {
+        return match (true) {
+            is_int($value) => 'int',
+            is_float($value) => 'float',
+            is_bool($value) => 'bool',
+            is_array($value) => 'array',
+            default => 'string',
+        };
+    }
+
+    /**
+     * @throws SettingNotFoundException
+     */
+    public function update(int $userId, string $key, mixed $value = null, ?array $properties = null): UserSetting
+    {
+        $setting = UserSetting::where(['user_id' => $userId, 'key' => $key])->first();
+        if (!$setting) {
+            throw new SettingNotFoundException($key);
+        }
+
+        $properties = $this->mergeProperties($setting, $properties);
+        if (!$this->getProperty($properties, SettingsProperty::TYPE)) {
+            $properties['type'] = $this->detectType($value);
+        }
+
+        $setting->update([
+            'user_id' => $userId,
+            'value' => $this->getProperty($properties, SettingsProperty::ENCRYPTED) ? encrypt($value) : $value,
+            'properties' => json_encode($properties),
+        ]);
+
+        return $setting;
+    }
+
+    public function delete(int $userId, string $key): bool|null|int
+    {
+        return UserSetting::where(['user_id' => $userId, 'key' => $key])->delete();
+    }
+
+    private function mergeProperties(UserSetting $setting, ?array $properties): array
+    {
+        $existingProperties = $setting->properties;
+        if (is_string($existingProperties)) {
+            $existingProperties = json_decode($existingProperties, true) ?? [];
+        }
+        if (!is_array($existingProperties)) {
+            $existingProperties = [];
+        }
+
+        return array_merge($existingProperties, $properties ?? []);
     }
 }

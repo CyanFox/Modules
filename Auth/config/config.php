@@ -27,10 +27,6 @@ return [
 
     'profile' => [
         'layout' => 'auth::components.layouts.auth',
-        'enable' => [
-            'change_avatar' => true,
-            'delete_account' => true,
-        ],
     ],
 
     'password' => [

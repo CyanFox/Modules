@@ -1,7 +1,7 @@
 {
     "name": "Admin",
     "alias": "admin",
-    "description": "Base Template",
+    "description": "Admin Module",
     "keywords": [
         "cyanfox",
         "base"
@@ -11,7 +11,7 @@
     ],
     "license": "MIT",
     "version": "2026.9.0",
-    "remote_version_url": "https://raw.githubusercontent.com/CyanFox/Modules/main/Admin/module.json",
+    "remote_version_url": "https://git.cyanfox.de/CyanFox/Modules/raw/branch/main/Admin/module.json",
     "priority": 300,
     "providers": [
         "Modules\\Admin\\Providers\\AdminServiceProvider"
@@ -20,5 +20,9 @@
         "seeds": [
             "Modules\\Admin\\Database\\Seeders\\AdminDatabaseSeeder"
         ]
-    }
+    },
+    "require": [
+        "Core",
+        "Auth"
+    ]
 }

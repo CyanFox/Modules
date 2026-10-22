@@ -12,6 +12,7 @@
     ],
     "license": "MIT",
     "version": "2026.9.0",
+    "remote_version_url": "https://git.cyanfox.de/CyanFox/Modules/raw/branch/main/Core/module.json",
     "priority": 100,
     "providers": [
         "Modules\\Core\\Providers\\CoreServiceProvider"

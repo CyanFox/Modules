@@ -116,8 +116,10 @@
 
         <div class="absolute bottom-6 left-0 p-4 sm:bottom-0 sm:right-0 sm:left-auto">
             <x-select wire:change="changeLanguage($event.target.value)">
-                <option value="en" @if(app()->getLocale() == 'en') selected @endif>English</option>
-                <option value="de" @if(app()->getLocale() == 'de') selected @endif>Deutsch</option>
+                <option value="en"
+                        @if(app()->getLocale() == 'en') selected @endif>{{ __('messages.languages.en') }}</option>
+                <option value="de"
+                        @if(app()->getLocale() == 'de') selected @endif>{{ __('messages.languages.de') }}</option>
                 @shook('s.global.languages')
             </x-select>
         </div>

@@ -9,6 +9,12 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 class EventServiceProvider extends ServiceProvider
 {
     /**
+     * Indicates if events should be discovered.
+     *
+     * @var bool
+     */
+    protected static $shouldDiscoverEvents = true;
+    /**
      * The event handler mappings for the application.
      *
      * @var array<string, array<int, string>>
@@ -16,14 +22,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [];
 
     /**
-     * Indicates if events should be discovered.
-     *
-     * @var bool
-     */
-    protected static $shouldDiscoverEvents = true;
-
-    /**
      * Configure the proper event listeners for email verification.
      */
-    protected function configureEmailVerification(): void {}
+    protected function configureEmailVerification(): void
+    {
+    }
 }
