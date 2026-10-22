@@ -20,9 +20,8 @@
         <form wire:submit="createApiKey">
             <div class="p-4 space-y-4">
                 <x-input wire:model="name" :label="__('account::modals.create_api_key.name')" autofocus required/>
-                <x-select.multiple wire:model="permissions" :label="__('account::modals.create_api_key.permissions')"
-                                   required>
-                    @foreach(auth()->user()->permissions as $permission)
+                <x-select.multiple wire:model="permissions" :label="__('account::modals.create_api_key.permissions')">
+                    @foreach(auth()->user()->getAllPermissions() as $permission)
                         <option value="{{ $permission->name }}">{{ $permission->name }}</option>
                     @endforeach
                 </x-select.multiple>

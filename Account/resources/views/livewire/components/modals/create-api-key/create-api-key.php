@@ -5,7 +5,7 @@ use RealZone22\PenguBlade\ModalComponent;
 new class extends ModalComponent {
 
     public string $name;
-    public array $permissions = [];
+    public ?array $permissions = [];
 
     public string $token;
 
@@ -13,7 +13,7 @@ new class extends ModalComponent {
     {
         $this->validate([
             'name' => 'required|string|max:255',
-            'permissions' => 'required|array',
+            'permissions' => 'nullable|array',
         ]);
 
         $this->token = auth()->user()->createToken(json_encode(['name' => $this->name, 'type' => 'api']), $this->permissions)->plainTextToken;

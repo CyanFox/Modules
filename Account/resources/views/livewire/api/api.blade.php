@@ -80,7 +80,7 @@
                                     <i class="icon-trash"></i>
                                 </x-button.floating>
 
-                                @hook('s.account.api.actions')
+                                @shook('s.account.api.actions')
                                 @endhook
                             </x-table.body.item>
                         </x-table.body.row>
