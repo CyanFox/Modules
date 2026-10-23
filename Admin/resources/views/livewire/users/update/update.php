@@ -39,7 +39,7 @@ new class extends Component {
             'username' => $this->username,
             'email' => $this->email,
             'password' => $this->password,
-            'disabled' => $this->disabled,
+            'disabled' => $this->disabled ?? false,
         ]);
 
         $this->user->syncRoles($this->roles);

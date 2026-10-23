@@ -16,9 +16,9 @@ class SettingsSeeder extends Seeder
     public function run(): void
     {
         $settings = [
-            ['key' => 'admin.logo.css', 'value' => config('admin.logo.css'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'admin::settings.keys.logo.css']],
-            ['key' => 'admin.logo.show_app_name', 'value' => config('admin.logo.show_app_name'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'admin::settings.keys.logo.show_app_name']],
-            ['key' => 'admin.logo.show_logo', 'value' => config('admin.logo.show_logo'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'admin::settings.keys.logo.show_logo']],
+            ['key' => 'admin.logo.css', 'value' => config('admin.logo.css'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'admin::settings.keys.logo.css', SettingsProperty::PERMISSIONS => ['admin.dashboard']]],
+            ['key' => 'admin.logo.show_app_name', 'value' => config('admin.logo.show_app_name'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'admin::settings.keys.logo.show_app_name', SettingsProperty::PERMISSIONS => ['admin.dashboard']]],
+            ['key' => 'admin.logo.show_logo', 'value' => config('admin.logo.show_logo'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'admin::settings.keys.logo.show_logo', SettingsProperty::PERMISSIONS => ['admin.dashboard']]],
         ];
 
         foreach ($settings as $setting) {

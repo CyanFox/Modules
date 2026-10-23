@@ -58,12 +58,10 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logFillable()
+            ->logAll()
             ->logExcept($this->hidden)
+            ->dontLogIfAttributesChangedOnly(['last_used_at', 'updated_at'])
             ->setDescriptionForEvent(function ($eventName) {
-                $changes = $this->getChanges();
-                unset($changes['updated_at']);
-
                 return 'user.api_key.' . $eventName;
             });
     }

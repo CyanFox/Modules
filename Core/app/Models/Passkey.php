@@ -54,11 +54,10 @@ class Passkey extends BasePassKey
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['name', 'last_used_at'])
+            ->logAll()
+            ->logExcept($this->hidden)
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->setDescriptionForEvent(function ($eventName) {
-                $changes = $this->getChanges();
-                unset($changes['updated_at']);
-
                 return 'user.passkeys.' . $eventName;
             });
     }

@@ -108,6 +108,7 @@ class User extends Authenticatable implements HasPasskeys, HasMedia
 
     protected $hidden = [
         'password',
+        'remember_token',
     ];
 
     public function sessions(): HasMany
@@ -158,13 +159,11 @@ class User extends Authenticatable implements HasPasskeys, HasMedia
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logFillable()
+            ->logAll()
             ->logExcept($this->hidden)
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->setDescriptionForEvent(function ($eventName) {
-                $changes = $this->getChanges();
-                unset($changes['updated_at']);
-
-                if (array_keys($changes) === ['password']) {
+                if (array_keys($this->getChanges()) === ['password']) {
                     return 'user.password.' . $eventName;
                 }
 

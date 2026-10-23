@@ -49,12 +49,10 @@ class Role extends \Spatie\Permission\Models\Role
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logFillable()
+            ->logAll()
             ->logExcept($this->hidden)
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->setDescriptionForEvent(function ($eventName) {
-                $changes = $this->getChanges();
-                unset($changes['updated_at']);
-
                 return 'roles.' . $eventName;
             });
     }

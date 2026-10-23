@@ -14,4 +14,6 @@ class SettingsProperty
     const INTERNAL = 'internal'; // Can't be accessed by the api (for. api keys, secrets etc.)
     const AUTH = 'auth'; // Only visible to authenticated users
     const HIDDEN = 'hidden'; // Hides the setting from the user settings page
+    const PERMISSIONS = 'permissions'; // Permissions required to view the setting
+    const ROLES = 'roles'; // Roles required to view the setting
 }

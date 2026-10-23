@@ -57,12 +57,10 @@ class Permission extends \Spatie\Permission\Models\Permission
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logFillable()
+            ->logAll()
             ->logExcept($this->hidden)
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->setDescriptionForEvent(function ($eventName) {
-                $changes = $this->getChanges();
-                unset($changes['updated_at']);
-
                 return 'permissions.' . $eventName;
             });
     }
