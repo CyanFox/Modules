@@ -19,6 +19,7 @@
                     <x-select :label="__('admin::settings.general.default_language')" wire:model="language" required>
                         <option value="en">{{ __('messages.languages.en') }}</option>
                         <option value="de">{{ __('messages.languages.de') }}</option>
+                        <option value="de-sie">{{ __('messages.languages.de_sie') }}</option>
                         @shook('s.global.languages')
                     </x-select>
                     <x-file :label="__('admin::settings.general.logo')" wire:model="logo"/>

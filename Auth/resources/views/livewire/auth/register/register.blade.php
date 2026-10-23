@@ -83,6 +83,8 @@
                         @if(app()->getLocale() == 'en') selected @endif>{{ __('messages.languages.en') }}</option>
                 <option value="de"
                         @if(app()->getLocale() == 'de') selected @endif>{{ __('messages.languages.de') }}</option>
+                <option value="de-sie"
+                        @if(app()->getLocale() == 'de') selected @endif>{{ __('messages.languages.de_sie') }}</option>
                 @shook('s.global.languages')
             </x-select>
         </div>

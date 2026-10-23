@@ -36,6 +36,7 @@
                                   :label="__('account::account.language')">
                             <option value="en">{{ __('messages.languages.en') }}</option>
                             <option value="de">{{ __('messages.languages.de') }}</option>
+                            <option value="de-sie">{{ __('messages.languages.de_sie') }}</option>
 
                             @shook('s.global.languages')
                         </x-select>
