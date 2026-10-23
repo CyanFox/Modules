@@ -3,6 +3,7 @@
 namespace Modules\Auth\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use Dedoc\Scramble\Attributes\BodyParameter;
 use Dedoc\Scramble\Attributes\Endpoint;
 use Dedoc\Scramble\Attributes\Group;
 use Dedoc\Scramble\Attributes\PathParameter;
@@ -218,7 +219,9 @@ class AuthController extends Controller
 
     #[Endpoint(title: 'Forgot Password')]
     #[PathParameter('resetToken', 'Token from Email', required: false, example: 'abcdefghijklm123456789')]
+    #[BodyParameter('username', 'Username', required: false)]
     #[Response(200, 'Password reset successfully.', examples: ['application/json' => ['success' => true, 'message' => 'Password reset successfully.', 'data' => []]])]
+    #[Response(200, 'Password reset email sent.', examples: ['application/json' => ['success' => true, 'message' => 'Password reset email sent.', 'data' => []]])]
     #[Response(422, 'Captcha validation failed.', examples: ['application/json' => ['success' => false, 'message' => 'Captcha validation failed.', 'data' => []]])]
     #[Response(422, 'Token expired.', examples: ['application/json' => ['success' => false, 'message' => 'Token expired.', 'data' => []]])]
     #[Response(403, 'Forgot password is disabled.', examples: ['application/json' => ['success' => false, 'message' => 'Forgot password is disabled.', 'data' => []]])]
