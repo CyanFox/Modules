@@ -1,18 +1,19 @@
 <?php
 
-namespace Modules\Core\Http\Controllers\API;
+namespace Modules\Core\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use Dedoc\Scramble\Attributes\Endpoint;
 use Dedoc\Scramble\Attributes\Group;
 use Dedoc\Scramble\Attributes\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Modules\Core\Enums\SettingsProperty;
 
 #[Group('User')]
 class UserController extends Controller
 {
-    #[Endpoint(title: 'Get current user')]
+    #[Endpoint(title: 'Get Current user')]
     #[Response(200, 'User retrieved.', examples: ['application/json' => ['success' => true, 'message' => 'Setting retrieved.', 'data' => [
         'id' => 1,
         'first_name' => 'first name',
@@ -118,5 +119,20 @@ class UserController extends Controller
             })
             ->values()
         );
+    }
+
+    #[Endpoint(title: 'Check password')]
+    #[Response(200, 'Password checked.', examples: ['application/json' => ['success' => true, 'message' => 'Password checked.', 'data' => [
+        'valid' => true,
+    ]]])]
+    #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
+    public function checkPassword(Request $request)
+    {
+        $user = $request->user();
+        $password = $request->input('password');
+
+        return apiResponse('Password checked.', [
+            'valid' => Hash::check($password, $user->password),
+        ]);
     }
 }

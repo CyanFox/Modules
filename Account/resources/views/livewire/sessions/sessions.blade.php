@@ -115,7 +115,7 @@
                 <x-table.body>
                     @foreach(auth()->user()->tokens as $token)
                         @php
-                            $properties = json_decode($token->name);
+                            $properties = $token->name;
 
                             if (data_get($properties, 'type') == 'api') {
                                 continue;

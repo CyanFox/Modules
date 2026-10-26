@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Modules\Auth\Http\Controllers\API\AuthController;
+use Modules\Auth\Http\Controllers\API\V1\AuthController;
 
 Route::group(['prefix' => 'v1/auth', 'as' => 'auth.'], function () {
     Route::group(['middleware' => 'throttle:10,1'], function () {

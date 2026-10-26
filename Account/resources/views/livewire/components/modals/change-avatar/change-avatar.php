@@ -47,6 +47,7 @@ new class extends ModalComponent {
             return;
         }
 
+        UserSettings::delete(auth()->id(), 'core.custom_avatar_url');
         auth()->user()->clearMediaCollection('avatar');
         auth()->user()->addMedia($this->avatar->getRealPath())->toMediaCollection('avatar');
 

@@ -48,6 +48,13 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
 {
     use LogsActivity;
 
+    protected function casts(): array
+    {
+        return [
+            'name' => 'json'
+        ];
+    }
+
     public function getDisplayName(): string
     {
         $properties = json_decode($this->name);

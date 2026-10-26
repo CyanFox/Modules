@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Auth\Http\Controllers\API;
+namespace Modules\Auth\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use Dedoc\Scramble\Attributes\BodyParameter;
