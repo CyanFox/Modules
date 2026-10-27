@@ -11,11 +11,13 @@ use Modules\Core\Models\Setting;
 
 class SettingsService
 {
-    public function get(string $key, mixed $default = null): mixed
+    public function get(string $key, mixed $default = null, ?Setting $setting = null): mixed
     {
-        $setting = Setting::where('key', $key)->first();
         if (!$setting) {
-            return $default;
+            $setting = Setting::where('key', $key)->first();
+            if (!$setting) {
+                return $default;
+            }
         }
 
         $encrypted = $setting->hasProperty(SettingsProperty::ENCRYPTED);

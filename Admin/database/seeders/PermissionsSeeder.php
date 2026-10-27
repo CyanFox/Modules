@@ -33,7 +33,6 @@ class PermissionsSeeder extends Seeder
             'admin.permissions.delete',
 
             'admin.modules',
-            'admin.modules.install',
             'admin.modules.disable',
             'admin.modules.enable',
             'admin.modules.delete',

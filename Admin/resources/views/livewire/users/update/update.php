@@ -38,9 +38,14 @@ new class extends Component {
             'last_name' => $this->lastName,
             'username' => $this->username,
             'email' => $this->email,
-            'password' => $this->password,
             'disabled' => $this->disabled ?? false,
         ]);
+
+        if ($this->password) {
+            $this->user->update([
+                'password' => $this->password,
+            ]);
+        }
 
         $this->user->syncRoles($this->roles);
         $this->user->syncPermissions($this->permissions);

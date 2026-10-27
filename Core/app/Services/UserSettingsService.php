@@ -11,11 +11,13 @@ use Modules\Core\Models\UserSetting;
 
 class UserSettingsService
 {
-    public function get(int $userId, string $key, mixed $default = null): mixed
+    public function get(int $userId, string $key, mixed $default = null, ?UserSetting $setting = null): mixed
     {
-        $setting = UserSetting::where(['user_id' => $userId, 'key' => $key])->first();
         if (!$setting) {
-            return $default;
+            $setting = UserSetting::where(['user_id' => $userId, 'key' => $key])->first();
+            if (!$setting) {
+                return $default;
+            }
         }
 
         $encrypted = $setting->hasProperty(SettingsProperty::ENCRYPTED);

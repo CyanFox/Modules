@@ -21,7 +21,7 @@ return [
         'description' => 'Are you sure you want to delete this role? This action cannot be undone.',
 
         'buttons' => [
-            'delete' => 'Delete Permission'
+            'delete' => 'Delete Role'
         ],
 
         'notifications' => [
