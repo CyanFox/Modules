@@ -12,6 +12,7 @@ use Laravel\Sanctum\Sanctum;
 use Masmerise\Toaster\ToasterConfig;
 use Modules\Core\Http\Middleware\Authenticate;
 use Modules\Core\Http\Middleware\CheckLanguage;
+use Modules\Core\Http\Middleware\UserIsDisabled;
 use Modules\Core\Models\PersonalAccessToken;
 use Modules\Core\Models\User;
 use Nwidart\Modules\Support\ModuleServiceProvider;
@@ -137,8 +138,10 @@ class CoreServiceProvider extends ModuleServiceProvider
         $router->middlewareGroup('auth', [
             Authenticate::class,
             CheckLanguage::class,
+            UserIsDisabled::class,
         ]);
 
+        $router->pushMiddlewareToGroup('api', UserIsDisabled::class);
         $router->pushMiddlewareToGroup('web', 'language');
     }
 

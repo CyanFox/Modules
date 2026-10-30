@@ -44,7 +44,7 @@ class AuthController extends Controller
         'uuid' => '00000000-0000-0000-0000-000000000000',
     ]]])]
     #[Response(403, 'This account has been disabled.', examples: ['application/json' => ['success' => false, 'message' => 'This account has been disabled.', 'data' => []]])]
-    #[Response(422, 'Captcha validation failed.', examples: ['application/json' => ['success' => false, 'message' => 'Captcha validation failed.', 'data' => []]])]
+    #[Response(422, 'Captcha validation failed.', examples: ['application/json' => ['success' => false, 'message' => 'Captcha validation failed.', 'data' => ['captcha_required' => true]]])]
     #[Response(403, 'Login is disabled.', examples: ['application/json' => ['success' => false, 'message' => 'Login is disabled.', 'data' => []]])]
     #[Response(400, 'Invalid username or password.', examples: ['application/json' => ['success' => false, 'message' => 'Invalid username or password.', 'data' => []]])]
     #[Response(401, 'MFA Required.', examples: ['application/json' => ['success' => false, 'message' => 'MFA Required.', 'data' => ['mfa_required' => true]]])]
@@ -61,7 +61,7 @@ class AuthController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return apiResponse('Captcha validation failed.', [], false, 422);
+                return apiResponse('Captcha validation failed.', ['captcha_required' => true], false, 422);
             }
         }
 
@@ -179,7 +179,7 @@ class AuthController extends Controller
         'created_at' => '2000-01-01T00:00:00.000000Z',
         'updated_at' => '2000-01-01T00:00:00.000000Z',
     ]]])]
-    #[Response(422, 'Captcha validation failed.', examples: ['application/json' => ['success' => false, 'message' => 'Captcha validation failed.', 'data' => []]])]
+    #[Response(422, 'Captcha validation failed.', examples: ['application/json' => ['success' => false, 'message' => 'Captcha validation failed.', 'data' => ['captcha_required' => true]]])]
     #[Response(403, 'Registration is disabled.', examples: ['application/json' => ['success' => false, 'message' => 'Registration is disabled.', 'data' => []]])]
     public function register(Request $request)
     {
@@ -202,7 +202,7 @@ class AuthController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return apiResponse('Captcha validation failed.', [], false, 422);
+                return apiResponse('Captcha validation failed.', ['captcha_required' => true], false, 422);
             }
         }
 
@@ -222,7 +222,7 @@ class AuthController extends Controller
     #[BodyParameter('username', 'Username', required: false)]
     #[Response(200, 'Password reset successfully.', examples: ['application/json' => ['success' => true, 'message' => 'Password reset successfully.', 'data' => []]])]
     #[Response(200, 'Password reset email sent.', examples: ['application/json' => ['success' => true, 'message' => 'Password reset email sent.', 'data' => []]])]
-    #[Response(422, 'Captcha validation failed.', examples: ['application/json' => ['success' => false, 'message' => 'Captcha validation failed.', 'data' => []]])]
+    #[Response(422, 'Captcha validation failed.', examples: ['application/json' => ['success' => false, 'message' => 'Captcha validation failed.', 'data' => ['captcha_required' => true]]])]
     #[Response(422, 'Token expired.', examples: ['application/json' => ['success' => false, 'message' => 'Token expired.', 'data' => []]])]
     #[Response(403, 'Forgot password is disabled.', examples: ['application/json' => ['success' => false, 'message' => 'Forgot password is disabled.', 'data' => []]])]
     public function forgotPassword(Request $request, $resetToken = null)
@@ -275,7 +275,7 @@ class AuthController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return apiResponse('Captcha validation failed.', [], false, 422);
+                return apiResponse('Captcha validation failed.', ['captcha_required' => true], false, 422);
             }
         }
 

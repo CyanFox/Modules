@@ -69,10 +69,6 @@ class SessionsController
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function revokeWebSession(Request $request, $sessionId)
     {
-        $request->validate([
-            'password' => 'required|string|current_password'
-        ]);
-
         $session = $request->user()->sessions()->where('id', $sessionId)->first();
         if ($session?->delete()) {
             return apiResponse('Web session revoked.');
@@ -87,10 +83,6 @@ class SessionsController
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function revokeNativeSession(Request $request, $sessionId)
     {
-        $request->validate([
-            'password' => 'required|string|current_password'
-        ]);
-
         $session = $request->user()->tokens()->where('id', $sessionId)->first();
         if ($session?->delete()) {
             return apiResponse('Native session revoked.');
@@ -104,10 +96,6 @@ class SessionsController
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function getLoginQrCode(Request $request)
     {
-        $request->validate([
-            'password' => 'required|string|current_password'
-        ]);
-
         return apiResponse('Login QR code retrieved.', ['qrcode' => url()->temporarySignedRoute('api.auth.login.qrcode', now()->addMinutes(5), ['userId' => $request->user()->id])]);
     }
 }

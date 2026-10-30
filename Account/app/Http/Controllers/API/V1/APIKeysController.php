@@ -64,7 +64,6 @@ class APIKeysController
     public function createApiKey(Request $request)
     {
         $request->validate([
-            'password' => 'required|string|current_password',
             'name' => 'required|string',
             'permissions' => 'nullable|array',
         ]);

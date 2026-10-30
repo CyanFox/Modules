@@ -105,10 +105,6 @@ class ProfileController extends Controller
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function deleteAccount(Request $request)
     {
-        $request->validate([
-            'password' => 'required|string|current_password',
-        ]);
-
         $request->user()->delete();
 
         return apiResponse('Account deleted.');
