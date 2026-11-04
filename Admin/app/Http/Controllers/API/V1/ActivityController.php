@@ -37,7 +37,7 @@ class ActivityController extends Controller
     public function getActivities(Request $request)
     {
         if ($request->user()->cannot('admin.activity')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.activity.unauthenticated'), false, 401);
         }
 
         return apiResponse('Activities retrieved.', QueryBuilder::for(Activity::class)

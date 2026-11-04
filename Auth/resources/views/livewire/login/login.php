@@ -13,23 +13,14 @@ new class extends Component {
     use WithRateLimiting;
 
     public $unsplash = [];
-
     public $rateLimitTime;
 
     public $user;
-
     public $username;
-
     public $password;
-
     public $rememberMe;
-
     public $captcha;
-
     public $mfaEnabled = false;
-
-    public $useRecoveryCode = false;
-
     public $mfaCode;
 
     public function attemptLogin()

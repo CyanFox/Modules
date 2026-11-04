@@ -16,17 +16,17 @@ class UserController extends Controller
     #[Endpoint(title: 'Get Current user')]
     #[Response(200, 'User retrieved.', examples: ['application/json' => ['success' => true, 'message' => 'Setting retrieved.', 'data' => [
         'id' => 1,
-        'first_name' => 'first name',
-        'last_name' => 'last name',
-        'username' => 'username',
-        'email' => 'email',
-        'theme' => 'theme',
-        'language' => 'language',
+        'first_name' => '',
+        'last_name' => '',
+        'username' => '',
+        'email' => '',
+        'theme' => '',
+        'language' => '',
         'disabled' => false,
         'created_at' => '2000-01-01T00:00:00.000000Z',
         'updated_at' => '2000-01-01T00:00:00.000000Z',
-        'avatar_url' => 'avatar url',
-        'display_name' => 'display name',
+        'avatar_url' => '',
+        'display_name' => '',
         'roles' => [],
         'permissions' => [],
         'settings' => []
@@ -62,7 +62,7 @@ class UserController extends Controller
     #[Response(200, 'Permissions retrieved.', examples: ['application/json' => ['success' => true, 'message' => 'Permissions retrieved.', 'data' => [
         [
             'id' => 1,
-            'name' => 'test',
+            'name' => '',
         ]
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
@@ -80,7 +80,7 @@ class UserController extends Controller
     #[Response(200, 'Roles retrieved.', examples: ['application/json' => ['success' => true, 'message' => 'Roles retrieved.', 'data' => [
         [
             'id' => 1,
-            'name' => 'test',
+            'name' => '',
         ]
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
@@ -98,8 +98,8 @@ class UserController extends Controller
     #[Response(200, 'Settings retrieved.', examples: ['application/json' => ['success' => true, 'message' => 'Settings retrieved.', 'data' => [
         [
             'id' => 1,
-            'key' => 'key',
-            'value' => 'value',
+            'key' => '',
+            'value' => '',
             'properties' => [],
             'created_at' => '2000-01-01T00:00:00.000000Z',
             'updated_at' => '2000-01-01T00:00:00.000000Z'

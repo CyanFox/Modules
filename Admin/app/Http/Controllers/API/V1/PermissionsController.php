@@ -27,7 +27,7 @@ class PermissionsController extends Controller
     public function getPermissions(Request $request)
     {
         if ($request->user()->cannot('admin.permissions')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.permissions.unauthenticated'), false, 401);
         }
 
         return apiResponse('Permissions retrieved.', QueryBuilder::for(Permission::class)
@@ -49,12 +49,12 @@ class PermissionsController extends Controller
     public function getPermission(Request $request, int $permissionsId)
     {
         if ($request->user()->cannot('admin.permissions')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.permissions.unauthenticated'), false, 401);
         }
 
         $permission = Permission::find($permissionsId);
         if (!$permission) {
-            return apiResponse('Permission not found.', [], false, 404);
+            return apiResponse('Permission not found.', apiError('admin.permissions.not_found'), false, 404);
         }
 
         return apiResponse('Permission retrieved.', $permission->toArray());
@@ -72,7 +72,7 @@ class PermissionsController extends Controller
     public function createPermission(Request $request)
     {
         if ($request->user()->cannot('admin.permissions.create')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.permissions.unauthenticated'), false, 401);
         }
 
         $request->validate([
@@ -98,12 +98,12 @@ class PermissionsController extends Controller
     public function updatePermission(Request $request, int $permissionId)
     {
         if ($request->user()->cannot('admin.permissions.update')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.permissions.unauthenticated'), false, 401);
         }
 
         $permission = Permission::find($permissionId);
         if (!$permission) {
-            return apiResponse('Permission not found.', [], false, 404);
+            return apiResponse('Permission not found.', apiError('admin.permissions.not_found'), false, 404);
         }
 
         $request->validate([
@@ -123,12 +123,12 @@ class PermissionsController extends Controller
     public function deletePermission(Request $request, int $permissionId)
     {
         if ($request->user()->cannot('admin.permissions.delete')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.permissions.unauthenticated'), false, 401);
         }
 
         $permission = Permission::find($permissionId);
         if (!$permission) {
-            return apiResponse('Permission not found.', [], false, 404);
+            return apiResponse('Permission not found.', apiError('admin.permissions.not_found'), false, 404);
         }
 
         $permission->delete();

@@ -28,25 +28,25 @@ class SettingsController extends Controller
     {
         $setting = Setting::where('key', $key)->first();
         if (!$setting) {
-            return apiResponse('Setting not found.', [], false, 404);
+            return apiResponse('Setting not found.', apiError('core.settings.not_found'), false, 404);
         }
 
         if ($setting->getProperty(SettingsProperty::INTERNAL)) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('core.settings.unauthenticated'), false, 401);
         }
 
         if ($setting->getProperty(SettingsProperty::PERMISSIONS) || $setting->getProperty(SettingsProperty::ROLES) || $setting->getProperty(SettingsProperty::AUTH)) {
             $user = auth('sanctum')->user();
             if (!$user) {
-                return apiResponse('Unauthenticated.', [], false, 401);
+                return apiResponse('Unauthenticated.', apiError('core.settings.unauthenticated'), false, 401);
             }
 
             if (array_any($setting->getProperty(SettingsProperty::PERMISSIONS) ?? [], fn($permission) => !$user->can($permission))) {
-                return apiResponse('Unauthenticated.', [], false, 401);
+                return apiResponse('Unauthenticated.', apiError('core.settings.unauthenticated'), false, 401);
             }
 
             if (array_any($setting->getProperty(SettingsProperty::ROLES) ?? [], fn($role) => !$user->hasRole($role))) {
-                return apiResponse('Unauthenticated.', [], false, 401);
+                return apiResponse('Unauthenticated.', apiError('core.settings.unauthenticated'), false, 401);
             }
         }
 
@@ -79,11 +79,11 @@ class SettingsController extends Controller
 
         $setting = UserSetting::where(['key' => $key, 'user_id' => $user->id])->first();
         if (!$setting) {
-            return apiResponse('Setting not found', [], false, 404);
+            return apiResponse('Setting not found', apiError('core.settings.not_found'), false, 404);
         }
 
         if ($setting->getProperty(SettingsProperty::INTERNAL)) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('core.settings.unauthenticated'), false, 401);
         }
 
         if ($setting->getProperty(SettingsProperty::ENCRYPTED)) {

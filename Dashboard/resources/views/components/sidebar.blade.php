@@ -77,7 +77,7 @@
                         </div>
                     </button>
                 </x-dropdown.trigger>
-                <x-dropdown.items>
+                <x-dropdown.items position="bottom">
                     @hook('dashboard.profile.items')
                     @shook('s.dashboard.profile.items')
 

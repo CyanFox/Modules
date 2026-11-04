@@ -31,7 +31,7 @@ class MFAController
             }]
         ]);
         if (userSettings('auth.mfa.enabled', $request->user()->id)) {
-            return apiResponse('MFA already enabled.', [], false, 422);
+            return apiResponse('MFA already enabled.', apiError('account.mfa.already_enabled'), false, 422);
         }
 
         $recoveryCodes = $this->regenerateCodes();
@@ -59,7 +59,7 @@ class MFAController
     public function disableMFA(Request $request)
     {
         if (!userSettings('auth.mfa.enabled', $request->user()->id)) {
-            return apiResponse('MFA not enabled.', [], false, 422);
+            return apiResponse('MFA not enabled.', apiError('account.mfa.not_enabled'), false, 422);
         }
 
         UserSettings::delete($request->user()->id, 'auth.mfa.recovery_codes');
@@ -78,7 +78,7 @@ class MFAController
     public function regenerateRecoveryCodes(Request $request)
     {
         if (!userSettings('auth.mfa.enabled', $request->user()->id)) {
-            return apiResponse('MFA not enabled.', [], false, 422);
+            return apiResponse('MFA not enabled.', apiError('account.mfa.not_enabled'), false, 422);
         }
 
         $recoveryCodes = $this->regenerateCodes();
@@ -97,7 +97,7 @@ class MFAController
     public function generateMFASecret(Request $request)
     {
         if (userSettings('auth.mfa.enabled', $request->user()->id)) {
-            return apiResponse('MFA already enabled.', [], false, 422);
+            return apiResponse('MFA already enabled.', apiError('account.mfa.already_enabled'), false, 422);
         }
 
         $google2FA = new Google2FA();
@@ -116,7 +116,7 @@ class MFAController
     public function verifyMFA(Request $request)
     {
         if (!userSettings('auth.mfa.enabled', $request->user()->id)) {
-            return apiResponse('MFA not enabled.', [], false, 422);
+            return apiResponse('MFA not enabled.', apiError('account.mfa.not_enabled'), false, 422);
         }
 
         $request->validate([

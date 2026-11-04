@@ -23,7 +23,7 @@ class SettingsController extends Controller
     public function changeLogo(Request $request)
     {
         if ($request->user()->cannot('admin.settings')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.settings.unauthenticated'), false, 401);
         }
 
         $request->validate([
@@ -45,7 +45,7 @@ class SettingsController extends Controller
     public function resetLogo(Request $request)
     {
         if ($request->user()->cannot('admin.settings')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.settings.unauthenticated'), false, 401);
         }
 
         Storage::disk('public')->delete('img/' . str_replace('/storage/img/', '', settings('app.logo')));
@@ -74,7 +74,7 @@ class SettingsController extends Controller
     public function getSettings(Request $request)
     {
         if ($request->user()->cannot('admin.settings')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.settings.unauthenticated'), false, 401);
         }
 
         return apiResponse('Settings retrieved.', Setting::all()->each(function (Setting $setting) {
@@ -98,7 +98,7 @@ class SettingsController extends Controller
     public function getSetting(Request $request, $key)
     {
         if ($request->user()->cannot('admin.settings')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.settings.unauthenticated'), false, 401);
         }
 
         $setting = Setting::where('key', $key)->first();
@@ -121,7 +121,7 @@ class SettingsController extends Controller
     public function createSetting(Request $request)
     {
         if ($request->user()->cannot('admin.settings')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.settings.unauthenticated'), false, 401);
         }
 
         $request->validate([
@@ -150,7 +150,7 @@ class SettingsController extends Controller
     public function updateSetting(Request $request, $key)
     {
         if ($request->user()->cannot('admin.settings')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.settings.unauthenticated'), false, 401);
         }
 
         $request->validate([
@@ -179,7 +179,7 @@ class SettingsController extends Controller
     public function updateSettings(Request $request)
     {
         if ($request->user()->cannot('admin.settings')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.settings.unauthenticated'), false, 401);
         }
 
         $payload = $request->all();
@@ -209,11 +209,11 @@ class SettingsController extends Controller
     public function deleteSetting(Request $request, $key)
     {
         if ($request->user()->cannot('admin.settings')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.settings.unauthenticated'), false, 401);
         }
 
         if (!Settings::delete($key)) {
-            return apiResponse('Setting not found.', [], false, 404);
+            return apiResponse('Setting not found.', apiError('admin.settings.not_found'), false, 404);
         }
 
         return apiResponse('Setting deleted.');

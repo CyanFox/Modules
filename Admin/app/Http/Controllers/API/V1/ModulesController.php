@@ -27,7 +27,7 @@ class ModulesController extends Controller
     public function getModules(Request $request)
     {
         if ($request->user()->cannot('admin.modules')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.modules.unauthenticated'), false, 401);
         }
 
         return apiResponse('Modules retrieved.', collect(Module::all())->map(function ($module) {
@@ -59,7 +59,7 @@ class ModulesController extends Controller
     public function getModule(Request $request, string $module)
     {
         if ($request->user()->cannot('admin.modules')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.modules.unauthenticated'), false, 401);
         }
 
         return apiResponse('Module retrieved.', [
@@ -82,7 +82,7 @@ class ModulesController extends Controller
     public function disableModule(Request $request, string $module)
     {
         if ($request->user()->cannot('admin.modules.disable')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.modules.unauthenticated'), false, 401);
         }
 
         Module::find($module)->disable();
@@ -96,7 +96,7 @@ class ModulesController extends Controller
     public function enableModule(Request $request, string $module)
     {
         if ($request->user()->cannot('admin.modules.enable')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.modules.unauthenticated'), false, 401);
         }
 
         Module::find($module)->enable();
@@ -110,7 +110,7 @@ class ModulesController extends Controller
     public function deleteModule(Request $request, string $module)
     {
         if ($request->user()->cannot('admin.modules.delete')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.modules.unauthenticated'), false, 401);
         }
 
         Module::find($module)->delete();

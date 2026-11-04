@@ -6,10 +6,8 @@ use Modules\Core\Http\Controllers\API\V1\SettingsController;
 use Modules\Core\Http\Controllers\API\V1\UserController;
 
 Route::group(['prefix' => 'v1/core', 'as' => 'core.'], function () {
-    Route::group(['middleware' => ['throttle:60,1']], function () {
-        Route::get('settings/{key}', [SettingsController::class, 'getSetting'])->name('settings.get');
-        Route::get('user-settings/{key}', [SettingsController::class, 'getUserSetting'])->middleware('auth:sanctum')->name('user.settings.get');
-    });
+    Route::get('settings/{key}', [SettingsController::class, 'getSetting'])->name('settings.get');
+    Route::get('user-settings/{key}', [SettingsController::class, 'getUserSetting'])->middleware('auth:sanctum')->name('user.settings.get');
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('users/me', [UserController::class, 'me'])->name('users.me');

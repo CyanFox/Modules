@@ -12,11 +12,11 @@
             </div>
 
             @hook('auth.login.card')
-            <x-card class="md:w-sm space-y-4">
+            <x-card class="sm:w-sm space-y-4">
                 @if(settings('auth.login.enabled'))
                     @if($mfaEnabled)
                         @if($user)
-                            <div class="rounded-2xl border border-on-surface dark:border-on-surface-dark/50"
+                            <div class="rounded-radius border border-on-surface dark:border-on-surface-dark/50"
                                  wire:transition>
                                 <div class="flex p-1 relative">
                                     <img
@@ -43,6 +43,7 @@
                         @hook('auth.login.mfa.form')
                         <form wire:submit="checkMfaCode" class="space-y-4" wire:key="mfa-form">
                             <x-input wire:model="mfaCode" :label="__('auth::login.mfa_recovery_code')"
+                                     autocapitalize="none" autocorrect="off" spellcheck="false"
                                      x-init="$nextTick(() => $el.focus())" autofocus required/>
 
                             <x-button class="w-full" type="submit" loading="checkMfaCode">
@@ -65,7 +66,7 @@
                         @endif
 
                         @if($username)
-                            <div class="rounded-2xl border border-on-surface dark:border-on-surface-dark/50"
+                                <div class="rounded-radius border border-on-surface dark:border-on-surface-dark/50"
                                  wire:transition>
                                 <div class="flex p-1 relative">
                                     <img
@@ -94,6 +95,7 @@
                             <x-input wire:model="username" :label="__('auth::login.username')"
                                      wire:blur="checkIfUserExists($event.target.value)"
                                      autocomplete="username webauthn" autofocus
+                                     autocapitalize="none" autocorrect="off" spellcheck="false"
                                      required/>
                             <x-password wire:model="password" :label="__('auth::login.password')"
                                         autocomplete="password"

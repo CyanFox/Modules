@@ -19,7 +19,6 @@ use Mews\Captcha\Captcha;
 use Modules\Auth\Emails\ForgotPasswordMail;
 use Modules\Core\Enums\SettingsProperty;
 use Modules\Core\Facades\UserSettings;
-use Modules\Core\Models\User;
 use Modules\Core\Models\UserSetting;
 use PragmaRX\Google2FA\Google2FA;
 
@@ -44,25 +43,12 @@ class AuthController extends Controller
         'uuid' => '00000000-0000-0000-0000-000000000000',
     ]]])]
     #[Response(403, 'This account has been disabled.', examples: ['application/json' => ['success' => false, 'message' => 'This account has been disabled.', 'data' => []]])]
-    #[Response(422, 'Captcha validation failed.', examples: ['application/json' => ['success' => false, 'message' => 'Captcha validation failed.', 'data' => ['captcha_required' => true]]])]
     #[Response(403, 'Login is disabled.', examples: ['application/json' => ['success' => false, 'message' => 'Login is disabled.', 'data' => []]])]
-    #[Response(400, 'Invalid username or password.', examples: ['application/json' => ['success' => false, 'message' => 'Invalid username or password.', 'data' => []]])]
-    #[Response(401, 'MFA Required.', examples: ['application/json' => ['success' => false, 'message' => 'MFA Required.', 'data' => ['mfa_required' => true]]])]
+    #[Response(401, 'MFA Required.', examples: ['application/json' => ['success' => false, 'message' => 'MFA Required.', 'data' => []]])]
     public function login(Request $request)
     {
         if (!settings('auth.login.enabled')) {
-            return apiResponse('Login is disabled.', [], false, 403);
-        }
-
-        if (settings('auth.login.captcha')) {
-            $validator = Validator::make($request->all(), [
-                'captcha_key' => ['required', 'string'],
-                'captcha' => ['required', 'string', 'captcha_api:' . $request->captcha_key . ',' . $request->captcha_type ?? 'default'],
-            ]);
-
-            if ($validator->fails()) {
-                return apiResponse('Captcha validation failed.', ['captcha_required' => true], false, 422);
-            }
+            return apiResponse('Login is disabled.', apiError('auth.login.disabled'), false, 403);
         }
 
         $request->validate([
@@ -73,17 +59,35 @@ class AuthController extends Controller
             'platform' => 'nullable|in:android,ios,linux,windows,macos,desktop,unknown',
         ]);
 
-        $user = User::where('username', $request->username)->first();
+        $user = userModel()->where('username', $request->username)->first();
+
+        if (settings('auth.login.captcha') && (!userSettings('auth.mfa.enabled', $user->id) || !filled($request->mfa_code))) {
+            $validator = Validator::make($request->all(), [
+                'captcha_key' => ['required', 'string'],
+                'captcha' => ['required', 'string', 'captcha_api:' . $request->captcha_key . ',' . $request->captcha_type ?? 'default'],
+            ]);
+
+            if ($validator->fails()) {
+                throw ValidationException::withMessages([
+                    'captcha' => 'auth::login.invalid_captcha',
+                ]);
+            }
+        }
+
         if (!$user) {
-            return apiResponse('Invalid username or password.', [], false, 400);
+            throw ValidationException::withMessages([
+                'username' => 'auth.failed',
+            ]);
         }
 
         if (!Hash::check($request->password, $user->password)) {
-            return apiResponse('Invalid username or password.', [], false, 400);
+            throw ValidationException::withMessages([
+                'username' => 'auth.failed',
+            ]);
         }
 
         if ($user->disabled) {
-            return apiResponse('This account has been disabled.', [], false, 403);
+            return apiResponse('This account has been disabled.', apiError('auth.login.user_disabled'), false, 403);
         }
 
         if (userSettings('auth.mfa.enabled', $user->id)) {
@@ -96,7 +100,7 @@ class AuthController extends Controller
                     $recoveryCodes = userSettings('auth.mfa.recovery_codes', $user->id);
                     if (!in_array($request->mfa_code, $recoveryCodes)) {
                         throw ValidationException::withMessages([
-                            'mfaCode' => __('auth::login.invalid_mfa_code'),
+                            'mfaCode' => 'auth::login.invalid_mfa_code',
                         ]);
                     }
 
@@ -105,7 +109,7 @@ class AuthController extends Controller
                     UserSettings::set($user->id, 'auth.mfa.recovery_codes', $recoveryCodes, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true]);
                 }
             } else {
-                return apiResponse('MFA Required.', ['mfa_required' => true], false, 401);
+                return apiResponse('MFA Required.', apiError('auth.login.mfa_required'), false, 401);
             }
         }
 
@@ -141,7 +145,7 @@ class AuthController extends Controller
     public function loginQrCode(Request $request, int $userId)
     {
         if (!settings('auth.login.enabled')) {
-            return apiResponse('Login is disabled.', [], false, 422);
+            return apiResponse('Login is disabled.', apiError('auth.login.disabled'), false, 422);
         }
 
         $request->validate([
@@ -150,9 +154,9 @@ class AuthController extends Controller
             'platform' => 'nullable|in:android,ios,linux,windows,macos,desktop,unknown',
         ]);
 
-        $user = User::find($userId);
+        $user = userModel()->find($userId);
         if (!$user) {
-            return apiResponse('User not found.', [], false, 404);
+            return apiResponse('User not found.', apiError('auth.login.user_not_found'), false, 404);
         }
 
         $uuid = str()->uuid();
@@ -179,12 +183,11 @@ class AuthController extends Controller
         'created_at' => '2000-01-01T00:00:00.000000Z',
         'updated_at' => '2000-01-01T00:00:00.000000Z',
     ]]])]
-    #[Response(422, 'Captcha validation failed.', examples: ['application/json' => ['success' => false, 'message' => 'Captcha validation failed.', 'data' => ['captcha_required' => true]]])]
     #[Response(403, 'Registration is disabled.', examples: ['application/json' => ['success' => false, 'message' => 'Registration is disabled.', 'data' => []]])]
     public function register(Request $request)
     {
         if (!settings('auth.register.enabled')) {
-            return apiResponse('Registration is disabled.', [], false, 403);
+            return apiResponse('Registration is disabled.', apiError('auth.register.disabled'), false, 403);
         }
 
         $request->validate([
@@ -202,11 +205,13 @@ class AuthController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return apiResponse('Captcha validation failed.', ['captcha_required' => true], false, 422);
+                throw ValidationException::withMessages([
+                    'captcha' => 'auth::register.invalid_captcha',
+                ]);
             }
         }
 
-        $user = User::create([
+        $user = userModel()->create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'username' => $request->username,
@@ -222,13 +227,12 @@ class AuthController extends Controller
     #[BodyParameter('username', 'Username', required: false)]
     #[Response(200, 'Password reset successfully.', examples: ['application/json' => ['success' => true, 'message' => 'Password reset successfully.', 'data' => []]])]
     #[Response(200, 'Password reset email sent.', examples: ['application/json' => ['success' => true, 'message' => 'Password reset email sent.', 'data' => []]])]
-    #[Response(422, 'Captcha validation failed.', examples: ['application/json' => ['success' => false, 'message' => 'Captcha validation failed.', 'data' => ['captcha_required' => true]]])]
     #[Response(422, 'Token expired.', examples: ['application/json' => ['success' => false, 'message' => 'Token expired.', 'data' => []]])]
     #[Response(403, 'Forgot password is disabled.', examples: ['application/json' => ['success' => false, 'message' => 'Forgot password is disabled.', 'data' => []]])]
     public function forgotPassword(Request $request, $resetToken = null)
     {
         if (!settings('auth.forgot_password.enabled')) {
-            return apiResponse('Forgot password is disabled.', [], false, 403);
+            return apiResponse('Forgot password is disabled.', apiError('auth.forgot_password.disabled'), false, 403);
         }
 
         if ($resetToken) {
@@ -239,14 +243,14 @@ class AuthController extends Controller
 
             $user = UserSetting::where('key', 'auth.forgot_password.token')->where('value', $resetToken)->first()?->user;
             if (!$user) {
-                return apiResponse('Invalid token.', [], false, 422);
+                return apiResponse('Invalid token.', apiError('auth.forgot_password.invalid_token'), false, 422);
             }
 
             if (carbon()->parse(userSettings('auth.forgot_password.expiration', $user->id))->isBefore(now())) {
                 userSettings()->delete($user->id, 'auth.forgot_password.token');
                 userSettings()->delete($user->id, 'auth.forgot_password.expiration');
 
-                return apiResponse('Token expired.', [], false, 422);
+                return apiResponse('Token expired.', apiError('auth.forgot_password.token_expired'), false, 422);
             }
 
             $user->update([
@@ -275,7 +279,9 @@ class AuthController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return apiResponse('Captcha validation failed.', ['captcha_required' => true], false, 422);
+                throw ValidationException::withMessages([
+                    'captcha' => 'auth::forgot-password.invalid_captcha',
+                ]);
             }
         }
 
@@ -316,5 +322,22 @@ class AuthController extends Controller
     public function captcha(Captcha $captcha, string $config = 'default')
     {
         return apiResponse('Captcha generated.', $captcha->create($config, true));
+    }
+
+    #[Endpoint(title: 'Lookup User')]
+    #[PathParameter('username', 'User', example: 'username')]
+    #[Response(200, 'User retrieved.', examples: ['application/json' => ['success' => true, 'message' => 'User retrieved.', 'data' => [
+        'username' => '',
+        'avatar_url' => ''
+    ]]])]
+    public function lookupUser(string $username)
+    {
+        $user = userModel()->where('username', $username)->first();
+
+        return apiResponse('User retrieved.', [
+                'username' => $username,
+                'avatar_url' => $user ? $user->getAvatar() : str_replace(['{email}', '{email_md5}', '{username}', '{first_name}', '{last_name}'], [$username, md5($username), $username, $username, $username], settings('core.default_avatar_url'))
+            ]
+        );
     }
 }

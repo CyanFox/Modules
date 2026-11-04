@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Modules\Auth\Providers;
 
+use Illuminate\Routing\Router;
 use Illuminate\Validation\Rules\Password;
 use Modules\Auth\Http\Middleware\Authenticate;
-use Modules\Auth\Http\Middleware\CheckLanguage;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
 class AuthServiceProvider extends ModuleServiceProvider
@@ -78,6 +78,15 @@ class AuthServiceProvider extends ModuleServiceProvider
             });
         }
 
+        $this->registerMiddleware($this->app['router']);
+
         parent::boot();
+    }
+
+    public function registerMiddleware(Router $router)
+    {
+        $router->middlewareGroup('auth', [
+            Authenticate::class,
+        ]);
     }
 }

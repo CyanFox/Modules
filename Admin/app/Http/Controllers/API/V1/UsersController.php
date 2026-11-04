@@ -32,7 +32,7 @@ class UsersController extends Controller
     public function getUsers(Request $request)
     {
         if ($request->user()->cannot('admin.users')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.users.unauthenticated'), false, 401);
         }
 
         return apiResponse('Users retrieved.', QueryBuilder::for(userModel()->query())
@@ -64,12 +64,12 @@ class UsersController extends Controller
     public function getUser(Request $request, int $userId)
     {
         if ($request->user()->cannot('admin.users')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.users.unauthenticated'), false, 401);
         }
 
         $user = userModel()->find($userId);
         if (!$user) {
-            return apiResponse('User not found.', [], false, 404);
+            return apiResponse('User not found.', apiError('admin.users.not_found'), false, 404);
         }
 
         return apiResponse('User retrieved.', array_merge($user->withoutRelations()->toArray(), [
@@ -110,7 +110,7 @@ class UsersController extends Controller
     public function createUser(Request $request)
     {
         if ($request->user()->cannot('admin.users.create')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.users.unauthenticated'), false, 401);
         }
 
         $request->validate([
@@ -149,12 +149,12 @@ class UsersController extends Controller
     public function updateUser(Request $request, int $userId)
     {
         if ($request->user()->cannot('admin.users.update')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.users.unauthenticated'), false, 401);
         }
 
         $user = userModel()->find($userId);
         if (!$user) {
-            return apiResponse('User not found.', [], false, 404);
+            return apiResponse('User not found.', apiError('admin.users.not_found'), false, 404);
         }
 
         $request->validate([
@@ -181,12 +181,12 @@ class UsersController extends Controller
     public function deleteUser(Request $request, int $userId)
     {
         if ($request->user()->cannot('admin.users.delete')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.users.unauthenticated'), false, 401);
         }
 
         $user = userModel()->find($userId);
         if (!$user) {
-            return apiResponse('User not found.', [], false, 404);
+            return apiResponse('User not found.', apiError('admin.users.not_found'), false, 404);
         }
 
         $user->delete();

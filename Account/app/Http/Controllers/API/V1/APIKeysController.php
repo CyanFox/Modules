@@ -88,6 +88,6 @@ class APIKeysController
             return apiResponse('API Key deleted.');
         }
 
-        return apiResponse('API Key not found.', null, 404);
+        return apiResponse('API Key not found.', apiError('account.api_keys.not_found'), 404);
     }
 }

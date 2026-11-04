@@ -27,7 +27,7 @@ class RolesController extends Controller
     public function getRoles(Request $request)
     {
         if ($request->user()->cannot('admin.roles')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.roles.unauthenticated'), false, 401);
         }
 
         return apiResponse('Roles retrieved.', QueryBuilder::for(Role::class)
@@ -50,12 +50,12 @@ class RolesController extends Controller
     public function getRole(Request $request, int $roleId)
     {
         if ($request->user()->cannot('admin.roles')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.roles.unauthenticated'), false, 401);
         }
 
         $role = Role::find($roleId);
         if (!$role) {
-            return apiResponse('Role not found.', [], false, 404);
+            return apiResponse('Role not found.', apiError('admin.roles.not_found'), false, 404);
         }
 
         return apiResponse('Role retrieved.', array_merge($role->withoutRelations()->toArray(), [
@@ -78,7 +78,7 @@ class RolesController extends Controller
     public function createRole(Request $request)
     {
         if ($request->user()->cannot('admin.roles.create')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.roles.unauthenticated'), false, 401);
         }
 
         $request->validate([
@@ -107,12 +107,12 @@ class RolesController extends Controller
     public function updateRole(Request $request, int $roleId)
     {
         if ($request->user()->cannot('admin.roles.update')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.roles.unauthenticated'), false, 401);
         }
 
         $role = Role::find($roleId);
         if (!$role) {
-            return apiResponse('Role not found.', [], false, 404);
+            return apiResponse('Role not found.', apiError('admin.roles.not_found'), false, 404);
         }
 
         $request->validate([
@@ -134,12 +134,12 @@ class RolesController extends Controller
     public function deleteRole(Request $request, int $roleId)
     {
         if ($request->user()->cannot('admin.roles.delete')) {
-            return apiResponse('Unauthenticated.', [], false, 401);
+            return apiResponse('Unauthenticated.', apiError('admin.roles.unauthenticated'), false, 401);
         }
 
         $role = Role::find($roleId);
         if (!$role) {
-            return apiResponse('Role not found.', [], false, 404);
+            return apiResponse('Role not found.', apiError('admin.roles.not_found'), false, 404);
         }
 
         $role->delete();

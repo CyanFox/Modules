@@ -14,7 +14,7 @@
             @hook('auth.forgot_password.card')
             <x-card class="md:w-sm space-y-4">
                 @if($user)
-                    <div class="rounded-2xl border border-on-surface dark:border-on-surface-dark/50"
+                    <div class="rounded-radius border border-on-surface dark:border-on-surface-dark/50"
                          wire:transition>
                         <div class="flex p-1 relative">
                             <img
@@ -81,6 +81,7 @@
                     <form wire:submit="sendResetLink" class="space-y-4">
                         <x-input wire:model="username" :label="__('auth::forgot-password.username')"
                                  autocomplete="username" autofocus
+                                 autocapitalize="none" autocorrect="off" spellcheck="false"
                                  required/>
 
                         @if(settings('auth.forgot_password.captcha'))

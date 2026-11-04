@@ -74,7 +74,7 @@ class SessionsController
             return apiResponse('Web session revoked.');
         }
 
-        return apiResponse('Web session not found.', [], false, 404);
+        return apiResponse('Web session not found.', apiError('account.sessions.web.not_found'), false, 404);
     }
 
     #[Endpoint(title: 'Revoke Native Session')]
@@ -88,11 +88,11 @@ class SessionsController
             return apiResponse('Native session revoked.');
         }
 
-        return apiResponse('Native session not found.', [], false, 404);
+        return apiResponse('Native session not found.', apiError('account.sessions.native.not_found'), false, 404);
     }
 
     #[Endpoint(title: 'Login QR Code')]
-    #[Response(200, 'Login QR code retrieved.', examples: ['application/json' => ['success' => true, 'message' => 'Login QR code retrieved.', 'data' => []]])]
+    #[Response(200, 'Login QR code retrieved.', examples: ['application/json' => ['success' => true, 'message' => 'Login QR code retrieved.', 'data' => ['qrcode' => '']]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function getLoginQrCode(Request $request)
     {
