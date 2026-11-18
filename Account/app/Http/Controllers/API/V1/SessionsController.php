@@ -6,6 +6,7 @@ use Dedoc\Scramble\Attributes\Endpoint;
 use Dedoc\Scramble\Attributes\Group;
 use Dedoc\Scramble\Attributes\Response;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\QueryBuilder;
 
 #[Group('Account Sessions')]
@@ -55,10 +56,35 @@ class SessionsController
     public function getNativeSessions(Request $request)
     {
         $sessions = QueryBuilder::for($request->user()->tokens())
-            ->where('name', 'like', '%"type":"native"%')
             ->allowedSorts('created_at', 'last_used_at', 'expires_at')
             ->allowedFilters('name', 'abilities')
-            ->paginate($request->query('perPage') ?? null);
+            ->get()
+            ->filter(function ($session) {
+                $name = json_decode($session->name, true);
+
+                return is_array($name) && ($name['type'] ?? null) === 'native';
+            })
+            ->map(function ($session) {
+                $session->name = json_decode($session->name, true);
+
+                return $session;
+            })
+            ->values();
+
+        $perPage = (int)($request->query('perPage') ?: 15);
+        $perPage = $perPage > 0 ? $perPage : 15;
+        $page = max((int)$request->query('page', 1), 1);
+
+        $sessions = new LengthAwarePaginator(
+            $sessions->slice(($page - 1) * $perPage, $perPage)->values(),
+            $sessions->count(),
+            $perPage,
+            $page,
+            [
+                'path' => $request->url(),
+                'query' => $request->query(),
+            ],
+        );
 
         return apiResponse('Native sessions retrieved.', $sessions);
     }

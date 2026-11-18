@@ -106,7 +106,7 @@ class MFAController
 
         UserSettings::set($request->user()->id, 'auth.mfa.secret', $secret, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true]);
 
-        return apiResponse('MFA Secret generated.', $secret);
+        return apiResponse('MFA Secret generated.', ['secret' => $secret]);
     }
 
     #[Endpoint(title: 'Verify MFA')]

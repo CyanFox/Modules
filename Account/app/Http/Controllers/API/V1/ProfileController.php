@@ -9,6 +9,7 @@ use Dedoc\Scramble\Attributes\Response;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
 use Modules\Core\Facades\UserSettings;
+use Modules\Core\Models\Session;
 
 #[Group('Account Profile')]
 class ProfileController extends Controller
@@ -19,10 +20,15 @@ class ProfileController extends Controller
         'avatar_url' => ''
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
+    #[Response(403, 'Change avatar is disabled.', examples: ['application/json' => ['success' => false, 'message' => 'Change avatar is disabled.', 'data' => []]])]
     public function changeAvatar(Request $request)
     {
+        if (!settings('account.enable.change_avatar')) {
+            return apiResponse('Change avatar is disabled.', apiError('account.change_avatar.disabled'), false, 403);
+        }
+
         $request->validate([
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:6144',
+            'avatar' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:6144',
             'custom_avatar_url' => 'nullable|url',
         ]);
 
@@ -69,7 +75,7 @@ class ProfileController extends Controller
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function updateProfile(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'username' => 'nullable|string|max:255|unique:users,username,' . $request->user()->id,
@@ -78,7 +84,7 @@ class ProfileController extends Controller
             'language' => 'nullable|string|max:255',
         ]);
 
-        $request->user()->update($validated);
+        $request->user()->update($request->all());
 
         return apiResponse('Profile updated.', $request->user());
     }
@@ -97,14 +103,21 @@ class ProfileController extends Controller
             'password' => $request->new_password,
         ]);
 
+        Session::where('user_id', $request->user()->id)->delete();
+
         return apiResponse('Password updated.');
     }
 
     #[Endpoint(title: 'Delete Account')]
     #[Response(200, 'Account deleted.', examples: ['application/json' => ['success' => true, 'message' => 'Account deleted.', 'data' => []]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
+    #[Response(403, 'Delete Account is disabled.', examples: ['application/json' => ['success' => false, 'message' => 'Delete Account is disabled.', 'data' => []]])]
     public function deleteAccount(Request $request)
     {
+        if (!settings('account.enable.delete_account')) {
+            return apiResponse('Delete Account is disabled.', apiError('account.delete_account.disabled'), false, 403);
+        }
+
         $request->user()->delete();
 
         return apiResponse('Account deleted.');

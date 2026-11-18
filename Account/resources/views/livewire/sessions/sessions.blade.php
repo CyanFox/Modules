@@ -52,10 +52,7 @@
                                 </span>
                             </x-table.body.item>
                             <x-table.body.item>
-                                <span x-data
-                                      x-tooltip.raw="{{ formatDateTime($session->last_activity) }}">
-                                    {{ carbon()->parse($session->last_activity ?? 0)->diffForHumans() }}
-                                </span>
+                                <x-core::human-date :date="$session->last_activity"/>
                             </x-table.body.item>
                             <x-table.body.item>
                                 @hook('account.sessions.web.actions')

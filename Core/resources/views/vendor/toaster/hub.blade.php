@@ -1,8 +1,8 @@
 <div role="status" id="toaster" x-data="toasterHub(@js($toasts), @js($config))" @class([
-    'fixed z-50 p-4 w-full flex flex-col pointer-events-none top-0 sm:p-6',
-    'sm:bottom-0 sm:top-auto' => $alignment->is('bottom'),
+    'fixed z-50 p-4 w-full flex flex-col pointer-events-none sm:p-6',
+    'bottom-0 top-auto' => $alignment->is('bottom'),
     'sm:top-1/2 sm:-translate-y-1/2' => $alignment->is('middle'),
-    'sm:top-0' => $alignment->is('top'),
+    'top-0' => $alignment->is('top'),
     'items-start rtl:items-end' => $position->is('left'),
     'items-center' => $position->is('center'),
     'items-end rtl:items-start' => $position->is('right'),

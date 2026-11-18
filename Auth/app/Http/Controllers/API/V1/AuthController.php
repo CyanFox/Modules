@@ -240,7 +240,6 @@ class AuthController extends Controller
                 'password' => ['required', 'string', Password::defaults()],
             ]);
 
-
             $user = UserSetting::where('key', 'auth.forgot_password.token')->where('value', $resetToken)->first()?->user;
             if (!$user) {
                 return apiResponse('Invalid token.', apiError('auth.forgot_password.invalid_token'), false, 422);

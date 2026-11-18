@@ -42,8 +42,8 @@ class ActivityController extends Controller
         ])->orWhere([
             'causer_id' => auth()->id(),
             'causer_type' => userModel()::class,
-        ]))->allowedSorts('created_at', 'causer_id', 'causer_type', 'description', 'log_name', 'event', 'subject_id', 'subject_type')
-            ->allowedFilters('causer_id', 'causer_type', 'description', 'log_name', 'event', 'attribute_changes', 'subject_id', 'subject_type')
+        ]))->allowedSorts('id', 'created_at', 'causer_id', 'causer_type', 'description', 'log_name', 'event', 'subject_id', 'subject_type')
+            ->allowedFilters('id', 'causer_id', 'causer_type', 'description', 'log_name', 'event', 'attribute_changes', 'subject_id', 'subject_type')
             ->paginate($request->query('perPage') ?? null)
             ->appends($request->query()));
     }

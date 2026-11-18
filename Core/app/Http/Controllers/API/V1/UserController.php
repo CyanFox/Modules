@@ -43,7 +43,7 @@ class UserController extends Controller
                 'id' => $role->id,
                 'name' => $role->name,
             ]),
-            'permissions' => $user->permissions->map(fn($permission) => [
+            'permissions' => $user->getAllPermissions()->map(fn($permission) => [
                 'id' => $permission->id,
                 'name' => $permission->name,
             ]),
@@ -70,7 +70,7 @@ class UserController extends Controller
     {
         $user = $request->user();
 
-        return apiResponse('Permissions retrieved.', $user->permissions->map(fn($permission) => [
+        return apiResponse('Permissions retrieved.', $user->getAllPermissions()->map(fn($permission) => [
             'id' => $permission->id,
             'name' => $permission->name,
         ]));

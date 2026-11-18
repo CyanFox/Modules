@@ -49,7 +49,7 @@
                 <x-table.body>
                     @foreach(auth()->user()->tokens as $token)
                         @php
-                            $properties = $token->name;
+                            $properties = json_decode($token->name);
 
                             if (data_get($properties, 'type') == 'native') {
                                 continue;
@@ -62,7 +62,7 @@
                             </x-table.body.item>
                             <x-table.body.item>
                                 <span x-data x-tooltip.raw="{{ implode(', ', $token->abilities) }}">
-                                    {{ str()->limit(implode(', ', $token->abilities), 200, preserveWords: true) }}
+                                    {{ str()->limit(implode(', ', $token->abilities), 150, preserveWords: true) }}
                                 </span>
                             </x-table.body.item>
                             <x-table.body.item>

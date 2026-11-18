@@ -9,7 +9,7 @@
         <div class="my-4 space-y-4">
             @if($icon)
                 <div class="flex justify-center text-6xl">
-                    <i class="{{ $icon }} {{ $iconColor ? $iconColor : 'text-warning' }}"></i>
+                    <i class="{{ $icon }} {{ $iconColor ?: 'text-warning' }}"></i>
                 </div>
             @endif
 

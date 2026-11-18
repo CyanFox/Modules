@@ -29,6 +29,7 @@ new class extends Component {
             'username' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255',
             'password' => ['required', 'string', Password::defaults()],
+            'passwordConfirmation' => 'required|same:password',
         ]);
 
         if ($this->setRateLimit()) {
