@@ -29,6 +29,9 @@ new class extends Component
     public $permissions = [];
 
     public $disabled;
+    public $disableMfa;
+    public $forcePasswordChange;
+    public $forceMfa;
 
     public $disableMfa;
 
