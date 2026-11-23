@@ -92,7 +92,7 @@
                             @endif
 
                             @hook('auth.login.form')
-                            <form wire:submit="attemptLogin" class="space-y-4">
+                                <form wire:submit="attemptLogin" class="space-y-4 my-0">
                                 <x-input wire:model="username" :label="__('auth::login.username')"
                                          wire:blur="checkIfUserExists($event.target.value)"
                                          autocomplete="username webauthn" autofocus
@@ -119,11 +119,22 @@
                                     @endhook
                                 @endif
 
-                                <x-button class="w-full" type="submit" loading="attemptLogin">
+                                    <x-divider/>
+
+                                    <x-button class="w-full" type="submit" loading="attemptLogin">
                                     {{ __('auth::login.buttons.login') }}
                                 </x-button>
                                 @shook('s.auth.login.buttons')
                             </form>
+                                <x-divider/>
+                                <div class="my-0 space-y-4">
+                                    @foreach(\Modules\Auth\Models\OAuthProvider::all() as $provider)
+                                        <x-button color="{{ $provider->color }}"
+                                                  link="{{ route('oauth.redirect', ['provider' => $provider->id]) }}">
+                                            {!! __('auth::login.buttons.login_with_provider', ['provider' => e($provider->name), 'icon' => e($provider->icon)]) !!}
+                                        </x-button>
+                                    @endforeach
+                                </div>
 
                             <x-divider/>
                             <div class="flex justify-center">

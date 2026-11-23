@@ -13,5 +13,5 @@ return [
     ],
     'core' => [
         'default_avatar_url' => 'Default Avatar URL',
-    ]
+    ],
 ];

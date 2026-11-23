@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use Modules\Admin\Http\Controllers\API\V1\ActivityController;
 use Modules\Admin\Http\Controllers\API\V1\ModulesController;

@@ -51,6 +51,8 @@
                                 @endhook
                             @endif
 
+                            <x-divider/>
+
                             <x-button class="w-full" type="submit" loading="resetPassword">
                                 {{ __('auth::forgot-password.buttons.reset_password') }}
                             </x-button>
@@ -92,6 +94,8 @@
                                 <x-input wire:model="captcha" :label="__('auth::forgot-password.captcha')" required/>
                                 @endhook
                             @endif
+
+                            <x-divider/>
 
                             <x-button class="w-full" type="submit" loading="sendResetLink">
                                 {{ __('auth::forgot-password.buttons.send_rest_link') }}

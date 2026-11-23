@@ -27,6 +27,7 @@ use Webauthn\PublicKeyCredentialSource;
  * @property-read Collection<int, Activity> $activitiesAsSubject
  * @property-read int|null $activities_as_subject_count
  * @property-read User $authenticatable
+ *
  * @method static PasskeyFactory factory($count = null, $state = [])
  * @method static Builder<static>|Passkey newModelQuery()
  * @method static Builder<static>|Passkey newQuery()
@@ -39,10 +40,11 @@ use Webauthn\PublicKeyCredentialSource;
  * @method static Builder<static>|Passkey whereLastUsedAt($value)
  * @method static Builder<static>|Passkey whereName($value)
  * @method static Builder<static>|Passkey whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  * @mixin IdeHelperPasskey
  */
-class Passkey extends BasePassKey
+class Passkey extends BasePasskey
 {
     use LogsActivity;
 
@@ -58,7 +60,7 @@ class Passkey extends BasePassKey
             ->logExcept($this->hidden)
             ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->setDescriptionForEvent(function ($eventName) {
-                return 'user.passkeys.' . $eventName;
+                return 'user.passkeys.'.$eventName;
             });
     }
 }

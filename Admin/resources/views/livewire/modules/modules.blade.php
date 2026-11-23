@@ -57,6 +57,13 @@
                                     @endif
                                 </x-table.body.item>
                                 <x-table.body.item class="flex gap-1">
+                                    @if(modules()->getSettingsPage($module) !== null)
+                                        <x-button.floating link="{{ modules()->getSettingsPage($module) }}"
+                                                           :tooltip="__('admin::modules.tooltips.settings')" size="sm"
+                                                           wire:navigate>
+                                            <i class="icon-settings"></i>
+                                        </x-button.floating>
+                                    @endif
                                     @if(modules()->getModule($module)->isDisabled())
                                         @can('admin.modules.enable')
                                             <x-button.floating wire:click="enableModule('{{ $module }}')"

@@ -24,6 +24,7 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User $user
+ *
  * @method static Builder<static>|UserSetting newModelQuery()
  * @method static Builder<static>|UserSetting newQuery()
  * @method static Builder<static>|UserSetting query()
@@ -34,8 +35,10 @@ use Spatie\Activitylog\Support\LogOptions;
  * @method static Builder<static>|UserSetting whereUpdatedAt($value)
  * @method static Builder<static>|UserSetting whereUserId($value)
  * @method static Builder<static>|UserSetting whereValue($value)
+ *
  * @property-read Collection<int, Activity> $activitiesAsSubject
  * @property-read int|null $activities_as_subject_count
+ *
  * @mixin Eloquent
  * @mixin IdeHelperUserSetting
  */
@@ -124,7 +127,7 @@ class UserSetting extends Model
             ->logExcept($this->hidden)
             ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->setDescriptionForEvent(function ($eventName) {
-                return 'user.settings.' . $eventName;
+                return 'user.settings.'.$eventName;
             });
     }
 }

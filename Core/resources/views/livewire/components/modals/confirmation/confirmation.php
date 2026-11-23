@@ -4,7 +4,8 @@ use Livewire\Attributes\Locked;
 use Modules\Core\Traits\WithPasswordConfirmation;
 use RealZone22\PenguBlade\ModalComponent;
 
-new class extends ModalComponent {
+new class extends ModalComponent
+{
     use WithPasswordConfirmation;
 
     #[Locked]
@@ -42,7 +43,7 @@ new class extends ModalComponent {
 
     public function confirmAction()
     {
-        if ($this->needsPasswordConfirmation && !$this->hasPasswordConfirmedSession()) {
+        if ($this->needsPasswordConfirmation && ! $this->hasPasswordConfirmedSession()) {
             return;
         }
 
@@ -64,7 +65,7 @@ new class extends ModalComponent {
 
     public function mount()
     {
-        if ($this->needsPasswordConfirmation && !$this->checkPasswordConfirmation()->passwordFunction('render')->checkPassword()) {
+        if ($this->needsPasswordConfirmation && ! $this->checkPasswordConfirmation()->passwordFunction('render')->checkPassword()) {
             return;
         }
     }

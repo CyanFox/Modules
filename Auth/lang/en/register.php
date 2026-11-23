@@ -25,5 +25,5 @@ return [
 
     'notifications' => [
         'registered' => 'You have been registered successfully.',
-    ]
+    ],
 ];

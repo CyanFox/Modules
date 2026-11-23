@@ -34,7 +34,7 @@ return [
             'uppercase_letters' => 'Password Require Uppercase',
             'lowercase_letters' => 'Password Require Lowercase',
             'uncompromised' => 'Password Uncompromised',
-        ]
+        ],
     ],
     'logo' => [
         'css' => 'Custom Logo CSS',

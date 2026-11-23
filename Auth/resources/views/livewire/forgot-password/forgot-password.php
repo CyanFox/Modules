@@ -13,13 +13,16 @@ use Modules\Auth\Facades\Unsplash;
 use Modules\Core\Enums\SettingsProperty;
 use Modules\Core\Models\UserSetting;
 
-new class extends Component {
+new class extends Component
+{
     use WithRateLimiting;
 
     public $unsplash = [];
 
     public $username;
+
     public $rateLimitTime;
+
     public $captcha;
 
     #[Url]
@@ -28,6 +31,7 @@ new class extends Component {
     public $user;
 
     public $password;
+
     public $passwordConfirmation;
 
     public function resetPassword()
@@ -37,7 +41,7 @@ new class extends Component {
             'passwordConfirmation' => 'required|string|same:password',
         ]);
 
-        if (!$this->user || $this->setRateLimit()) {
+        if (! $this->user || $this->setRateLimit()) {
             return;
         }
 
@@ -124,7 +128,7 @@ new class extends Component {
 
     public function mount()
     {
-        if (!settings('auth.forgot_password.enabled')) {
+        if (! settings('auth.forgot_password.enabled')) {
             abort(404);
         }
 

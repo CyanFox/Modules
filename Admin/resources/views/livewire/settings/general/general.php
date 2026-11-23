@@ -6,13 +6,18 @@ use Livewire\WithFileUploads;
 use Masmerise\Toaster\Toaster;
 use Modules\Core\Facades\Settings;
 
-new class extends Component {
+new class extends Component
+{
     use WithFileUploads;
 
     public $name;
+
     public $url;
+
     public $timezone;
+
     public $language;
+
     public $logo;
 
     public function updateSettings()
@@ -22,7 +27,7 @@ new class extends Component {
             'url' => 'required|url',
             'timezone' => 'required|timezone',
             'language' => 'required',
-            'logo' => 'nullable|image:allow_svg'
+            'logo' => 'nullable|image:allow_svg',
         ]);
 
         $settings = [
@@ -33,11 +38,11 @@ new class extends Component {
         ];
 
         if ($this->logo) {
-            Storage::disk('public')->delete('img/' . str_replace('/storage/img/', '', settings('app.logo')));
+            Storage::disk('public')->delete('img/'.str_replace('/storage/img/', '', settings('app.logo')));
 
-            $this->logo->storeAs('img', 'Logo.' . $this->logo->getClientOriginalExtension(), 'public');
+            $this->logo->storeAs('img', 'Logo.'.$this->logo->getClientOriginalExtension(), 'public');
 
-            $settings['app.logo'] = '/storage/img/Logo.' . $this->logo->getClientOriginalExtension();
+            $settings['app.logo'] = '/storage/img/Logo.'.$this->logo->getClientOriginalExtension();
         }
 
         foreach ($settings as $key => $value) {
@@ -51,7 +56,7 @@ new class extends Component {
 
     public function resetLogo()
     {
-        Storage::disk('public')->delete('img/' . str_replace('/storage/img/', '', settings('app.logo')));
+        Storage::disk('public')->delete('img/'.str_replace('/storage/img/', '', settings('app.logo')));
 
         Settings::update('app.logo', '/img/Logo.svg');
 

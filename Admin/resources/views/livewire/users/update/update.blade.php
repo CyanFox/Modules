@@ -31,6 +31,12 @@
 
                 <div class="space-y-4 mt-4">
                     <x-checkbox wire:model="disabled" label="{{ __('admin::users.disabled') }}"/>
+                    @if(userSettings('auth.mfa.enabled', $user->id))
+                        <x-checkbox wire:model="disableMfa" label="{{ __('admin::users.disable_mfa') }}"/>
+                    @endif
+                    <x-checkbox wire:model="forcePasswordChange"
+                                label="{{ __('admin::users.force_password_change') }}"/>
+                    <x-checkbox wire:model="forceMfa" label="{{ __('admin::users.force_mfa') }}"/>
                 </div>
 
                 <x-cf.buttons :submit-text="__('admin::users.update.buttons.update')" target="updateUser"/>

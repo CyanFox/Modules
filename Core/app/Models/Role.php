@@ -24,6 +24,7 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property-read int|null $permissions_count
  * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
+ *
  * @method static Builder<static>|Role newModelQuery()
  * @method static Builder<static>|Role newQuery()
  * @method static Builder<static>|Role permission($permissions, bool $without = false)
@@ -34,6 +35,7 @@ use Spatie\Activitylog\Support\LogOptions;
  * @method static Builder<static>|Role whereName($value)
  * @method static Builder<static>|Role whereUpdatedAt($value)
  * @method static Builder<static>|Role withoutPermission($permissions)
+ *
  * @mixin Eloquent
  * @mixin IdeHelperRole
  */
@@ -53,7 +55,7 @@ class Role extends \Spatie\Permission\Models\Role
             ->logExcept($this->hidden)
             ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->setDescriptionForEvent(function ($eventName) {
-                return 'roles.' . $eventName;
+                return 'roles.'.$eventName;
             });
     }
 }

@@ -6,35 +6,43 @@ use Livewire\Component;
 use Masmerise\Toaster\Toaster;
 use Modules\Core\Facades\UserSettings;
 use Modules\Core\Models\Session;
+use Modules\Core\Models\UserSetting;
 use Modules\Core\Traits\WithConfirmation;
 use Modules\Core\Traits\WithPasswordConfirmation;
 
-new class extends Component {
-    use WithPasswordConfirmation, WithConfirmation;
+new class extends Component
+{
+    use WithConfirmation, WithPasswordConfirmation;
 
     #[Url]
     public string $tab = 'password';
 
     public ?string $theme;
+
     public ?string $language;
 
     public ?string $firstName;
+
     public ?string $lastName;
+
     public string $username;
+
     public string $email;
 
     public ?string $currentPassword;
+
     public ?string $newPassword;
+
     public ?string $confirmNewPassword;
 
     public function deleteAccount($confirmed = false)
     {
-        if (!settings('account.enable.delete_account')) {
+        if (! settings('account.enable.delete_account')) {
             return;
         }
 
         if ($confirmed) {
-            if (!$this->hasPasswordConfirmedSession()) {
+            if (! $this->hasPasswordConfirmedSession()) {
                 return;
             }
 
@@ -44,6 +52,7 @@ new class extends Component {
             Toaster::success(__('account::account.delete_account.notifications.deleted'));
 
             $this->redirect(route('auth.login'), true);
+
             return;
         }
 
@@ -54,6 +63,37 @@ new class extends Component {
             ->icon('icon-triangle-alert')
             ->needsPasswordConfirmation()
             ->method('deleteAccount', true)
+            ->send();
+    }
+
+    public function unlinkProvider($providerId, $confirmed = false)
+    {
+        $linkedProviders = UserSetting::where('key', 'like', 'auth.oauth.%')
+            ->where('user_id', auth()->id())
+            ->count();
+
+        if ($linkedProviders === 1 && blank(auth()->user()->password)) {
+            Toaster::error(__('account::account.unlink_provider.notifications.last_provider'));
+
+            return;
+        }
+
+        if ($confirmed) {
+            UserSettings::delete(auth()->id(), 'auth.oauth.'.$providerId.'.id');
+
+            Toaster::success(__('account::account.unlink_provider.notifications.unlinked'));
+
+            $this->redirect(url()->previous(), true);
+
+            return;
+        }
+
+        $this->dialog()
+            ->question(__('account::account.unlink_provider.title'),
+                __('account::account.unlink_provider.description'))
+            ->confirm(__('account::account.unlink_provider.buttons.unlink'), 'warning')
+            ->icon('icon-triangle-alert')
+            ->method('unlinkProvider', $providerId, true)
             ->send();
     }
 
@@ -74,7 +114,7 @@ new class extends Component {
     public function disableMfa($confirmed = false)
     {
         if ($confirmed) {
-            if (!$this->hasPasswordConfirmedSession()) {
+            if (! $this->hasPasswordConfirmedSession()) {
                 return;
             }
 
@@ -85,6 +125,7 @@ new class extends Component {
             Toaster::success(__('account::account.disable_mfa.notifications.disabled'));
 
             $this->redirect(url()->previous(), true);
+
             return;
         }
 
@@ -103,7 +144,7 @@ new class extends Component {
         $this->validate([
             'firstName' => 'nullable|string|max:255',
             'lastName' => 'nullable|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username,' . auth()->id(),
+            'username' => 'required|string|max:255|unique:users,username,'.auth()->id(),
             'email' => 'required|email|max:255',
         ]);
 
@@ -121,8 +162,13 @@ new class extends Component {
 
     public function changePassword()
     {
+        if (filled(auth()->user()->password)) {
+            $this->validate([
+                'currentPassword' => 'required|string|current_password',
+            ]);
+        }
+
         $this->validate([
-            'currentPassword' => 'required|string|current_password',
             'newPassword' => ['required', 'string', Password::defaults()],
             'confirmNewPassword' => ['required', 'string', 'same:newPassword'],
         ]);

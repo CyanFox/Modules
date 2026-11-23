@@ -22,7 +22,7 @@ class SessionsController
             'last_activity' => 1234567890,
             'created_at' => '2000-01-01T00:00:00.000000Z',
             'updated_at' => '2000-01-01T00:00:00.000000Z',
-        ]
+        ],
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function getWebSessions(Request $request)
@@ -43,14 +43,14 @@ class SessionsController
                 'name' => '',
                 'type' => 'native',
                 'platform' => '',
-                'uuid' => ''
+                'uuid' => '',
             ],
             'abilities' => [],
             'last_used_at' => '2000-01-01T00:00:00.000000Z',
             'expires_at' => '2000-01-01T00:00:00.000000Z',
             'created_at' => '2000-01-01T00:00:00.000000Z',
             'updated_at' => '2000-01-01T00:00:00.000000Z',
-        ]
+        ],
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function getNativeSessions(Request $request)
@@ -71,9 +71,9 @@ class SessionsController
             })
             ->values();
 
-        $perPage = (int)($request->query('perPage') ?: 15);
+        $perPage = (int) ($request->query('perPage') ?: 15);
         $perPage = $perPage > 0 ? $perPage : 15;
-        $page = max((int)$request->query('page', 1), 1);
+        $page = max((int) $request->query('page', 1), 1);
 
         $sessions = new LengthAwarePaginator(
             $sessions->slice(($page - 1) * $perPage, $perPage)->values(),

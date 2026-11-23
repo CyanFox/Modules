@@ -10,11 +10,12 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\Sanctum;
 use Masmerise\Toaster\ToasterConfig;
-use Modules\Core\Http\Middleware\Authenticate;
 use Modules\Core\Http\Middleware\CheckLanguage;
+use Modules\Core\Http\Middleware\UpdateLastActivity;
 use Modules\Core\Http\Middleware\UserIsDisabled;
 use Modules\Core\Models\PersonalAccessToken;
 use Modules\Core\Models\User;
+use Modules\Core\Services\SpotlightService;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -74,6 +75,10 @@ class CoreServiceProvider extends ModuleServiceProvider
     {
         parent::register();
 
+        $this->app->singleton('spotlight', function () {
+            return new SpotlightService;
+        });
+
         $this->registerToasterConfig();
     }
 
@@ -81,7 +86,7 @@ class CoreServiceProvider extends ModuleServiceProvider
     {
         $path = module_path($this->name, 'config/toaster.php');
 
-        if (!is_file($path)) {
+        if (! is_file($path)) {
             return;
         }
 
@@ -102,7 +107,7 @@ class CoreServiceProvider extends ModuleServiceProvider
 
         $this->registerMiddleware($this->app['router']);
 
-        if (!app()->runningInConsole()) {
+        if (! app()->runningInConsole()) {
             $group = Role::findOrCreate('Super Admin');
             $group->givePermissionTo(Permission::all());
 
@@ -136,13 +141,13 @@ class CoreServiceProvider extends ModuleServiceProvider
         }
 
         $router->middlewareGroup('auth', [
-            Authenticate::class,
             CheckLanguage::class,
             UserIsDisabled::class,
         ]);
 
         $router->pushMiddlewareToGroup('api', UserIsDisabled::class);
         $router->pushMiddlewareToGroup('web', 'language');
+        $router->pushMiddlewareToGroup('web', UpdateLastActivity::class);
     }
 
     /**
@@ -157,12 +162,12 @@ class CoreServiceProvider extends ModuleServiceProvider
 
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
-                    $config = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
+                    $config = str_replace($configPath.DIRECTORY_SEPARATOR, '', $file->getPathname());
                     $configKey = str_replace(DIRECTORY_SEPARATOR, '.', $config);
                     $configKey = str_replace('.php', '', $configKey);
 
                     $key = ($config === 'config.php') ? $this->nameLower : $configKey;
-                    $publishPath = ($config === 'config.php') ? config_path($this->nameLower . '.php') : config_path($config);
+                    $publishPath = ($config === 'config.php') ? config_path($this->nameLower.'.php') : config_path($config);
                     $this->publishes([$file->getPathname() => $publishPath], 'config');
 
                     $this->merge_config_from($file->getPathname(), $key);

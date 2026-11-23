@@ -14,16 +14,15 @@ use Modules\Core\Models\Session;
 #[Group('Account Profile')]
 class ProfileController extends Controller
 {
-
     #[Endpoint(title: 'Change Avatar')]
     #[Response(200, 'Avatar updated.', examples: ['application/json' => ['success' => true, 'message' => 'Avatar Updated.', 'data' => [
-        'avatar_url' => ''
+        'avatar_url' => '',
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     #[Response(403, 'Change avatar is disabled.', examples: ['application/json' => ['success' => false, 'message' => 'Change avatar is disabled.', 'data' => []]])]
     public function changeAvatar(Request $request)
     {
-        if (!settings('account.enable.change_avatar')) {
+        if (! settings('account.enable.change_avatar')) {
             return apiResponse('Change avatar is disabled.', apiError('account.change_avatar.disabled'), false, 403);
         }
 
@@ -36,7 +35,7 @@ class ProfileController extends Controller
             $request->user()->clearMediaCollection('avatar');
 
             UserSettings::set($request->user()->id, 'core.custom_avatar_url', $request->custom_avatar_url, true);
-        } else if ($request->avatar) {
+        } elseif ($request->avatar) {
             UserSettings::delete($request->user()->id, 'core.custom_avatar_url');
 
             $request->user()->clearMediaCollection('avatar');
@@ -48,7 +47,7 @@ class ProfileController extends Controller
 
     #[Endpoint(title: 'Reset Avatar')]
     #[Response(200, 'Avatar reset.', examples: ['application/json' => ['success' => true, 'message' => 'Avatar reset.', 'data' => [
-        'avatar_url' => ''
+        'avatar_url' => '',
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function resetAvatar(Request $request)
@@ -78,7 +77,7 @@ class ProfileController extends Controller
         $request->validate([
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
-            'username' => 'nullable|string|max:255|unique:users,username,' . $request->user()->id,
+            'username' => 'nullable|string|max:255|unique:users,username,'.$request->user()->id,
             'email' => 'nullable|string|email|max:255',
             'theme' => 'nullable|string|max:255',
             'language' => 'nullable|string|max:255',
@@ -114,7 +113,7 @@ class ProfileController extends Controller
     #[Response(403, 'Delete Account is disabled.', examples: ['application/json' => ['success' => false, 'message' => 'Delete Account is disabled.', 'data' => []]])]
     public function deleteAccount(Request $request)
     {
-        if (!settings('account.enable.delete_account')) {
+        if (! settings('account.enable.delete_account')) {
             return apiResponse('Delete Account is disabled.', apiError('account.delete_account.disabled'), false, 403);
         }
 

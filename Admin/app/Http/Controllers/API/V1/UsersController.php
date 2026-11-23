@@ -26,7 +26,7 @@ class UsersController extends Controller
             'disabled' => false,
             'created_at' => '2000-01-01T00:00:00.000000Z',
             'updated_at' => '2000-01-01T00:00:00.000000Z',
-        ]
+        ],
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function getUsers(Request $request)
@@ -68,18 +68,18 @@ class UsersController extends Controller
         }
 
         $user = userModel()->find($userId);
-        if (!$user) {
+        if (! $user) {
             return apiResponse('User not found.', apiError('admin.users.not_found'), false, 404);
         }
 
         return apiResponse('User retrieved.', array_merge($user->withoutRelations()->toArray(), [
             'avatar_url' => $user->getAvatar(),
             'display_name' => $user->getDisplayName(),
-            'roles' => $user->roles->map(fn($role) => [
+            'roles' => $user->roles->map(fn ($role) => [
                 'id' => $role->id,
                 'name' => $role->name,
             ]),
-            'permissions' => $user->permissions->map(fn($permission) => [
+            'permissions' => $user->permissions->map(fn ($permission) => [
                 'id' => $permission->id,
                 'name' => $permission->name,
             ]),
@@ -153,14 +153,14 @@ class UsersController extends Controller
         }
 
         $user = userModel()->find($userId);
-        if (!$user) {
+        if (! $user) {
             return apiResponse('User not found.', apiError('admin.users.not_found'), false, 404);
         }
 
         $request->validate([
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
-            'username' => 'nullable|string|max:255|unique:users,username,' . $userId,
+            'username' => 'nullable|string|max:255|unique:users,username,'.$userId,
             'password' => ['nullable', 'string', Password::defaults()],
             'email' => 'nullable|email',
             'roles' => 'nullable|array',
@@ -185,7 +185,7 @@ class UsersController extends Controller
         }
 
         $user = userModel()->find($userId);
-        if (!$user) {
+        if (! $user) {
             return apiResponse('User not found.', apiError('admin.users.not_found'), false, 404);
         }
 

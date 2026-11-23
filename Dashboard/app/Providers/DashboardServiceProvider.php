@@ -38,7 +38,7 @@ class DashboardServiceProvider extends ModuleServiceProvider
     /**
      * Define module schedules.
      *
-     * @param $schedule
+     * @param  $schedule
      */
     // protected function configureSchedules(Schedule $schedule): void
     // {
@@ -47,9 +47,9 @@ class DashboardServiceProvider extends ModuleServiceProvider
 
     public function boot(): void
     {
-        if (!app()->runningInConsole()) {
+        if (! app()->runningInConsole()) {
             LaraHooks::listen('s.admin.profile.items', function () {
-                return Blade::render('<x-admin::profile.item icon="icon-house" route="dashboard">' . __('admin::admin.home') . '</x-admin::profile.item>');
+                return Blade::render('<x-admin::profile.item icon="icon-house" route="dashboard">'.__('admin::admin.home').'</x-admin::profile.item>');
             }, 10);
         }
 

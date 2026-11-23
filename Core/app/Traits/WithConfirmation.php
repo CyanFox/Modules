@@ -58,7 +58,7 @@ trait WithConfirmation
 
     public function method(string $callable, ...$args): static
     {
-        $this->confirmationData['event'] = $callable . '(' . implode(', ', $args) . ')';
+        $this->confirmationData['event'] = $callable.'('.implode(', ', $args).')';
 
         return $this;
     }

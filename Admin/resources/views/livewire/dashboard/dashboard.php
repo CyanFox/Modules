@@ -6,7 +6,8 @@ use Modules\Core\Models\Permission;
 use Modules\Core\Models\Role;
 use Nwidart\Modules\Facades\Module;
 
-new class extends Component {
+new class extends Component
+{
     public array $stats = [];
 
     public function mount(): void

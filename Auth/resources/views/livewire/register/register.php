@@ -8,17 +8,26 @@ use Livewire\Component;
 use Modules\Auth\Facades\Unsplash;
 use Modules\Core\Models\User;
 
-new class extends Component {
+new class extends Component
+{
     use WithRateLimiting;
 
     public $unsplash = [];
+
     public $rateLimitTime;
+
     public $captcha;
+
     public $firstName;
+
     public $lastName;
+
     public $username;
+
     public $email;
+
     public $password;
+
     public $passwordConfirmation;
 
     public function register()

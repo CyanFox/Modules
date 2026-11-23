@@ -19,12 +19,12 @@ class UnsplashService
             }
 
             $imagePath = $imageData[0]['urls']['regular'];
-            $photoLink = $imageData[0]['links']['html'] . $utmSource;
+            $photoLink = $imageData[0]['links']['html'].$utmSource;
             $authorName = $imageData[0]['user']['name'];
-            $authorLink = $imageData[0]['user']['links']['html'] . $utmSource;
+            $authorLink = $imageData[0]['user']['links']['html'].$utmSource;
             $error = null;
 
-            $css = "background-image: url('" . $imagePath . "');
+            $css = "background-image: url('".$imagePath."');
                     background-size: cover;
                     background-repeat: no-repeat;
                     background-position: center;
@@ -47,13 +47,13 @@ class UnsplashService
             'photo' => $photoLink,
             'author' => $authorName,
             'authorURL' => $authorLink,
-            'utm' => 'https://unsplash.com/' . $this->getUTM(),
+            'utm' => 'https://unsplash.com/'.$this->getUTM(),
         ];
     }
 
     public function getRandomUnsplashImage($cache = true): ?array
     {
-        if (!$cache) {
+        if (! $cache) {
             Cache::forget('unsplash_image');
         }
 
@@ -63,8 +63,8 @@ class UnsplashService
         }
 
         return Cache::remember('unsplash_image', now()->addHour(), function () use ($apiKey) {
-            return Http::withHeader('Authorization', "Client-ID " . $apiKey)
-                ->get('https://api.unsplash.com/photos/random?count=1&query=' .
+            return Http::withHeader('Authorization', 'Client-ID '.$apiKey)
+                ->get('https://api.unsplash.com/photos/random?count=1&query='.
                     settings('auth.unsplash.query', config('auth.unsplash.query')))
                 ->json();
         });

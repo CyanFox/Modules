@@ -28,6 +28,7 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property-read Collection<int, Activity> $activitiesAsSubject
  * @property-read int|null $activities_as_subject_count
  * @property-read Model|Eloquent $tokenable
+ *
  * @method static Builder<static>|PersonalAccessToken newModelQuery()
  * @method static Builder<static>|PersonalAccessToken newQuery()
  * @method static Builder<static>|PersonalAccessToken query()
@@ -41,6 +42,7 @@ use Spatie\Activitylog\Support\LogOptions;
  * @method static Builder<static>|PersonalAccessToken whereTokenableId($value)
  * @method static Builder<static>|PersonalAccessToken whereTokenableType($value)
  * @method static Builder<static>|PersonalAccessToken whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  * @mixin IdeHelperPersonalAccessToken
  */
@@ -51,7 +53,7 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
     protected function casts(): array
     {
         return [
-            'name' => 'json'
+            'name' => 'json',
         ];
     }
 
@@ -69,7 +71,7 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
             ->logExcept($this->hidden)
             ->dontLogIfAttributesChangedOnly(['last_used_at', 'updated_at'])
             ->setDescriptionForEvent(function ($eventName) {
-                return 'user.api_key.' . $eventName;
+                return 'user.api_key.'.$eventName;
             });
     }
 }

@@ -24,5 +24,5 @@ return [
         'sent' => 'Reset link sent successfully',
         'invalid' => 'This password reset token is either invalid or has expired',
         'reset' => 'Password reset successfully',
-    ]
+    ],
 ];

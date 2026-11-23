@@ -20,6 +20,7 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property string|null $user_agent
  * @property string $payload
  * @property int $last_activity
+ *
  * @method static Builder<static>|Session newModelQuery()
  * @method static Builder<static>|Session newQuery()
  * @method static Builder<static>|Session query()
@@ -29,9 +30,11 @@ use Spatie\Activitylog\Support\LogOptions;
  * @method static Builder<static>|Session wherePayload($value)
  * @method static Builder<static>|Session whereUserAgent($value)
  * @method static Builder<static>|Session whereUserId($value)
+ *
  * @property-read User|null $user
  * @property-read Collection<int, Activity> $activitiesAsSubject
  * @property-read int|null $activities_as_subject_count
+ *
  * @mixin Eloquent
  * @mixin IdeHelperSession
  */
@@ -72,7 +75,7 @@ class Session extends Model
             ->logExcept($this->hidden)
             ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->setDescriptionForEvent(function ($eventName) {
-                return 'user.session.' . $eventName;
+                return 'user.session.'.$eventName;
             });
     }
 }

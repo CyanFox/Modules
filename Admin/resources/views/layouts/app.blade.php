@@ -15,6 +15,7 @@
     @livewireStyles
 </head>
 <body wire:transition.navigate>
+@livewire('core::components.spotlight')
 
 <x-admin::sidebar :breadcrumbs="$breadcrumbs ?? []">
     {{ $slot }}

@@ -11,8 +11,9 @@ use RealZone22\PenguTables\Table\Header;
 use RealZone22\PenguTables\Table\Options;
 use RealZone22\PenguTables\Traits\WithExport;
 
-new class extends PenguTable {
-    use WithExport, WithConfirmation;
+new class extends PenguTable
+{
+    use WithConfirmation, WithExport;
 
     protected function setupOptions(): Options
     {
@@ -31,7 +32,7 @@ new class extends PenguTable {
         }
 
         return [
-            Header::make('<x-button link="' . route('admin.users.create') . '" wire:navigate>' . __('admin::users.buttons.create') . '</x-button>')
+            Header::make('<x-button link="'.route('admin.users.create').'" wire:navigate>'.__('admin::users.buttons.create').'</x-button>'),
         ];
     }
 
@@ -41,7 +42,7 @@ new class extends PenguTable {
             Column::make(__('messages.tables.id'), 'id')
                 ->sortable(),
             Column::make(__('admin::users.avatar'))
-                ->format(fn($col, $row) => '<img src="' . e($row->getAvatar()) . '" class="rounded-full size-8">')
+                ->format(fn ($col, $row) => '<img src="'.e($row->getAvatar()).'" class="rounded-full size-8">')
                 ->html(),
             Column::make(__('admin::users.first_name'), 'first_name')
                 ->sortable()
@@ -56,34 +57,63 @@ new class extends PenguTable {
                 ->sortable()
                 ->searchable(),
             Column::make(__('admin::users.mfa_enabled'))
-                ->format(fn($col, $row) => userSettings('auth.mfa.enabled', $row->id) ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
+                ->format(fn ($col, $row) => userSettings('auth.mfa.enabled', $row->id) ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
                 ->html(),
             Column::make(__('admin::users.disabled'), 'disabled')
-                ->format(fn($col) => $col ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
+                ->format(fn ($col) => $col ? '<i class="icon-check text-success"></i>' : '<i class="icon-x text-danger"></i>')
                 ->sortable()
                 ->html(),
+            Column::make(__('admin::users.last_activity'), 'last_activity')
+                ->format(fn ($col) => Blade::render('<x-core::human-date date="'.$col.'"/>'))
+                ->html()
+                ->sortable(),
             Column::make(__('messages.tables.created_at'), 'created_at')
-                ->format(fn($col) => Blade::render('<x-core::human-date date="' . $col . '"/>'))
+                ->format(fn ($col) => Blade::render('<x-core::human-date date="'.$col.'"/>'))
                 ->html()
                 ->sortable(),
             Column::make(__('messages.tables.updated_at'), 'updated_at')
-                ->format(fn($col) => Blade::render('<x-core::human-date date="' . $col . '"/>'))
+                ->format(fn ($col) => Blade::render('<x-core::human-date date="'.$col.'"/>'))
                 ->html()
                 ->sortable(),
             Column::actions(__('messages.tables.actions'), function ($row) {
                 $actions = [];
 
+                if (auth()->user()->can('core.impersonate') && $row->cannot('core.impersonate.immune') && $row->id !== auth()->id()) {
+                    $actions[] = Action::make('<x-button.floating size="sm" wire:click="impersonate('.$row->id.')" loading="impersonate('.$row->id.')" tooltip="'.__('admin::users.tooltips.impersonate').'" color="secondary"><i class="icon-venetian-mask"></i></x-button.floating>');
+                }
+
                 if (auth()->user()->can('admin.users.update')) {
-                    $actions[] = Action::make('<x-button.floating size="sm" link="' . route('admin.users.update', ['userId' => $row->id]) . '" tooltip="' . __('admin::users.tooltips.update') . '" wire:navigate><i class="icon-pen"></i></x-button.floating>');
+                    $actions[] = Action::make('<x-button.floating size="sm" link="'.route('admin.users.update', ['userId' => $row->id]).'" tooltip="'.__('admin::users.tooltips.update').'" wire:navigate><i class="icon-pen"></i></x-button.floating>');
                 }
 
                 if (auth()->user()->can('admin.users.delete') && $row->id !== auth()->id()) {
-                    $actions[] = Action::make('<x-button.floating color="danger" size="sm" wire:click="deleteUser(`' . $row->id . '`)" loading="deleteUser(`' . $row->id . '`)" tooltip="' . __('admin::users.tooltips.delete') . '"><i class="icon-trash"></i></x-button.floating>');
+                    $actions[] = Action::make('<x-button.floating color="danger" size="sm" wire:click="deleteUser(`'.$row->id.'`)" loading="deleteUser(`'.$row->id.'`)" tooltip="'.__('admin::users.tooltips.delete').'"><i class="icon-trash"></i></x-button.floating>');
                 }
 
                 return $actions;
-            })
+            }),
         ];
+    }
+
+    public function impersonate($userId)
+    {
+        if (auth()->user()->cannot('core.impersonate')) {
+            return;
+        }
+
+        $user = userModel()->find($userId);
+        if (! $user || $user->can('core.impersonate.immune') || $userId === auth()->id()) {
+            return;
+        }
+
+        activity()
+            ->performedOn($user)
+            ->causedBy(auth()->user())
+            ->log('user.impersonate.start');
+
+        auth()->user()->impersonate($user);
+
+        $this->redirect('/', true);
     }
 
     public function deleteUser($userId, $confirmed = false)
@@ -99,8 +129,9 @@ new class extends PenguTable {
         if ($confirmed) {
             $user = userModel()->find($userId);
 
-            if (!$user?->delete()) {
+            if (! $user?->delete()) {
                 Toaster::error(__('messages.notifications.something_went_wrong'));
+
                 return;
             }
 

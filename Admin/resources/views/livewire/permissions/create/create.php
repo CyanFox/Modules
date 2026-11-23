@@ -4,8 +4,10 @@ use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Modules\Core\Models\Permission;
 
-new class extends Component {
+new class extends Component
+{
     public $name;
+
     public $guardName = 'web';
 
     public function createPermission()

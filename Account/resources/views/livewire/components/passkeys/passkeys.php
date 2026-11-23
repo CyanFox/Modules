@@ -14,8 +14,9 @@ use Spatie\LaravelPasskeys\Actions\StorePasskeyAction;
 use Spatie\LaravelPasskeys\Models\Concerns\HasPasskeys;
 use Spatie\LaravelPasskeys\Support\Config;
 
-new class extends Component {
-    use WithPasswordConfirmation, WithConfirmation;
+new class extends Component
+{
+    use WithConfirmation, WithPasswordConfirmation;
 
     #[Validate('required|string|max:255')]
     public string $name = '';
@@ -39,7 +40,7 @@ new class extends Component {
     #[On('account.passkeys.store')]
     public function storePasskey(string $passkey): void
     {
-        if (!$this->hasPasswordConfirmedSession()) {
+        if (! $this->hasPasswordConfirmedSession()) {
             $this->checkPasswordConfirmation()
                 ->passwordDispatch('account.passkeys.store', $passkey)
                 ->checkPassword();
@@ -54,7 +55,7 @@ new class extends Component {
     {
         $passkeyOptions = session()->pull('passkey-registration-options');
 
-        if (!is_string($passkeyOptions)) {
+        if (! is_string($passkeyOptions)) {
             throw ValidationException::withMessages([
                 'name' => __('passkeys::passkeys.error_something_went_wrong_generating_the_passkey'),
             ])->errorBag('passkeyForm');
@@ -87,7 +88,7 @@ new class extends Component {
     public function deletePasskey(int $passkeyId, $confirmed = false): void
     {
         if ($confirmed) {
-            if (!$this->hasPasswordConfirmedSession()) {
+            if (! $this->hasPasswordConfirmedSession()) {
                 return;
             }
 
@@ -134,5 +135,4 @@ new class extends Component {
 
         return $options;
     }
-
 };

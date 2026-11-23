@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'web']], function () {
     Route::livewire('dashboard', 'admin::dashboard')->name('dashboard')->can('admin.dashboard');

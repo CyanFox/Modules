@@ -15,6 +15,7 @@ return [
     'update_available' => 'Update available (:remoteVersion)',
 
     'tooltips' => [
+        'settings' => 'Module settings',
         'delete' => 'Delete module',
         'enable' => 'Enable module',
         'disable' => 'Disable module',
@@ -38,5 +39,5 @@ return [
         'notifications' => [
             'deleted' => 'Module deleted successfully',
         ],
-    ]
+    ],
 ];

@@ -16,7 +16,7 @@ class UnsplashController
         'photo' => '',
         'author' => '',
         'authorURL' => '',
-        'utm' => '',]]])]
+        'utm' => '', ]]])]
     public function getBackgroundCSS()
     {
         return apiResponse('Background css retrieved', Unsplash::returnBackground());
@@ -53,8 +53,8 @@ class UnsplashController
             'exif' => [],
             'location' => [],
             'views' => 0,
-            'downloads' => 0
-        ]
+            'downloads' => 0,
+        ],
     ]]])]
     public function getBackgroundImage()
     {

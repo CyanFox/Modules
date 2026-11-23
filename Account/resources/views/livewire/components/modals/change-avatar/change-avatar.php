@@ -4,11 +4,14 @@ use Livewire\WithFileUploads;
 use Modules\Core\Facades\UserSettings;
 use RealZone22\PenguBlade\ModalComponent;
 
-new class extends ModalComponent {
+new class extends ModalComponent
+{
     use WithFileUploads;
 
     public $currentAvatar;
+
     public $customAvatarUrl;
+
     public $avatar;
 
     public function updated($propertyName)
@@ -17,9 +20,11 @@ new class extends ModalComponent {
             if (blank($this->customAvatarUrl)) {
                 if ($this->avatar) {
                     $this->currentAvatar = $this->avatar->temporaryUrl();
+
                     return;
                 }
                 $this->currentAvatar = auth()->user()->getAvatar();
+
                 return;
             }
             $this->currentAvatar = $this->customAvatarUrl;
@@ -44,12 +49,15 @@ new class extends ModalComponent {
             Toaster::success(__('account::modals.change_avatar.notifications.changed'));
 
             $this->redirect(url()->previous(), true);
+
             return;
         }
 
-        UserSettings::delete(auth()->id(), 'core.custom_avatar_url');
-        auth()->user()->clearMediaCollection('avatar');
-        auth()->user()->addMedia($this->avatar->getRealPath())->toMediaCollection('avatar');
+        if ($this->avatar) {
+            UserSettings::delete(auth()->id(), 'core.custom_avatar_url');
+            auth()->user()->clearMediaCollection('avatar');
+            auth()->user()->addMedia($this->avatar->getRealPath())->toMediaCollection('avatar');
+        }
 
         Toaster::success(__('account::modals.change_avatar.notifications.changed'));
 
@@ -60,7 +68,6 @@ new class extends ModalComponent {
     {
         auth()->user()->clearMediaCollection('avatar');
         UserSettings::delete(auth()->id(), 'core.custom_avatar_url');
-
 
         Toaster::success(__('account::modals.change_avatar.notifications.reset'));
 
@@ -74,7 +81,7 @@ new class extends ModalComponent {
 
     public function mount()
     {
-        if (!settings('account.enable.change_avatar')) {
+        if (! settings('account.enable.change_avatar')) {
             abort(403);
         }
 

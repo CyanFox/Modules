@@ -3,7 +3,8 @@
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-new class extends Component {
+new class extends Component
+{
     public function render(): View
     {
         return $this->view()

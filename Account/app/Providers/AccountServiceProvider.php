@@ -38,7 +38,7 @@ class AccountServiceProvider extends ModuleServiceProvider
     /**
      * Define module schedules.
      *
-     * @param $schedule
+     * @param  $schedule
      */
     // protected function configureSchedules(Schedule $schedule): void
     // {
@@ -47,12 +47,12 @@ class AccountServiceProvider extends ModuleServiceProvider
 
     public function boot(): void
     {
-        if (!app()->runningInConsole()) {
+        if (! app()->runningInConsole()) {
             LaraHooks::listen('s.dashboard.profile.items', function () {
-                return Blade::render('<x-dashboard::profile.item icon="icon-user" route="account.profile">' . __('account::account.profile') . '</x-dashboard::profile.item>');
+                return Blade::render('<x-dashboard::profile.item icon="icon-user" route="account.profile">'.__('account::account.profile').'</x-dashboard::profile.item>');
             }, 10);
             LaraHooks::listen('s.admin.profile.items', function () {
-                return Blade::render('<x-admin::profile.item icon="icon-user" route="account.profile">' . __('account::account.profile') . '</x-admin::profile.item>');
+                return Blade::render('<x-admin::profile.item icon="icon-user" route="account.profile">'.__('account::account.profile').'</x-admin::profile.item>');
             }, 10);
         }
 

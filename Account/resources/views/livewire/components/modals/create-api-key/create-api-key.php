@@ -2,9 +2,10 @@
 
 use RealZone22\PenguBlade\ModalComponent;
 
-new class extends ModalComponent {
-
+new class extends ModalComponent
+{
     public string $name;
+
     public ?array $permissions = [];
 
     public string $token;

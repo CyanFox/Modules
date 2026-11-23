@@ -16,7 +16,7 @@ class MFAController
 {
     #[Endpoint(title: 'Enable MFA')]
     #[Response(200, 'MFA enabled.', examples: ['application/json' => ['success' => true, 'message' => 'MFA enabled.', 'data' => [
-        'recovery_codes' => []
+        'recovery_codes' => [],
     ]]])]
     #[Response(422, 'MFA already enabled.', examples: ['application/json' => ['success' => false, 'message' => 'MFA already enabled.', 'data' => []]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
@@ -24,11 +24,11 @@ class MFAController
     {
         $request->validate([
             'code' => ['required', 'digits:6', function (string $attribute, mixed $value, Closure $fail) use ($request) {
-                $google2FA = new Google2FA();
-                if (!$google2FA->verifyKey(UserSettings::get($request->user()->id, 'auth.mfa.secret'), $value)) {
+                $google2FA = new Google2FA;
+                if (! $google2FA->verifyKey(UserSettings::get($request->user()->id, 'auth.mfa.secret'), $value)) {
                     $fail('invalid mfa code');
                 }
-            }]
+            }],
         ]);
         if (userSettings('auth.mfa.enabled', $request->user()->id)) {
             return apiResponse('MFA already enabled.', apiError('account.mfa.already_enabled'), false, 422);
@@ -58,7 +58,7 @@ class MFAController
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function disableMFA(Request $request)
     {
-        if (!userSettings('auth.mfa.enabled', $request->user()->id)) {
+        if (! userSettings('auth.mfa.enabled', $request->user()->id)) {
             return apiResponse('MFA not enabled.', apiError('account.mfa.not_enabled'), false, 422);
         }
 
@@ -71,13 +71,13 @@ class MFAController
 
     #[Endpoint(title: 'Regenerate MFA Recovery Codes')]
     #[Response(200, 'Recovery codes regenerated.', examples: ['application/json' => ['success' => true, 'message' => 'Recovery codes regenerated.', 'data' => [
-        'recovery_codes' => []
+        'recovery_codes' => [],
     ]]])]
     #[Response(422, 'MFA not enabled.', examples: ['application/json' => ['success' => false, 'message' => 'MFA not enabled.', 'data' => []]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function regenerateRecoveryCodes(Request $request)
     {
-        if (!userSettings('auth.mfa.enabled', $request->user()->id)) {
+        if (! userSettings('auth.mfa.enabled', $request->user()->id)) {
             return apiResponse('MFA not enabled.', apiError('account.mfa.not_enabled'), false, 422);
         }
 
@@ -90,7 +90,7 @@ class MFAController
 
     #[Endpoint(title: 'Generate MFA Secret')]
     #[Response(200, 'MFA secret generated.', examples: ['application/json' => ['success' => true, 'message' => 'MFA secret generated.', 'data' => [
-        'secret' => ''
+        'secret' => '',
     ]]])]
     #[Response(422, 'MFA already enabled.', examples: ['application/json' => ['success' => false, 'message' => 'MFA already enabled.', 'data' => []]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
@@ -100,7 +100,7 @@ class MFAController
             return apiResponse('MFA already enabled.', apiError('account.mfa.already_enabled'), false, 422);
         }
 
-        $google2FA = new Google2FA();
+        $google2FA = new Google2FA;
 
         $secret = $google2FA->generateSecretKey();
 
@@ -115,17 +115,17 @@ class MFAController
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function verifyMFA(Request $request)
     {
-        if (!userSettings('auth.mfa.enabled', $request->user()->id)) {
+        if (! userSettings('auth.mfa.enabled', $request->user()->id)) {
             return apiResponse('MFA not enabled.', apiError('account.mfa.not_enabled'), false, 422);
         }
 
         $request->validate([
             'code' => ['required', 'digits:6', function (string $attribute, mixed $value, Closure $fail) use ($request) {
-                $google2FA = new Google2FA();
-                if (!$google2FA->verifyKey(UserSettings::get($request->user()->id, 'auth.mfa.secret'), $value)) {
+                $google2FA = new Google2FA;
+                if (! $google2FA->verifyKey(UserSettings::get($request->user()->id, 'auth.mfa.secret'), $value)) {
                     $fail('invalid mfa code');
                 }
-            }]
+            }],
         ]);
 
         return apiResponse('MFA verified.');

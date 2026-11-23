@@ -27,7 +27,7 @@ class APIKeysController
             'expires_at' => '2000-01-01T00:00:00.000000Z',
             'created_at' => '2000-01-01T00:00:00.000000Z',
             'updated_at' => '2000-01-01T00:00:00.000000Z',
-        ]
+        ],
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function getApiKeys(Request $request)
@@ -48,9 +48,9 @@ class APIKeysController
             })
             ->values();
 
-        $perPage = (int)($request->query('perPage') ?: 15);
+        $perPage = (int) ($request->query('perPage') ?: 15);
         $perPage = $perPage > 0 ? $perPage : 15;
-        $page = max((int)$request->query('page', 1), 1);
+        $page = max((int) $request->query('page', 1), 1);
 
         $apiKeys = new LengthAwarePaginator(
             $apiKeys->slice(($page - 1) * $perPage, $perPage)->values(),
@@ -84,7 +84,7 @@ class APIKeysController
                 'updated_at' => '2000-01-01T00:00:00.000000Z',
             ],
         ],
-        'plainTextToken' => ''
+        'plainTextToken' => '',
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function createApiKey(Request $request)
@@ -98,7 +98,7 @@ class APIKeysController
         $token->accessToken->name = json_decode($token->accessToken->name, true);
 
         return apiResponse('API Key created.', [
-            'token' => $token
+            'token' => $token,
         ]);
     }
 

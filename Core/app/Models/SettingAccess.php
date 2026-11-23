@@ -21,11 +21,14 @@ use Spatie\Permission\Models\Role;
  * @property-read Role|null $role
  * @property-read Model|Eloquent $setting
  * @property-read User|null $user
+ *
  * @method static Builder<static>|SettingAccess newModelQuery()
  * @method static Builder<static>|SettingAccess newQuery()
  * @method static Builder<static>|SettingAccess query()
+ *
  * @property-read Collection<int, Activity> $activitiesAsSubject
  * @property-read int|null $activities_as_subject_count
+ *
  * @mixin Eloquent
  * @mixin IdeHelperSettingAccess
  */
@@ -67,7 +70,7 @@ class SettingAccess extends Model
             ->logExcept($this->hidden)
             ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->setDescriptionForEvent(function ($eventName) {
-                return 'settings.access.' . $eventName;
+                return 'settings.access.'.$eventName;
             });
     }
 }

@@ -4,7 +4,8 @@ use Livewire\Component;
 use Masmerise\Toaster\Toaster;
 use Modules\Core\Traits\WithPasswordConfirmation;
 
-new class extends Component {
+new class extends Component
+{
     use WithPasswordConfirmation;
 
     public function logoutSession($sessionId)

@@ -14,6 +14,7 @@ class EventServiceProvider extends ServiceProvider
      * @var bool
      */
     protected static $shouldDiscoverEvents = true;
+
     /**
      * The event handler mappings for the application.
      *
@@ -24,7 +25,5 @@ class EventServiceProvider extends ServiceProvider
     /**
      * Configure the proper event listeners for email verification.
      */
-    protected function configureEmailVerification(): void
-    {
-    }
+    protected function configureEmailVerification(): void {}
 }

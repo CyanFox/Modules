@@ -9,7 +9,8 @@ use Modules\Core\Traits\WithConfirmation;
 use Nwidart\Modules\Facades\Module;
 use Symfony\Component\Process\Process;
 
-new class extends Component {
+new class extends Component
+{
     use WithConfirmation;
 
     public function enableModule($module)
@@ -18,8 +19,9 @@ new class extends Component {
             return;
         }
 
-        if (!modules()->checkRequirements($module)) {
+        if (! modules()->checkRequirements($module)) {
             Toaster::error(__('admin::modules.notifications.requirements_not_met'));
+
             return;
         }
 
@@ -42,7 +44,7 @@ new class extends Component {
 
         activity()
             ->causedBy(auth()->user())
-            ->log('admin.modules.' . mb_strtolower($module) . '.enabled');
+            ->log('admin.modules.'.mb_strtolower($module).'.enabled');
 
         Toaster::success(__('admin::modules.notifications.enabled'));
 
@@ -58,6 +60,7 @@ new class extends Component {
         foreach (Module::all() as $m) {
             if (in_array($module, modules()->getRequirements($m->getName()))) {
                 Toaster::error(__('admin::modules.notifications.required_by_another_module'));
+
                 return;
             }
         }
@@ -77,7 +80,7 @@ new class extends Component {
 
         activity()
             ->causedBy(auth()->user())
-            ->log('admin.modules.' . mb_strtolower($module) . '.disabled');
+            ->log('admin.modules.'.mb_strtolower($module).'.disabled');
 
         Toaster::success(__('admin::modules.notifications.disabled'));
 
@@ -93,6 +96,7 @@ new class extends Component {
         foreach (Module::all() as $m) {
             if (in_array($module, modules()->getRequirements($m->getName()))) {
                 Toaster::error(__('admin::modules.notifications.required_by_another_module'));
+
                 return;
             }
         }
@@ -126,7 +130,7 @@ new class extends Component {
 
             activity()
                 ->causedBy(auth()->user())
-                ->log('admin.modules.' . mb_strtolower($module) . '.deleted');
+                ->log('admin.modules.'.mb_strtolower($module).'.deleted');
 
             Toaster::success(__('admin::modules.delete.notifications.deleted'));
 

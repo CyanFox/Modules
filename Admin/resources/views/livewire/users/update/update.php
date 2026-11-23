@@ -4,28 +4,44 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Component;
 use Masmerise\Toaster\Toaster;
+use Modules\Core\Facades\UserSettings;
 
-new class extends Component {
-
+new class extends Component
+{
     public $userId;
+
     public $user;
 
     public $firstName;
+
     public $lastName;
+
     public $username;
+
     public $email;
+
     public $password;
+
     public $passwordConfirmation;
+
     public $roles = [];
+
     public $permissions = [];
+
     public $disabled;
+
+    public $disableMfa;
+
+    public $forcePasswordChange;
+
+    public $forceMfa;
 
     public function updateUser()
     {
         $this->validate([
             'firstName' => 'nullable|string|max:255',
             'lastName' => 'nullable|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username,' . $this->user->id,
+            'username' => 'required|string|max:255|unique:users,username,'.$this->user->id,
             'email' => 'required|email|max:255',
             'password' => ['nullable', 'string', Password::defaults()],
             'passwordConfirmation' => 'same:password',
@@ -40,6 +56,24 @@ new class extends Component {
             'email' => $this->email,
             'disabled' => $this->disabled ?? false,
         ]);
+
+        if ($this->forcePasswordChange) {
+            UserSettings::set($this->user->id, 'auth.force_password_change', true);
+        } else {
+            UserSettings::delete($this->user->id, 'auth.force_password_change');
+        }
+
+        if ($this->forceMfa) {
+            UserSettings::set($this->user->id, 'auth.force_mfa', true);
+        } else {
+            UserSettings::delete($this->user->id, 'auth.force_mfa');
+        }
+
+        if ($this->disableMfa) {
+            UserSettings::delete($this->user->id, 'auth.mfa.recovery_codes');
+            UserSettings::delete($this->user->id, 'auth.mfa.secret');
+            UserSettings::delete($this->user->id, 'auth.mfa.enabled');
+        }
 
         if ($this->password) {
             $this->user->update([
@@ -58,7 +92,7 @@ new class extends Component {
     public function mount()
     {
         $this->user = userModel()->find($this->userId);
-        if (!$this->user) {
+        if (! $this->user) {
             abort(404);
         }
 
@@ -67,6 +101,8 @@ new class extends Component {
         $this->username = $this->user->username;
         $this->email = $this->user->email;
         $this->disabled = $this->user->disabled;
+        $this->forcePasswordChange = UserSettings::get($this->user->id, 'auth.force_password_change');
+        $this->forceMfa = UserSettings::get($this->user->id, 'auth.force_mfa');
         $this->roles = $this->user->roles->pluck('name')->toArray();
         $this->permissions = $this->user->permissions->pluck('name')->toArray();
     }

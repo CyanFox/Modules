@@ -7,6 +7,7 @@ namespace Modules\Auth\Providers;
 use Illuminate\Routing\Router;
 use Illuminate\Validation\Rules\Password;
 use Modules\Auth\Http\Middleware\Authenticate;
+use Modules\Auth\Http\Middleware\CheckForceActions;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
 class AuthServiceProvider extends ModuleServiceProvider
@@ -50,7 +51,7 @@ class AuthServiceProvider extends ModuleServiceProvider
 
     public function boot(): void
     {
-        if (!app()->runningInConsole()) {
+        if (! app()->runningInConsole()) {
             Password::defaults(function () {
                 $password = Password::min(settings('auth.password.minimum_length'));
 
@@ -87,6 +88,7 @@ class AuthServiceProvider extends ModuleServiceProvider
     {
         $router->middlewareGroup('auth', [
             Authenticate::class,
+            CheckForceActions::class,
         ]);
     }
 }

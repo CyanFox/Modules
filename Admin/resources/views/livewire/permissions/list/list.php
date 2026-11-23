@@ -12,8 +12,9 @@ use RealZone22\PenguTables\Table\Header;
 use RealZone22\PenguTables\Table\Options;
 use RealZone22\PenguTables\Traits\WithExport;
 
-new class extends PenguTable {
-    use WithExport, WithConfirmation;
+new class extends PenguTable
+{
+    use WithConfirmation, WithExport;
 
     protected function setupOptions(): Options
     {
@@ -32,7 +33,7 @@ new class extends PenguTable {
         }
 
         return [
-            Header::make('<x-button link="' . route('admin.permissions.create') . '" wire:navigate>' . __('admin::permissions.buttons.create') . '</x-button>')
+            Header::make('<x-button link="'.route('admin.permissions.create').'" wire:navigate>'.__('admin::permissions.buttons.create').'</x-button>'),
         ];
     }
 
@@ -48,26 +49,26 @@ new class extends PenguTable {
                 ->sortable()
                 ->searchable(),
             Column::make(__('messages.tables.created_at'), 'created_at')
-                ->format(fn($col) => Blade::render('<x-core::human-date date="' . $col . '"/>'))
+                ->format(fn ($col) => Blade::render('<x-core::human-date date="'.$col.'"/>'))
                 ->html()
                 ->sortable(),
             Column::make(__('messages.tables.updated_at'), 'updated_at')
-                ->format(fn($col) => Blade::render('<x-core::human-date date="' . $col . '"/>'))
+                ->format(fn ($col) => Blade::render('<x-core::human-date date="'.$col.'"/>'))
                 ->html()
                 ->sortable(),
             Column::actions(__('messages.tables.actions'), function ($row) {
                 $actions = [];
 
                 if (auth()->user()->can('admin.permissions.update')) {
-                    $actions[] = Action::make('<x-button.floating size="sm" link="' . route('admin.permissions.update', ['permissionId' => $row->id]) . '" tooltip="' . __('admin::permissions.tooltips.update') . '" wire:navigate><i class="icon-pen"></i></x-button.floating>');
+                    $actions[] = Action::make('<x-button.floating size="sm" link="'.route('admin.permissions.update', ['permissionId' => $row->id]).'" tooltip="'.__('admin::permissions.tooltips.update').'" wire:navigate><i class="icon-pen"></i></x-button.floating>');
                 }
 
                 if (auth()->user()->can('admin.permissions.delete') && $row->id !== auth()->id()) {
-                    $actions[] = Action::make('<x-button.floating color="danger" size="sm" wire:click="deletePermission(`' . $row->id . '`)" loading="deletePermission(`' . $row->id . '`)" tooltip="' . __('admin::permissions.tooltips.delete') . '"><i class="icon-trash"></i></x-button.floating>');
+                    $actions[] = Action::make('<x-button.floating color="danger" size="sm" wire:click="deletePermission(`'.$row->id.'`)" loading="deletePermission(`'.$row->id.'`)" tooltip="'.__('admin::permissions.tooltips.delete').'"><i class="icon-trash"></i></x-button.floating>');
                 }
 
                 return $actions;
-            })
+            }),
         ];
     }
 
@@ -80,8 +81,9 @@ new class extends PenguTable {
         if ($confirmed) {
             $permission = Permission::find($permissionId);
 
-            if (!$permission?->delete()) {
+            if (! $permission?->delete()) {
                 Toaster::error(__('messages.notifications.something_went_wrong'));
+
                 return;
             }
 

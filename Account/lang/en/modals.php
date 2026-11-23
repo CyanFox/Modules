@@ -26,7 +26,7 @@ return [
 
         'notifications' => [
             'created' => 'API Key created successfully.',
-        ]
+        ],
     ],
 
     'enable_mfa' => [
@@ -39,9 +39,9 @@ return [
         'recovery_codes_description' => 'Save these recovery codes in a secure place. You will not be able to see them again.',
 
         'buttons' => [
-            'enable' => 'Enable MFA',
+            'enable' => 'Enable',
             'regenerate' => 'Regenerate Codes',
-            'download' => 'Download Codes'
+            'download' => 'Download Codes',
         ],
 
         'notifications' => [
@@ -55,7 +55,7 @@ return [
 
         'buttons' => [
             'regenerate' => 'Regenerate Codes',
-            'download' => 'Download Codes'
+            'download' => 'Download Codes',
         ],
     ],
 
@@ -74,5 +74,5 @@ return [
             'changed' => 'Avatar changed successfully.',
             'reset' => 'Avatar reset successfully.',
         ],
-    ]
+    ],
 ];

@@ -17,7 +17,7 @@ class SettingsController extends Controller
 {
     #[Endpoint(title: 'Change Logo')]
     #[Response(200, 'Logo updated.', examples: ['application/json' => ['success' => true, 'message' => 'Logo updated.', 'data' => [
-        'logo' => 'logo'
+        'logo' => 'logo',
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function changeLogo(Request $request)
@@ -30,11 +30,11 @@ class SettingsController extends Controller
             'logo' => 'required|image:allow_svg',
         ]);
 
-        Storage::disk('public')->delete('img/' . str_replace('/storage/img/', '', settings('app.logo')));
+        Storage::disk('public')->delete('img/'.str_replace('/storage/img/', '', settings('app.logo')));
 
-        $request->logo->storeAs('img', 'Logo.' . $request->logo->getClientOriginalExtension(), 'public');
+        $request->logo->storeAs('img', 'Logo.'.$request->logo->getClientOriginalExtension(), 'public');
 
-        Settings::set('app.logo', '/storage/img/Logo.' . $request->logo->getClientOriginalExtension(), true);
+        Settings::set('app.logo', '/storage/img/Logo.'.$request->logo->getClientOriginalExtension(), true);
 
         return apiResponse('Logo updated.', ['logo' => Settings::get('app.logo')]);
     }
@@ -48,7 +48,7 @@ class SettingsController extends Controller
             return apiResponse('Unauthenticated.', apiError('admin.settings.unauthenticated'), false, 401);
         }
 
-        Storage::disk('public')->delete('img/' . str_replace('/storage/img/', '', settings('app.logo')));
+        Storage::disk('public')->delete('img/'.str_replace('/storage/img/', '', settings('app.logo')));
 
         Settings::set('app.logo', '/img/Logo.svg', true);
 
@@ -68,7 +68,7 @@ class SettingsController extends Controller
             'properties' => [],
             'created_at' => '2000-01-01T00:00:00.000000Z',
             'updated_at' => '2000-01-01T00:00:00.000000Z',
-        ]
+        ],
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function getSettings(Request $request)
@@ -128,7 +128,7 @@ class SettingsController extends Controller
             'key' => 'required|unique:settings,key',
             'value' => 'required',
             'properties' => 'nullable|array',
-            'update' => 'nullable|boolean'
+            'update' => 'nullable|boolean',
         ]);
 
         $setting = Settings::set($request->key, $request->value, $request->update ?? false, $request->properties);
@@ -155,7 +155,7 @@ class SettingsController extends Controller
 
         $request->validate([
             'value' => 'required',
-            'properties' => 'nullable|array'
+            'properties' => 'nullable|array',
         ]);
 
         $setting = Settings::update($key, $request->value, $request->properties);
@@ -173,7 +173,7 @@ class SettingsController extends Controller
             'properties' => [],
             'created_at' => '2000-01-01T00:00:00.000000Z',
             'updated_at' => '2000-01-01T00:00:00.000000Z',
-        ]
+        ],
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function updateSettings(Request $request)
@@ -212,7 +212,7 @@ class SettingsController extends Controller
             return apiResponse('Unauthenticated.', apiError('admin.settings.unauthenticated'), false, 401);
         }
 
-        if (!Settings::delete($key)) {
+        if (! Settings::delete($key)) {
             return apiResponse('Setting not found.', apiError('admin.settings.not_found'), false, 404);
         }
 

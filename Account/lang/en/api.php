@@ -17,7 +17,7 @@ return [
 
         'notifications' => [
             'deleted' => 'API Key deleted successfully.',
-        ]
+        ],
     ],
 
     'tooltips' => [

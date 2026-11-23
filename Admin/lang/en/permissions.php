@@ -5,15 +5,14 @@ return [
     'name' => 'Name',
     'guard_name' => 'Guard Name',
     'guard_name_hint' => 'Do not change this unless you know what you are doing',
-    'permissions' => 'Permissions',
 
     'buttons' => [
-        'create' => 'Create Permission'
+        'create' => 'Create Permission',
     ],
 
     'tooltips' => [
         'update' => 'Update Permission',
-        'delete' => 'Delete Permission'
+        'delete' => 'Delete Permission',
     ],
 
     'delete' => [
@@ -21,35 +20,35 @@ return [
         'description' => 'Are you sure you want to delete this permission? This action cannot be undone.',
 
         'buttons' => [
-            'delete' => 'Delete Permission'
+            'delete' => 'Delete Permission',
         ],
 
         'notifications' => [
-            'deleted' => 'Permission deleted successfully'
-        ]
+            'deleted' => 'Permission deleted successfully',
+        ],
     ],
 
     'create' => [
         'tab_title' => 'Create Permission',
 
         'buttons' => [
-            'create' => 'Create Permission'
+            'create' => 'Create Permission',
         ],
 
         'notifications' => [
-            'created' => 'Permission created successfully'
-        ]
+            'created' => 'Permission created successfully',
+        ],
     ],
 
     'update' => [
         'tab_title' => 'Update Permission',
 
         'buttons' => [
-            'update' => 'Update Permission'
+            'update' => 'Update Permission',
         ],
 
         'notifications' => [
-            'updated' => 'Permission updated successfully'
-        ]
-    ]
+            'updated' => 'Permission updated successfully',
+        ],
+    ],
 ];

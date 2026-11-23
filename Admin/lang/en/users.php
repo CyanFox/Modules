@@ -13,12 +13,17 @@ return [
     'roles' => 'Roles',
     'permissions' => 'Permissions',
     'disabled' => 'Disabled',
+    'disable_mfa' => 'Disable MFA',
+    'force_password_change' => 'Force Password Change',
+    'force_mfa' => 'Force MFA',
+    'last_activity' => 'Last Activity',
 
     'buttons' => [
         'create' => 'Create User',
     ],
 
     'tooltips' => [
+        'impersonate' => 'Impersonate User',
         'update' => 'Update User',
         'delete' => 'Delete User',
     ],
@@ -28,35 +33,35 @@ return [
         'description' => 'Are you sure you want to delete this user? This action cannot be undone.',
 
         'buttons' => [
-            'delete' => 'Delete User'
+            'delete' => 'Delete User',
         ],
 
         'notifications' => [
-            'deleted' => 'User deleted successfully.'
-        ]
+            'deleted' => 'User deleted successfully.',
+        ],
     ],
 
     'create' => [
         'tab_title' => 'Create User',
 
         'buttons' => [
-            'create' => 'Create User'
+            'create' => 'Create User',
         ],
 
         'notifications' => [
-            'created' => 'User created successfully.'
-        ]
+            'created' => 'User created successfully.',
+        ],
     ],
 
     'update' => [
         'tab_title' => 'Update User',
 
         'buttons' => [
-            'update' => 'Update User'
+            'update' => 'Update User',
         ],
 
         'notifications' => [
-            'updated' => 'User updated successfully.'
-        ]
+            'updated' => 'User updated successfully.',
+        ],
     ],
 ];

@@ -11,7 +11,8 @@ use RealZone22\PenguTables\Table\Options;
 use RealZone22\PenguTables\Traits\WithExport;
 use Spatie\Activitylog\Models\Activity;
 
-new class extends PenguTable {
+new class extends PenguTable
+{
     use WithExport;
 
     protected function setupOptions(): Options
@@ -32,18 +33,18 @@ new class extends PenguTable {
             Column::make(__('admin::activity.description'), 'description')
                 ->searchable(),
             Column::make(__('admin::activity.caused_by'), 'causer_id')
-                ->format(fn($col, $row) => $row->causer ? $row->causer->getDisplayName() : __('admin::activity.unknown')),
+                ->format(fn ($col, $row) => $row->causer ? $row->causer->getDisplayName() : __('admin::activity.unknown')),
             Column::make(__('admin::activity.subject'), 'subject_id')
-                ->format(fn($col, $row) => $row->subject ? $row->subject->getDisplayName() : __('admin::activity.unknown')),
+                ->format(fn ($col, $row) => $row->subject ? $row->subject->getDisplayName() : __('admin::activity.unknown')),
             Column::make(__('admin::activity.performed_at'), 'created_at')
-                ->format(fn($value) => Blade::render('<x-core::human-date date="' . $value . '"/>'))
+                ->format(fn ($value) => Blade::render('<x-core::human-date date="'.$value.'"/>'))
                 ->sortable()
                 ->html(),
             Column::actions(__('messages.tables.actions'), function ($row) {
                 return [
-                    Action::make('<x-button.floating size="sm" wire:click="$dispatch(`openModal`, { modalComponent: `admin::components.modals.activity-details`, arguments: { activityId: `' . $row->id . '` }})" loading="openModal" tooltip="' . __('admin::activity.tooltips.show_details') . '"><i class="icon-eye"></i></x-button.floating>')
+                    Action::make('<x-button.floating size="sm" wire:click="$dispatch(`openModal`, { modalComponent: `admin::components.modals.activity-details`, arguments: { activityId: `'.$row->id.'` }})" loading="openModal" tooltip="'.__('admin::activity.tooltips.show_details').'"><i class="icon-eye"></i></x-button.floating>'),
                 ];
-            })
+            }),
         ];
     }
 

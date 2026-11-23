@@ -11,7 +11,9 @@ class ForgotPasswordMail extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
+
     public $token;
+
     public $expiration;
 
     /**

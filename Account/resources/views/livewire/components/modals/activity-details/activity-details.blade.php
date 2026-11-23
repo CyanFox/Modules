@@ -8,12 +8,14 @@
             <span class="text-2xl">{{ __('account::modals.activity_details.old_values') }}</span>
             <x-divider/>
             @php
-                function compareValues($val1, $val2)
-                {
-                    if (is_array($val1) && is_array($val2)) {
-                        return json_encode($val1) === json_encode($val2);
+                if (!function_exists('compareValues')) {
+                    function compareValues($val1, $val2)
+                    {
+                        if (is_array($val1) && is_array($val2)) {
+                            return json_encode($val1) === json_encode($val2);
+                        }
+                        return (string)$val1 === (string)$val2;
                     }
-                    return (string)$val1 === (string)$val2;
                 }
             @endphp
             <div class="overflow-x-auto">

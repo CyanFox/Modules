@@ -26,12 +26,12 @@ class ActivityController extends Controller
             'causer_id' => 1,
             'attribute_changes' => [
                 'attributes' => [],
-                'old' => []
+                'old' => [],
             ],
             'properties' => [],
             'created_at' => '2000-01-01T00:00:00.000000Z',
             'updated_at' => '2000-01-01T00:00:00.000000Z',
-        ]
+        ],
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function getActivities(Request $request)

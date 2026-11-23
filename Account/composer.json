@@ -28,7 +28,6 @@
         }
     },
     "require": {
-        "jenssegers/agent": "^v2.6.0",
-        "linkxtr/laravel-qrcode": "^3.2"
+        "jenssegers/agent": "^v2.6.0"
     }
 }

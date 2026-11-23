@@ -13,9 +13,9 @@ class SettingsService
 {
     public function get(string $key, mixed $default = null, ?Setting $setting = null): mixed
     {
-        if (!$setting) {
+        if (! $setting) {
             $setting = Setting::where('key', $key)->first();
-            if (!$setting) {
+            if (! $setting) {
                 return $default;
             }
         }
@@ -44,7 +44,7 @@ class SettingsService
 
         if ($updateIfExists && $setting) {
             $properties = $this->mergeProperties($setting, $properties);
-            if (!$this->getProperty($properties, SettingsProperty::TYPE)) {
+            if (! $this->getProperty($properties, SettingsProperty::TYPE)) {
                 $properties['type'] = $this->detectType($value);
             }
 
@@ -54,9 +54,9 @@ class SettingsService
             ]);
         }
 
-        if (!$setting) {
+        if (! $setting) {
             $properties ??= [SettingsProperty::INTERNAL => true];
-            if (!$this->getProperty($properties, SettingsProperty::TYPE)) {
+            if (! $this->getProperty($properties, SettingsProperty::TYPE)) {
                 $properties['type'] = $this->detectType($value);
             }
 
@@ -87,12 +87,12 @@ class SettingsService
     public function update(string $key, mixed $value = null, ?array $properties = null): Setting
     {
         $setting = Setting::where('key', $key)->first();
-        if (!$setting) {
+        if (! $setting) {
             throw new SettingNotFoundException($key);
         }
 
         $properties = $this->mergeProperties($setting, $properties);
-        if (!$this->getProperty($properties, SettingsProperty::TYPE)) {
+        if (! $this->getProperty($properties, SettingsProperty::TYPE)) {
             $properties['type'] = $this->detectType($value);
         }
 
@@ -112,11 +112,11 @@ class SettingsService
     private function convertTypes(mixed $value, ?string $type): mixed
     {
         return match ($type) {
-            'string' => (string)$value,
-            'int' => (int)$value,
-            'float' => (float)$value,
-            'bool' => (bool)$value,
-            'array' => (array)$value,
+            'string' => (string) $value,
+            'int' => (int) $value,
+            'float' => (float) $value,
+            'bool' => (bool) $value,
+            'array' => (array) $value,
             'json' => json_decode($value, true),
             default => $value,
         };
@@ -133,7 +133,7 @@ class SettingsService
         if (is_string($existingProperties)) {
             $existingProperties = json_decode($existingProperties, true) ?? [];
         }
-        if (!is_array($existingProperties)) {
+        if (! is_array($existingProperties)) {
             $existingProperties = [];
         }
 

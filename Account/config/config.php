@@ -6,5 +6,5 @@ return [
     'enable' => [
         'delete_account' => true,
         'change_avatar' => true,
-    ]
+    ],
 ];

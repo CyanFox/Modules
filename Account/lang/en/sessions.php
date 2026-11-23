@@ -33,7 +33,7 @@ return [
 
     'tooltips' => [
         'logout' => 'Logout Session',
-        'qrcode' => 'Show login QR Code'
+        'qrcode' => 'Show login QR Code',
     ],
 
     'notifications' => [

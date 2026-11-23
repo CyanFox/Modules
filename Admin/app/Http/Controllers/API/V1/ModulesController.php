@@ -21,7 +21,7 @@ class ModulesController extends Controller
             'authors' => [],
             'version' => '1.0.0',
             'settings_page' => null,
-        ]
+        ],
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function getModules(Request $request)

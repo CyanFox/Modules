@@ -56,6 +56,8 @@
                             @endhook
                         @endif
 
+                        <x-divider/>
+
                         <x-button class="w-full" type="submit" loading="register">
                             {{ __('auth::register.buttons.register') }}
                         </x-button>

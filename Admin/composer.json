@@ -24,6 +24,9 @@
     "autoload-dev": {
         "psr-4": {
             "Modules\\Admin\\Tests\\": "tests/"
-        }
+        },
+        "files": [
+            "tests/helpers.php"
+        ]
     }
 }

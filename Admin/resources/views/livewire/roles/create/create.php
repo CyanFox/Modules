@@ -4,9 +4,12 @@ use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Modules\Core\Models\Role;
 
-new class extends Component {
+new class extends Component
+{
     public $name;
+
     public $guardName = 'web';
+
     public $permissions = [];
 
     public function createRole()

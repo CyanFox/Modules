@@ -29,7 +29,7 @@ class UserController extends Controller
         'display_name' => '',
         'roles' => [],
         'permissions' => [],
-        'settings' => []
+        'settings' => [],
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function me(Request $request)
@@ -39,16 +39,16 @@ class UserController extends Controller
         return apiResponse('User retrieved.', array_merge($user->withoutRelations()->toArray(), [
             'avatar_url' => $user->getAvatar(),
             'display_name' => $user->getDisplayName(),
-            'roles' => $user->roles->map(fn($role) => [
+            'roles' => $user->roles->map(fn ($role) => [
                 'id' => $role->id,
                 'name' => $role->name,
             ]),
-            'permissions' => $user->getAllPermissions()->map(fn($permission) => [
+            'permissions' => $user->getAllPermissions()->map(fn ($permission) => [
                 'id' => $permission->id,
                 'name' => $permission->name,
             ]),
             'settings' => $user->userSettings
-                ->reject(fn($setting) => $setting->getProperty(SettingsProperty::INTERNAL) === true)
+                ->reject(fn ($setting) => $setting->getProperty(SettingsProperty::INTERNAL) === true)
                 ->each(function ($setting) {
                     if (is_string($setting->properties)) {
                         $setting->setAttribute('properties', json_decode($setting->properties, true));
@@ -63,14 +63,14 @@ class UserController extends Controller
         [
             'id' => 1,
             'name' => '',
-        ]
+        ],
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function permissions(Request $request)
     {
         $user = $request->user();
 
-        return apiResponse('Permissions retrieved.', $user->getAllPermissions()->map(fn($permission) => [
+        return apiResponse('Permissions retrieved.', $user->getAllPermissions()->map(fn ($permission) => [
             'id' => $permission->id,
             'name' => $permission->name,
         ]));
@@ -81,14 +81,14 @@ class UserController extends Controller
         [
             'id' => 1,
             'name' => '',
-        ]
+        ],
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function roles(Request $request)
     {
         $user = $request->user();
 
-        return apiResponse('Roles retrieved.', $user->roles->map(fn($role) => [
+        return apiResponse('Roles retrieved.', $user->roles->map(fn ($role) => [
             'id' => $role->id,
             'name' => $role->name,
         ]));
@@ -102,8 +102,8 @@ class UserController extends Controller
             'value' => '',
             'properties' => [],
             'created_at' => '2000-01-01T00:00:00.000000Z',
-            'updated_at' => '2000-01-01T00:00:00.000000Z'
-        ]
+            'updated_at' => '2000-01-01T00:00:00.000000Z',
+        ],
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function settings(Request $request)
@@ -111,7 +111,7 @@ class UserController extends Controller
         $user = $request->user();
 
         return apiResponse('Settings retrieved.', $user->userSettings
-            ->reject(fn($setting) => $setting->getProperty(SettingsProperty::INTERNAL) === true)
+            ->reject(fn ($setting) => $setting->getProperty(SettingsProperty::INTERNAL) === true)
             ->each(function ($setting) {
                 if (is_string($setting->properties)) {
                     $setting->setAttribute('properties', json_decode($setting->properties, true));

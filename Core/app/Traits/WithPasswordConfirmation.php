@@ -39,6 +39,20 @@ trait WithPasswordConfirmation
 
     public function checkPassword()
     {
+        if (blank(auth()->user()->password)) {
+            session(['core.password_confirmed_at' => time()]);
+            $passwordConfirmationToken = str()->random(64);
+            cache()->put(
+                'core.password_confirmation.'.hash('sha256', $passwordConfirmationToken),
+                true,
+                now()->addMinutes(5),
+            );
+
+            $this->executePasswordConfirmation($this->createPasswordConfirmationToken());
+
+            return true;
+        }
+
         if ($this->hasPasswordConfirmedSession($this->passwordConfirmationData['expiration'] ?? 300)) {
             $this->executePasswordConfirmation($this->createPasswordConfirmationToken());
 
@@ -116,19 +130,19 @@ trait WithPasswordConfirmation
 
     private function passwordConfirmationTokenKey(string $token): string
     {
-        return 'core.password_confirmation.' . hash('sha256', $token);
+        return 'core.password_confirmation.'.hash('sha256', $token);
     }
 
     public function mountWithPasswordConfirmation(?string $passwordConfirmationToken = null): void
     {
-        if (!$this instanceof ModalComponent || !$this->requiresPasswordConfirmationToken()) {
+        if (! $this instanceof ModalComponent || ! $this->requiresPasswordConfirmationToken()) {
             return;
         }
 
         $hasValidToken = $passwordConfirmationToken
             && cache()->pull($this->passwordConfirmationTokenKey($passwordConfirmationToken));
 
-        if (!$hasValidToken) {
+        if (! $hasValidToken) {
             abort(403);
         }
     }
@@ -140,7 +154,7 @@ trait WithPasswordConfirmation
 
     public function passwordFunction(string $callable, ...$args): static
     {
-        $this->passwordConfirmationData['event'] = $callable . '(' . implode(', ', $args) . ')';
+        $this->passwordConfirmationData['event'] = $callable.'('.implode(', ', $args).')';
 
         return $this;
     }

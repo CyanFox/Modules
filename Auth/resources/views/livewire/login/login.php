@@ -9,18 +9,26 @@ use Modules\Core\Enums\SettingsProperty;
 use Modules\Core\Facades\UserSettings;
 use PragmaRX\Google2FA\Google2FA;
 
-new class extends Component {
+new class extends Component
+{
     use WithRateLimiting;
 
     public $unsplash = [];
+
     public $rateLimitTime;
 
     public $user;
+
     public $username;
+
     public $password;
+
     public $rememberMe;
+
     public $captcha;
+
     public $mfaEnabled = false;
+
     public $mfaCode;
 
     public function attemptLogin()
@@ -43,12 +51,13 @@ new class extends Component {
 
         $this->checkIfUserExists($this->username);
 
-        if (!$this->user) {
+        if (! $this->user) {
             $this->addError('username', __('auth.failed'));
+
             return;
         }
 
-        if (!Hash::check($this->password, $this->user->password)) {
+        if (! Hash::check($this->password, $this->user->password)) {
             activity()
                 ->performedOn($this->user)
                 ->causedByAnonymous()
@@ -68,6 +77,7 @@ new class extends Component {
 
         if (userSettings('auth.mfa.enabled', $this->user->id)) {
             $this->mfaEnabled = true;
+
             return;
         }
 
@@ -91,17 +101,17 @@ new class extends Component {
             'mfaCode' => 'required',
         ]);
 
-        if ($this->setRateLimit() || !$this->user) {
+        if ($this->setRateLimit() || ! $this->user) {
             return;
         }
 
-        $google2FA = new Google2FA();
+        $google2FA = new Google2FA;
 
         $secret = userSettings('auth.mfa.secret', $this->user->id);
 
-        if (!$google2FA->verifyKey($secret, $this->mfaCode)) {
+        if (! $google2FA->verifyKey($secret, $this->mfaCode)) {
             $recoveryCodes = userSettings('auth.mfa.recovery_codes', $this->user->id);
-            if (!in_array($this->mfaCode, $recoveryCodes)) {
+            if (! in_array($this->mfaCode, $recoveryCodes)) {
                 throw ValidationException::withMessages([
                     'mfaCode' => __('auth::login.invalid_mfa_code'),
                 ]);

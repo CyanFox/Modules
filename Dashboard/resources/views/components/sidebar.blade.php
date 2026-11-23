@@ -61,35 +61,44 @@
                 @endforeach
             </x-breadcrumb>
 
+            <div class="flex items-center gap-4">
+                @livewire('dashboard::components.notifications')
 
-            <!-- Profile Menu  -->
-            <x-dropdown>
-                <x-dropdown.trigger>
-                    <button type="button"
-                            class="flex cursor-pointer w-full items-center rounded-radius gap-2 p-2 text-left text-on-surface hover:bg-primary/5 hover:text-on-surface-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:text-on-surface-dark dark:hover:bg-primary-dark/5 dark:hover:text-on-surface-dark-strong dark:focus-visible:outline-primary-dark">
-                        <img src="{{ auth()->user()->getAvatar() }}"
-                             class="size-8 object-cover rounded-full" alt="avatar" aria-hidden="true"/>
-                        <div class="hidden lg:flex flex-col">
+                <i class="icon-search cursor-pointer text-on-surface dark:text-on-surface-dark" x-data
+                   x-tooltip.raw="{{ __('dashboard::dashboard.tooltips.spotlight') }}"
+                   @click="$dispatch('open-spotlight')"></i>
+
+                <x-dropdown>
+                    <x-dropdown.trigger>
+                        <button type="button"
+                                class="flex cursor-pointer w-full items-center rounded-radius gap-2 p-2 text-left text-on-surface hover:bg-primary/5 hover:text-on-surface-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:text-on-surface-dark dark:hover:bg-primary-dark/5 dark:hover:text-on-surface-dark-strong dark:focus-visible:outline-primary-dark">
+                            <img src="{{ auth()->user()->getAvatar() }}"
+                                 class="size-8 object-cover rounded-full" alt="avatar" aria-hidden="true"/>
+                            <div class="hidden lg:flex flex-col">
                             <span
                                 class="text-sm font-bold text-on-surface-strong dark:text-on-surface-dark-strong">{{ auth()->user()->getDisplayName() }}</span>
-                            <span class="text-xs" aria-hidden="true">{{ auth()->user()->username }}</span>
-                            <span class="sr-only">profile settings</span>
-                        </div>
-                    </button>
-                </x-dropdown.trigger>
-                <x-dropdown.items position="bottom">
-                    @hook('dashboard.profile.items')
-                    @shook('s.dashboard.profile.items')
+                                <span class="text-xs" aria-hidden="true">{{ auth()->user()->username }}</span>
+                                <span class="sr-only">profile settings</span>
+                            </div>
+                        </button>
+                    </x-dropdown.trigger>
+                    <x-dropdown.items position="bottom">
+                        @hook('dashboard.profile.items')
+                        @shook('s.dashboard.profile.items')
 
-                    <x-divider class="my-0"/>
-                    <x-dashboard::profile.item icon="icon-log-out" route="auth.logout">
-                        {{ __('dashboard::dashboard.logout') }}
-                    </x-dashboard::profile.item>
-                    @endhook
-                </x-dropdown.items>
-            </x-dropdown>
+                        <x-divider class="my-0"/>
+                        <x-dashboard::profile.item icon="icon-log-out" route="auth.logout">
+                            {{ __('dashboard::dashboard.logout') }}
+                        </x-dashboard::profile.item>
+                        @endhook
+                    </x-dropdown.items>
+                </x-dropdown>
+                @impersonating
+                @livewire('dashboard::components.impersonation')
+                @endImpersonating
+            </div>
         </nav>
-        <!-- main content  -->
+
         <div id="main-content" class="p-4">
             <div class="overflow-y-auto">
                 {{ $slot }}

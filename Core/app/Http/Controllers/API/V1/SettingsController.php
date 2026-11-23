@@ -27,7 +27,7 @@ class SettingsController extends Controller
     public function getSetting(string $key)
     {
         $setting = Setting::where('key', $key)->first();
-        if (!$setting) {
+        if (! $setting) {
             return apiResponse('Setting not found.', apiError('core.settings.not_found'), false, 404);
         }
 
@@ -37,15 +37,15 @@ class SettingsController extends Controller
 
         if ($setting->getProperty(SettingsProperty::PERMISSIONS) || $setting->getProperty(SettingsProperty::ROLES) || $setting->getProperty(SettingsProperty::AUTH)) {
             $user = auth('sanctum')->user();
-            if (!$user) {
+            if (! $user) {
                 return apiResponse('Unauthenticated.', apiError('core.settings.unauthenticated'), false, 401);
             }
 
-            if (array_any($setting->getProperty(SettingsProperty::PERMISSIONS) ?? [], fn($permission) => !$user->can($permission))) {
+            if (array_any($setting->getProperty(SettingsProperty::PERMISSIONS) ?? [], fn ($permission) => ! $user->can($permission))) {
                 return apiResponse('Unauthenticated.', apiError('core.settings.unauthenticated'), false, 401);
             }
 
-            if (array_any($setting->getProperty(SettingsProperty::ROLES) ?? [], fn($role) => !$user->hasRole($role))) {
+            if (array_any($setting->getProperty(SettingsProperty::ROLES) ?? [], fn ($role) => ! $user->hasRole($role))) {
                 return apiResponse('Unauthenticated.', apiError('core.settings.unauthenticated'), false, 401);
             }
         }
@@ -58,7 +58,6 @@ class SettingsController extends Controller
 
         return apiResponse('Setting retrieved.', $setting);
     }
-
 
     #[Endpoint(title: 'Get User Setting')]
     #[PathParameter('key', 'Setting Key')]
@@ -78,7 +77,7 @@ class SettingsController extends Controller
         $user = auth('sanctum')->user();
 
         $setting = UserSetting::where(['key' => $key, 'user_id' => $user->id])->first();
-        if (!$setting) {
+        if (! $setting) {
             return apiResponse('Setting not found', apiError('core.settings.not_found'), false, 404);
         }
 

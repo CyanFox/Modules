@@ -9,5 +9,5 @@ return [
 <br><a href=":url">:url</a>
 <br>This password reset link will expire at :expiration.
 <br>If you did not request a password reset, no further action is required.',
-    ]
+    ],
 ];

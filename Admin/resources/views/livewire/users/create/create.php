@@ -4,18 +4,31 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Component;
 use Masmerise\Toaster\Toaster;
+use Modules\Core\Facades\UserSettings;
 
-new class extends Component {
-
+new class extends Component
+{
     public $firstName;
+
     public $lastName;
+
     public $username;
+
     public $email;
+
     public $password;
+
     public $passwordConfirmation;
+
     public $roles = [];
+
     public $permissions = [];
+
     public $disabled;
+
+    public $forcePasswordChange;
+
+    public $forceMfa;
 
     public function createUser()
     {
@@ -38,6 +51,9 @@ new class extends Component {
             'password' => $this->password,
             'disabled' => $this->disabled ?? false,
         ]);
+
+        UserSettings::set($user->id, 'auth.force_password_change', $this->forcePasswordChange);
+        UserSettings::set($user->id, 'auth.force_mfa', $this->forceMfa);
 
         $user->syncRoles($this->roles);
         $user->syncPermissions($this->permissions);

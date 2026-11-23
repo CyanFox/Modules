@@ -4,11 +4,16 @@ use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Modules\Core\Models\Role;
 
-new class extends Component {
+new class extends Component
+{
     public $roleId;
+
     public $role;
+
     public $name;
+
     public $guardName = 'web';
+
     public $permissions = [];
 
     public function updateRole()
@@ -34,7 +39,7 @@ new class extends Component {
     public function mount()
     {
         $this->role = Role::find($this->roleId);
-        if (!$this->role) {
+        if (! $this->role) {
             abort(404);
         }
 

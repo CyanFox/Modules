@@ -9,7 +9,8 @@ use Modules\Core\Facades\Settings;
 use Modules\Core\Models\Setting;
 use Modules\Core\Traits\WithConfirmation;
 
-new class extends Component {
+new class extends Component
+{
     use WithConfirmation;
 
     public $settings = [];
@@ -33,6 +34,7 @@ new class extends Component {
                     $hasValidationErrors = true;
                     $langKey = $setting->getProperty(SettingsProperty::LANG_KEY);
                     $validationErrorSettings[] = $langKey ? __($langKey) : $setting->key;
+
                     continue;
                 }
             }
@@ -67,8 +69,9 @@ new class extends Component {
         if ($confirmed) {
             $setting = Setting::find($settingId);
 
-            if (!$setting?->delete()) {
+            if (! $setting?->delete()) {
                 Toaster::error(__('messages.notifications.something_went_wrong'));
+
                 return;
             }
 
@@ -91,8 +94,8 @@ new class extends Component {
     private function castValue(mixed $value, ?string $type): mixed
     {
         return match ($type) {
-            'int' => (int)$value,
-            'float' => (float)$value,
+            'int' => (int) $value,
+            'float' => (float) $value,
             'bool' => filter_var($value, FILTER_VALIDATE_BOOLEAN),
             'array' => is_array($value) ? $value : (json_decode($value, true) ?? []),
             'json' => is_string($value) ? $value : json_encode($value),
@@ -137,7 +140,7 @@ new class extends Component {
     public function mount(): void
     {
         $this->settings = Setting::all()
-            ->mapWithKeys(fn(Setting $setting) => [
+            ->mapWithKeys(fn (Setting $setting) => [
                 $setting->id => [
                     'id' => $setting->id,
                     'value' => $this->formatValue(Settings::get($setting->key), $setting->getProperty(SettingsProperty::TYPE)),

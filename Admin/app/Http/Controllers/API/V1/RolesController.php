@@ -21,7 +21,7 @@ class RolesController extends Controller
             'guard_name' => 'guard name',
             'created_at' => '2000-01-01T00:00:00.000000Z',
             'updated_at' => '2000-01-01T00:00:00.000000Z',
-        ]
+        ],
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function getRoles(Request $request)
@@ -54,12 +54,12 @@ class RolesController extends Controller
         }
 
         $role = Role::find($roleId);
-        if (!$role) {
+        if (! $role) {
             return apiResponse('Role not found.', apiError('admin.roles.not_found'), false, 404);
         }
 
         return apiResponse('Role retrieved.', array_merge($role->withoutRelations()->toArray(), [
-            'permissions' => $role->permissions->map(fn($permission) => [
+            'permissions' => $role->permissions->map(fn ($permission) => [
                 'id' => $permission->id,
                 'name' => $permission->name,
             ]),
@@ -111,12 +111,12 @@ class RolesController extends Controller
         }
 
         $role = Role::find($roleId);
-        if (!$role) {
+        if (! $role) {
             return apiResponse('Role not found.', apiError('admin.roles.not_found'), false, 404);
         }
 
         $request->validate([
-            'name' => 'required|string|max:255|unique:roles,name,' . $roleId,
+            'name' => 'required|string|max:255|unique:roles,name,'.$roleId,
             'guard_name' => 'nullable|string|max:255',
             'permissions' => 'nullable|array',
         ]);
@@ -138,7 +138,7 @@ class RolesController extends Controller
         }
 
         $role = Role::find($roleId);
-        if (!$role) {
+        if (! $role) {
             return apiResponse('Role not found.', apiError('admin.roles.not_found'), false, 404);
         }
 

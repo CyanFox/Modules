@@ -13,6 +13,7 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Lab404\Impersonate\Models\Impersonate;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Core\Events\Users\UserCreatedEvent;
 use Spatie\Activitylog\Models\Activity;
@@ -54,6 +55,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $roles_count
  * @property-read Collection<int, Permission> $teams
  * @property-read int|null $teams_count
+ *
  * @method static Builder<static>|User newModelQuery()
  * @method static Builder<static>|User newQuery()
  * @method static Builder<static>|User permission($permissions, bool $without = false)
@@ -75,6 +77,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder<static>|User withoutPermission($permissions)
  * @method static Builder<static>|User withoutRole($roles, ?string $guard = null)
  * @method static Builder<static>|User withoutTeam($teams)
+ *
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
  * @property-read Collection<int, Session> $sessions
@@ -83,12 +86,13 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $tokens_count
  * @property-read Collection<int, UserSetting> $userSettings
  * @property-read int|null $user_settings_count
+ *
  * @mixin Eloquent
  * @mixin IdeHelperUser
  */
-class User extends Authenticatable implements HasPasskeys, HasMedia
+class User extends Authenticatable implements HasMedia, HasPasskeys
 {
-    use HasRoles, InteractsWithPasskeys, LogsActivity, Notifiable, HasApiTokens, InteractsWithMedia;
+    use HasApiTokens, HasRoles, Impersonate, InteractsWithMedia, InteractsWithPasskeys, LogsActivity, Notifiable;
 
     protected $fillable = [
         'first_name',
@@ -99,11 +103,13 @@ class User extends Authenticatable implements HasPasskeys, HasMedia
         'theme',
         'language',
         'disabled',
+        'last_activity',
     ];
 
     protected $casts = [
         'disabled' => 'boolean',
         'password' => 'hashed',
+        'last_activity' => 'datetime',
     ];
 
     protected $hidden = [
@@ -126,10 +132,20 @@ class User extends Authenticatable implements HasPasskeys, HasMedia
         return $this->getDisplayName();
     }
 
+    public function canImpersonate()
+    {
+        return $this->can('core.impersonate');
+    }
+
+    public function canBeImpersonated()
+    {
+        return $this->can('core.impersonate.immune');
+    }
+
     public function getDisplayName(): string
     {
         if ($this->first_name || $this->last_name) {
-            return $this->first_name . ' ' . $this->last_name;
+            return $this->first_name.' '.$this->last_name;
         }
 
         return $this->username;
@@ -161,13 +177,13 @@ class User extends Authenticatable implements HasPasskeys, HasMedia
         return LogOptions::defaults()
             ->logAll()
             ->logExcept($this->hidden)
-            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->dontLogIfAttributesChangedOnly(['updated_at', 'last_activity'])
             ->setDescriptionForEvent(function ($eventName) {
                 if (array_keys($this->getChanges()) === ['password']) {
-                    return 'user.password.' . $eventName;
+                    return 'user.password.'.$eventName;
                 }
 
-                return 'user.' . $eventName;
+                return 'user.'.$eventName;
             });
     }
 

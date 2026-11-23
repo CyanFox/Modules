@@ -21,7 +21,7 @@ class PermissionsController extends Controller
             'guard_name' => 'guard name',
             'created_at' => '2000-01-01T00:00:00.000000Z',
             'updated_at' => '2000-01-01T00:00:00.000000Z',
-        ]
+        ],
     ]]])]
     #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
     public function getPermissions(Request $request)
@@ -53,7 +53,7 @@ class PermissionsController extends Controller
         }
 
         $permission = Permission::find($permissionsId);
-        if (!$permission) {
+        if (! $permission) {
             return apiResponse('Permission not found.', apiError('admin.permissions.not_found'), false, 404);
         }
 
@@ -102,12 +102,12 @@ class PermissionsController extends Controller
         }
 
         $permission = Permission::find($permissionId);
-        if (!$permission) {
+        if (! $permission) {
             return apiResponse('Permission not found.', apiError('admin.permissions.not_found'), false, 404);
         }
 
         $request->validate([
-            'name' => 'required|string|max:255|unique:permissions,name,' . $permissionId,
+            'name' => 'required|string|max:255|unique:permissions,name,'.$permissionId,
             'guard_name' => 'nullable|string|max:255',
         ]);
 
@@ -127,7 +127,7 @@ class PermissionsController extends Controller
         }
 
         $permission = Permission::find($permissionId);
-        if (!$permission) {
+        if (! $permission) {
             return apiResponse('Permission not found.', apiError('admin.permissions.not_found'), false, 404);
         }
 

@@ -8,12 +8,12 @@ return [
     'permissions' => 'Permissions',
 
     'buttons' => [
-        'create' => 'Create Role'
+        'create' => 'Create Role',
     ],
 
     'tooltips' => [
         'update' => 'Update Role',
-        'delete' => 'Delete Role'
+        'delete' => 'Delete Role',
     ],
 
     'delete' => [
@@ -21,35 +21,35 @@ return [
         'description' => 'Are you sure you want to delete this role? This action cannot be undone.',
 
         'buttons' => [
-            'delete' => 'Delete Role'
+            'delete' => 'Delete Role',
         ],
 
         'notifications' => [
-            'deleted' => 'Role deleted successfully'
-        ]
+            'deleted' => 'Role deleted successfully',
+        ],
     ],
 
     'create' => [
         'tab_title' => 'Create Role',
 
         'buttons' => [
-            'create' => 'Create Role'
+            'create' => 'Create Role',
         ],
 
         'notifications' => [
-            'created' => 'Role created successfully'
-        ]
+            'created' => 'Role created successfully',
+        ],
     ],
 
     'update' => [
         'tab_title' => 'Update Role',
 
         'buttons' => [
-            'update' => 'Update Role'
+            'update' => 'Update Role',
         ],
 
         'notifications' => [
-            'updated' => 'Role updated successfully'
-        ]
-    ]
+            'updated' => 'Role updated successfully',
+        ],
+    ],
 ];

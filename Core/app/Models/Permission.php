@@ -28,6 +28,7 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property-read int|null $teams_count
  * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
+ *
  * @method static Builder<static>|Permission newModelQuery()
  * @method static Builder<static>|Permission newQuery()
  * @method static Builder<static>|Permission permission($permissions, bool $without = false)
@@ -42,6 +43,7 @@ use Spatie\Activitylog\Support\LogOptions;
  * @method static Builder<static>|Permission withoutPermission($permissions)
  * @method static Builder<static>|Permission withoutRole($roles, ?string $guard = null)
  * @method static Builder<static>|Permission withoutTeam($teams)
+ *
  * @mixin Eloquent
  * @mixin IdeHelperPermission
  */
@@ -61,7 +63,7 @@ class Permission extends \Spatie\Permission\Models\Permission
             ->logExcept($this->hidden)
             ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->setDescriptionForEvent(function ($eventName) {
-                return 'permissions.' . $eventName;
+                return 'permissions.'.$eventName;
             });
     }
 }

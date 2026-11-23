@@ -1,0 +1,60 @@
+name: PHPStan
+
+on:
+  push:
+    paths:
+      - '**.php'
+      - 'phpstan.neon.dist'
+      - '.forgejo/workflows/phpstan.yml'
+  workflow_dispatch:
+
+jobs:
+  phpstan:
+    name: phpstan
+    runs-on: docker
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: https://github.com/shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Clone CyanFox-Base
+        run: git clone https://git.cyanfox.de/CyanFox/Base
+
+      - name: Install dependencies
+        run: |
+          cd Base
+          composer update --prefer-dist --no-interaction
+
+      - name: Copy modules
+        run: |
+          cd Base
+          rm -rf modules
+          mkdir modules
+          find . -mindepth 1 -maxdepth 1 \
+            ! -name 'Base' ! -name 'modules' \
+            -exec cp -a {} modules/ \;
+
+      - name: Install dependencies for modules
+        run: |
+          cd Base
+          composer update --prefer-dist --no-interaction
+
+      - name: List Installed Dependencies
+        run: |
+          cd Base
+          composer show -D
+
+      - name: Run PHPStan
+        run: |
+          cd Base
+          cp .env.testing .env
+          php artisan module:enable --all
+          php artisan migrate --force
+          php artisan module:seed --all
+
+          ./vendor/bin/phpstan --error-format=github

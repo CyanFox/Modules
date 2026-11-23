@@ -112,6 +112,13 @@
                             <i class="icon-key-round"></i>
                             <span class="ml-2">{{ __('account::account.tabs.passkeys') }}</span>
                         </x-tab.item>
+                        @if(\Modules\Auth\Models\OAuthProvider::where('account_linking', true)->exists())
+                            <x-tab.item class="flex-1 flex items-center justify-center" uuid="oauth"
+                                        wire:click="$set('tab', 'oauth')">
+                                <i class="icon-user-round-key"></i>
+                                <span class="ml-2">{{ __('account::account.tabs.oauth') }}</span>
+                            </x-tab.item>
+                        @endif
 
                         @shook('s.account.password.tabs')
                         @endhook
@@ -121,8 +128,11 @@
                     @if($tab == 'password')
                         @hook('account.profile.password')
                         <form wire:submit="changePassword" class="space-y-4 mt-4">
-                            <x-password wire:model="currentPassword" :label="__('account::account.current_password')"
-                                        required/>
+                            @if(filled(auth()->user()->password))
+                                <x-password wire:model="currentPassword"
+                                            :label="__('account::account.current_password')"
+                                            required/>
+                            @endif
 
                             <div class="grid md:grid-cols-2 gap-4">
                                 <x-password wire:model="newPassword" :label="__('account::account.new_password')"
@@ -142,6 +152,23 @@
                         @hook('account.profile.passkeys')
                         @livewire('account::components.passkeys')
                         @endhook
+                    @elseif($tab == 'oauth')
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            @foreach(\Modules\Auth\Models\OAuthProvider::where('account_linking', true)->get() as $provider)
+                                @if(userSettings('auth.oauth.' . $provider->id . '.id'))
+                                    <x-button color="{{ $provider->color }}"
+                                              loading="unlinkProvider('{{ $provider->id }}')"
+                                              wire:click="unlinkProvider('{{ $provider->id }}')">
+                                        <i class="icon-link-2-off mr-1"></i> {!! __('account::account.buttons.unlink_provider', ['provider' => e($provider->name), 'icon' => e($provider->icon)]) !!}
+                                    </x-button>
+                                @else
+                                    <x-button color="{{ $provider->color }}"
+                                              link="{{ route('oauth.redirect', ['provider' => $provider->id]) }}">
+                                        <i class="icon-link-2 mr-1"></i> {!! __('account::account.buttons.link_with_provider', ['provider' => e($provider->name), 'icon' => e($provider->icon)]) !!}
+                                    </x-button>
+                                @endif
+                            @endforeach
+                        </div>
                     @endif
                 </x-card>
             </div>

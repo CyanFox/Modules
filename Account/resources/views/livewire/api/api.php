@@ -4,8 +4,9 @@ use Livewire\Component;
 use Modules\Core\Traits\WithConfirmation;
 use Modules\Core\Traits\WithPasswordConfirmation;
 
-new class extends Component {
-    use WithPasswordConfirmation, WithConfirmation;
+new class extends Component
+{
+    use WithConfirmation, WithPasswordConfirmation;
 
     public function showCreateAPIKey()
     {
@@ -22,6 +23,7 @@ new class extends Component {
             Toaster::success(__('account::api.delete_api_key.notifications.deleted'));
 
             $this->redirect(url()->previous(), true);
+
             return;
         }
 

@@ -3,7 +3,8 @@
 use RealZone22\PenguBlade\ModalComponent;
 use Spatie\Activitylog\Models\Activity;
 
-new class extends ModalComponent {
+new class extends ModalComponent
+{
     public $activityId;
 
     public $attributeChanges;
@@ -23,8 +24,9 @@ new class extends ModalComponent {
             ->where('causer_id', auth()->id())
             ->first();
 
-        if (!$activityLog) {
+        if (! $activityLog) {
             $this->closeModal();
+
             return;
         }
 

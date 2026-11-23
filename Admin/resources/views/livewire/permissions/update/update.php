@@ -4,10 +4,14 @@ use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Modules\Core\Models\Permission;
 
-new class extends Component {
+new class extends Component
+{
     public $permissionId;
+
     public $permission;
+
     public $name;
+
     public $guardName = 'web';
 
     public function updatePermission()
@@ -30,7 +34,7 @@ new class extends Component {
     public function mount()
     {
         $this->permission = Permission::find($this->permissionId);
-        if (!$this->permission) {
+        if (! $this->permission) {
             abort(404);
         }
 

@@ -13,9 +13,9 @@ class UserSettingsService
 {
     public function get(int $userId, string $key, mixed $default = null, ?UserSetting $setting = null): mixed
     {
-        if (!$setting) {
+        if (! $setting) {
             $setting = UserSetting::where(['user_id' => $userId, 'key' => $key])->first();
-            if (!$setting) {
+            if (! $setting) {
                 return $default;
             }
         }
@@ -38,11 +38,11 @@ class UserSettingsService
     private function convertTypes(mixed $value, ?string $type): mixed
     {
         return match ($type) {
-            'string' => (string)$value,
-            'int' => (int)$value,
-            'float' => (float)$value,
-            'bool' => (bool)$value,
-            'array' => (array)$value,
+            'string' => (string) $value,
+            'int' => (int) $value,
+            'float' => (float) $value,
+            'bool' => (bool) $value,
+            'array' => (array) $value,
             'json' => json_decode($value, true),
             default => $value,
         };
@@ -62,7 +62,7 @@ class UserSettingsService
 
         if ($updateIfExists && $setting) {
             $properties = $this->mergeProperties($setting, $properties);
-            if (!$this->getProperty($properties, SettingsProperty::TYPE)) {
+            if (! $this->getProperty($properties, SettingsProperty::TYPE)) {
                 $properties['type'] = $this->detectType($value);
             }
 
@@ -73,9 +73,9 @@ class UserSettingsService
             ]);
         }
 
-        if (!$setting) {
+        if (! $setting) {
             $properties ??= [SettingsProperty::INTERNAL => false];
-            if (!$this->getProperty($properties, SettingsProperty::TYPE)) {
+            if (! $this->getProperty($properties, SettingsProperty::TYPE)) {
                 $properties['type'] = $this->detectType($value);
             }
 
@@ -107,12 +107,12 @@ class UserSettingsService
     public function update(int $userId, string $key, mixed $value = null, ?array $properties = null): UserSetting
     {
         $setting = UserSetting::where(['user_id' => $userId, 'key' => $key])->first();
-        if (!$setting) {
+        if (! $setting) {
             throw new SettingNotFoundException($key);
         }
 
         $properties = $this->mergeProperties($setting, $properties);
-        if (!$this->getProperty($properties, SettingsProperty::TYPE)) {
+        if (! $this->getProperty($properties, SettingsProperty::TYPE)) {
             $properties['type'] = $this->detectType($value);
         }
 
@@ -136,7 +136,7 @@ class UserSettingsService
         if (is_string($existingProperties)) {
             $existingProperties = json_decode($existingProperties, true) ?? [];
         }
-        if (!is_array($existingProperties)) {
+        if (! is_array($existingProperties)) {
             $existingProperties = [];
         }
 

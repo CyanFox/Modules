@@ -4,7 +4,7 @@ return [
     'tab_title' => 'Settings',
 
     'buttons' => [
-        'update' => 'Update Settings'
+        'update' => 'Update Settings',
     ],
 
     'notifications' => [
@@ -29,17 +29,17 @@ return [
         'logo' => 'Logo',
 
         'buttons' => [
-            'reset_logo' => 'Reset Logo'
+            'reset_logo' => 'Reset Logo',
         ],
 
         'notifications' => [
-            'logo_reset' => 'Logo Reset successfully'
+            'logo_reset' => 'Logo Reset successfully',
         ],
     ],
 
     'module' => [
         'tab_title' => 'Module',
-        'no_settings_page' => 'There is no module with a custom settings page'
+        'no_settings_page' => 'There is no module with a custom settings page',
     ],
 
     'editor' => [
@@ -64,7 +64,7 @@ return [
 
         'buttons' => [
             'update' => 'Update Setting',
-            'delete' => 'Delete Setting'
+            'delete' => 'Delete Setting',
         ],
 
         'delete' => [
@@ -72,19 +72,19 @@ return [
             'description' => 'Are you sure you want to delete this setting? This action cannot be undone.',
 
             'buttons' => [
-                'delete' => 'Delete'
+                'delete' => 'Delete',
             ],
 
             'notifications' => [
-                'deleted' => 'Setting deleted successfully'
-            ]
+                'deleted' => 'Setting deleted successfully',
+            ],
         ],
 
         'tooltips' => [
             'encrypted' => 'This setting is encrypted in the database',
             'internal' => 'This setting is internal and cannot be accessed by the API',
             'auth' => 'This setting requires authentication to access',
-            'hidden' => 'This setting is hidden in the user settings page'
+            'hidden' => 'This setting is hidden in the user settings page',
         ],
-    ]
+    ],
 ];

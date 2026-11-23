@@ -24,5 +24,6 @@ return [
 
     'buttons' => [
         'login' => 'Login',
+        'login_with_provider' => 'Login with <i class=":icon ml-1.5 mr-0.5"></i> :provider',
     ],
 ];
