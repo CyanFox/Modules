@@ -43,7 +43,7 @@ class ActivityController extends Controller
         return apiResponse('Activities retrieved.', QueryBuilder::for(Activity::class)
             ->allowedSorts('created_at', 'causer_id', 'causer_type', 'description', 'log_name', 'event', 'subject_id', 'subject_type')
             ->allowedFilters('causer_id', 'causer_type', 'description', 'log_name', 'event', 'attribute_changes', 'subject_id', 'subject_type')
-            ->paginate($request->query('perPage') ?? null)
+            ->paginate($request->query('perPage') === null ? null : (int)$request->query('perPage'))
             ->appends($request->query()));
     }
 }

@@ -1,9 +1,11 @@
 <?php
 
+use Modules\Core\Traits\WithPasswordConfirmation;
 use RealZone22\PenguBlade\ModalComponent;
 
-new class extends ModalComponent
-{
+new class extends ModalComponent {
+    use WithPasswordConfirmation;
+
     public string $name;
 
     public ?array $permissions = [];
@@ -20,6 +22,13 @@ new class extends ModalComponent
         $this->token = auth()->user()->createToken(json_encode(['name' => $this->name, 'type' => 'api']), $this->permissions)->plainTextToken;
 
         Toaster::success(__('account::modals.create_api_key.notifications.created'));
+    }
+
+    public function mount()
+    {
+        if (!$this->hasPasswordConfirmedSession()) {
+            abort(403);
+        }
     }
 
     public function closeModal(): void

@@ -87,7 +87,7 @@ new class extends ModalComponent
         }
 
         $this->provider = OAuthProvider::find($this->providerId);
-        if (! $this->provider) {
+        if (!$this->provider instanceof OAuthProvider) {
             abort(404);
         }
 

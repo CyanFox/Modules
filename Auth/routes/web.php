@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Two\InvalidStateException;
+use Laravel\Socialite\Two\User;
 use Modules\Auth\Models\OAuthProvider;
 use Modules\Auth\Socialite\CustomOAuthProvider;
 use Modules\Core\Facades\UserSettings;
@@ -58,6 +59,11 @@ Route::group(['prefix' => 'oauth', 'as' => 'oauth.'], function () {
         } catch (InvalidStateException) {
             abort(400, 'Invalid OAuth state.');
         }
+
+        if (!$socialiteUser instanceof User) {
+            abort(422, 'The OAuth provider did not return a valid user.');
+        }
+
         $settingKey = 'auth.oauth.'.$oauthProvider->id.'.id';
         $linkedSetting = UserSetting::where('key', $settingKey)
             ->where('value', $socialiteUser->getId())

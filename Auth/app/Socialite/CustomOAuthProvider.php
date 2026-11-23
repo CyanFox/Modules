@@ -23,8 +23,8 @@ class CustomOAuthProvider extends AbstractProvider
 
         parent::__construct(
             $request,
-            $oauthProvider?->client_id ?? $clientId,
-            $oauthProvider?->client_secret ?? $clientSecret,
+            $oauthProvider->client_id ?? $clientId,
+            $oauthProvider->client_secret ?? $clientSecret,
             $redirectUrl,
             $guzzle
         );

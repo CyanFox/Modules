@@ -76,7 +76,7 @@ class SettingsController extends Controller
     {
         $user = auth('sanctum')->user();
 
-        $setting = UserSetting::where(['key' => $key, 'user_id' => $user->id])->first();
+        $setting = UserSetting::where(['key' => $key, 'user_id' => $user->getAuthIdentifier()])->first();
         if (! $setting) {
             return apiResponse('Setting not found', apiError('core.settings.not_found'), false, 404);
         }

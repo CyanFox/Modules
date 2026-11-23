@@ -4,11 +4,14 @@ use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Modules\Core\Enums\SettingsProperty;
 use Modules\Core\Facades\UserSettings;
+use Modules\Core\Traits\WithPasswordConfirmation;
 use PragmaRX\Google2FA\Google2FA;
 use RealZone22\PenguBlade\ModalComponent;
 
 new class extends ModalComponent
 {
+    use WithPasswordConfirmation;
+
     #[Locked]
     public string $mfaSecret;
 
@@ -66,6 +69,10 @@ new class extends ModalComponent
 
     public function mount()
     {
+        if (!$this->hasPasswordConfirmedSession()) {
+            abort(403);
+        }
+
         $google2FA = new Google2FA;
         $this->mfaSecret = $google2FA->generateSecretKey();
 

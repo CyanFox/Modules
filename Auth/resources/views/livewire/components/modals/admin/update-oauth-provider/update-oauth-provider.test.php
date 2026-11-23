@@ -5,7 +5,7 @@ use Modules\Auth\Models\OAuthProvider;
 
 function makeOAuthProviderForTest(array $attributes = []): OAuthProvider
 {
-    return OAuthProvider::create(array_merge([
+    $provider = new OAuthProvider(array_merge([
         'name' => 'Google',
         'discovery_url' => 'https://accounts.google.com/.well-known/openid-configuration',
         'client_id' => 'client-id',
@@ -15,6 +15,10 @@ function makeOAuthProviderForTest(array $attributes = []): OAuthProvider
             ['oauth' => 'email', 'db' => 'email'],
         ],
     ], $attributes));
+
+    $provider->save();
+
+    return $provider;
 }
 
 it('renders successfully for users with the permission', function () {

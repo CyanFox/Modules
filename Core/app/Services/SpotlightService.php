@@ -42,7 +42,7 @@ class SpotlightService
             $item['title'] = __($item['title']);
         }
 
-        if (isset($item['description']) && is_string($item['description']) && $this->isTranslationKey($item['description'])) {
+        if (is_string($item['description']) && $this->isTranslationKey($item['description'])) {
             $item['raw_description'] = $item['description'];
             $item['description'] = __($item['description']);
         }

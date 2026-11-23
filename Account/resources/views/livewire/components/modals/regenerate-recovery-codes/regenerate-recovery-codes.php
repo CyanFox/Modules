@@ -2,10 +2,12 @@
 
 use Modules\Core\Enums\SettingsProperty;
 use Modules\Core\Facades\UserSettings;
+use Modules\Core\Traits\WithPasswordConfirmation;
 use RealZone22\PenguBlade\ModalComponent;
 
-new class extends ModalComponent
-{
+new class extends ModalComponent {
+    use WithPasswordConfirmation;
+
     public array $recoveryCodes;
 
     public function regenerateCodes()
@@ -24,11 +26,15 @@ new class extends ModalComponent
     {
         return response()->streamDownload(function () {
             echo implode(PHP_EOL, $this->recoveryCodes);
-        }, 'recovery-codes-'.auth()->user()->getDisplayName().'.txt');
+        }, 'recovery-codes-' . auth()->user()->getDisplayName() . '.txt');
     }
 
     public function mount()
     {
+        if (!$this->hasPasswordConfirmedSession()) {
+            abort(403);
+        }
+
         $this->regenerateCodes();
     }
 };

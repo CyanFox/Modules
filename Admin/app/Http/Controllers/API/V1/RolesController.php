@@ -33,7 +33,7 @@ class RolesController extends Controller
         return apiResponse('Roles retrieved.', QueryBuilder::for(Role::class)
             ->allowedSorts('name', 'guard_name')
             ->allowedFilters('name', 'guard_name')
-            ->paginate($request->query('perPage') ?? null));
+            ->paginate($request->query('perPage') === null ? null : (int)$request->query('perPage')));
     }
 
     #[Endpoint(title: 'Get Role')]

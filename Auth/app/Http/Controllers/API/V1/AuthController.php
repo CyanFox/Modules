@@ -64,7 +64,7 @@ class AuthController extends Controller
         if (settings('auth.login.captcha') && (! userSettings('auth.mfa.enabled', $user->id) || ! filled($request->mfa_code))) {
             $validator = Validator::make($request->all(), [
                 'captcha_key' => ['required', 'string'],
-                'captcha' => ['required', 'string', 'captcha_api:'.$request->captcha_key.','.$request->captcha_type ?? 'default'],
+                'captcha' => ['required', 'string', 'captcha_api:' . $request->captcha_key . ',' . ($request->captcha_type ?? 'default')],
             ]);
 
             if ($validator->fails()) {
@@ -201,7 +201,7 @@ class AuthController extends Controller
         if (settings('auth.register.captcha')) {
             $validator = Validator::make($request->all(), [
                 'captcha_key' => ['required', 'string'],
-                'captcha' => ['required', 'string', 'captcha_api:'.$request->captcha_key.','.$request->captcha_type ?? 'default'],
+                'captcha' => ['required', 'string', 'captcha_api:' . $request->captcha_key . ',' . ($request->captcha_type ?? 'default')],
             ]);
 
             if ($validator->fails()) {
@@ -274,7 +274,7 @@ class AuthController extends Controller
         if (settings('auth.forgot_password.captcha')) {
             $validator = Validator::make($request->all(), [
                 'captcha_key' => ['required', 'string'],
-                'captcha' => ['required', 'string', 'captcha_api:'.$request->captcha_key.','.$request->captcha_type ?? 'default'],
+                'captcha' => ['required', 'string', 'captcha_api:' . $request->captcha_key . ',' . ($request->captcha_type ?? 'default')],
             ]);
 
             if ($validator->fails()) {
