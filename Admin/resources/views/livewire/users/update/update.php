@@ -32,6 +32,12 @@ new class extends Component {
     public $forcePasswordChange;
     public $forceMfa;
 
+    public $disableMfa;
+
+    public $forcePasswordChange;
+
+    public $forceMfa;
+
     public function updateUser()
     {
         $this->validate([

@@ -28,6 +28,10 @@ new class extends Component
     public $forcePasswordChange;
     public $forceMfa;
 
+    public $forcePasswordChange;
+
+    public $forceMfa;
+
     public function createUser()
     {
         $this->validate([
