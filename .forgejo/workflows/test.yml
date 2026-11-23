@@ -34,12 +34,11 @@ jobs:
 
       - name: Copy modules
         run: |
-          cd Base
-          rm -rf modules
-          mkdir modules
+          rm -rf Base/modules
+          mkdir Base/modules
           find . -mindepth 1 -maxdepth 1 \
-            ! -name 'Base' ! -name 'modules' \
-            -exec cp -a {} modules/ \;
+            ! -name 'Base' \
+            -exec cp -a {} Base/modules/ \;
 
       - name: Install dependencies for modules
         run: |

@@ -75,6 +75,20 @@ return [
         ],
     ],
 
+    'unlink_provider' => [
+        'title' => 'Unlink Provider',
+        'description' => 'Are you sure you want to unlink this provider? This action cannot be undone.',
+
+        'buttons' => [
+            'unlink' => 'Unlink Provider',
+        ],
+
+        'notifications' => [
+            'unlinked' => 'Provider unlinked successfully.',
+            'last_provider' => 'This provider cannot be unlinked. Please add a password or set up a new OAuth provider to unlink this one.',
+        ],
+    ],
+
     'tabs' => [
         'password' => 'Password',
         'passkeys' => 'Passkeys',
