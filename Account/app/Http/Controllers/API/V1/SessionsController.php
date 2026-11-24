@@ -30,7 +30,7 @@ class SessionsController
         return apiResponse('Web sessions retrieved.', QueryBuilder::for($request->user()->sessions())
             ->allowedSorts('created_at', 'user_agent', 'last_activity')
             ->allowedFilters('ip_address', 'user_agent')
-            ->paginate($request->query('perPage') === null ? null : (int)$request->query('perPage')));
+            ->paginate($request->query('perPage') === null ? null : (int) $request->query('perPage')));
     }
 
     #[Endpoint(title: 'Get Native Sessions', description: 'Supports pagination, filtering and sorting via laravel-query-builder')]

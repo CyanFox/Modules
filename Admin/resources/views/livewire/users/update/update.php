@@ -6,7 +6,8 @@ use Livewire\Component;
 use Masmerise\Toaster\Toaster;
 use Modules\Core\Facades\UserSettings;
 
-new class extends Component {
+new class extends Component
+{
     public $userId;
 
     public $user;
@@ -28,8 +29,11 @@ new class extends Component {
     public $permissions = [];
 
     public $disabled;
+
     public $disableMfa;
+
     public $forcePasswordChange;
+
     public $forceMfa;
 
     public function updateUser()
@@ -37,7 +41,7 @@ new class extends Component {
         $this->validate([
             'firstName' => 'nullable|string|max:255',
             'lastName' => 'nullable|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username,' . $this->user->id,
+            'username' => 'required|string|max:255|unique:users,username,'.$this->user->id,
             'email' => 'required|email|max:255',
             'password' => ['nullable', 'string', Password::defaults()],
             'passwordConfirmation' => 'same:password',
@@ -88,7 +92,7 @@ new class extends Component {
     public function mount()
     {
         $this->user = userModel()->find($this->userId);
-        if (!$this->user) {
+        if (! $this->user) {
             abort(404);
         }
 

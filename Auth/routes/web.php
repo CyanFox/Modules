@@ -60,7 +60,7 @@ Route::group(['prefix' => 'oauth', 'as' => 'oauth.'], function () {
             abort(400, 'Invalid OAuth state.');
         }
 
-        if (!$socialiteUser instanceof User) {
+        if (! $socialiteUser instanceof User) {
             abort(422, 'The OAuth provider did not return a valid user.');
         }
 
