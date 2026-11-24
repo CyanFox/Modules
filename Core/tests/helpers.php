@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Str;
 use Modules\Core\Enums\SettingsProperty;
 use Modules\Core\Facades\Settings;
 
@@ -11,6 +12,23 @@ use Modules\Core\Facades\Settings;
 function setSetting(string $key, mixed $value, array $properties = []): void
 {
     Settings::set($key, $value, true, array_merge([SettingsProperty::INTERNAL => true], $properties));
+}
+
+/**
+ * Create a valid password confirmation token for modals gated by
+ * WithPasswordConfirmation::mountWithPasswordConfirmation().
+ */
+function passwordConfirmationToken(): string
+{
+    $token = Str::random(64);
+
+    cache()->put(
+        'core.password_confirmation.' . hash('sha256', $token),
+        true,
+        now()->addMinutes(5),
+    );
+
+    return $token;
 }
 
 /**

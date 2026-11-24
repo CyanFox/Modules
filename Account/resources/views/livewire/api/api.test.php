@@ -15,6 +15,7 @@ it('deletes an api key when confirmed', function () {
     $tokenId = (string) $user->tokens()->first()->id;
 
     $this->actingAs($user);
+    $this->withSession(['core.password_confirmed_at' => time()]);
 
     Livewire::test('account::api')
         ->call('deleteApiKey', $tokenId, true)

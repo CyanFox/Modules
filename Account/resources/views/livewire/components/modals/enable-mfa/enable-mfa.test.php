@@ -5,16 +5,20 @@ use PragmaRX\Google2FA\Google2FA;
 
 it('renders successfully', function () {
     $this->actingAs(makeUser());
+    $this->withSession(['core.password_confirmed_at' => time()]);
+    $token = passwordConfirmationToken();
 
-    Livewire::test('account::components.modals.enable-mfa')
+    Livewire::test('account::components.modals.enable-mfa', ['passwordConfirmationToken' => $token])
         ->assertStatus(200);
 });
 
 it('generates a mfa secret on mount', function () {
     $user = makeUser();
     $this->actingAs($user);
+    $this->withSession(['core.password_confirmed_at' => time()]);
+    $token = passwordConfirmationToken();
 
-    Livewire::test('account::components.modals.enable-mfa');
+    Livewire::test('account::components.modals.enable-mfa', ['passwordConfirmationToken' => $token]);
 
     expect(userSettings('auth.mfa.secret', $user->id))->not->toBeNull();
 });
@@ -22,8 +26,10 @@ it('generates a mfa secret on mount', function () {
 it('enables mfa with a valid code', function () {
     $user = makeUser();
     $this->actingAs($user);
+    $this->withSession(['core.password_confirmed_at' => time()]);
+    $token = passwordConfirmationToken();
 
-    $component = Livewire::test('account::components.modals.enable-mfa');
+    $component = Livewire::test('account::components.modals.enable-mfa', ['passwordConfirmationToken' => $token]);
     $secret = userSettings('auth.mfa.secret', $user->id);
 
     $component
@@ -37,8 +43,10 @@ it('enables mfa with a valid code', function () {
 it('rejects an invalid code', function () {
     $user = makeUser();
     $this->actingAs($user);
+    $this->withSession(['core.password_confirmed_at' => time()]);
+    $token = passwordConfirmationToken();
 
-    Livewire::test('account::components.modals.enable-mfa')
+    Livewire::test('account::components.modals.enable-mfa', ['passwordConfirmationToken' => $token])
         ->set('code', '000000')
         ->call('enableMfa')
         ->assertHasErrors('code');

@@ -11,9 +11,9 @@
         </span>
     </x-dropdown.trigger>
 
-    <x-dropdown.items position="bottom-right" class="w-80">
+    <x-dropdown.items position="bottom" class="sm:w-80 w-fit">
         <div
-            class="flex flex-wrap items-center justify-between border-b border-outline px-4 py-2.5 dark:border-outline-dark">
+            class="flex flex-col items-start justify-between border-b border-outline px-4 py-2.5 dark:border-outline-dark">
             <span class="text-sm font-bold text-on-surface-strong dark:text-on-surface-dark-strong">
                 {{ __('dashboard::dashboard.notifications.title') }}
             </span>

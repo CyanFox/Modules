@@ -2,17 +2,16 @@
 
 use Livewire\Livewire;
 
-it('renders successfully with a valid password confirmation token', function () {
+it('renders successfully with a confirmed password session', function () {
     $this->actingAs(makeUser());
-
-    $token = str()->random(64);
-    cache()->put('core.password_confirmation.'.hash('sha256', $token), true, now()->addMinutes(5));
+    $this->withSession(['core.password_confirmed_at' => time()]);
+    $token = passwordConfirmationToken();
 
     Livewire::test('account::components.modals.login-qr-code', ['passwordConfirmationToken' => $token])
         ->assertStatus(200);
 });
 
-it('aborts without a valid password confirmation token', function () {
+it('aborts without a confirmed password session', function () {
     $this->actingAs(makeUser());
 
     Livewire::test('account::components.modals.login-qr-code')

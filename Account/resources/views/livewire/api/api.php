@@ -4,8 +4,7 @@ use Livewire\Component;
 use Modules\Core\Traits\WithConfirmation;
 use Modules\Core\Traits\WithPasswordConfirmation;
 
-new class extends Component
-{
+new class extends Component {
     use WithConfirmation, WithPasswordConfirmation;
 
     public function showCreateAPIKey()
@@ -18,6 +17,10 @@ new class extends Component
     public function deleteApiKey(string $tokenId, bool $confirmed = false)
     {
         if ($confirmed) {
+            if (!$this->hasPasswordConfirmedSession()) {
+                return;
+            }
+
             auth()->user()->tokens->where('id', $tokenId)->first()?->delete();
 
             Toaster::success(__('account::api.delete_api_key.notifications.deleted'));
