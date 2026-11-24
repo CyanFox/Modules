@@ -75,20 +75,6 @@ return [
         ],
     ],
 
-    'unlink_provider' => [
-        'title' => 'Provider trennen',
-        'description' => 'Bist du sicher, dass du diesen Provider trennen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.',
-
-        'buttons' => [
-            'unlink' => 'Provider trennen',
-        ],
-
-        'notifications' => [
-            'unlinked' => 'Provider erfolgreich getrennt.',
-            'last_provider' => 'Dieser Provider kann nicht getrennt werden. Bitte füge ein Passwort hinzu oder lege einen neuen OAuth-Anbieter fest, um diesen zu trennen.',
-        ],
-    ],
-
     'tabs' => [
         'password' => 'Passwort',
         'passkeys' => 'Passkeys',
