@@ -1,0 +1,224 @@
+<?php
+
+use Illuminate\Validation\Rules\Password;
+use Livewire\Attributes\Url;
+use Livewire\Component;
+use Masmerise\Toaster\Toaster;
+use Modules\Core\Facades\UserSettings;
+use Modules\Core\Models\Session;
+use Modules\Core\Models\UserSetting;
+use Modules\Core\Traits\WithConfirmation;
+use Modules\Core\Traits\WithPasswordConfirmation;
+
+new class extends Component
+{
+    use WithConfirmation, WithPasswordConfirmation;
+
+    #[Url]
+    public string $tab = 'password';
+
+    public ?string $theme;
+
+    public ?string $language;
+
+    public ?string $firstName;
+
+    public ?string $lastName;
+
+    public string $username;
+
+    public string $email;
+
+    public ?string $currentPassword;
+
+    public ?string $newPassword;
+
+    public ?string $confirmNewPassword;
+
+    public function deleteAccount($confirmed = false)
+    {
+        if (! settings('account.enable.delete_account')) {
+            return;
+        }
+
+        if ($confirmed) {
+            if (! $this->hasPasswordConfirmedSession()) {
+                return;
+            }
+
+            auth()->user()->delete();
+            auth()->logout();
+
+            Toaster::success(__('account::account.delete_account.notifications.deleted'));
+
+            $this->redirect(route('auth.login'), true);
+
+            return;
+        }
+
+        $this->dialog()
+            ->question(__('account::account.delete_account.title'),
+                __('account::account.delete_account.description'))
+            ->confirm(__('account::account.delete_account.buttons.delete'), 'danger')
+            ->icon('icon-triangle-alert')
+            ->needsPasswordConfirmation()
+            ->method('deleteAccount', true)
+            ->send();
+    }
+
+    public function unlinkProvider($providerId, $confirmed = false)
+    {
+        $linkedProviders = UserSetting::where('key', 'like', 'auth.oauth.%')
+            ->where('user_id', auth()->id())
+            ->count();
+
+        if ($linkedProviders === 1 && blank(auth()->user()->password)) {
+            Toaster::error(__('account::account.unlink_provider.notifications.last_provider'));
+
+            return;
+        }
+
+        if ($confirmed) {
+            UserSettings::delete(auth()->id(), 'auth.oauth.'.$providerId.'.id');
+
+            Toaster::success(__('account::account.unlink_provider.notifications.unlinked'));
+
+            $this->redirect(url()->previous(), true);
+
+            return;
+        }
+
+        $this->dialog()
+            ->question(__('account::account.unlink_provider.title'),
+                __('account::account.unlink_provider.description'))
+            ->confirm(__('account::account.unlink_provider.buttons.unlink'), 'warning')
+            ->icon('icon-triangle-alert')
+            ->method('unlinkProvider', $providerId, true)
+            ->send();
+    }
+
+    public function enableMfa()
+    {
+        $this->checkPasswordConfirmation()
+            ->passwordModal('account::components.modals.enable-mfa')
+            ->checkPassword();
+    }
+
+    public function regenerateRecoveryCodes()
+    {
+        $this->checkPasswordConfirmation()
+            ->passwordModal('account::components.modals.regenerate-recovery-codes')
+            ->checkPassword();
+    }
+
+    public function disableMfa($confirmed = false)
+    {
+        if ($confirmed) {
+            if (! $this->hasPasswordConfirmedSession()) {
+                return;
+            }
+
+            UserSettings::delete(auth()->id(), 'auth.mfa.recovery_codes');
+            UserSettings::delete(auth()->id(), 'auth.mfa.secret');
+            UserSettings::delete(auth()->id(), 'auth.mfa.enabled');
+
+            Toaster::success(__('account::account.disable_mfa.notifications.disabled'));
+
+            $this->redirect(url()->previous(), true);
+
+            return;
+        }
+
+        $this->dialog()
+            ->question(__('account::account.disable_mfa.title'),
+                __('account::account.disable_mfa.description'))
+            ->confirm(__('account::account.disable_mfa.buttons.disable'), 'warning')
+            ->icon('icon-triangle-alert')
+            ->needsPasswordConfirmation()
+            ->method('disableMfa', true)
+            ->send();
+    }
+
+    public function updateProfile()
+    {
+        $this->validate([
+            'firstName' => 'nullable|string|max:255',
+            'lastName' => 'nullable|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username,'.auth()->id(),
+            'email' => 'required|email|max:255',
+        ]);
+
+        auth()->user()->update([
+            'first_name' => $this->firstName,
+            'last_name' => $this->lastName,
+            'username' => $this->username,
+            'email' => $this->email,
+        ]);
+
+        Toaster::success(__('account::account.notifications.profile_updated'));
+
+        $this->redirect(url()->previous(), true);
+    }
+
+    public function changePassword()
+    {
+        if (filled(auth()->user()->password)) {
+            $this->validate([
+                'currentPassword' => 'required|string|current_password',
+            ]);
+        }
+
+        $this->validate([
+            'newPassword' => ['required', 'string', Password::defaults()],
+            'confirmNewPassword' => ['required', 'string', 'same:newPassword'],
+        ]);
+
+        auth()->user()->update([
+            'password' => $this->newPassword,
+        ]);
+
+        Session::where('user_id', auth()->id())->whereNot('id', session()->getId())->delete();
+
+        Toaster::success(__('account::account.notifications.password_changed'));
+
+        $this->redirect(url()->previous(), true);
+    }
+
+    public function updateTheme()
+    {
+        auth()->user()->update(['theme' => $this->theme]);
+
+        Toaster::success(__('account::account.notifications.theme_updated'));
+
+        $this->redirect(url()->previous(), true);
+    }
+
+    public function updateLanguage()
+    {
+        auth()->user()->update(['language' => $this->language]);
+
+        App::setLocale($this->language);
+
+        Toaster::success(__('account::account.notifications.language_updated'));
+
+        $this->redirect(url()->previous(), true);
+    }
+
+    public function mount()
+    {
+        $this->theme = auth()->user()->theme;
+        $this->language = auth()->user()->language;
+
+        $this->firstName = auth()->user()->first_name;
+        $this->lastName = auth()->user()->last_name;
+        $this->username = auth()->user()->username;
+        $this->email = auth()->user()->email;
+    }
+
+    public function render()
+    {
+        return $this->view()
+            ->layout('dashboard::layouts.app', ['breadcrumbs' => [['label' => __('account::account.account'), 'url' => route('account.profile')], ['label' => __('account::account.profile'), 'last' => true]]])
+            ->title(__('account::account.profile'));
+    }
+};

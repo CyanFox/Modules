@@ -1,7 +1,7 @@
 {
     "name": "Auth",
     "alias": "auth",
-    "description": "Base Template",
+    "description": "Auth Module",
     "keywords": [
         "cyanfox",
         "base"
@@ -10,8 +10,10 @@
         "CyanFox"
     ],
     "license": "MIT",
-    "version": "2026.9.0",
+    "version": "2026.11.0",
+    "remote_version_url": "https://git.cyanfox.de/CyanFox/Modules/raw/branch/main/Auth/module.json",
     "priority": 200,
+    "settings_page": "admin.settings.auth",
     "providers": [
         "Modules\\Auth\\Providers\\AuthServiceProvider"
     ],
@@ -19,5 +21,8 @@
         "seeds": [
             "Modules\\Auth\\Database\\Seeders\\AuthDatabaseSeeder"
         ]
-    }
+    },
+    "require": [
+        "Core"
+    ]
 }

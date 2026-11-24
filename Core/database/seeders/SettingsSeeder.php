@@ -19,14 +19,20 @@ class SettingsSeeder extends Seeder
     public function run(): void
     {
         $settings = [
-            ['key' => 'app.name', 'value' => config('app.name'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
-            ['key' => 'app.url', 'value' => config('app.url'), 'properties' => [SettingsProperty::INTERNAL->value => false]],
-            ['key' => 'app.date_format', 'value' => 'Y-m-d', 'properties' => [SettingsProperty::INTERNAL->value => false]],
-            ['key' => 'app.time_format', 'value' => 'H:i', 'properties' => [SettingsProperty::INTERNAL->value => false]],
+            ['key' => 'app.name', 'value' => config('app.name'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'core::settings.app.name']],
+            ['key' => 'app.locale', 'value' => config('app.locale'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'core::settings.app.locale']],
+            ['key' => 'app.url', 'value' => config('app.url'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'core::settings.app.url', SettingsProperty::RULES => 'url']],
+            ['key' => 'app.timezone', 'value' => config('app.timezone'), 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'core::settings.app.timezone', SettingsProperty::RULES => 'timezone']],
+            ['key' => 'app.date_format', 'value' => 'Y-m-d', 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'core::settings.app.date_format']],
+            ['key' => 'app.time_format', 'value' => 'H:i', 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'core::settings.app.time_format']],
+            ['key' => 'app.logo', 'value' => '/img/Logo.svg', 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'core::settings.app.logo']],
+            ['key' => 'app.force_https', 'value' => false, 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'core::settings.app.force_https']],
+
+            ['key' => 'core.default_avatar_url', 'value' => 'https://avatars.cyanfox.de/beam/100/{email_md5}', 'properties' => [SettingsProperty::INTERNAL => false, SettingsProperty::LANG_KEY => 'core::settings.core.default_avatar_url']],
         ];
 
         foreach ($settings as $setting) {
-            Settings::set($setting['key'], $setting['value'], properties: array_merge($setting['properties'], [SettingsProperty::MODULE->value => 'Core']));
+            Settings::set($setting['key'], $setting['value'], properties: array_merge($setting['properties'], [SettingsProperty::MODULE => 'Core']));
         }
     }
 }

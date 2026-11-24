@@ -18,6 +18,7 @@ class CoreDatabaseSeeder extends Seeder
     {
         $this->call([
             SettingsSeeder::class,
+            PermissionsSeeder::class,
         ]);
     }
 }

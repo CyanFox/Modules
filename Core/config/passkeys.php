@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Modules\Core\Models\User;
 use Spatie\LaravelPasskeys\Actions\ConfigureCeremonyStepManagerFactoryAction;
 use Spatie\LaravelPasskeys\Actions\FindPasskeyToAuthenticateAction;
 use Spatie\LaravelPasskeys\Actions\GeneratePasskeyAuthenticationOptionsAction;
@@ -15,7 +14,7 @@ return [
      * After a successful authentication attempt using a passkey
      * we'll redirect to this URL.
      */
-    'redirect_to_after_login' => '/dashboard',
+    'redirect_to_after_login' => '/',
 
     /*
      * These class are responsible for performing core tasks regarding passkeys.
@@ -46,6 +45,6 @@ return [
      */
     'models' => [
         'passkey' => Passkey::class,
-        'authenticatable' => env('AUTH_MODEL', User::class),
+        'authenticatable' => env('AUTH_MODEL', config('auth.providers.users.model')),
     ],
 ];

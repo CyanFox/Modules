@@ -1,0 +1,64 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: test
+    runs-on: docker
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: https://github.com/shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Clone CyanFox-Base
+        run: git clone https://git.cyanfox.de/CyanFox/Base
+
+      - name: Setup problem matchers
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Install dependencies
+        run: |
+          cd Base
+          composer update --prefer-dist --no-interaction
+
+      - name: Copy modules
+        run: |
+          rm -rf Base/modules
+          mkdir Base/modules
+          find . -mindepth 1 -maxdepth 1 \
+            ! -name 'Base' \
+            -exec cp -a {} Base/modules/ \;
+
+      - name: Install dependencies for modules
+        run: |
+          cd Base
+          composer update --prefer-dist --no-interaction
+
+      - name: List Installed Dependencies
+        run: |
+          cd Base
+          composer show -D
+
+      - name: Test
+        run: |
+          cd Base
+          cp .env.testing .env
+          php artisan module:enable --all
+          php artisan migrate --force
+          php artisan module:seed --all
+
+          npm install
+          npm run build
+
+          php artisan test

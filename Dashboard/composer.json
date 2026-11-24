@@ -1,0 +1,29 @@
+{
+    "name": "cyanfox/dashboard",
+    "description": "",
+    "authors": [
+        {
+            "name": "CyanFox",
+            "email": "opensource@cyanfox.de"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Dashboard\\": "app/",
+            "Modules\\Dashboard\\Database\\Factories\\": "database/factories/",
+            "Modules\\Dashboard\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Dashboard\\Tests\\": "tests/"
+        }
+    }
+}

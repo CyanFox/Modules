@@ -7,16 +7,26 @@ namespace Modules\Core\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Lab404\Impersonate\Models\Impersonate;
+use Laravel\Sanctum\HasApiTokens;
+use Modules\Core\Events\Users\UserCreatedEvent;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 use Spatie\LaravelPasskeys\Models\Concerns\HasPasskeys;
 use Spatie\LaravelPasskeys\Models\Concerns\InteractsWithPasskeys;
 use Spatie\LaravelPasskeys\Models\Passkey;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -69,11 +79,21 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder<static>|User withoutRole($roles, ?string $guard = null)
  * @method static Builder<static>|User withoutTeam($teams)
  *
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
+ * @property-read Collection<int, Session> $sessions
+ * @property-read int|null $sessions_count
+ * @property-read Collection<int, PersonalAccessToken> $tokens
+ * @property-read int|null $tokens_count
+ * @property-read Collection<int, UserSetting> $userSettings
+ * @property-read int|null $user_settings_count
+ *
  * @mixin Eloquent
+ * @mixin IdeHelperUser
  */
-class User extends Model implements HasPasskeys
+class User extends Authenticatable implements HasMedia, HasPasskeys
 {
-    use HasRoles, InteractsWithPasskeys, LogsActivity, Notifiable;
+    use HasApiTokens, HasRoles, Impersonate, InteractsWithMedia, InteractsWithPasskeys, LogsActivity, Notifiable;
 
     protected $fillable = [
         'first_name',
@@ -84,12 +104,106 @@ class User extends Model implements HasPasskeys
         'theme',
         'language',
         'disabled',
+        'last_activity',
     ];
 
     protected $casts = [
         'disabled' => 'boolean',
         'password' => 'hashed',
+        'last_activity' => 'datetime',
     ];
 
-    // TODO: Activity Log
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    public function sessions(): HasMany
+    {
+        return $this->hasMany(Session::class);
+    }
+
+    public function userSettings(): HasMany
+    {
+        return $this->hasMany(UserSetting::class);
+    }
+
+    /**
+     * The user's personal access tokens (using the project's token model).
+     *
+     * @return MorphMany<PersonalAccessToken, $this>
+     */
+    public function tokens(): MorphMany
+    {
+        return $this->morphMany(PersonalAccessToken::class, 'tokenable');
+    }
+
+    public function getPasskeyDisplayName(): string
+    {
+        return $this->getDisplayName();
+    }
+
+    public function canImpersonate()
+    {
+        return $this->can('core.impersonate');
+    }
+
+    public function canBeImpersonated()
+    {
+        return $this->can('core.impersonate.immune');
+    }
+
+    public function getDisplayName(): string
+    {
+        if ($this->first_name || $this->last_name) {
+            return $this->first_name.' '.$this->last_name;
+        }
+
+        return $this->username;
+    }
+
+    public function getAvatar()
+    {
+        if (userSettings('core.custom_avatar_url', $this->id)) {
+            return e(userSettings('core.custom_avatar_url', $this->id));
+        }
+
+        if ($this->hasMedia('avatar')) {
+            return $this->getFirstMediaUrl('avatar', 'avatar');
+        }
+
+        $placeholders = [
+            '{email}' => $this->email,
+            '{email_md5}' => md5($this->email),
+            '{username}' => $this->username,
+            '{first_name}' => $this->first_name,
+            '{last_name}' => $this->last_name,
+        ];
+
+        return str_replace(array_keys($placeholders), array_values($placeholders), settings('core.default_avatar_url'));
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logExcept($this->hidden)
+            ->dontLogIfAttributesChangedOnly(['updated_at', 'last_activity'])
+            ->setDescriptionForEvent(function ($eventName) {
+                if (array_keys($this->getChanges()) === ['password']) {
+                    return 'user.password.'.$eventName;
+                }
+
+                return 'user.'.$eventName;
+            });
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function (User $user): void {
+            UserCreatedEvent::dispatch($user);
+        });
+    }
 }

@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 /**
  * @property int $id
@@ -31,16 +35,26 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Setting whereUpdatedAt($value)
  * @method static Builder<static>|Setting whereValue($value)
  *
+ * @property-read Collection<int, Activity> $activitiesAsSubject
+ * @property-read int|null $activities_as_subject_count
+ *
  * @mixin Eloquent
+ * @mixin IdeHelperSetting
  */
 class Setting extends Model
 {
+    use LogsActivity;
+
     protected $table = 'settings';
 
     protected $fillable = [
         'key',
         'value',
         'properties',
+    ];
+
+    protected $casts = [
+        'properties' => 'array',
     ];
 
     public function access(): MorphMany
@@ -50,13 +64,70 @@ class Setting extends Model
 
     public function hasProperty(string $property): bool
     {
-        return isset($this->properties[$property]);
+        $properties = $this->properties;
+
+        if (is_string($properties)) {
+            $properties = json_decode($properties, true) ?? [];
+        }
+
+        return isset($properties[$property]);
     }
 
-    public function getProperty(string $property, mixed $default = null): mixed
+    public function getProperty(string $property): mixed
     {
-        return $this->properties[$property] ?? $default;
+        $properties = $this->properties;
+
+        if (is_string($properties)) {
+            $properties = json_decode($properties, true) ?? [];
+        }
+
+        return $properties[$property] ?? null;
     }
 
-    // TODO: Activity Log
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::retrieved(function ($model) {
+            Cache::remember("settings_$model->id", now()->addDay(), function () use ($model) {
+                return $model;
+            });
+        });
+
+        static::creating(function ($model) {
+            Cache::remember("settings_$model->id", now()->addDay(), function () use ($model) {
+                return $model;
+            });
+
+            return true;
+        });
+
+        static::updating(function ($model) {
+            Cache::forget("settings_$model->id");
+
+            return true;
+        });
+
+        static::deleting(function ($model) {
+            Cache::forget("settings_$model->id");
+
+            return true;
+        });
+    }
+
+    public function getDisplayName(): string
+    {
+        return $this->key;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logExcept($this->hidden)
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->setDescriptionForEvent(function ($eventName) {
+                return 'settings.'.$eventName;
+            });
+    }
 }

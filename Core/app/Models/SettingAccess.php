@@ -6,9 +6,13 @@ namespace Modules\Core\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -22,10 +26,16 @@ use Spatie\Permission\Models\Role;
  * @method static Builder<static>|SettingAccess newQuery()
  * @method static Builder<static>|SettingAccess query()
  *
+ * @property-read Collection<int, Activity> $activitiesAsSubject
+ * @property-read int|null $activities_as_subject_count
+ *
  * @mixin Eloquent
+ * @mixin IdeHelperSettingAccess
  */
 class SettingAccess extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'setting_id',
         'role_id',
@@ -53,5 +63,14 @@ class SettingAccess extends Model
         return $this->belongsTo(userModel());
     }
 
-    // TODO: Activity Log
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logExcept($this->hidden)
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->setDescriptionForEvent(function ($eventName) {
+                return 'settings.access.'.$eventName;
+            });
+    }
 }

@@ -6,8 +6,12 @@ namespace Modules\Core\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 /**
  * @property string $id
@@ -28,11 +32,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder<static>|Session whereUserId($value)
  *
  * @property-read User|null $user
+ * @property-read Collection<int, Activity> $activitiesAsSubject
+ * @property-read int|null $activities_as_subject_count
  *
  * @mixin Eloquent
+ * @mixin IdeHelperSession
  */
 class Session extends Model
 {
+    use LogsActivity;
+
     public $timestamps = false;
 
     public $incrementing = false;
@@ -54,5 +63,19 @@ class Session extends Model
         return $this->belongsTo(userModel());
     }
 
-    // TODO: Activity Log
+    public function getDisplayName(): string
+    {
+        return $this->ip_address ?? '';
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logExcept($this->hidden)
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->setDescriptionForEvent(function ($eventName) {
+                return 'user.session.'.$eventName;
+            });
+    }
 }
