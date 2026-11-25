@@ -1,6 +1,7 @@
 <?php
 
 use Livewire\WithFileUploads;
+use Modules\Core\Enums\SettingsProperty;
 use Modules\Core\Facades\UserSettings;
 use RealZone22\PenguBlade\ModalComponent;
 
@@ -44,7 +45,7 @@ new class extends ModalComponent
         if ($this->customAvatarUrl) {
             auth()->user()->clearMediaCollection('avatar');
 
-            UserSettings::set(auth()->id(), 'core.custom_avatar_url', $this->customAvatarUrl, true);
+            UserSettings::set(auth()->id(), 'core.custom_avatar_url', $this->customAvatarUrl, true, [SettingsProperty::HIDDEN => true]);
 
             Toaster::success(__('account::modals.change_avatar.notifications.changed'));
 

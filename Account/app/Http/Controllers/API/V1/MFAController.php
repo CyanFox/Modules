@@ -36,8 +36,8 @@ class MFAController
 
         $recoveryCodes = $this->regenerateCodes();
 
-        UserSettings::set(auth()->id(), 'auth.mfa.enabled', true);
-        UserSettings::set($request->user()->id, 'auth.mfa.recovery_codes', $recoveryCodes, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true]);
+        UserSettings::set(auth()->id(), 'auth.mfa.enabled', true, properties: [SettingsProperty::HIDDEN => true]);
+        UserSettings::set($request->user()->id, 'auth.mfa.recovery_codes', $recoveryCodes, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true, SettingsProperty::HIDDEN => true]);
 
         return apiResponse('MFA enabled.', ['recovery_codes' => $recoveryCodes]);
     }
@@ -83,7 +83,7 @@ class MFAController
 
         $recoveryCodes = $this->regenerateCodes();
 
-        UserSettings::set($request->user()->id, 'auth.mfa.recovery_codes', $recoveryCodes, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true]);
+        UserSettings::set($request->user()->id, 'auth.mfa.recovery_codes', $recoveryCodes, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true, SettingsProperty::HIDDEN => true]);
 
         return apiResponse('Recovery codes regenerated.', ['recovery_codes' => $recoveryCodes]);
     }
@@ -104,7 +104,7 @@ class MFAController
 
         $secret = $google2FA->generateSecretKey();
 
-        UserSettings::set($request->user()->id, 'auth.mfa.secret', $secret, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true]);
+        UserSettings::set($request->user()->id, 'auth.mfa.secret', $secret, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true, SettingsProperty::HIDDEN => true]);
 
         return apiResponse('MFA Secret generated.', ['secret' => $secret]);
     }

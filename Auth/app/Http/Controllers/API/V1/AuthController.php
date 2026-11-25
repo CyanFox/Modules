@@ -106,7 +106,7 @@ class AuthController extends Controller
 
                     unset($recoveryCodes[array_search($request->mfa_code, $recoveryCodes)]);
 
-                    UserSettings::set($user->id, 'auth.mfa.recovery_codes', $recoveryCodes, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true]);
+                    UserSettings::set($user->id, 'auth.mfa.recovery_codes', $recoveryCodes, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true, SettingsProperty::HIDDEN => true]);
                 }
             } else {
                 return apiResponse('MFA Required.', apiError('auth.login.mfa_required'), false, 401);

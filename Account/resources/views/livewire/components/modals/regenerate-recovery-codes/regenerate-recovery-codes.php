@@ -17,7 +17,7 @@ new class extends ModalComponent {
             $recoveryCodes[] = str()->random();
         }
 
-        UserSettings::set(auth()->id(), 'auth.mfa.recovery_codes', $recoveryCodes, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true]);
+        UserSettings::set(auth()->id(), 'auth.mfa.recovery_codes', $recoveryCodes, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true, SettingsProperty::HIDDEN => true]);
 
         $this->recoveryCodes = $recoveryCodes;
     }

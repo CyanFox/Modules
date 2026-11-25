@@ -119,7 +119,7 @@ new class extends Component
 
             unset($recoveryCodes[array_search($this->mfaCode, $recoveryCodes)]);
 
-            UserSettings::set($this->user->id, 'auth.mfa.recovery_codes', $recoveryCodes, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true]);
+            UserSettings::set($this->user->id, 'auth.mfa.recovery_codes', $recoveryCodes, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true, SettingsProperty::HIDDEN => true]);
         }
 
         Auth::login($this->user, $this->rememberMe);

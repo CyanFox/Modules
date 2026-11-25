@@ -8,6 +8,7 @@ use Laravel\Socialite\Two\InvalidStateException;
 use Laravel\Socialite\Two\User;
 use Modules\Auth\Models\OAuthProvider;
 use Modules\Auth\Socialite\CustomOAuthProvider;
+use Modules\Core\Enums\SettingsProperty;
 use Modules\Core\Facades\UserSettings;
 use Modules\Core\Models\UserSetting;
 use Nwidart\Modules\Facades\Module;
@@ -92,7 +93,7 @@ Route::group(['prefix' => 'oauth', 'as' => 'oauth.'], function () {
                 abort(403, 'Account linking is disabled for this OAuth provider.');
             }
 
-            UserSettings::set(Auth::id(), $settingKey, $socialiteUser->getId(), true);
+            UserSettings::set(Auth::id(), $settingKey, $socialiteUser->getId(), true, [SettingsProperty::INTERNAL => true, SettingsProperty::HIDDEN => true]);
 
             return redirect()->route('account.profile', ['tab' => 'oauth']);
         }
@@ -111,7 +112,7 @@ Route::group(['prefix' => 'oauth', 'as' => 'oauth.'], function () {
         }
 
         $user = $userModel->create($userData);
-        UserSettings::set($user->id, $settingKey, $socialiteUser->getId());
+        UserSettings::set($user->id, $settingKey, $socialiteUser->getId(), properties: [SettingsProperty::INTERNAL => true, SettingsProperty::HIDDEN => true]);
         Auth::login($user);
 
         return redirect()->intended();

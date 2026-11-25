@@ -8,6 +8,7 @@ use Dedoc\Scramble\Attributes\Group;
 use Dedoc\Scramble\Attributes\Response;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
+use Modules\Core\Enums\SettingsProperty;
 use Modules\Core\Facades\UserSettings;
 use Modules\Core\Models\Session;
 
@@ -34,7 +35,7 @@ class ProfileController extends Controller
         if ($request->custom_avatar_url) {
             $request->user()->clearMediaCollection('avatar');
 
-            UserSettings::set($request->user()->id, 'core.custom_avatar_url', $request->custom_avatar_url, true);
+            UserSettings::set($request->user()->id, 'core.custom_avatar_url', $request->custom_avatar_url, true, [SettingsProperty::HIDDEN => true]);
         } elseif ($request->avatar) {
             UserSettings::delete($request->user()->id, 'core.custom_avatar_url');
 

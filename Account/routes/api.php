@@ -7,6 +7,7 @@ use Modules\Account\Http\Controllers\API\V1\APIKeysController;
 use Modules\Account\Http\Controllers\API\V1\MFAController;
 use Modules\Account\Http\Controllers\API\V1\ProfileController;
 use Modules\Account\Http\Controllers\API\V1\SessionsController;
+use Modules\Account\Http\Controllers\API\V1\SettingsController;
 
 Route::group(['prefix' => 'v1/account', 'as' => 'account.', 'middleware' => ['auth:sanctum', 'api_force_actions']], function () {
     Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
@@ -35,6 +36,11 @@ Route::group(['prefix' => 'v1/account', 'as' => 'account.', 'middleware' => ['au
         Route::get('/', [APIKeysController::class, 'getApiKeys'])->name('get');
         Route::post('/', [APIKeysController::class, 'createApiKey'])->name('create');
         Route::delete('{apiKeyId}', [APIKeysController::class, 'deleteApiKey'])->name('delete');
+    });
+    Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
+        Route::get('/', [SettingsController::class, 'getSettings'])->name('get');
+        Route::post('/', [SettingsController::class, 'updateSettings'])->name('update');
+        Route::delete('{settingId}', [SettingsController::class, 'deleteSetting'])->name('delete');
     });
     Route::get('activities', [ActivityController::class, 'getActivities'])->name('activities');
 });
