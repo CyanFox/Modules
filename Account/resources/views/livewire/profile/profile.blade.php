@@ -78,7 +78,7 @@
                     </div>
                 </x-card>
             </div>
-            <div class="md:col-span-2 space-y-4">
+            <div class="md:col-span-2 space-y-4 overflow-x-auto">
                 <x-card>
                     @hook('account.profile.form')
                     <form wire:submit="updateProfile">
@@ -113,7 +113,7 @@
                             <span class="ml-2">{{ __('account::account.tabs.passkeys') }}</span>
                         </x-tab.item>
                         @if(\Modules\Auth\Models\OAuthProvider::where('account_linking', true)->exists())
-                            <x-tab.item class="flex-1 flex items-center justify-center" uuid="oauth"
+                            <x-tab.item class="flex-1 flex items-center justify-center min-w-fit" uuid="oauth"
                                         wire:click="$set('tab', 'oauth')">
                                 <i class="icon-user-round-key"></i>
                                 <span class="ml-2">{{ __('account::account.tabs.oauth') }}</span>
@@ -123,7 +123,6 @@
                         @shook('s.account.password.tabs')
                         @endhook
                     </x-tab>
-
 
                     @if($tab == 'password')
                         @hook('account.profile.password')
