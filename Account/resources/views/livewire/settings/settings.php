@@ -8,7 +8,8 @@ use Modules\Core\Facades\UserSettings;
 use Modules\Core\Models\UserSetting;
 use Modules\Core\Traits\WithConfirmation;
 
-new class extends Component {
+new class extends Component
+{
     use WithConfirmation;
 
     public $settings = [];
@@ -72,7 +73,7 @@ new class extends Component {
         if ($confirmed) {
             $setting = UserSetting::where('user_id', auth()->id())->find($settingId);
 
-            if (!$setting?->delete()) {
+            if (! $setting?->delete()) {
                 Toaster::error(__('messages.notifications.something_went_wrong'));
 
                 return;
@@ -97,8 +98,8 @@ new class extends Component {
     private function castValue(mixed $value, ?string $type): mixed
     {
         return match ($type) {
-            'int' => (int)$value,
-            'float' => (float)$value,
+            'int' => (int) $value,
+            'float' => (float) $value,
             'bool' => filter_var($value, FILTER_VALIDATE_BOOLEAN),
             'array' => is_array($value) ? $value : (json_decode($value, true) ?? []),
             'json' => is_string($value) ? $value : json_encode($value),

@@ -38,7 +38,7 @@ class UsersController extends Controller
         return apiResponse('Users retrieved.', QueryBuilder::for(userModel()->query())
             ->allowedSorts('first_name', 'last_name', 'username', 'email', 'theme', 'language', 'disabled')
             ->allowedFilters('first_name', 'last_name', 'username', 'email', 'theme', 'language', 'disabled')
-            ->paginate($request->query('perPage') === null ? null : (int)$request->query('perPage')));
+            ->paginate($request->query('perPage') === null ? null : (int) $request->query('perPage')));
     }
 
     #[Endpoint(title: 'Get User')]

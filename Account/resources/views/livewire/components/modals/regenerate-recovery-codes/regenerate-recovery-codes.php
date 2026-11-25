@@ -5,7 +5,8 @@ use Modules\Core\Facades\UserSettings;
 use Modules\Core\Traits\WithPasswordConfirmation;
 use RealZone22\PenguBlade\ModalComponent;
 
-new class extends ModalComponent {
+new class extends ModalComponent
+{
     use WithPasswordConfirmation;
 
     public array $recoveryCodes;
@@ -26,12 +27,12 @@ new class extends ModalComponent {
     {
         return response()->streamDownload(function () {
             echo implode(PHP_EOL, $this->recoveryCodes);
-        }, 'recovery-codes-' . auth()->user()->getDisplayName() . '.txt');
+        }, 'recovery-codes-'.auth()->user()->getDisplayName().'.txt');
     }
 
     public function mount()
     {
-        if (!$this->hasPasswordConfirmedSession()) {
+        if (! $this->hasPasswordConfirmedSession()) {
             abort(403);
         }
 

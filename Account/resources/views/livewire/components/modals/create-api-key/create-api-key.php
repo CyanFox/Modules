@@ -3,7 +3,8 @@
 use Modules\Core\Traits\WithPasswordConfirmation;
 use RealZone22\PenguBlade\ModalComponent;
 
-new class extends ModalComponent {
+new class extends ModalComponent
+{
     use WithPasswordConfirmation;
 
     public string $name;
@@ -26,7 +27,7 @@ new class extends ModalComponent {
 
     public function mount()
     {
-        if (!$this->hasPasswordConfirmedSession()) {
+        if (! $this->hasPasswordConfirmedSession()) {
             abort(403);
         }
     }

@@ -9,7 +9,7 @@ new class extends ModalComponent
 
     public function mount()
     {
-        if (!$this->hasPasswordConfirmedSession()) {
+        if (! $this->hasPasswordConfirmedSession()) {
             abort(403);
         }
     }

@@ -36,7 +36,7 @@ class SettingsController
             ->allowedSorts('key', 'created_at', 'updated_at')
             ->allowedFilters('key')
             ->get()
-            ->filter(fn(Model $setting) => !$this->isHidden($setting))
+            ->filter(fn (Model $setting) => ! $this->isHidden($setting))
             ->map(function (Model $setting) {
                 $this->hydrateSetting($setting);
 
@@ -44,9 +44,9 @@ class SettingsController
             })
             ->values();
 
-        $perPage = (int)($request->query('perPage') ?: 15);
+        $perPage = (int) ($request->query('perPage') ?: 15);
         $perPage = $perPage > 0 ? $perPage : 15;
-        $page = max((int)$request->query('page', 1), 1);
+        $page = max((int) $request->query('page', 1), 1);
 
         $settings = new LengthAwarePaginator(
             $settings->slice(($page - 1) * $perPage, $perPage)->values(),
@@ -64,7 +64,7 @@ class SettingsController
 
     private function isHidden(Model $setting): bool
     {
-        if (!$setting instanceof UserSetting) {
+        if (! $setting instanceof UserSetting) {
             return true;
         }
 
@@ -74,7 +74,7 @@ class SettingsController
 
     private function hydrateSetting(Model $setting): void
     {
-        if (!$setting instanceof UserSetting) {
+        if (! $setting instanceof UserSetting) {
             return;
         }
         if ($setting->getProperty(SettingsProperty::ENCRYPTED)) {
@@ -97,12 +97,12 @@ class SettingsController
             'settings' => 'required|array',
         ]);
 
-        $userId = (int)$request->user()->getAuthIdentifier();
+        $userId = (int) $request->user()->getAuthIdentifier();
 
         foreach ($request->input('settings') as $key => $value) {
             $setting = UserSetting::where(['user_id' => $userId, 'key' => $key])->first();
 
-            if (!$setting || $this->isHidden($setting)) {
+            if (! $setting || $this->isHidden($setting)) {
                 continue;
             }
 
@@ -121,7 +121,7 @@ class SettingsController
     {
         $setting = $request->user()->userSettings()->where('id', $settingId)->first();
 
-        if (!$setting || $this->isHidden($setting)) {
+        if (! $setting || $this->isHidden($setting)) {
             return apiResponse('Setting not found.', apiError('account.settings.not_found'), false, 404);
         }
 

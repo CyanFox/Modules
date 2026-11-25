@@ -23,7 +23,7 @@ function passwordConfirmationToken(): string
     $token = Str::random(64);
 
     cache()->put(
-        'core.password_confirmation.' . hash('sha256', $token),
+        'core.password_confirmation.'.hash('sha256', $token),
         true,
         now()->addMinutes(5),
     );
