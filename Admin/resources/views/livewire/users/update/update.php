@@ -4,6 +4,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Component;
 use Masmerise\Toaster\Toaster;
+use Modules\Core\Enums\SettingsProperty;
 use Modules\Core\Facades\UserSettings;
 
 new class extends Component
@@ -58,13 +59,13 @@ new class extends Component
         ]);
 
         if ($this->forcePasswordChange) {
-            UserSettings::set($this->user->id, 'auth.force_password_change', true);
+            UserSettings::set($this->user->id, 'auth.force_password_change', true, true, [SettingsProperty::HIDDEN => true]);
         } else {
             UserSettings::delete($this->user->id, 'auth.force_password_change');
         }
 
         if ($this->forceMfa) {
-            UserSettings::set($this->user->id, 'auth.force_mfa', true);
+            UserSettings::set($this->user->id, 'auth.force_mfa', true, true, [SettingsProperty::HIDDEN => true]);
         } else {
             UserSettings::delete($this->user->id, 'auth.force_mfa');
         }

@@ -9,4 +9,5 @@ Route::group(['prefix' => 'account', 'as' => 'account.', 'middleware' => ['auth'
     Route::livewire('sessions', 'account::sessions')->name('sessions');
     Route::livewire('activity', 'account::activity')->name('activity');
     Route::livewire('api', 'account::api')->name('api');
+    Route::livewire('settings', 'account::settings')->name('settings');
 });

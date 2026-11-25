@@ -4,6 +4,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Component;
 use Masmerise\Toaster\Toaster;
+use Modules\Core\Enums\SettingsProperty;
 use Modules\Core\Facades\UserSettings;
 
 new class extends Component
@@ -52,8 +53,8 @@ new class extends Component
             'disabled' => $this->disabled ?? false,
         ]);
 
-        UserSettings::set($user->id, 'auth.force_password_change', $this->forcePasswordChange);
-        UserSettings::set($user->id, 'auth.force_mfa', $this->forceMfa);
+        UserSettings::set($user->id, 'auth.force_password_change', $this->forcePasswordChange, properties: [SettingsProperty::HIDDEN => true]);
+        UserSettings::set($user->id, 'auth.force_mfa', $this->forceMfa, properties: [SettingsProperty::HIDDEN => true]);
 
         $user->syncRoles($this->roles);
         $user->syncPermissions($this->permissions);

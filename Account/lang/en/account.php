@@ -6,6 +6,7 @@ return [
     'sessions' => 'Sessions',
     'activity' => 'Activity',
     'api' => 'API Keys',
+    'settings' => 'Settings',
 
     'first_name' => 'First Name',
     'last_name' => 'Last Name',

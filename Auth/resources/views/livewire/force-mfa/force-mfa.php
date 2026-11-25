@@ -25,7 +25,7 @@ new class extends Component
             $recoveryCodes[] = str()->random();
         }
 
-        UserSettings::set(auth()->id(), 'auth.mfa.recovery_codes', $recoveryCodes, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true]);
+        UserSettings::set(auth()->id(), 'auth.mfa.recovery_codes', $recoveryCodes, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true, SettingsProperty::HIDDEN => true]);
 
         $this->recoveryCodes = $recoveryCodes;
     }
@@ -48,7 +48,7 @@ new class extends Component
             }],
         ]);
 
-        UserSettings::set(auth()->id(), 'auth.mfa.enabled', true);
+        UserSettings::set(auth()->id(), 'auth.mfa.enabled', true, properties: [SettingsProperty::HIDDEN => true]);
         UserSettings::delete(auth()->id(), 'auth.force_mfa');
 
         $this->regenerateCodes();
@@ -69,7 +69,7 @@ new class extends Component
         $google2FA = new Google2FA;
         $this->mfaSecret = $google2FA->generateSecretKey();
 
-        UserSettings::set(auth()->id(), 'auth.mfa.secret', $this->mfaSecret, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true]);
+        UserSettings::set(auth()->id(), 'auth.mfa.secret', $this->mfaSecret, true, [SettingsProperty::INTERNAL => true, SettingsProperty::ENCRYPTED => true, SettingsProperty::HIDDEN => true]);
     }
 
     public function render()

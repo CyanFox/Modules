@@ -20,6 +20,12 @@
         <i class="icon-key"></i>
         <span class="ml-2">{{ __('account::account.api') }}</span>
     </x-tab.item>
+    <x-tab.item class="flex-1 flex items-center justify-center min-w-fit" uuid="settings"
+                :href="route('account.settings')"
+                wire:navigate>
+        <i class="icon-settings-2"></i>
+        <span class="ml-2">{{ __('account::account.settings') }}</span>
+    </x-tab.item>
 
     @shook('s.account.tabs')
     @endhook

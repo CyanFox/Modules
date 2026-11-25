@@ -1,5 +1,5 @@
-@php use Modules\Core\Models\Role; @endphp
-@php use Modules\Core\Models\Permission; @endphp
+@php use Modules\Core\Models\Permission;use Modules\Core\Models\Role; @endphp
+@php @endphp
 <div>
     <div wire:transition>
         <x-cf.card hook="admin.users.update">
@@ -36,7 +36,10 @@
                     @endif
                     <x-checkbox wire:model="forcePasswordChange"
                                 label="{{ __('admin::users.force_password_change') }}"/>
-                    <x-checkbox wire:model="forceMfa" label="{{ __('admin::users.force_mfa') }}"/>
+
+                    @if(!userSettings('auth.mfa.enabled', $user->id))
+                        <x-checkbox wire:model="forceMfa" label="{{ __('admin::users.force_mfa') }}"/>
+                    @endif
                 </div>
 
                 <x-cf.buttons :submit-text="__('admin::users.update.buttons.update')" target="updateUser"/>

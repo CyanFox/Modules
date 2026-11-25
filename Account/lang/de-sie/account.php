@@ -6,6 +6,7 @@ return [
     'sessions' => 'Sitzungen',
     'activity' => 'Aktivitäten',
     'api' => 'API-Keys',
+    'settings' => 'Einstellungen',
 
     'first_name' => 'Vorname',
     'last_name' => 'Nachname',
