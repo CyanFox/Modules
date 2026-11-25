@@ -49,7 +49,7 @@ it('shows a warning when a setting value fails its rules', function () {
         'user_id' => auth()->id(),
         'key' => 'app.url',
         'value' => 'http://localhost',
-        'properties' => [SettingsProperty::RULES => ['url']]
+        'properties' => [SettingsProperty::RULES => ['url']],
     ]);
 
     Livewire::test('account::settings')
