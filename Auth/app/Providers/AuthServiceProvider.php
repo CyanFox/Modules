@@ -8,6 +8,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Validation\Rules\Password;
 use Modules\Auth\Http\Middleware\Authenticate;
 use Modules\Auth\Http\Middleware\CheckForceActions;
+use Modules\Auth\Http\Middleware\CheckForceActionsApi;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
 class AuthServiceProvider extends ModuleServiceProvider
@@ -90,5 +91,7 @@ class AuthServiceProvider extends ModuleServiceProvider
             Authenticate::class,
             CheckForceActions::class,
         ]);
+
+        $router->aliasMiddleware('api_force_actions', CheckForceActionsApi::class);
     }
 }

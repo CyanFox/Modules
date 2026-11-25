@@ -8,11 +8,11 @@ use Modules\Account\Http\Controllers\API\V1\MFAController;
 use Modules\Account\Http\Controllers\API\V1\ProfileController;
 use Modules\Account\Http\Controllers\API\V1\SessionsController;
 
-Route::group(['prefix' => 'v1/account', 'as' => 'account.', 'middleware' => ['auth:sanctum']], function () {
+Route::group(['prefix' => 'v1/account', 'as' => 'account.', 'middleware' => ['auth:sanctum', 'api_force_actions']], function () {
     Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
         Route::patch('/', [ProfileController::class, 'updateProfile'])->name('update');
         Route::delete('/', [ProfileController::class, 'deleteAccount'])->name('delete');
-        Route::patch('password', [ProfileController::class, 'updatePassword'])->name('password.update');
+        Route::patch('password', [ProfileController::class, 'updatePassword'])->name('password.update')->withoutMiddleware('api_force_actions');
 
         Route::put('avatar', [ProfileController::class, 'changeAvatar'])->name('avatar.update');
         Route::delete('avatar', [ProfileController::class, 'resetAvatar'])->name('avatar.reset');
@@ -30,7 +30,7 @@ Route::group(['prefix' => 'v1/account', 'as' => 'account.', 'middleware' => ['au
         Route::post('disable', [MFAController::class, 'disableMFA'])->name('disable');
         Route::post('codes', [MFAController::class, 'regenerateRecoveryCodes'])->name('codes');
         Route::post('verify', [MFAController::class, 'verifyMFA'])->name('verify');
-    });
+    })->withoutMiddleware('api_force_actions');
     Route::group(['prefix' => 'api', 'as' => 'api.'], function () {
         Route::get('/', [APIKeysController::class, 'getApiKeys'])->name('get');
         Route::post('/', [APIKeysController::class, 'createApiKey'])->name('create');

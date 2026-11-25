@@ -9,7 +9,7 @@ use Modules\Admin\Http\Controllers\API\V1\RolesController;
 use Modules\Admin\Http\Controllers\API\V1\SettingsController;
 use Modules\Admin\Http\Controllers\API\V1\UsersController;
 
-Route::group(['prefix' => 'v1/admin', 'as' => 'admin.', 'middleware' => ['auth:sanctum']], function () {
+Route::group(['prefix' => 'v1/admin', 'as' => 'admin.', 'middleware' => ['auth:sanctum', 'api_force_actions']], function () {
     Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
         Route::get('/', [UsersController::class, 'getUsers'])->name('all')->can('admin.users');
         Route::get('{userId}', [UsersController::class, 'getUser'])->name('get')->can('admin.users');
