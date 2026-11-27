@@ -42,7 +42,7 @@ class OAuthProvidersController extends Controller
         return apiResponse('OAuth providers retrieved.', QueryBuilder::for(OAuthProvider::class)
             ->allowedSorts('name', 'discovery_url')
             ->allowedFilters('name', 'discovery_url')
-            ->paginate($request->query('perPage') === null ? null : (int)$request->query('perPage')));
+            ->paginate($request->query('perPage') === null ? null : (int) $request->query('perPage')));
     }
 
     #[Endpoint(title: 'Get OAuth Provider')]
@@ -71,7 +71,7 @@ class OAuthProvidersController extends Controller
         }
 
         $provider = OAuthProvider::find($oauthProviderId);
-        if (!$provider) {
+        if (! $provider) {
             return apiResponse('OAuth provider not found.', apiError('auth.oauth_providers.not_found'), false, 404);
         }
 
@@ -144,12 +144,12 @@ class OAuthProvidersController extends Controller
         }
 
         $provider = OAuthProvider::find($oauthProviderId);
-        if (!$provider) {
+        if (! $provider) {
             return apiResponse('OAuth provider not found.', apiError('auth.oauth_providers.not_found'), false, 404);
         }
 
         $request->validate([
-            'name' => 'required|string|max:255|unique:oauth_providers,name,' . $oauthProviderId,
+            'name' => 'required|string|max:255|unique:oauth_providers,name,'.$oauthProviderId,
             'color' => 'nullable|in:primary,secondary,success,danger,warning,info',
             'icon' => 'nullable|string|max:255',
             'discovery_url' => 'required|url',
@@ -175,7 +175,7 @@ class OAuthProvidersController extends Controller
         }
 
         $provider = OAuthProvider::find($oauthProviderId);
-        if (!$provider) {
+        if (! $provider) {
             return apiResponse('OAuth provider not found.', apiError('auth.oauth_providers.not_found'), false, 404);
         }
 
