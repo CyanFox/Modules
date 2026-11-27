@@ -11,7 +11,8 @@ use Modules\Core\Models\UserSetting;
 use Modules\Core\Traits\WithConfirmation;
 use Modules\Core\Traits\WithPasswordConfirmation;
 
-new class extends Component {
+new class extends Component
+{
     use WithConfirmation, WithPasswordConfirmation;
 
     #[Url]
@@ -37,12 +38,12 @@ new class extends Component {
 
     public function deleteAccount($confirmed = false)
     {
-        if (!settings('account.enable.delete_account')) {
+        if (! settings('account.enable.delete_account')) {
             return;
         }
 
         if ($confirmed) {
-            if (!$this->hasPasswordConfirmedSession()) {
+            if (! $this->hasPasswordConfirmedSession()) {
                 return;
             }
 
@@ -79,7 +80,7 @@ new class extends Component {
         }
 
         if ($confirmed) {
-            UserSettings::delete(auth()->id(), 'auth.oauth.' . $providerId . '.id');
+            UserSettings::delete(auth()->id(), 'auth.oauth.'.$providerId.'.id');
 
             activity()
                 ->performedOn(OAuthProvider::find($providerId))
@@ -119,7 +120,7 @@ new class extends Component {
     public function disableMfa($confirmed = false)
     {
         if ($confirmed) {
-            if (!$this->hasPasswordConfirmedSession()) {
+            if (! $this->hasPasswordConfirmedSession()) {
                 return;
             }
 
@@ -149,7 +150,7 @@ new class extends Component {
         $this->validate([
             'firstName' => 'nullable|string|max:255',
             'lastName' => 'nullable|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username,' . auth()->id(),
+            'username' => 'required|string|max:255|unique:users,username,'.auth()->id(),
             'email' => 'required|email|max:255',
         ]);
 

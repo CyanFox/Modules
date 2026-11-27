@@ -62,7 +62,7 @@ class OAuthProvider extends Model
             ->logExcept($this->hidden)
             ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->setDescriptionForEvent(function ($eventName) {
-                return 'oauth_providers.' . $eventName;
+                return 'oauth_providers.'.$eventName;
             });
     }
 }
