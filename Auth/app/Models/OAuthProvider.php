@@ -4,6 +4,8 @@ namespace Modules\Auth\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 /**
  * @property int $id
@@ -20,6 +22,8 @@ use Illuminate\Support\Carbon;
  */
 class OAuthProvider extends Model
 {
+    use LogsActivity;
+
     protected $table = 'oauth_providers';
 
     /**
@@ -41,4 +45,24 @@ class OAuthProvider extends Model
         'fields' => 'array',
         'client_secret' => 'encrypted',
     ];
+
+    protected $hidden = [
+        'client_secret',
+    ];
+
+    public function getDisplayName()
+    {
+        return $this->name;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logExcept($this->hidden)
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->setDescriptionForEvent(function ($eventName) {
+                return 'oauth_providers.' . $eventName;
+            });
+    }
 }

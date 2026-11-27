@@ -10,7 +10,7 @@
         "CyanFox"
     ],
     "license": "MIT",
-    "version": "2026.11.1",
+    "version": "2026.11.2",
     "remote_version_url": "https://git.cyanfox.de/CyanFox/Modules/raw/branch/main/Account/module.json",
     "priority": 300,
     "providers": [

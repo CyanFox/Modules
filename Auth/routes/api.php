@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Modules\Auth\Http\Controllers\API\V1\AuthController;
+use Modules\Auth\Http\Controllers\API\V1\OAuthProvidersController;
 use Modules\Auth\Http\Controllers\API\V1\UnsplashController;
 
 Route::group(['prefix' => 'v1/auth', 'as' => 'auth.'], function () {
@@ -26,4 +27,12 @@ Route::group(['prefix' => 'v1/auth', 'as' => 'auth.'], function () {
     });
 
     Route::get('captcha/{config?}', [AuthController::class, 'captcha'])->middleware(['throttle:60,1'])->name('captcha');
+
+    Route::group(['prefix' => 'oauth-providers', 'as' => 'oauth-providers.', 'middleware' => ['auth:sanctum', 'api_force_actions']], function () {
+        Route::get('/', [OAuthProvidersController::class, 'getOAuthProviders'])->name('all')->can('admin.settings');
+        Route::get('{oauthProviderId}', [OAuthProvidersController::class, 'getOAuthProvider'])->name('get')->can('admin.settings');
+        Route::post('/', [OAuthProvidersController::class, 'createOAuthProvider'])->name('create')->can('admin.settings');
+        Route::patch('{oauthProviderId}', [OAuthProvidersController::class, 'updateOAuthProvider'])->name('update')->can('admin.settings');
+        Route::delete('{oauthProviderId}', [OAuthProvidersController::class, 'deleteOAuthProvider'])->name('delete')->can('admin.settings');
+    });
 });

@@ -94,7 +94,7 @@ class UserSetting extends Model
             });
         });
 
-        static::creating(function ($model) {
+        static::created(function ($model) {
             Cache::remember("user_settings_$model->id", now()->addDay(), function () use ($model) {
                 return $model;
             });
@@ -102,13 +102,13 @@ class UserSetting extends Model
             return true;
         });
 
-        static::updating(function ($model) {
+        static::updated(function ($model) {
             Cache::forget("user_settings_$model->id");
 
             return true;
         });
 
-        static::deleting(function ($model) {
+        static::deleted(function ($model) {
             Cache::forget("user_settings_$model->id");
 
             return true;

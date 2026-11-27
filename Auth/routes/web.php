@@ -83,6 +83,11 @@ Route::group(['prefix' => 'oauth', 'as' => 'oauth.'], function () {
                 abort(409, 'This OAuth account is already linked to another user.');
             }
 
+            activity()
+                ->performedOn(auth()->user())
+                ->causedByAnonymous()
+                ->log('auth.login.oauth');
+
             Auth::login($linkedUser);
 
             return redirect()->intended();
@@ -92,6 +97,10 @@ Route::group(['prefix' => 'oauth', 'as' => 'oauth.'], function () {
             if (! $oauthProvider->account_linking) {
                 abort(403, 'Account linking is disabled for this OAuth provider.');
             }
+            activity()
+                ->performedOn($oauthProvider)
+                ->causedBy(auth()->user())
+                ->log('user.oauth.linked');
 
             UserSettings::set(Auth::id(), $settingKey, $socialiteUser->getId(), true, [SettingsProperty::INTERNAL => true, SettingsProperty::HIDDEN => true]);
 
