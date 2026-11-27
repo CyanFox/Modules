@@ -39,7 +39,7 @@ class UserController extends Controller
         return apiResponse('User retrieved.', array_merge($user->withoutRelations()->toArray(), [
             'avatar_url' => $user->getAvatar(),
             'display_name' => $user->getDisplayName(),
-            'notifications' => $user->unreadNotifications->map(fn($notification) => [
+            'notifications' => $user->unreadNotifications->map(fn ($notification) => [
                 'id' => $notification->id,
                 'type' => $notification->type,
                 'data' => $notification->data,
@@ -144,7 +144,7 @@ class UserController extends Controller
     {
         $user = $request->user();
 
-        return apiResponse('Notifications retrieved.', $user->unreadNotifications->map(fn($notification) => [
+        return apiResponse('Notifications retrieved.', $user->unreadNotifications->map(fn ($notification) => [
             'id' => $notification->id,
             'type' => $notification->type,
             'data' => $notification->data,
