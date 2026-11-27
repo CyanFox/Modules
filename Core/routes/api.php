@@ -16,6 +16,8 @@ Route::group(['prefix' => 'v1/core', 'as' => 'core.'], function () {
             Route::get('roles', [UserController::class, 'roles'])->name('users.me.roles');
             Route::get('permissions', [UserController::class, 'permissions'])->name('users.me.permissions');
             Route::get('settings', [UserController::class, 'settings'])->name('users.me.settings');
+            Route::get('notifications', [UserController::class, 'notifications'])->name('users.me.notifications');
+            Route::post('notifications/mark-as-read', [UserController::class, 'markAsRead'])->name('users.me.notifications.mark-as-read');
             Route::post('check-password', [UserController::class, 'checkPassword'])->name('users.me.check-password');
         });
     });

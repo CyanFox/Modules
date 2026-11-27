@@ -56,7 +56,7 @@
                             }
                         @endphp
                         @hook('account.api.body')
-                        <x-table.body.row>
+                        <x-table.body.row wire:key="{{ $token->id }}">
                             <x-table.body.item>
                                 {{ data_get($properties, 'name') }}
                             </x-table.body.item>

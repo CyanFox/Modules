@@ -18,7 +18,7 @@ class ActivityController extends Controller
         [
             'id' => 1,
             'log_name' => 'default',
-            'description' => 'descrition',
+            'description' => 'description',
             'subject_type' => 'Some\\Model',
             'subject_id' => 1,
             'event' => 'created',

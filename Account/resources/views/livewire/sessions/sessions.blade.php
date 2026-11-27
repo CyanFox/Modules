@@ -39,7 +39,7 @@
                             }
                         @endphp
                         @hook('account.sessions.web.body')
-                        <x-table.body.row>
+                        <x-table.body.row wire:key="{{ $session->id }}">
                             <x-table.body.item>
                                 {{ $session->ip_address }}
                             </x-table.body.item>

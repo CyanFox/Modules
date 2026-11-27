@@ -26,7 +26,7 @@ new class extends Component
 
     public function loadNewNotifications(): void
     {
-        $this->notifications = auth()->user()->notifications()->take(10)->get();
+        $this->notifications = auth()->user()->unreadNotifications()->take(10)->get();
         $this->unreadNotificationsCount = $this->getUnreadNotificationsCount();
     }
 

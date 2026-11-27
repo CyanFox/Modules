@@ -39,6 +39,13 @@ class UserController extends Controller
         return apiResponse('User retrieved.', array_merge($user->withoutRelations()->toArray(), [
             'avatar_url' => $user->getAvatar(),
             'display_name' => $user->getDisplayName(),
+            'notifications' => $user->unreadNotifications->map(fn($notification) => [
+                'id' => $notification->id,
+                'type' => $notification->type,
+                'data' => $notification->data,
+                'read_at' => $notification->read_at,
+                'created_at' => $notification->created_at,
+            ])->values()->all(),
             'roles' => $user->roles->map(fn ($role) => [
                 'id' => $role->id,
                 'name' => $role->name,
@@ -119,6 +126,45 @@ class UserController extends Controller
             })
             ->values()
         );
+    }
+
+    #[Endpoint(title: 'Get current user unread notifications')]
+    #[Response(200, 'Notifications retrieved.', examples: ['application/json' => ['success' => true, 'message' => 'Notifications retrieved.', 'data' => [
+        [
+            'id' => 'uuid',
+            'type' => '',
+            'date' => [],
+            'read_at' => null,
+            'created_at' => '2000-01-01T00:00:00.000000Z',
+            'updated_at' => '2000-01-01T00:00:00.000000Z',
+        ],
+    ]]])]
+    #[Response(401, 'Unauthenticated.', examples: ['application/json' => ['success' => false, 'message' => 'Unauthenticated.', 'data' => []]])]
+    public function notifications(Request $request)
+    {
+        $user = $request->user();
+
+        return apiResponse('Notifications retrieved.', $user->unreadNotifications->map(fn($notification) => [
+            'id' => $notification->id,
+            'type' => $notification->type,
+            'data' => $notification->data,
+            'read_at' => $notification->read_at,
+            'created_at' => $notification->created_at,
+        ])->values()->all());
+    }
+
+    #[Endpoint(title: 'Mark notifications as read')]
+    #[Response(200, 'Notifications marked as read.', examples: ['application/json' => ['success' => true, 'message' => 'Notifications marked as read.', 'data' => []]])]
+    public function markAsRead(Request $request)
+    {
+        $user = $request->user();
+        if ($request->query('notificationId')) {
+            $user->unreadNotifications->where('id', $request->query('notificationId'))->markAsRead();
+        } else {
+            $user->unreadNotifications->markAsRead();
+        }
+
+        return apiResponse('Notifications marked as read.');
     }
 
     #[Endpoint(title: 'Check password')]
