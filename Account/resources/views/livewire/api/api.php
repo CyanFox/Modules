@@ -4,7 +4,8 @@ use Livewire\Component;
 use Modules\Core\Traits\WithConfirmation;
 use Modules\Core\Traits\WithPasswordConfirmation;
 
-new class extends Component {
+new class extends Component
+{
     use WithConfirmation, WithPasswordConfirmation;
 
     public function showCreateAPIKey()
@@ -17,7 +18,7 @@ new class extends Component {
     public function deleteApiKey(string $tokenId, bool $confirmed = false)
     {
         if ($confirmed) {
-            if (!$this->hasPasswordConfirmedSession()) {
+            if (! $this->hasPasswordConfirmedSession()) {
                 return;
             }
 

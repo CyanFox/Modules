@@ -44,7 +44,7 @@ class ActivityController extends Controller
             'causer_type' => userModel()::class,
         ]))->allowedSorts('id', 'created_at', 'causer_id', 'causer_type', 'description', 'log_name', 'event', 'subject_id', 'subject_type')
             ->allowedFilters('id', 'causer_id', 'causer_type', 'description', 'log_name', 'event', 'attribute_changes', 'subject_id', 'subject_type')
-            ->paginate($request->query('perPage') === null ? null : (int)$request->query('perPage'))
+            ->paginate($request->query('perPage') === null ? null : (int) $request->query('perPage'))
             ->appends($request->query()));
     }
 }

@@ -33,7 +33,7 @@ class PermissionsController extends Controller
         return apiResponse('Permissions retrieved.', QueryBuilder::for(Permission::class)
             ->allowedSorts('name', 'guard_name')
             ->allowedFilters('name', 'guard_name')
-            ->paginate($request->query('perPage') === null ? null : (int)$request->query('perPage')));
+            ->paginate($request->query('perPage') === null ? null : (int) $request->query('perPage')));
     }
 
     #[Endpoint(title: 'Get Permission')]
